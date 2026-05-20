@@ -1,0 +1,174 @@
+import { Link } from "@tanstack/react-router";
+import { useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Heart, MessageCircle, Trash2, Flower2 } from "lucide-react";
+import { useAuth } from "@/hooks/use-auth";
+import {
+  addComment,
+  deletePost,
+  listComments,
+  toggleLike,
+  type FeedPost,
+} from "@/lib/feed.functions";
+import { toast } from "sonner";
+import { formatDistanceToNow } from "date-fns";
+
+export function PostCard({ post }: { post: FeedPost }) {
+  const { user } = useAuth();
+  const qc = useQueryClient();
+  const [showComments, setShowComments] = useState(false);
+  const [commentBody, setCommentBody] = useState("");
+
+  const likeFn = useServerFn(toggleLike);
+  const deleteFn = useServerFn(deletePost);
+  const commentsFn = useServerFn(listComments);
+  const addCommentFn = useServerFn(addComment);
+
+  const like = useMutation({
+    mutationFn: () => likeFn({ data: { post_id: post.id } }),
+    onMutate: async () => {
+      await qc.cancelQueries({ queryKey: ["feed"] });
+      qc.setQueriesData<FeedPost[]>({ queryKey: ["feed"] }, (old) =>
+        old?.map((p) =>
+          p.id === post.id
+            ? { ...p, liked_by_me: !p.liked_by_me, like_count: p.like_count + (p.liked_by_me ? -1 : 1) }
+            : p,
+        ),
+      );
+    },
+    onSettled: () => qc.invalidateQueries({ queryKey: ["feed"] }),
+  });
+
+  const del = useMutation({
+    mutationFn: () => deleteFn({ data: { id: post.id } }),
+    onSuccess: () => {
+      toast.success("Post removed.");
+      qc.invalidateQueries({ queryKey: ["feed"] });
+    },
+  });
+
+  const { data: comments } = useQuery({
+    queryKey: ["comments", post.id],
+    queryFn: () => commentsFn({ data: { post_id: post.id } }),
+    enabled: showComments,
+  });
+
+  const submitComment = useMutation({
+    mutationFn: () => addCommentFn({ data: { post_id: post.id, body: commentBody.trim() } }),
+    onSuccess: () => {
+      setCommentBody("");
+      qc.invalidateQueries({ queryKey: ["comments", post.id] });
+      qc.invalidateQueries({ queryKey: ["feed"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const isOwner = user?.id === post.author_id;
+  const initials = (post.author_name || "?").split(/\s+/).map((s) => s[0]).slice(0, 2).join("").toUpperCase();
+
+  return (
+    <article className="overflow-hidden rounded-2xl border border-border/60 bg-card soft-shadow">
+      <header className="flex items-center justify-between px-4 py-3">
+        <Link to="/u/$userId" params={{ userId: post.author_id }} className="flex items-center gap-3">
+          <Avatar className="h-10 w-10">
+            {post.author_avatar && <AvatarImage src={post.author_avatar} alt="" />}
+            <AvatarFallback className="bg-sage/20 text-sage-deep text-sm">{initials}</AvatarFallback>
+          </Avatar>
+          <div>
+            <div className="font-medium text-foreground text-sm">{post.author_name}</div>
+            <div className="text-xs text-muted-foreground">
+              {formatDistanceToNow(new Date(post.created_at), { addSuffix: true })}
+            </div>
+          </div>
+        </Link>
+        {isOwner && (
+          <Button variant="ghost" size="icon" onClick={() => del.mutate()} aria-label="Delete">
+            <Trash2 className="h-4 w-4 text-muted-foreground" />
+          </Button>
+        )}
+      </header>
+
+      {post.image_url && (
+        <div className="aspect-square w-full bg-muted">
+          <img src={post.image_url} alt="" className="h-full w-full object-cover" loading="lazy" />
+        </div>
+      )}
+
+      <div className="space-y-3 px-4 py-3">
+        {post.caption && <p className="whitespace-pre-wrap text-sm leading-relaxed text-foreground">{post.caption}</p>}
+
+        {post.memorial_slug && (
+          <Link
+            to="/memorial/$slug"
+            params={{ slug: post.memorial_slug }}
+            className="inline-flex items-center gap-1.5 rounded-full bg-sage/10 px-3 py-1 text-xs text-sage-deep hover:bg-sage/20"
+          >
+            <Flower2 className="h-3 w-3" /> In memory of {post.memorial_pet_name}
+          </Link>
+        )}
+
+        <div className="flex items-center gap-4 pt-1">
+          <button
+            onClick={() => user ? like.mutate() : toast.error("Sign in to like")}
+            className="flex items-center gap-1.5 text-sm text-muted-foreground transition hover:text-terracotta"
+          >
+            <Heart
+              className={`h-5 w-5 transition ${post.liked_by_me ? "fill-terracotta text-terracotta" : ""}`}
+            />
+            {post.like_count}
+          </button>
+          <button
+            onClick={() => setShowComments((s) => !s)}
+            className="flex items-center gap-1.5 text-sm text-muted-foreground transition hover:text-foreground"
+          >
+            <MessageCircle className="h-5 w-5" />
+            {post.comment_count}
+          </button>
+        </div>
+
+        {showComments && (
+          <div className="space-y-3 border-t border-border/60 pt-3">
+            {(comments ?? []).map((c) => {
+              const ci = (c.author_name || "?").split(/\s+/).map((s: string) => s[0]).slice(0, 2).join("").toUpperCase();
+              return (
+                <div key={c.id} className="flex gap-2">
+                  <Avatar className="h-7 w-7">
+                    {c.author_avatar && <AvatarImage src={c.author_avatar} alt="" />}
+                    <AvatarFallback className="bg-sage/20 text-[10px] text-sage-deep">{ci}</AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1 rounded-xl bg-muted/50 px-3 py-2">
+                    <div className="text-xs font-medium text-foreground">{c.author_name}</div>
+                    <div className="text-sm text-foreground/90">{c.body}</div>
+                  </div>
+                </div>
+              );
+            })}
+            {user && (
+              <div className="flex gap-2">
+                <Textarea
+                  value={commentBody}
+                  onChange={(e) => setCommentBody(e.target.value)}
+                  placeholder="Share a kind word…"
+                  rows={1}
+                  className="min-h-[40px] resize-none"
+                />
+                <Button
+                  size="sm"
+                  disabled={!commentBody.trim() || submitComment.isPending}
+                  onClick={() => submitComment.mutate()}
+                  className="bg-sage-deep text-primary-foreground hover:bg-sage-deep/90"
+                >
+                  Post
+                </Button>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </article>
+  );
+}

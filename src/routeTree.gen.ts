@@ -13,9 +13,11 @@ import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ResourcesRouteImport } from './routes/resources'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as GardenRouteImport } from './routes/garden'
+import { Route as CommunityRouteImport } from './routes/community'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as UUserIdRouteImport } from './routes/u.$userId'
 import { Route as MemorialSlugRouteImport } from './routes/memorial.$slug'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedJournalRouteImport } from './routes/_authenticated/journal'
@@ -43,6 +45,11 @@ const GardenRoute = GardenRouteImport.update({
   path: '/garden',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CommunityRoute = CommunityRouteImport.update({
+  id: '/community',
+  path: '/community',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -55,6 +62,11 @@ const AuthenticatedRoute = AuthenticatedRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UUserIdRoute = UUserIdRouteImport.update({
+  id: '/u/$userId',
+  path: '/u/$userId',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MemorialSlugRoute = MemorialSlugRouteImport.update({
@@ -92,6 +104,7 @@ const AuthenticatedMemorialSlugEditRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/community': typeof CommunityRoute
   '/garden': typeof GardenRoute
   '/login': typeof LoginRoute
   '/resources': typeof ResourcesRoute
@@ -101,11 +114,13 @@ export interface FileRoutesByFullPath {
   '/journal': typeof AuthenticatedJournalRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/memorial/$slug': typeof MemorialSlugRoute
+  '/u/$userId': typeof UUserIdRoute
   '/memorial/$slug/edit': typeof AuthenticatedMemorialSlugEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/community': typeof CommunityRoute
   '/garden': typeof GardenRoute
   '/login': typeof LoginRoute
   '/resources': typeof ResourcesRoute
@@ -115,6 +130,7 @@ export interface FileRoutesByTo {
   '/journal': typeof AuthenticatedJournalRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/memorial/$slug': typeof MemorialSlugRoute
+  '/u/$userId': typeof UUserIdRoute
   '/memorial/$slug/edit': typeof AuthenticatedMemorialSlugEditRoute
 }
 export interface FileRoutesById {
@@ -122,6 +138,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/about': typeof AboutRoute
+  '/community': typeof CommunityRoute
   '/garden': typeof GardenRoute
   '/login': typeof LoginRoute
   '/resources': typeof ResourcesRoute
@@ -131,6 +148,7 @@ export interface FileRoutesById {
   '/_authenticated/journal': typeof AuthenticatedJournalRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/memorial/$slug': typeof MemorialSlugRoute
+  '/u/$userId': typeof UUserIdRoute
   '/_authenticated/memorial/$slug/edit': typeof AuthenticatedMemorialSlugEditRoute
 }
 export interface FileRouteTypes {
@@ -138,6 +156,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/community'
     | '/garden'
     | '/login'
     | '/resources'
@@ -147,11 +166,13 @@ export interface FileRouteTypes {
     | '/journal'
     | '/settings'
     | '/memorial/$slug'
+    | '/u/$userId'
     | '/memorial/$slug/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
+    | '/community'
     | '/garden'
     | '/login'
     | '/resources'
@@ -161,12 +182,14 @@ export interface FileRouteTypes {
     | '/journal'
     | '/settings'
     | '/memorial/$slug'
+    | '/u/$userId'
     | '/memorial/$slug/edit'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/about'
+    | '/community'
     | '/garden'
     | '/login'
     | '/resources'
@@ -176,6 +199,7 @@ export interface FileRouteTypes {
     | '/_authenticated/journal'
     | '/_authenticated/settings'
     | '/memorial/$slug'
+    | '/u/$userId'
     | '/_authenticated/memorial/$slug/edit'
   fileRoutesById: FileRoutesById
 }
@@ -183,11 +207,13 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   AboutRoute: typeof AboutRoute
+  CommunityRoute: typeof CommunityRoute
   GardenRoute: typeof GardenRoute
   LoginRoute: typeof LoginRoute
   ResourcesRoute: typeof ResourcesRoute
   SignupRoute: typeof SignupRoute
   MemorialSlugRoute: typeof MemorialSlugRoute
+  UUserIdRoute: typeof UUserIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -220,6 +246,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GardenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/community': {
+      id: '/community'
+      path: '/community'
+      fullPath: '/community'
+      preLoaderRoute: typeof CommunityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -239,6 +272,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/u/$userId': {
+      id: '/u/$userId'
+      path: '/u/$userId'
+      fullPath: '/u/$userId'
+      preLoaderRoute: typeof UUserIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/memorial/$slug': {
@@ -310,11 +350,13 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AboutRoute: AboutRoute,
+  CommunityRoute: CommunityRoute,
   GardenRoute: GardenRoute,
   LoginRoute: LoginRoute,
   ResourcesRoute: ResourcesRoute,
   SignupRoute: SignupRoute,
   MemorialSlugRoute: MemorialSlugRoute,
+  UUserIdRoute: UUserIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
