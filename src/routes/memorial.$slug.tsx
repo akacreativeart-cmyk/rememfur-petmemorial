@@ -9,7 +9,7 @@ import { SiteFooter } from "@/components/site/SiteFooter";
 import { getMemorialBySlug } from "@/lib/memorials.functions";
 import { lightCandle, postMessage } from "@/lib/tributes.functions";
 import { useAuth } from "@/hooks/use-auth";
-import { Flame, Heart, MessageCircle, Share2 } from "lucide-react";
+import { Flame, Heart, MessageCircle, Share2, Pencil } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
 
