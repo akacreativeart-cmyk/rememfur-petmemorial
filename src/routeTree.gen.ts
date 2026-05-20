@@ -9,13 +9,32 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ResourcesRouteImport } from './routes/resources'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as GardenRouteImport } from './routes/garden'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as MemorialSlugRouteImport } from './routes/memorial.$slug'
 
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ResourcesRoute = ResourcesRouteImport.update({
   id: '/resources',
   path: '/resources',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GardenRoute = GardenRouteImport.update({
+  id: '/garden',
+  path: '/garden',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -28,44 +47,108 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MemorialSlugRoute = MemorialSlugRouteImport.update({
+  id: '/memorial/$slug',
+  path: '/memorial/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/garden': typeof GardenRoute
+  '/login': typeof LoginRoute
   '/resources': typeof ResourcesRoute
+  '/signup': typeof SignupRoute
+  '/memorial/$slug': typeof MemorialSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/garden': typeof GardenRoute
+  '/login': typeof LoginRoute
   '/resources': typeof ResourcesRoute
+  '/signup': typeof SignupRoute
+  '/memorial/$slug': typeof MemorialSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/garden': typeof GardenRoute
+  '/login': typeof LoginRoute
   '/resources': typeof ResourcesRoute
+  '/signup': typeof SignupRoute
+  '/memorial/$slug': typeof MemorialSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/resources'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/garden'
+    | '/login'
+    | '/resources'
+    | '/signup'
+    | '/memorial/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/resources'
-  id: '__root__' | '/' | '/about' | '/resources'
+  to:
+    | '/'
+    | '/about'
+    | '/garden'
+    | '/login'
+    | '/resources'
+    | '/signup'
+    | '/memorial/$slug'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/garden'
+    | '/login'
+    | '/resources'
+    | '/signup'
+    | '/memorial/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  GardenRoute: typeof GardenRoute
+  LoginRoute: typeof LoginRoute
   ResourcesRoute: typeof ResourcesRoute
+  SignupRoute: typeof SignupRoute
+  MemorialSlugRoute: typeof MemorialSlugRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/resources': {
       id: '/resources'
       path: '/resources'
       fullPath: '/resources'
       preLoaderRoute: typeof ResourcesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/garden': {
+      id: '/garden'
+      path: '/garden'
+      fullPath: '/garden'
+      preLoaderRoute: typeof GardenRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -82,13 +165,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/memorial/$slug': {
+      id: '/memorial/$slug'
+      path: '/memorial/$slug'
+      fullPath: '/memorial/$slug'
+      preLoaderRoute: typeof MemorialSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  GardenRoute: GardenRoute,
+  LoginRoute: LoginRoute,
   ResourcesRoute: ResourcesRoute,
+  SignupRoute: SignupRoute,
+  MemorialSlugRoute: MemorialSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
