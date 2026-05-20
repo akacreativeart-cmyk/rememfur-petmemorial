@@ -29,7 +29,7 @@ function CommunityPage() {
 
   const { data: posts, isLoading } = useQuery({
     queryKey: ["feed", scope, user?.id ?? "anon"],
-    queryFn: () => feedFn({ data: { scope, viewerId: user?.id ?? null } }),
+    queryFn: () => feedFn({ data: { scope, viewerId: user?.id ?? undefined } }),
   });
 
   return (
