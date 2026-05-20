@@ -25,7 +25,7 @@ async function hydratePosts(rows: any[], viewerId: string | null): Promise<FeedP
   const authorIds = Array.from(new Set(rows.map((r) => r.author_id)));
   const memorialIds = Array.from(new Set(rows.map((r) => r.memorial_id).filter(Boolean)));
 
-  const [{ data: profs }, { data: likes }, { data: comments }, { data: memorials }, myLikes] = await Promise.all([
+  const [profsRes, likesRes, commentsRes, memorialsRes, myLikesRes] = await Promise.all([
     supabaseAdmin.from("profiles").select("id, display_name, avatar_url").in("id", authorIds),
     supabaseAdmin.from("post_likes").select("post_id").in("post_id", ids),
     supabaseAdmin.from("post_comments").select("post_id").in("post_id", ids),
@@ -36,9 +36,14 @@ async function hydratePosts(rows: any[], viewerId: string | null): Promise<FeedP
       ? supabaseAdmin.from("post_likes").select("post_id").eq("user_id", viewerId).in("post_id", ids)
       : Promise.resolve({ data: [] as any[] }),
   ]);
+  const profs = profsRes.data ?? [];
+  const likes = likesRes.data ?? [];
+  const comments = commentsRes.data ?? [];
+  const memorials = (memorialsRes as any).data ?? [];
+  const myLikes = (myLikesRes as any).data ?? [];
 
-  const profMap = new Map((profs ?? []).map((p) => [p.id, p]));
-  const memMap = new Map((memorials?.data ?? memorials ?? []).map((m: any) => [m.id, m]));
+  const profMap = new Map(profs.map((p: any) => [p.id, p]));
+  const memMap = new Map((memorials as any[]).map((m: any) => [m.id, m]));
   const likeCounts: Record<string, number> = {};
   (likes ?? []).forEach((l: any) => { likeCounts[l.post_id] = (likeCounts[l.post_id] ?? 0) + 1; });
   const commentCounts: Record<string, number> = {};
