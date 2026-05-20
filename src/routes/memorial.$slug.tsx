@@ -132,7 +132,7 @@ function MemorialPage() {
               <section className="rounded-3xl border border-border/60 bg-card p-7 soft-shadow">
                 <h2 className="font-display text-2xl text-foreground">Gallery</h2>
                 <div className="mt-4 grid grid-cols-3 gap-3">
-                  {photos.map((p) => (
+                  {photos.map((p: any) => (
                     <img key={p.id} src={p.image_url} alt={p.caption ?? m.pet_name} loading="lazy" className="aspect-square rounded-2xl object-cover" />
                   ))}
                 </div>
@@ -157,7 +157,7 @@ function MemorialPage() {
               )}
               <ul className="mt-6 space-y-4">
                 {current.messages.length === 0 && <li className="text-sm italic text-muted-foreground">Be the first to leave a kind word.</li>}
-                {current.messages.map((msg) => (
+                {current.messages.map((msg: any) => (
                   <li key={msg.id} className="rounded-2xl bg-cream/60 p-4">
                     <div className="text-xs text-muted-foreground">{msg.author_name} · {format(new Date(msg.created_at), "MMM d, yyyy")}</div>
                     <p className="mt-1 whitespace-pre-line text-sm text-foreground">{msg.body}</p>
@@ -193,7 +193,7 @@ function MemorialPage() {
               <div className="rounded-3xl border border-border/60 bg-card p-6 soft-shadow">
                 <h3 className="font-display text-lg text-foreground">Recent candles</h3>
                 <ul className="mt-3 space-y-3 text-sm">
-                  {current.candles.slice(0, 8).map((c) => (
+                  {current.candles.slice(0, 8).map((c: any) => (
                     <li key={c.id} className="flex gap-2">
                       <Flame className="mt-0.5 h-3.5 w-3.5 shrink-0 text-terracotta" />
                       <div>
