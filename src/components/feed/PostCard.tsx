@@ -133,7 +133,7 @@ export function PostCard({ post }: { post: FeedPost }) {
         {showComments && (
           <div className="space-y-3 border-t border-border/60 pt-3">
             {(comments ?? []).map((c) => {
-              const ci = (c.author_name || "?").split(/\s+/).map((s) => s[0]).slice(0, 2).join("").toUpperCase();
+              const ci = (c.author_name || "?").split(/\s+/).map((s: string) => s[0]).slice(0, 2).join("").toUpperCase();
               return (
                 <div key={c.id} className="flex gap-2">
                   <Avatar className="h-7 w-7">
