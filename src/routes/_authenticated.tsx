@@ -2,7 +2,7 @@ import { createFileRoute, Outlet, redirect, Link } from "@tanstack/react-router"
 import { supabase } from "@/integrations/supabase/client";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
-import { LayoutDashboard, Sparkles, BookOpen, Heart, Settings } from "lucide-react";
+import { LayoutDashboard, Sparkles, BookOpen, Heart, Settings, Users } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated")({
   beforeLoad: async ({ location }) => {
@@ -26,6 +26,7 @@ function AuthenticatedLayout() {
             <SideLink to="/create" icon={Sparkles} label="Create memorial" />
             <SideLink to="/journal" icon={BookOpen} label="Memory journal" />
             <SideLink to="/garden" icon={Heart} label="Memorial Garden" />
+            <SideLink to="/community" icon={Users} label="Community" />
             <SideLink to="/settings" icon={Settings} label="Settings" />
           </nav>
         </aside>
