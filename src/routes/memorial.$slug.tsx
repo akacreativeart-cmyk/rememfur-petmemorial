@@ -114,6 +114,13 @@ function MemorialPage() {
                 <Button variant="outline" size="sm" onClick={share} className="rounded-full border-ink/15 bg-cream/80">
                   <Share2 className="mr-1.5 h-3.5 w-3.5" /> Share
                 </Button>
+                {user?.id === m.owner_id && (
+                  <Link to="/memorial/$slug/edit" params={{ slug: m.slug }}>
+                    <Button variant="outline" size="sm" className="rounded-full border-ink/15 bg-cream/80">
+                      <Pencil className="mr-1.5 h-3.5 w-3.5" /> Edit
+                    </Button>
+                  </Link>
+                )}
               </div>
             </div>
           </div>
