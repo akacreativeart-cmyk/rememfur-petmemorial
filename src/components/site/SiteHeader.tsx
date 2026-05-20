@@ -1,44 +1,53 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useRouter, useLocation } from "@tanstack/react-router";
 import { useAuth } from "@/hooks/use-auth";
-import { Button } from "@/components/ui/button";
+import { ChevronLeft, LogOut } from "lucide-react";
 import logo from "@/assets/logo.png";
 
 export function SiteHeader() {
   const { user, signOut } = useAuth();
+  const router = useRouter();
+  const { pathname } = useLocation();
+  const isHome = pathname === "/";
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5">
-        <Link to="/" className="flex items-center gap-2">
-          <img src={logo} alt="" width={32} height={32} className="h-8 w-8" />
-          <span className="font-display text-xl text-foreground">Rememfur</span>
-        </Link>
-        <nav className="hidden items-center gap-7 text-sm text-muted-foreground md:flex">
-          <Link to="/" className="hover:text-foreground" activeProps={{ className: "text-foreground" }}>Home</Link>
-          <Link to="/community" className="hover:text-foreground" activeProps={{ className: "text-foreground" }}>Community</Link>
-          <Link to="/garden" className="hover:text-foreground" activeProps={{ className: "text-foreground" }}>Memorial Garden</Link>
-          <Link to="/about" className="hover:text-foreground" activeProps={{ className: "text-foreground" }}>About</Link>
-          <Link to="/resources" className="hover:text-foreground" activeProps={{ className: "text-foreground" }}>Resources</Link>
-        </nav>
-        <div className="flex items-center gap-2">
-          {user ? (
-            <>
-              <Link to="/dashboard">
-                <Button variant="ghost" size="sm">My memorials</Button>
-              </Link>
-              <Button variant="outline" size="sm" onClick={() => signOut()}>Sign out</Button>
-            </>
+    <header
+      className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur-md"
+      style={{ paddingTop: "env(safe-area-inset-top)" }}
+    >
+      <div className="mx-auto flex h-14 max-w-md items-center justify-between gap-2 px-4">
+        <div className="flex min-w-0 items-center gap-2">
+          {!isHome ? (
+            <button
+              type="button"
+              onClick={() => router.history.back()}
+              aria-label="Back"
+              className="-ml-1 flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground hover:bg-muted"
+            >
+              <ChevronLeft className="h-5 w-5" />
+            </button>
           ) : (
-            <>
-              <Link to="/login" className="hidden sm:block">
-                <Button variant="ghost" size="sm">Log in</Button>
-              </Link>
-              <Link to="/signup">
-                <Button size="sm" className="bg-sage-deep text-primary-foreground hover:bg-sage-deep/90">
-                  Join for free
-                </Button>
-              </Link>
-            </>
+            <img src={logo} alt="" width={28} height={28} className="h-7 w-7" />
+          )}
+          <Link to="/" className="font-display text-lg tracking-tight text-foreground">
+            Rememfur
+          </Link>
+        </div>
+        <div className="flex items-center gap-1">
+          {user ? (
+            <button
+              onClick={() => signOut()}
+              aria-label="Sign out"
+              className="flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground hover:bg-muted"
+            >
+              <LogOut className="h-4 w-4" />
+            </button>
+          ) : (
+            <Link
+              to="/login"
+              className="rounded-full px-3 py-1.5 text-xs font-medium text-sage-deep hover:bg-sage/10"
+            >
+              Log in
+            </Link>
           )}
         </div>
       </div>
