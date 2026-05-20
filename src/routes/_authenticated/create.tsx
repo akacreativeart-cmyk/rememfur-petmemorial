@@ -11,7 +11,18 @@ import { useAuth } from "@/hooks/use-auth";
 import { createMemorial } from "@/lib/memorials.functions";
 import { transformPortrait } from "@/lib/transform.functions";
 import { lightCandle } from "@/lib/tributes.functions";
-import { Sparkles, Upload, Heart, Check, Loader2 } from "lucide-react";
+import { Sparkles, Upload, Heart, Check, Loader2, X } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export const Route = createFileRoute("/_authenticated/create")({
   component: CreatePage,
@@ -51,6 +62,15 @@ function CreatePage() {
 
   const [candleMsg, setCandleMsg] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [cancelling, setCancelling] = useState(false);
+
+  const hasProgress =
+    !!heroUrl || !!transformedUrl || !!petName || !!epitaph || !!story || !!candleMsg;
+
+  const handleCancel = () => {
+    setCancelling(true);
+    window.setTimeout(() => navigate({ to: "/dashboard" }), 360);
+  };
 
   const handleUpload = async (file: File) => {
     if (!user) return;
