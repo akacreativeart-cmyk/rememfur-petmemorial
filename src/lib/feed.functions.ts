@@ -45,10 +45,10 @@ async function hydratePosts(rows: any[], viewerId: string | null): Promise<FeedP
   const profMap = new Map(profs.map((p: any) => [p.id, p]));
   const memMap = new Map((memorials as any[]).map((m: any) => [m.id, m]));
   const likeCounts: Record<string, number> = {};
-  (likes ?? []).forEach((l: any) => { likeCounts[l.post_id] = (likeCounts[l.post_id] ?? 0) + 1; });
+  (likes as any[]).forEach((l: any) => { likeCounts[l.post_id] = (likeCounts[l.post_id] ?? 0) + 1; });
   const commentCounts: Record<string, number> = {};
-  (comments ?? []).forEach((c: any) => { commentCounts[c.post_id] = (commentCounts[c.post_id] ?? 0) + 1; });
-  const myLikeSet = new Set(((myLikes as any)?.data ?? []).map((l: any) => l.post_id));
+  (comments as any[]).forEach((c: any) => { commentCounts[c.post_id] = (commentCounts[c.post_id] ?? 0) + 1; });
+  const myLikeSet = new Set((myLikes as any[]).map((l: any) => l.post_id));
 
   return rows.map((r) => {
     const p = profMap.get(r.author_id) as any;
