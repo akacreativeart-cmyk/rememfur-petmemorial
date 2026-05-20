@@ -11,7 +11,18 @@ import { useAuth } from "@/hooks/use-auth";
 import { createMemorial } from "@/lib/memorials.functions";
 import { transformPortrait } from "@/lib/transform.functions";
 import { lightCandle } from "@/lib/tributes.functions";
-import { Sparkles, Upload, Heart, Check, Loader2 } from "lucide-react";
+import { Sparkles, Upload, Heart, Check, Loader2, X } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export const Route = createFileRoute("/_authenticated/create")({
   component: CreatePage,
@@ -51,6 +62,15 @@ function CreatePage() {
 
   const [candleMsg, setCandleMsg] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [cancelling, setCancelling] = useState(false);
+
+  const hasProgress =
+    !!heroUrl || !!transformedUrl || !!petName || !!epitaph || !!story || !!candleMsg;
+
+  const handleCancel = () => {
+    setCancelling(true);
+    window.setTimeout(() => navigate({ to: "/dashboard" }), 360);
+  };
 
   const handleUpload = async (file: File) => {
     if (!user) return;
@@ -110,9 +130,59 @@ function CreatePage() {
   };
 
   return (
-    <div>
-      <h1 className="font-display text-4xl text-foreground">Create a memorial</h1>
-      <p className="mt-1 text-sm text-muted-foreground">A four-step ritual: photo, transform, tribute, candle.</p>
+    <div
+      className={
+        cancelling
+          ? "pointer-events-none animate-fade-out transition-opacity duration-300"
+          : "animate-fade-in"
+      }
+    >
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h1 className="font-display text-4xl text-foreground">Create a memorial</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            A four-step ritual: photo, transform, tribute, candle.
+          </p>
+        </div>
+        {hasProgress ? (
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="ghost" size="sm" className="rounded-full text-muted-foreground">
+                <X className="mr-1 h-4 w-4" /> Cancel
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle className="font-display text-2xl">
+                  Set this aside for now?
+                </AlertDialogTitle>
+                <AlertDialogDescription>
+                  Your progress won't be saved. You can begin again whenever you feel ready.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel className="rounded-full">Keep going</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={handleCancel}
+                  className="rounded-full bg-muted text-foreground hover:bg-muted/80"
+                >
+                  Yes, cancel
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        ) : (
+          <Button
+            variant="ghost"
+            size="sm"
+            className="rounded-full text-muted-foreground"
+            onClick={handleCancel}
+          >
+            <X className="mr-1 h-4 w-4" /> Cancel
+          </Button>
+        )}
+      </div>
+
 
       <ol className="mt-7 flex items-center gap-3 text-xs">
         {["Photo", "Transform", "Tribute", "Candle"].map((label, i) => {

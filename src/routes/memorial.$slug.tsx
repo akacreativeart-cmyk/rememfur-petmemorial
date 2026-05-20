@@ -9,7 +9,7 @@ import { SiteFooter } from "@/components/site/SiteFooter";
 import { getMemorialBySlug } from "@/lib/memorials.functions";
 import { lightCandle, postMessage } from "@/lib/tributes.functions";
 import { useAuth } from "@/hooks/use-auth";
-import { Flame, Heart, MessageCircle, Share2 } from "lucide-react";
+import { Flame, Heart, MessageCircle, Share2, Pencil } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
 
@@ -114,6 +114,13 @@ function MemorialPage() {
                 <Button variant="outline" size="sm" onClick={share} className="rounded-full border-ink/15 bg-cream/80">
                   <Share2 className="mr-1.5 h-3.5 w-3.5" /> Share
                 </Button>
+                {user?.id === m.owner_id && (
+                  <Link to="/memorial/$slug/edit" params={{ slug: m.slug }}>
+                    <Button variant="outline" size="sm" className="rounded-full border-ink/15 bg-cream/80">
+                      <Pencil className="mr-1.5 h-3.5 w-3.5" /> Edit
+                    </Button>
+                  </Link>
+                )}
               </div>
             </div>
           </div>

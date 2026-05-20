@@ -106,3 +106,62 @@ export const listMyMemorials = createServerFn({ method: "GET" })
     if (error) throw new Error(error.message);
     return data ?? [];
   });
+
+const updateSchema = z.object({
+  slug: z.string().min(1),
+  pet_name: z.string().min(1).max(80),
+  species: z.enum(["dog", "cat", "other"]),
+  birth_date: z.string().nullable().optional(),
+  passing_date: z.string().nullable().optional(),
+  epitaph: z.string().max(200).nullable().optional(),
+  story: z.string().max(5000).nullable().optional(),
+  is_public: z.boolean(),
+});
+
+export const getMyMemorialBySlug = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: { slug: string }) =>
+    z.object({ slug: z.string().min(1) }).parse(input),
+  )
+  .handler(async ({ data, context }) => {
+    const { supabase, userId } = context;
+    const { data: row, error } = await supabase
+      .from("memorials")
+      .select("*")
+      .eq("slug", data.slug)
+      .eq("owner_id", userId)
+      .maybeSingle();
+    if (error) throw new Error(error.message);
+    return row;
+  });
+
+export const updateMemorial = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input) => updateSchema.parse(input))
+  .handler(async ({ data, context }) => {
+    const { supabase, userId } = context;
+    const { slug, ...patch } = data;
+    const { error } = await supabase
+      .from("memorials")
+      .update(patch)
+      .eq("slug", slug)
+      .eq("owner_id", userId);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+export const deleteMemorial = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: { id: string }) =>
+    z.object({ id: z.string().uuid() }).parse(input),
+  )
+  .handler(async ({ data, context }) => {
+    const { supabase, userId } = context;
+    const { error } = await supabase
+      .from("memorials")
+      .delete()
+      .eq("id", data.id)
+      .eq("owner_id", userId);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
