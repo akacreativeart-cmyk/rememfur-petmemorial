@@ -72,10 +72,12 @@ async function hydratePosts(rows: any[], viewerId: string | null): Promise<FeedP
 }
 
 export const listFeed = createServerFn({ method: "GET" })
-  .inputValidator((input: { scope?: "all" | "following"; viewerId?: string } | undefined) =>
+  .inputValidator((input: { scope?: "all" | "following"; viewerId?: string; cursor?: string | null; limit?: number } | undefined) =>
     z.object({
       scope: z.enum(["all", "following"]).default("all"),
       viewerId: z.string().uuid().nullish(),
+      cursor: z.string().nullish(),
+      limit: z.number().int().min(1).max(50).default(10),
     }).parse(input ?? {}),
   )
   .handler(async ({ data }) => {
@@ -92,7 +94,9 @@ export const listFeed = createServerFn({ method: "GET" })
       .from("posts")
       .select("id, author_id, image_url, caption, memorial_id, created_at")
       .order("created_at", { ascending: false })
-      .limit(50);
+      .order("id", { ascending: false })
+      .limit(data.limit);
+    if (data.cursor) q = q.lt("created_at", data.cursor);
     if (authorFilter) q = q.in("author_id", authorFilter);
     const { data: rows, error } = await q;
     if (error) throw new Error(error.message);
