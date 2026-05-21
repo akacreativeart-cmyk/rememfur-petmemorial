@@ -112,23 +112,38 @@ export function PostCard({ post }: { post: FeedPost }) {
           </Link>
         )}
 
-        <div className="flex items-center gap-4 pt-1">
+        <div className="flex items-center gap-3 pt-1">
           <button
-            onClick={() => user ? like.mutate() : toast.error("Sign in to like")}
-            className="flex items-center gap-1.5 text-sm text-muted-foreground transition hover:text-terracotta"
+            onClick={() => user ? like.mutate() : toast.error("Sign in to send a paw")}
+            aria-label="Send a paw"
+            className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm transition ${
+              post.liked_by_me
+                ? "bg-terracotta/15 text-terracotta"
+                : "bg-muted/60 text-muted-foreground hover:bg-terracotta/10 hover:text-terracotta"
+            }`}
           >
-            <Heart
-              className={`h-5 w-5 transition ${post.liked_by_me ? "fill-terracotta text-terracotta" : ""}`}
-            />
-            {post.like_count}
+            <PawIcon className={`h-4 w-4 ${post.liked_by_me ? "fill-terracotta" : ""}`} />
+            {post.like_count} {post.like_count === 1 ? "paw" : "paws"}
           </button>
           <button
             onClick={() => setShowComments((s) => !s)}
-            className="flex items-center gap-1.5 text-sm text-muted-foreground transition hover:text-foreground"
+            className="flex items-center gap-1.5 rounded-full bg-muted/60 px-3 py-1.5 text-sm text-muted-foreground transition hover:text-foreground"
           >
-            <MessageCircle className="h-5 w-5" />
+            <MessageCircle className="h-4 w-4" />
             {post.comment_count}
           </button>
+          <div className="ml-auto flex gap-1 text-base" aria-label="React">
+            {["🐾", "🦴", "❤️", "🐶", "🐱"].map((e) => (
+              <button
+                key={e}
+                onClick={() => user ? like.mutate() : toast.error("Sign in to react")}
+                className="rounded-full px-1.5 py-0.5 transition hover:bg-cream/80"
+                aria-label={`React ${e}`}
+              >
+                {e}
+              </button>
+            ))}
+          </div>
         </div>
 
         {showComments && (
