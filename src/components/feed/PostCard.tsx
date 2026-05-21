@@ -5,7 +5,8 @@ import { useServerFn } from "@tanstack/react-start";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Heart, MessageCircle, Trash2, Flower2 } from "lucide-react";
+import { MessageCircle, Trash2, Flower2 } from "lucide-react";
+import { PawIcon } from "@/components/site/PawIcon";
 import { useAuth } from "@/hooks/use-auth";
 import {
   addComment,
