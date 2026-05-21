@@ -2,14 +2,14 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect, useRef } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { SiteHeader } from "@components/site/SiteHeader";
-import { SiteFooter } from "@components/site/SiteFooter";
-import { PostCard } from "@components/feed/PostCard";
-import { PostSkeleton } from "@components/feed/PostSkeleton";
-import { ComposePost } from "@components/feed/ComposePost";
-import { listFeed } from "@lib/feed.functions";
-import { useAuth } from "@hooks/use-auth";
-import { Button } from "@components/ui/button";
+import { SiteHeader } from "@/components/site/SiteHeader";
+import { SiteFooter } from "@/components/site/SiteFooter";
+import { PostCard } from "@/components/feed/PostCard";
+import { PostSkeleton } from "@/components/feed/PostSkeleton";
+import { ComposePost } from "@/components/feed/ComposePost";
+import { listFeed } from "@/lib/feed.functions";
+import { useAuth } from "@/hooks/use-auth";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/community")({
   component: CommunityPage,
