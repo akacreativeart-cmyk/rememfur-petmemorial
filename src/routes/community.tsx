@@ -126,8 +126,8 @@ function CommunityPage() {
 
           {isFetchingNextPage && (
             <div className="flex items-center justify-center gap-2 py-4">
-              <div className="h-5 w-5 animate-spin rounded-full border-2 border-sage-deep border-t-transparent" />
-              <span className="text-sm text-muted-foreground">Loading more memories\u2026</span>
+            <div className="h-5 w-5 animate-spin rounded-full border-2 border-sage-deep border-t-transparent" />
+              <span className="text-sm text-muted-foreground">Loading more memories&hellip;</span>
             </div>
           )}
 
