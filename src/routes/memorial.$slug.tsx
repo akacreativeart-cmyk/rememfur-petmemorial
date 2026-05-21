@@ -213,6 +213,27 @@ function MemorialPage() {
                 </ul>
               </div>
             )}
+
+            <div className="rounded-3xl border border-border/60 bg-card p-6 soft-shadow">
+              <div className="flex items-center gap-2">
+                <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-terracotta/15 text-terracotta">
+                  <Gift className="h-4 w-4" />
+                </div>
+                <h3 className="font-display text-lg text-foreground">Memory gifts for {m.pet_name}</h3>
+              </div>
+              <p className="mt-2 text-xs text-muted-foreground">
+                Keepsakes, prints and condolence cards to honor their memory.
+              </p>
+              <ul className="mt-3 space-y-1.5 text-sm text-foreground/90">
+                <li>· Engraved name tag</li>
+                <li>· Framed portrait print</li>
+                <li>· Replica plush</li>
+                <li>· Digital candle card</li>
+              </ul>
+              <Link to="/marketplace" className="mt-4 inline-flex w-full items-center justify-center rounded-full bg-terracotta px-4 py-2 text-sm text-accent-foreground hover:bg-terracotta/90">
+                Browse memory gifts
+              </Link>
+            </div>
           </aside>
         </div>
       </main>
