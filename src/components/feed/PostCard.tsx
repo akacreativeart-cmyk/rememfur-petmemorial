@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient, InfiniteData } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -33,13 +33,19 @@ export function PostCard({ post }: { post: FeedPost }) {
     mutationFn: () => likeFn({ data: { post_id: post.id } }),
     onMutate: async () => {
       await qc.cancelQueries({ queryKey: ["feed"] });
-      qc.setQueriesData<FeedPost[]>({ queryKey: ["feed"] }, (old) =>
-        old?.map((p) =>
-          p.id === post.id
-            ? { ...p, liked_by_me: !p.liked_by_me, like_count: p.like_count + (p.liked_by_me ? -1 : 1) }
-            : p,
-        ),
-      );
+      qc.setQueriesData<InfiniteData<FeedPost[]>>({ queryKey: ["feed"] }, (old) => {
+        if (!old) return old;
+        return {
+          ...old,
+          pages: old.pages.map((page) =>
+            page.map((p) =>
+              p.id === post.id
+                ? { ...p, liked_by_me: !p.liked_by_me, like_count: p.like_count + (p.liked_by_me ? -1 : 1) }
+                : p,
+            ),
+          ),
+        };
+      });
     },
     onSettled: () => qc.invalidateQueries({ queryKey: ["feed"] }),
   });

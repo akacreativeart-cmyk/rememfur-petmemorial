@@ -1,10 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useState, useEffect, useRef } from "react";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { PostCard } from "@/components/feed/PostCard";
+import { PostSkeleton } from "@/components/feed/PostSkeleton";
 import { ComposePost } from "@/components/feed/ComposePost";
 import { listFeed } from "@/lib/feed.functions";
 import { useAuth } from "@/hooks/use-auth";
@@ -14,9 +15,9 @@ export const Route = createFileRoute("/community")({
   component: CommunityPage,
   head: () => ({
     meta: [
-      { title: "Community — Rememfur" },
+      { title: "Community \u2014 Rememfur" },
       { name: "description", content: "Share photos and memories of beloved pets with a supportive community." },
-      { property: "og:title", content: "Community — Rememfur" },
+      { property: "og:title", content: "Community \u2014 Rememfur" },
       { property: "og:description", content: "Share photos and memories of beloved pets." },
     ],
   }),
@@ -26,11 +27,42 @@ function CommunityPage() {
   const { user } = useAuth();
   const [scope, setScope] = useState<"all" | "following">("all");
   const feedFn = useServerFn(listFeed);
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
 
-  const { data: posts, isLoading } = useQuery({
+  const {
+    data,
+    isLoading,
+    isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage,
+  } = useInfiniteQuery({
     queryKey: ["feed", scope, user?.id ?? "anon"],
-    queryFn: () => feedFn({ data: { scope, viewerId: user?.id ?? undefined } }),
+    queryFn: ({ pageParam }) =>
+      feedFn({ data: { scope, viewerId: user?.id ?? undefined, cursor: pageParam, limit: 10 } }),
+    initialPageParam: null as string | null,
+    getNextPageParam: (lastPage) => {
+      if (lastPage.length < 10) return undefined;
+      return lastPage[lastPage.length - 1].created_at;
+    },
+    staleTime: 30_000,
   });
+
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      },
+      { rootMargin: "400px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+
+  const posts = data?.pages.flat() ?? [];
 
   return (
     <div className="min-h-screen bg-background paper-grain">
@@ -71,16 +103,39 @@ function CommunityPage() {
         )}
 
         <div className="space-y-6">
-          {isLoading && <div className="text-center text-sm text-muted-foreground">Loading…</div>}
-          {!isLoading && (posts ?? []).length === 0 && (
+          {isLoading && (
+            <>
+              <PostSkeleton />
+              <PostSkeleton />
+              <PostSkeleton />
+            </>
+          )}
+          {!isLoading && posts.length === 0 && (
             <div className="rounded-2xl border border-dashed border-border bg-card/50 p-10 text-center">
-              <p className="font-display text-xl text-foreground">It's quiet here.</p>
+              <p className="font-display text-xl text-foreground">It&apos;s quiet here.</p>
               <p className="mt-2 text-sm text-muted-foreground">
                 {scope === "following" ? "Follow people to fill your feed." : "Be the first to share a memory."}
               </p>
             </div>
           )}
-          {(posts ?? []).map((p) => <PostCard key={p.id} post={p} />)}
+          {posts.map((p) => (
+            <PostCard key={p.id} post={p} />
+          ))}
+
+          <div ref={sentinelRef} className="h-1" aria-hidden="true" />
+
+          {isFetchingNextPage && (
+            <div className="flex items-center justify-center gap-2 py-4">
+            <div className="h-5 w-5 animate-spin rounded-full border-2 border-sage-deep border-t-transparent" />
+              <span className="text-sm text-muted-foreground">Loading more memories&hellip;</span>
+            </div>
+          )}
+
+          {!hasNextPage && posts.length > 0 && (
+            <div className="py-6 text-center text-xs text-muted-foreground">
+              You&apos;re all caught up
+            </div>
+          )}
         </div>
       </main>
       <SiteFooter />
