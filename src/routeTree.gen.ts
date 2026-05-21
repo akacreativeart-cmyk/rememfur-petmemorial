@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ResourcesRouteImport } from './routes/resources'
+import { Route as MarketplaceRouteImport } from './routes/marketplace'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as GardenRouteImport } from './routes/garden'
 import { Route as CommunityRouteImport } from './routes/community'
@@ -33,6 +34,11 @@ const SignupRoute = SignupRouteImport.update({
 const ResourcesRoute = ResourcesRouteImport.update({
   id: '/resources',
   path: '/resources',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MarketplaceRoute = MarketplaceRouteImport.update({
+  id: '/marketplace',
+  path: '/marketplace',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -107,6 +113,7 @@ export interface FileRoutesByFullPath {
   '/community': typeof CommunityRoute
   '/garden': typeof GardenRoute
   '/login': typeof LoginRoute
+  '/marketplace': typeof MarketplaceRoute
   '/resources': typeof ResourcesRoute
   '/signup': typeof SignupRoute
   '/create': typeof AuthenticatedCreateRoute
@@ -123,6 +130,7 @@ export interface FileRoutesByTo {
   '/community': typeof CommunityRoute
   '/garden': typeof GardenRoute
   '/login': typeof LoginRoute
+  '/marketplace': typeof MarketplaceRoute
   '/resources': typeof ResourcesRoute
   '/signup': typeof SignupRoute
   '/create': typeof AuthenticatedCreateRoute
@@ -141,6 +149,7 @@ export interface FileRoutesById {
   '/community': typeof CommunityRoute
   '/garden': typeof GardenRoute
   '/login': typeof LoginRoute
+  '/marketplace': typeof MarketplaceRoute
   '/resources': typeof ResourcesRoute
   '/signup': typeof SignupRoute
   '/_authenticated/create': typeof AuthenticatedCreateRoute
@@ -159,6 +168,7 @@ export interface FileRouteTypes {
     | '/community'
     | '/garden'
     | '/login'
+    | '/marketplace'
     | '/resources'
     | '/signup'
     | '/create'
@@ -175,6 +185,7 @@ export interface FileRouteTypes {
     | '/community'
     | '/garden'
     | '/login'
+    | '/marketplace'
     | '/resources'
     | '/signup'
     | '/create'
@@ -192,6 +203,7 @@ export interface FileRouteTypes {
     | '/community'
     | '/garden'
     | '/login'
+    | '/marketplace'
     | '/resources'
     | '/signup'
     | '/_authenticated/create'
@@ -210,6 +222,7 @@ export interface RootRouteChildren {
   CommunityRoute: typeof CommunityRoute
   GardenRoute: typeof GardenRoute
   LoginRoute: typeof LoginRoute
+  MarketplaceRoute: typeof MarketplaceRoute
   ResourcesRoute: typeof ResourcesRoute
   SignupRoute: typeof SignupRoute
   MemorialSlugRoute: typeof MemorialSlugRoute
@@ -230,6 +243,13 @@ declare module '@tanstack/react-router' {
       path: '/resources'
       fullPath: '/resources'
       preLoaderRoute: typeof ResourcesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/marketplace': {
+      id: '/marketplace'
+      path: '/marketplace'
+      fullPath: '/marketplace'
+      preLoaderRoute: typeof MarketplaceRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -353,6 +373,7 @@ const rootRouteChildren: RootRouteChildren = {
   CommunityRoute: CommunityRoute,
   GardenRoute: GardenRoute,
   LoginRoute: LoginRoute,
+  MarketplaceRoute: MarketplaceRoute,
   ResourcesRoute: ResourcesRoute,
   SignupRoute: SignupRoute,
   MemorialSlugRoute: MemorialSlugRoute,

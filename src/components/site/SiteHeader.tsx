@@ -1,6 +1,6 @@
 import { Link, useRouter, useLocation } from "@tanstack/react-router";
 import { useAuth } from "@/hooks/use-auth";
-import { ChevronLeft, LogOut } from "lucide-react";
+import { ChevronLeft, LogOut, ShoppingBag } from "lucide-react";
 import logo from "@/assets/logo.png";
 
 export function SiteHeader() {
@@ -33,6 +33,13 @@ export function SiteHeader() {
           </Link>
         </div>
         <div className="flex items-center gap-1">
+          <Link
+            to="/marketplace"
+            aria-label="Marketplace"
+            className="flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground hover:bg-muted"
+          >
+            <ShoppingBag className="h-4 w-4" />
+          </Link>
           {user ? (
             <button
               onClick={() => signOut()}
