@@ -119,7 +119,7 @@ function LandingPage() {
       <section className="mx-auto max-w-6xl px-5 py-10">
         <div className="grid items-center gap-12 glass gloss rounded-[2rem] p-8 md:grid-cols-2 md:p-14">
           <div>
-            <div className="text-xs uppercase tracking-[0.25em] text-[oklch(0.78_0.18_25)]">The ritual</div>
+            <div className="text-xs uppercase tracking-[0.25em] text-[oklch(0.78_0.16_250)]">The ritual</div>
             <h2 className="mt-3 font-display text-4xl text-white md:text-5xl">A four-step act of love</h2>
             <p className="mt-4 max-w-md text-white/70">
               Photo. Transform. Tribute. Candle. A quiet ceremony, end-to-end, in about ten minutes.
