@@ -58,7 +58,7 @@ function LandingPage() {
             <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center">
               <h1 className="max-w-3xl font-display text-4xl text-white md:text-6xl md:leading-[1.05]">
                 Your love mattered.<br />
-                <span className="italic bg-gradient-to-r from-[oklch(0.78_0.18_25)] via-[oklch(0.72_0.22_350)] to-[oklch(0.70_0.20_300)] bg-clip-text text-transparent">Your grief is welcome here.</span>
+                <span className="italic font-display bg-gradient-to-r from-[oklch(0.78_0.16_240)] via-[oklch(0.72_0.20_265)] to-[oklch(0.74_0.18_295)] bg-clip-text text-transparent">Your grief is welcome here.</span>
               </h1>
               <p className="mt-5 max-w-xl text-base text-white/85 md:text-lg">
                 A gentle place to honor, remember, and celebrate the bond you shared.
