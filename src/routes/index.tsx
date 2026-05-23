@@ -58,7 +58,7 @@ function LandingPage() {
             <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center">
               <h1 className="max-w-3xl font-display text-4xl text-white md:text-6xl md:leading-[1.05]">
                 Your love mattered.<br />
-                <span className="italic bg-gradient-to-r from-[oklch(0.78_0.18_25)] via-[oklch(0.72_0.22_350)] to-[oklch(0.70_0.20_300)] bg-clip-text text-transparent">Your grief is welcome here.</span>
+                <span className="italic font-display bg-gradient-to-r from-[oklch(0.78_0.16_240)] via-[oklch(0.72_0.20_265)] to-[oklch(0.74_0.18_295)] bg-clip-text text-transparent">Your grief is welcome here.</span>
               </h1>
               <p className="mt-5 max-w-xl text-base text-white/85 md:text-lg">
                 A gentle place to honor, remember, and celebrate the bond you shared.
@@ -76,7 +76,7 @@ function LandingPage() {
                 </Link>
               </div>
               <div className="mt-7 inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-xs text-white/85">
-                <Heart className="h-3 w-3 fill-[oklch(0.72_0.22_25)] text-[oklch(0.72_0.22_25)]" />
+                <Heart className="h-3 w-3 fill-[oklch(0.70_0.18_260)] text-[oklch(0.70_0.18_260)]" />
                 A community that understands
               </div>
             </div>
@@ -119,7 +119,7 @@ function LandingPage() {
       <section className="mx-auto max-w-6xl px-5 py-10">
         <div className="grid items-center gap-12 glass gloss rounded-[2rem] p-8 md:grid-cols-2 md:p-14">
           <div>
-            <div className="text-xs uppercase tracking-[0.25em] text-[oklch(0.78_0.18_25)]">The ritual</div>
+            <div className="text-xs uppercase tracking-[0.25em] text-[oklch(0.78_0.16_250)]">The ritual</div>
             <h2 className="mt-3 font-display text-4xl text-white md:text-5xl">A four-step act of love</h2>
             <p className="mt-4 max-w-md text-white/70">
               Photo. Transform. Tribute. Candle. A quiet ceremony, end-to-end, in about ten minutes.
@@ -127,7 +127,7 @@ function LandingPage() {
             <ol className="mt-6 space-y-3 text-sm">
               {["Upload a photo that feels like them", "Choose an AI-painted transformation", "Write a tribute in your own words", "Light their first candle"].map((step, i) => (
                 <li key={step} className="flex items-start gap-3">
-                  <span className="mt-0.5 flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-br from-[oklch(0.72_0.20_30)] to-[oklch(0.62_0.22_330)] text-xs text-white">{i+1}</span>
+                  <span className="mt-0.5 flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-br from-[oklch(0.65_0.20_250)] to-[oklch(0.55_0.22_275)] text-xs text-white">{i+1}</span>
                   <span className="text-white/90">{step}</span>
                 </li>
               ))}

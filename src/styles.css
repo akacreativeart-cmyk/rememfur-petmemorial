@@ -2,13 +2,13 @@
 @source "../src";
 @import "tw-animate-css";
 
-@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Inter:wght@300;400;500;600;700;800&display=swap");
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --font-display: "Playfair Display", ui-serif, Georgia, serif;
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Newsreader", ui-serif, "New York", Georgia, serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", ui-sans-serif, system-ui, sans-serif;
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -47,26 +47,27 @@
 }
 
 :root {
-  --radius: 1rem;
+  --radius: 1.25rem;
 
-  /* Painterly palette */
-  --cream: oklch(0.96 0.018 85);
-  --sage: oklch(0.66 0.045 130);
-  --sage-deep: oklch(0.42 0.04 135);
-  --terracotta: oklch(0.66 0.12 40);
-  --mauve: oklch(0.74 0.05 330);
-  --navy: oklch(0.32 0.05 260);
-  --ink: oklch(0.22 0.015 50);
+  /* Apple-inspired neutral palette */
+  --cream: oklch(0.985 0.003 250);
+  --sage: oklch(0.72 0.04 200);
+  --sage-deep: oklch(0.45 0.04 220);
+  --terracotta: oklch(0.68 0.14 35);
+  --mauve: oklch(0.74 0.05 320);
+  --navy: oklch(0.26 0.03 250);
+  --ink: oklch(0.18 0.01 250);
 
-  /* CTA — warm amber sunset (Apple-style vivid accent) */
-  --cta: oklch(0.72 0.17 55);
-  --cta-deep: oklch(0.62 0.19 40);
-  --cta-foreground: oklch(0.99 0.005 85);
+  /* CTA — Apple signature blue (#0071e3 territory) */
+  --cta: oklch(0.62 0.20 255);
+  --cta-deep: oklch(0.52 0.22 258);
+  --cta-foreground: oklch(0.99 0.002 250);
 
-  --background: oklch(0.97 0.015 85);
-  --foreground: oklch(0.22 0.015 50);
+  /* Apple light surface — near-white with cool tint */
+  --background: oklch(0.985 0.002 250);
+  --foreground: oklch(0.18 0.01 250);
 
-  --card: oklch(0.985 0.01 85);
+  --card: oklch(1 0 0);
   --card-foreground: var(--foreground);
   --popover: var(--card);
   --popover-foreground: var(--foreground);
@@ -74,20 +75,20 @@
   --primary: var(--cta);
   --primary-foreground: var(--cta-foreground);
 
-  --secondary: oklch(0.92 0.025 80);
+  --secondary: oklch(0.96 0.003 250);
   --secondary-foreground: var(--ink);
 
-  --muted: oklch(0.93 0.018 80);
-  --muted-foreground: oklch(0.48 0.018 60);
+  --muted: oklch(0.95 0.003 250);
+  --muted-foreground: oklch(0.52 0.01 250);
 
-  --accent: var(--terracotta);
-  --accent-foreground: oklch(0.97 0.015 85);
+  --accent: var(--cta);
+  --accent-foreground: var(--cta-foreground);
 
-  --destructive: oklch(0.55 0.18 25);
-  --destructive-foreground: oklch(0.98 0 0);
+  --destructive: oklch(0.6 0.22 25);
+  --destructive-foreground: oklch(0.99 0 0);
 
-  --border: oklch(0.87 0.02 75);
-  --input: oklch(0.9 0.018 75);
+  --border: oklch(0.9 0.005 250);
+  --input: oklch(0.93 0.005 250);
   --ring: var(--cta);
 }
 
@@ -124,36 +125,41 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
   }
-  h1, h2, h3, h4, .font-display {
+  h1, h2, h3, h4 {
+    font-family: var(--font-sans);
+    letter-spacing: -0.022em;
+    font-weight: 600;
+  }
+  .font-display {
     font-family: var(--font-display);
-    letter-spacing: -0.01em;
+    letter-spacing: -0.015em;
   }
 }
 
 @layer utilities {
   .paper-grain {
     background-image:
-      radial-gradient(circle at 20% 30%, color-mix(in oklab, var(--terracotta) 5%, transparent), transparent 40%),
-      radial-gradient(circle at 80% 70%, color-mix(in oklab, var(--sage) 6%, transparent), transparent 45%);
+      radial-gradient(circle at 20% 30%, color-mix(in oklab, var(--cta) 5%, transparent), transparent 40%),
+      radial-gradient(circle at 80% 70%, color-mix(in oklab, var(--sage) 5%, transparent), transparent 45%);
   }
-  /* Ultra-modern dark aurora mesh (Lovable-inspired) */
+  /* Apple-style dark aurora — cool blues & indigo */
   .mesh-bg {
-    background-color: #0a0a12;
+    background-color: #000;
     background-image:
-      radial-gradient(60% 50% at 15% 90%, oklch(0.72 0.22 25 / 0.55), transparent 60%),
-      radial-gradient(55% 45% at 85% 85%, oklch(0.68 0.25 350 / 0.55), transparent 60%),
-      radial-gradient(50% 45% at 50% 70%, oklch(0.70 0.20 320 / 0.45), transparent 65%),
-      radial-gradient(45% 40% at 80% 30%, oklch(0.58 0.22 270 / 0.50), transparent 65%),
-      radial-gradient(50% 45% at 10% 20%, oklch(0.55 0.20 250 / 0.40), transparent 65%),
-      linear-gradient(180deg, #07070d 0%, #0a0a14 50%, #100912 100%);
+      radial-gradient(55% 45% at 15% 90%, oklch(0.55 0.22 260 / 0.55), transparent 60%),
+      radial-gradient(50% 45% at 85% 85%, oklch(0.60 0.18 220 / 0.45), transparent 60%),
+      radial-gradient(45% 40% at 50% 70%, oklch(0.55 0.20 280 / 0.40), transparent 65%),
+      radial-gradient(45% 40% at 80% 25%, oklch(0.50 0.22 270 / 0.50), transparent 65%),
+      radial-gradient(50% 45% at 10% 15%, oklch(0.55 0.18 240 / 0.45), transparent 65%),
+      linear-gradient(180deg, #000 0%, #05060d 50%, #07091a 100%);
     background-attachment: fixed;
   }
   .mesh-bg-soft {
-    background-color: #0d0d18;
+    background-color: #0a0a14;
     background-image:
-      radial-gradient(50% 50% at 20% 100%, oklch(0.70 0.20 25 / 0.35), transparent 60%),
-      radial-gradient(50% 50% at 80% 0%, oklch(0.65 0.22 320 / 0.30), transparent 65%),
-      radial-gradient(60% 60% at 50% 50%, oklch(0.55 0.18 260 / 0.25), transparent 70%);
+      radial-gradient(50% 50% at 20% 100%, oklch(0.55 0.20 260 / 0.32), transparent 60%),
+      radial-gradient(50% 50% at 80% 0%, oklch(0.55 0.18 220 / 0.28), transparent 65%),
+      radial-gradient(60% 60% at 50% 50%, oklch(0.50 0.18 280 / 0.22), transparent 70%);
   }
   .soft-shadow {
     box-shadow: 0 1px 2px oklch(0.22 0.015 50 / 0.04),
