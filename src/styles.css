@@ -47,26 +47,27 @@
 }
 
 :root {
-  --radius: 1rem;
+  --radius: 1.25rem;
 
-  /* Painterly palette */
-  --cream: oklch(0.96 0.018 85);
-  --sage: oklch(0.66 0.045 130);
-  --sage-deep: oklch(0.42 0.04 135);
-  --terracotta: oklch(0.66 0.12 40);
-  --mauve: oklch(0.74 0.05 330);
-  --navy: oklch(0.32 0.05 260);
-  --ink: oklch(0.22 0.015 50);
+  /* Apple-inspired neutral palette */
+  --cream: oklch(0.985 0.003 250);
+  --sage: oklch(0.72 0.04 200);
+  --sage-deep: oklch(0.45 0.04 220);
+  --terracotta: oklch(0.68 0.14 35);
+  --mauve: oklch(0.74 0.05 320);
+  --navy: oklch(0.26 0.03 250);
+  --ink: oklch(0.18 0.01 250);
 
-  /* CTA — warm amber sunset (Apple-style vivid accent) */
-  --cta: oklch(0.72 0.17 55);
-  --cta-deep: oklch(0.62 0.19 40);
-  --cta-foreground: oklch(0.99 0.005 85);
+  /* CTA — Apple signature blue (#0071e3 territory) */
+  --cta: oklch(0.62 0.20 255);
+  --cta-deep: oklch(0.52 0.22 258);
+  --cta-foreground: oklch(0.99 0.002 250);
 
-  --background: oklch(0.97 0.015 85);
-  --foreground: oklch(0.22 0.015 50);
+  /* Apple light surface — near-white with cool tint */
+  --background: oklch(0.985 0.002 250);
+  --foreground: oklch(0.18 0.01 250);
 
-  --card: oklch(0.985 0.01 85);
+  --card: oklch(1 0 0);
   --card-foreground: var(--foreground);
   --popover: var(--card);
   --popover-foreground: var(--foreground);
@@ -74,20 +75,20 @@
   --primary: var(--cta);
   --primary-foreground: var(--cta-foreground);
 
-  --secondary: oklch(0.92 0.025 80);
+  --secondary: oklch(0.96 0.003 250);
   --secondary-foreground: var(--ink);
 
-  --muted: oklch(0.93 0.018 80);
-  --muted-foreground: oklch(0.48 0.018 60);
+  --muted: oklch(0.95 0.003 250);
+  --muted-foreground: oklch(0.52 0.01 250);
 
-  --accent: var(--terracotta);
-  --accent-foreground: oklch(0.97 0.015 85);
+  --accent: var(--cta);
+  --accent-foreground: var(--cta-foreground);
 
-  --destructive: oklch(0.55 0.18 25);
-  --destructive-foreground: oklch(0.98 0 0);
+  --destructive: oklch(0.6 0.22 25);
+  --destructive-foreground: oklch(0.99 0 0);
 
-  --border: oklch(0.87 0.02 75);
-  --input: oklch(0.9 0.018 75);
+  --border: oklch(0.9 0.005 250);
+  --input: oklch(0.93 0.005 250);
   --ring: var(--cta);
 }
 
