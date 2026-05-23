@@ -76,7 +76,7 @@ function LandingPage() {
                 </Link>
               </div>
               <div className="mt-7 inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-xs text-white/85">
-                <Heart className="h-3 w-3 fill-[oklch(0.72_0.22_25)] text-[oklch(0.72_0.22_25)]" />
+                <Heart className="h-3 w-3 fill-[oklch(0.70_0.18_260)] text-[oklch(0.70_0.18_260)]" />
                 A community that understands
               </div>
             </div>
