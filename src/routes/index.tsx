@@ -39,43 +39,43 @@ const journey = [
 
 function LandingPage() {
   return (
-    <div className="min-h-screen bg-background paper-grain">
+    <div className="min-h-screen mesh-bg text-foreground">
       <SiteHeader />
 
       {/* Hero */}
       <section className="relative">
         <div className="mx-auto max-w-6xl px-5 pt-10 pb-16 md:pt-14">
-          <div className="relative overflow-hidden rounded-[2rem] border border-border/60 soft-shadow">
+          <div className="relative overflow-hidden rounded-[2rem] border border-white/10 soft-shadow">
             <img
               src={heroImg}
-              alt="A young woman sitting in a wildflower meadow beside her golden retriever, looking out at a misty lake at sunset"
+              alt="A young woman in a wildflower meadow at twilight beside her golden retriever under a vivid aurora sky"
               width={1920}
               height={1080}
               className="h-[560px] w-full object-cover md:h-[640px]"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-cream/85 via-cream/20 to-cream/40" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/40" />
             <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center">
-              <h1 className="max-w-3xl font-display text-4xl text-ink md:text-6xl md:leading-[1.05]">
+              <h1 className="max-w-3xl font-display text-4xl text-white md:text-6xl md:leading-[1.05]">
                 Your love mattered.<br />
-                <span className="italic text-sage-deep">Your grief is welcome here.</span>
+                <span className="italic bg-gradient-to-r from-[oklch(0.78_0.18_25)] via-[oklch(0.72_0.22_350)] to-[oklch(0.70_0.20_300)] bg-clip-text text-transparent">Your grief is welcome here.</span>
               </h1>
-              <p className="mt-5 max-w-xl text-base text-ink/80 md:text-lg">
+              <p className="mt-5 max-w-xl text-base text-white/85 md:text-lg">
                 A gentle place to honor, remember, and celebrate the bond you shared.
               </p>
               <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row">
                 <Link to="/signup">
-                  <Button size="lg" className="rounded-full bg-sage-deep px-7 py-6 text-base text-primary-foreground hover:bg-sage-deep/90">
+                  <Button size="lg" className="rounded-full px-7 py-6 text-base">
                     <Heart className="mr-2 h-4 w-4 fill-current" /> Create a memorial
                   </Button>
                 </Link>
                 <Link to="/garden">
-                  <Button size="lg" variant="outline" className="rounded-full border-ink/15 bg-cream/80 px-7 py-6 text-base text-ink hover:bg-cream">
+                  <Button size="lg" variant="outline" className="rounded-full px-7 py-6 text-base">
                     Visit Memorial Garden
                   </Button>
                 </Link>
               </div>
-              <div className="mt-7 inline-flex items-center gap-2 rounded-full bg-cream/70 px-4 py-1.5 text-xs text-ink/70 backdrop-blur">
-                <Heart className="h-3 w-3 fill-terracotta text-terracotta" />
+              <div className="mt-7 inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-xs text-white/85">
+                <Heart className="h-3 w-3 fill-[oklch(0.72_0.22_25)] text-[oklch(0.72_0.22_25)]" />
                 A community that understands
               </div>
             </div>
