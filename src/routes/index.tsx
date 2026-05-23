@@ -127,7 +127,7 @@ function LandingPage() {
             <ol className="mt-6 space-y-3 text-sm">
               {["Upload a photo that feels like them", "Choose an AI-painted transformation", "Write a tribute in your own words", "Light their first candle"].map((step, i) => (
                 <li key={step} className="flex items-start gap-3">
-                  <span className="mt-0.5 flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-br from-[oklch(0.72_0.20_30)] to-[oklch(0.62_0.22_330)] text-xs text-white">{i+1}</span>
+                  <span className="mt-0.5 flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-br from-[oklch(0.65_0.20_250)] to-[oklch(0.55_0.22_275)] text-xs text-white">{i+1}</span>
                   <span className="text-white/90">{step}</span>
                 </li>
               ))}
