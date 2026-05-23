@@ -3,12 +3,13 @@ import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { PawIcon } from "@/components/site/PawIcon";
-import heroImg from "@/assets/hero-meadow.jpg";
-import candleImg from "@/assets/candle.jpg";
-import pet1 from "@/assets/pet-1.jpg";
-import pet2 from "@/assets/pet-2.jpg";
-import pet3 from "@/assets/pet-3.jpg";
-import pet4 from "@/assets/pet-4.jpg";
+// Classy, free-to-use photography from Unsplash
+const heroImg = "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=1920&q=80";
+const candleImg = "https://images.unsplash.com/photo-1602874801007-bd458bb1b8b6?auto=format&fit=crop&w=1024&q=80";
+const pet1 = "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=768&q=80";
+const pet2 = "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=768&q=80";
+const pet3 = "https://images.unsplash.com/photo-1587300003388-59208cc962cb?auto=format&fit=crop&w=768&q=80";
+const pet4 = "https://images.unsplash.com/photo-1574158622682-e40e69881006?auto=format&fit=crop&w=768&q=80";
 import { Heart, Flower2, Users, BookOpen, HandHeart, Sparkles } from "lucide-react";
 
 export const Route = createFileRoute("/")({
