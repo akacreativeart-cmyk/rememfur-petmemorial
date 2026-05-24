@@ -56,9 +56,9 @@ function LandingPage() {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/40" />
             <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center">
-              <h1 className="max-w-3xl font-display text-4xl text-white md:text-6xl md:leading-[1.05]">
+              <h1 className="max-w-3xl font-display text-5xl text-white md:text-7xl md:leading-[1.02]">
                 Your love mattered.<br />
-                <span className="italic font-display bg-gradient-to-r from-[oklch(0.78_0.16_240)] via-[oklch(0.72_0.20_265)] to-[oklch(0.74_0.18_295)] bg-clip-text text-transparent">Your grief is welcome here.</span>
+                <span className="bg-gradient-to-r from-[oklch(0.78_0.14_240)] to-[oklch(0.72_0.18_265)] bg-clip-text text-transparent">Your grief is welcome here.</span>
               </h1>
               <p className="mt-5 max-w-xl text-base text-white/85 md:text-lg">
                 A gentle place to honor, remember, and celebrate the bond you shared.
@@ -87,7 +87,7 @@ function LandingPage() {
       {/* Quote band */}
       <section className="mx-auto max-w-6xl px-5">
         <div className="mx-auto max-w-2xl glass rounded-3xl px-8 py-10 text-center">
-          <p className="font-display text-3xl italic text-white/90 md:text-4xl">
+          <p className="font-display text-3xl text-white/90 md:text-4xl tracking-tight">
             "Love leaves paw prints on the heart."
           </p>
         </div>
