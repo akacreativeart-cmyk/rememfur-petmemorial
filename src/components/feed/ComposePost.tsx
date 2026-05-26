@@ -5,12 +5,27 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Upload, ImagePlus } from "lucide-react";
+import { Upload, ImagePlus, Sparkles } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { createPost } from "@/lib/feed.functions";
 import { listMyMemorials } from "@/lib/memorials.functions";
+import { assistCaption } from "@/lib/ai-assist.functions";
 import { toast } from "sonner";
+
+type FilterKey =
+  | "none" | "warm" | "mono" | "sepia" | "fade" | "vintage" | "cool" | "glow";
+
+const FILTERS: { key: FilterKey; label: string }[] = [
+  { key: "none", label: "Original" },
+  { key: "warm", label: "Warm" },
+  { key: "vintage", label: "Vintage" },
+  { key: "sepia", label: "Sepia" },
+  { key: "fade", label: "Fade" },
+  { key: "mono", label: "Mono" },
+  { key: "cool", label: "Cool" },
+  { key: "glow", label: "Glow" },
+];
 
 export function ComposePost() {
   const { user } = useAuth();
@@ -20,9 +35,11 @@ export function ComposePost() {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [memorialId, setMemorialId] = useState<string>("");
   const [uploading, setUploading] = useState(false);
+  const [filter, setFilter] = useState<FilterKey>("none");
 
   const createFn = useServerFn(createPost);
   const myMemorialsFn = useServerFn(listMyMemorials);
+  const assistFn = useServerFn(assistCaption);
 
   const { data: memorials } = useQuery({
     queryKey: ["my-memorials-mini"],
@@ -42,6 +59,15 @@ export function ComposePost() {
     setImageUrl(data.publicUrl);
   };
 
+  const assist = useMutation({
+    mutationFn: () => assistFn({ data: { draft: caption, tone: "tender" } }),
+    onSuccess: (res) => {
+      if (res?.caption) setCaption(res.caption);
+      toast.success("AI suggestion ready — edit freely.");
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
   const submit = useMutation({
     mutationFn: () =>
       createFn({
@@ -53,7 +79,7 @@ export function ComposePost() {
       }),
     onSuccess: () => {
       toast.success("Posted.");
-      setCaption(""); setImageUrl(null); setMemorialId(""); setOpen(false);
+      setCaption(""); setImageUrl(null); setMemorialId(""); setFilter("none"); setOpen(false);
       qc.invalidateQueries({ queryKey: ["feed"] });
     },
     onError: (e: Error) => toast.error(e.message),
@@ -69,18 +95,35 @@ export function ComposePost() {
           <ImagePlus className="mr-2 h-4 w-4" /> Share a memory
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-lg">
+      <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="font-display text-2xl">Share a memory</DialogTitle>
         </DialogHeader>
         <div className="space-y-4">
           {imageUrl ? (
-            <div className="relative overflow-hidden rounded-xl bg-muted">
-              <img src={imageUrl} alt="" className="aspect-square w-full object-cover" />
-              <Button variant="secondary" size="sm" className="absolute right-2 top-2" onClick={() => setImageUrl(null)}>
-                Remove
-              </Button>
-            </div>
+            <>
+              <div className="relative overflow-hidden rounded-xl bg-muted">
+                <img src={imageUrl} alt="" className={`aspect-square w-full object-cover filt-${filter}`} />
+                <Button variant="secondary" size="sm" className="absolute right-2 top-2" onClick={() => { setImageUrl(null); setFilter("none"); }}>
+                  Remove
+                </Button>
+              </div>
+              {/* Instagram-style filter strip */}
+              <div className="-mx-1 flex gap-2 overflow-x-auto pb-1">
+                {FILTERS.map((f) => (
+                  <button
+                    key={f.key}
+                    onClick={() => setFilter(f.key)}
+                    className={`shrink-0 rounded-xl border p-1.5 text-center transition ${
+                      filter === f.key ? "border-sage-deep ring-2 ring-sage-deep/30" : "border-border/60"
+                    }`}
+                  >
+                    <img src={imageUrl} alt="" className={`h-14 w-14 rounded-md object-cover filt-${f.key}`} />
+                    <div className="mt-1 text-[10px] text-muted-foreground">{f.label}</div>
+                  </button>
+                ))}
+              </div>
+            </>
           ) : (
             <label className="flex aspect-video w-full cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-border bg-muted/30 text-muted-foreground hover:bg-muted/50">
               <Upload className="h-6 w-6" />
@@ -90,7 +133,20 @@ export function ComposePost() {
           )}
 
           <div>
-            <Label htmlFor="cap">Caption</Label>
+            <div className="flex items-center justify-between">
+              <Label htmlFor="cap">Caption</Label>
+              <Button
+                type="button"
+                size="sm"
+                variant="ghost"
+                className="h-7 text-xs text-sage-deep hover:bg-sage/10"
+                disabled={assist.isPending}
+                onClick={() => assist.mutate()}
+              >
+                <Sparkles className="mr-1 h-3.5 w-3.5" />
+                {assist.isPending ? "Thinking…" : "AI assist (optional)"}
+              </Button>
+            </div>
             <Textarea id="cap" value={caption} onChange={(e) => setCaption(e.target.value)} rows={4} placeholder="What do you want to remember?" />
           </div>
 
