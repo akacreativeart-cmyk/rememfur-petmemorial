@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { PawIcon } from "@/components/site/PawIcon";
-import { Heart, Feather, Flame, Users, PenLine, ImagePlus, MessageCircleHeart } from "lucide-react";
+import { Heart, Feather, Flame, Users, PenLine, ImagePlus, MessageCircleHeart, ShoppingBag, Gift, Sparkles } from "lucide-react";
 
 // Warm, vintage pet photography
 const pet1 = "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=600&q=80";
@@ -320,6 +320,113 @@ function LandingPage() {
           </div>
         </div>
       </section>
+
+      {/* ─────────────────────────── Rainbow Bridge + Candles ─────────────────────────── */}
+      <section className="mx-auto max-w-6xl px-5 py-12">
+        <div className="rainbow-bridge relative h-72 overflow-hidden rounded-3xl border border-[color-mix(in_oklab,var(--ink)_12%,transparent)] md:h-80">
+          <div className="rainbow-arc" />
+          {/* drifting candles */}
+          <div className="candle-drift">
+            <div className="candle"><div className="flame" /></div>
+          </div>
+          <div className="candle-drift delay-1">
+            <div className="candle"><div className="flame" /></div>
+          </div>
+          <div className="candle-drift delay-2">
+            <div className="candle"><div className="flame" /></div>
+          </div>
+          <div className="candle-drift delay-3">
+            <div className="candle"><div className="flame" /></div>
+          </div>
+          <div className="candle-drift delay-4">
+            <div className="candle"><div className="flame" /></div>
+          </div>
+
+          <div className="relative z-10 flex h-full flex-col items-center justify-center px-6 text-center">
+            <div className="font-hand text-2xl text-[var(--terracotta)]">across the rainbow bridge</div>
+            <h2 className="mt-2 font-display text-3xl text-[var(--ink)] md:text-5xl">
+              A candle, gently lit, <span className="italic">for every name.</span>
+            </h2>
+            <p className="mt-3 max-w-md font-serif text-base text-[color-mix(in_oklab,var(--ink)_72%,transparent)]">
+              When you light one here, it joins thousands drifting across the sky tonight.
+            </p>
+            <Link to="/garden" className="mt-5">
+              <Button size="lg" className="rounded-full px-7">
+                <Flame className="mr-2 h-4 w-4" /> Light a candle
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ─────────────────────────── Memorabilia Marketplace ─────────────────────────── */}
+      <section className="mx-auto max-w-6xl px-5 py-16">
+        <div className="text-center">
+          <div className="chapter-rule mx-auto max-w-md">
+            <Gift className="h-5 w-5 text-[var(--terracotta)]" />
+            <span className="font-display text-sm uppercase tracking-[0.4em]">Memorabilia Market</span>
+            <Gift className="h-5 w-5 text-[var(--terracotta)]" />
+          </div>
+          <h2 className="mt-5 font-display text-4xl text-[var(--ink)] md:text-5xl">
+            Something to <span className="italic">hold on to.</span>
+          </h2>
+          <p className="mt-3 mx-auto max-w-xl font-serif text-lg text-[color-mix(in_oklab,var(--ink)_72%,transparent)]">
+            Hand-picked keepsakes — paw prints in clay, hand-painted portraits, memorial jewelry, and urns crafted with care.
+          </p>
+        </div>
+
+        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {[
+            {
+              title: "Custom Paw Print Plaque",
+              price: "From $48",
+              tag: "Keepsake",
+              img: "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&fit=crop&w=600&q=80",
+            },
+            {
+              title: "Hand-painted Portrait",
+              price: "From $129",
+              tag: "Artwork",
+              img: "https://images.unsplash.com/photo-1518791841217-8f162f1e1131?auto=format&fit=crop&w=600&q=80",
+            },
+            {
+              title: "Memorial Pendant",
+              price: "From $79",
+              tag: "Jewelry",
+              img: "https://images.unsplash.com/photo-1535632787350-4e68ef0ac584?auto=format&fit=crop&w=600&q=80",
+            },
+            {
+              title: "Hand-thrown Urn",
+              price: "From $185",
+              tag: "Ceramics",
+              img: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=600&q=80",
+            },
+          ].map((p) => (
+            <article key={p.title} className="book-card overflow-hidden rounded-2xl">
+              <div className="aspect-square overflow-hidden bg-muted">
+                <img src={p.img} alt={p.title} loading="lazy" className="h-full w-full object-cover sepia-[.05] transition-transform duration-500 hover:scale-105" />
+              </div>
+              <div className="p-4">
+                <div className="text-[10px] uppercase tracking-widest text-[var(--terracotta)]">{p.tag}</div>
+                <h3 className="mt-1 font-display text-lg text-[var(--ink)]">{p.title}</h3>
+                <div className="mt-1 font-serif text-sm text-[color-mix(in_oklab,var(--ink)_70%,transparent)]">{p.price}</div>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <div className="mt-8 text-center">
+          <Link to="/marketplace">
+            <Button size="lg" variant="outline" className="rounded-full px-7">
+              <ShoppingBag className="mr-2 h-4 w-4" /> Browse the marketplace
+            </Button>
+          </Link>
+          <div className="mt-3 font-hand text-lg text-[color-mix(in_oklab,var(--ink)_60%,transparent)]">
+            <Sparkles className="mr-1 inline h-4 w-4" /> a portion of every sale supports pet bereavement charities
+          </div>
+        </div>
+      </section>
+
 
       {/* ─────────────────────────── Pull quote ─────────────────────────── */}
       <section className="mx-auto max-w-4xl px-5 py-10">

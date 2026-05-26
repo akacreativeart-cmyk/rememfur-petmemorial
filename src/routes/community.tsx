@@ -7,6 +7,7 @@ import { SiteFooter } from "@/components/site/SiteFooter";
 import { PostCard } from "@/components/feed/PostCard";
 import { PostSkeleton } from "@/components/feed/PostSkeleton";
 import { ComposePost } from "@/components/feed/ComposePost";
+import { DummyPosts } from "@/components/feed/DummyPosts";
 import { listFeed } from "@/lib/feed.functions";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
@@ -111,16 +112,18 @@ function CommunityPage() {
             </>
           )}
           {!isLoading && posts.length === 0 && (
-            <div className="rounded-2xl border border-dashed border-border bg-card/50 p-10 text-center">
+            <div className="rounded-2xl border border-dashed border-border bg-card/50 p-6 text-center">
               <p className="font-display text-xl text-foreground">It&apos;s quiet here.</p>
               <p className="mt-2 text-sm text-muted-foreground">
-                {scope === "following" ? "Follow people to fill your feed." : "Be the first to share a memory."}
+                {scope === "following" ? "Follow people to fill your feed." : "Be the first to share a memory — or scroll a few stories from the community."}
               </p>
             </div>
           )}
           {posts.map((p) => (
             <PostCard key={p.id} post={p} />
           ))}
+
+          <DummyPosts />
 
           <div ref={sentinelRef} className="h-1" aria-hidden="true" />
 
