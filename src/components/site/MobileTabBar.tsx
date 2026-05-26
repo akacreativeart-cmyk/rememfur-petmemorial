@@ -1,5 +1,5 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { Home, Flower2, PlusCircle, Users, User as UserIcon } from "lucide-react";
+import { Home, ShoppingBag, PlusCircle, Users, User as UserIcon } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 
 type Tab = { to: string; label: string; icon: any; match?: (p: string) => boolean };
@@ -10,7 +10,7 @@ export function MobileTabBar() {
 
   const tabs: Tab[] = [
     { to: "/", label: "Home", icon: Home, match: (p) => p === "/" },
-    { to: "/garden", label: "Garden", icon: Flower2 },
+    { to: "/marketplace", label: "Market", icon: ShoppingBag },
     { to: user ? "/create" : "/signup", label: "Create", icon: PlusCircle },
     { to: "/community", label: "Feed", icon: Users },
     { to: user ? "/dashboard" : "/login", label: user ? "Me" : "Sign in", icon: UserIcon },

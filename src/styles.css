@@ -254,4 +254,97 @@
       0 1px 2px oklch(0.3 0.02 50 / 0.08),
       0 18px 30px -20px oklch(0.3 0.05 40 / 0.3);
   }
+
+  /* ─────── Rainbow Bridge + Candle animations ─────── */
+  .rainbow-bridge {
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse at 50% 100%, color-mix(in oklab, var(--paper) 92%, transparent), var(--paper) 70%),
+      linear-gradient(180deg,
+        color-mix(in oklab, var(--mauve) 22%, transparent) 0%,
+        color-mix(in oklab, var(--paper) 92%, transparent) 60%);
+  }
+  .rainbow-arc {
+    position: absolute;
+    inset: auto 0 -60% 0;
+    height: 220%;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 50% 100%,
+        transparent 38%,
+        oklch(0.78 0.18 350) 39%, oklch(0.78 0.18 350) 42%,
+        transparent 42.5%,
+        oklch(0.78 0.18 30)  43%, oklch(0.78 0.18 30)  46%,
+        transparent 46.5%,
+        oklch(0.85 0.16 80)  47%, oklch(0.85 0.16 80)  50%,
+        transparent 50.5%,
+        oklch(0.82 0.18 145) 51%, oklch(0.82 0.18 145) 54%,
+        transparent 54.5%,
+        oklch(0.78 0.16 230) 55%, oklch(0.78 0.16 230) 58%,
+        transparent 58.5%,
+        oklch(0.65 0.20 290) 59%, oklch(0.65 0.20 290) 62%,
+        transparent 62.5%);
+    opacity: 0.45;
+    filter: blur(0.3px);
+    animation: rainbow-shimmer 8s ease-in-out infinite;
+  }
+  @keyframes rainbow-shimmer {
+    0%, 100% { opacity: 0.4; transform: translateY(0); }
+    50%      { opacity: 0.7; transform: translateY(-6px); }
+  }
+
+  /* Candle that drifts across the rainbow */
+  .candle-drift {
+    position: absolute;
+    bottom: 22%;
+    animation: candle-cross 14s linear infinite;
+  }
+  .candle-drift.delay-1 { animation-delay: -3s; bottom: 32%; }
+  .candle-drift.delay-2 { animation-delay: -6s; bottom: 18%; }
+  .candle-drift.delay-3 { animation-delay: -9s; bottom: 26%; }
+  .candle-drift.delay-4 { animation-delay: -12s; bottom: 36%; }
+  @keyframes candle-cross {
+    0%   { transform: translateX(-10vw) translateY(0); }
+    50%  { transform: translateX(50vw)  translateY(-22px); }
+    100% { transform: translateX(110vw) translateY(0); }
+  }
+
+  .candle {
+    position: relative;
+    width: 14px; height: 30px;
+    background: linear-gradient(180deg, oklch(0.96 0.04 80), oklch(0.86 0.06 60));
+    border-radius: 3px;
+    box-shadow: 0 4px 10px oklch(0.3 0.05 40 / 0.25);
+  }
+  .candle::before { /* wick */
+    content: "";
+    position: absolute; left: 50%; top: -3px;
+    width: 1.5px; height: 4px; background: oklch(0.2 0.02 40);
+    transform: translateX(-50%);
+  }
+  .flame {
+    position: absolute; left: 50%; top: -18px;
+    width: 12px; height: 18px;
+    transform: translateX(-50%);
+    background: radial-gradient(circle at 50% 70%, oklch(0.95 0.18 80) 0%, oklch(0.82 0.22 50) 45%, oklch(0.62 0.22 30) 75%, transparent 80%);
+    border-radius: 50% 50% 45% 45% / 60% 60% 40% 40%;
+    filter: blur(0.2px) drop-shadow(0 0 10px oklch(0.85 0.2 60 / 0.7));
+    transform-origin: 50% 100%;
+    animation: flame-flicker 1.2s ease-in-out infinite;
+  }
+  @keyframes flame-flicker {
+    0%, 100% { transform: translateX(-50%) scale(1) rotate(-1deg); opacity: 0.95; }
+    50%      { transform: translateX(-50%) scale(1.08, 0.95) rotate(2deg); opacity: 1; }
+  }
+
+  /* Instagram-style preview filters */
+  .filt-none      { filter: none; }
+  .filt-warm      { filter: sepia(0.18) saturate(1.15) contrast(1.05) hue-rotate(-6deg); }
+  .filt-mono      { filter: grayscale(1) contrast(1.05); }
+  .filt-sepia     { filter: sepia(0.65) saturate(1.1) contrast(1.05) brightness(1.02); }
+  .filt-fade      { filter: contrast(0.92) brightness(1.06) saturate(0.85); }
+  .filt-vintage   { filter: sepia(0.35) hue-rotate(-15deg) saturate(1.2) contrast(1.05); }
+  .filt-cool      { filter: saturate(1.1) hue-rotate(8deg) brightness(1.02); }
+  .filt-glow      { filter: brightness(1.08) saturate(1.2) contrast(0.96); }
 }
