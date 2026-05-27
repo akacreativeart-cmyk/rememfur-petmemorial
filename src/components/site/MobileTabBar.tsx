@@ -1,5 +1,5 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { Home, Flower2, PlusCircle, Users } from "lucide-react";
+import { Home, Flower2, PlusCircle, Users, User } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 
 type Tab = { to: string; label: string; icon: any; match?: (p: string) => boolean };
@@ -13,6 +13,7 @@ export function MobileTabBar() {
     { to: "/garden", label: "Garden", icon: Flower2 },
     { to: user ? "/create" : "/signup", label: "Create", icon: PlusCircle },
     { to: "/community", label: "Feed", icon: Users },
+    { to: user ? "/settings" : "/login", label: "Profile", icon: User },
   ];
 
   return (
@@ -21,7 +22,7 @@ export function MobileTabBar() {
       className="fixed inset-x-3 bottom-3 z-50 glass-strong rounded-full"
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
-      <ul className="mx-auto flex max-w-md items-stretch justify-between px-2">
+      <ul className="mx-auto flex max-w-md items-stretch justify-between px-1">
         {tabs.map(({ to, label, icon: Icon, match }) => {
           const active = match ? match(pathname) : pathname === to || pathname.startsWith(to + "/");
           const isCreate = label === "Create";
