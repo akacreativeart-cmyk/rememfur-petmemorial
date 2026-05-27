@@ -5,7 +5,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { MessageCircle, Trash2, Flower2 } from "lucide-react";
+import { MessageCircle, Trash2, Flower2, Flame } from "lucide-react";
 import { PawIcon } from "@/components/site/PawIcon";
 import { useAuth } from "@/hooks/use-auth";
 import {
@@ -15,6 +15,7 @@ import {
   toggleLike,
   type FeedPost,
 } from "@/lib/feed.functions";
+import { lightCandleOnPost } from "@/lib/post-candle.functions";
 import { toast } from "sonner";
 import { formatDistanceToNow } from "date-fns";
 
@@ -28,6 +29,13 @@ export function PostCard({ post }: { post: FeedPost }) {
   const deleteFn = useServerFn(deletePost);
   const commentsFn = useServerFn(listComments);
   const addCommentFn = useServerFn(addComment);
+  const candleFn = useServerFn(lightCandleOnPost);
+
+  const candle = useMutation({
+    mutationFn: () => candleFn({ data: { post_id: post.id, message: null } }),
+    onSuccess: () => toast.success("Candle lit 🕯️ — they would have felt it."),
+    onError: (e: Error) => toast.error(e.message),
+  });
 
   const like = useMutation({
     mutationFn: () => likeFn({ data: { post_id: post.id } }),
@@ -138,6 +146,17 @@ export function PostCard({ post }: { post: FeedPost }) {
             <MessageCircle className="h-4 w-4" />
             {post.comment_count}
           </button>
+          {post.memorial_slug && (
+            <button
+              onClick={() => user ? candle.mutate() : toast.error("Sign in to light a candle")}
+              disabled={candle.isPending}
+              aria-label="Light a candle"
+              className="flex items-center gap-1.5 rounded-full bg-[color-mix(in_oklab,var(--cta)_12%,transparent)] px-3 py-1.5 text-sm text-[var(--cta)] transition hover:bg-[color-mix(in_oklab,var(--cta)_20%,transparent)]"
+            >
+              <Flame className="h-4 w-4" />
+              Candle
+            </button>
+          )}
           <div className="ml-auto flex gap-1 text-base" aria-label="React">
             {["🐾", "🦴", "❤️", "🐶", "🐱"].map((e) => (
               <button
