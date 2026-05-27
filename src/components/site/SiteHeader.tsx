@@ -1,7 +1,7 @@
 import { Link, useRouter, useLocation } from "@tanstack/react-router";
 import { useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
-import { ChevronLeft, LogOut, ShoppingBag, Menu, Home, Flower2, Users, BookOpen, PlusCircle, User as UserIcon, Settings, HeartHandshake, Info } from "lucide-react";
+import { ChevronLeft, LogOut, ShoppingBag, Menu, Home, Flower2, Users, BookOpen, PlusCircle, User as UserIcon, Settings, HeartHandshake, Info, HandHeart, Stethoscope, LifeBuoy } from "lucide-react";
 import logo from "@/assets/logo.png";
 import {
   Sheet,
@@ -23,6 +23,9 @@ export function SiteHeader() {
     { to: "/garden", label: "Memory Garden", icon: Flower2 },
     { to: "/community", label: "Community", icon: Users },
     { to: "/marketplace", label: "Marketplace", icon: ShoppingBag },
+    { to: "/grief-support", label: "Grief Support", icon: LifeBuoy },
+    { to: "/adoption", label: "Adoption", icon: HandHeart },
+    { to: "/medical", label: "Medical", icon: Stethoscope },
     { to: "/resources", label: "Grief Resources", icon: BookOpen },
     { to: "/about", label: "About", icon: Info },
   ];
@@ -32,7 +35,7 @@ export function SiteHeader() {
         { to: "/create", label: "Create memorial", icon: PlusCircle },
         { to: "/dashboard", label: "My dashboard", icon: UserIcon },
         { to: "/journal", label: "My journal", icon: HeartHandshake },
-        { to: "/settings", label: "Settings", icon: Settings },
+        { to: "/settings", label: "Profile & Settings", icon: Settings },
       ]
     : [];
 
