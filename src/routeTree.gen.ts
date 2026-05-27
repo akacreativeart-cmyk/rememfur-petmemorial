@@ -11,10 +11,13 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ResourcesRouteImport } from './routes/resources'
+import { Route as MedicalRouteImport } from './routes/medical'
 import { Route as MarketplaceRouteImport } from './routes/marketplace'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as GriefSupportRouteImport } from './routes/grief-support'
 import { Route as GardenRouteImport } from './routes/garden'
 import { Route as CommunityRouteImport } from './routes/community'
+import { Route as AdoptionRouteImport } from './routes/adoption'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
@@ -36,6 +39,11 @@ const ResourcesRoute = ResourcesRouteImport.update({
   path: '/resources',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MedicalRoute = MedicalRouteImport.update({
+  id: '/medical',
+  path: '/medical',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MarketplaceRoute = MarketplaceRouteImport.update({
   id: '/marketplace',
   path: '/marketplace',
@@ -46,6 +54,11 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GriefSupportRoute = GriefSupportRouteImport.update({
+  id: '/grief-support',
+  path: '/grief-support',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GardenRoute = GardenRouteImport.update({
   id: '/garden',
   path: '/garden',
@@ -54,6 +67,11 @@ const GardenRoute = GardenRouteImport.update({
 const CommunityRoute = CommunityRouteImport.update({
   id: '/community',
   path: '/community',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdoptionRoute = AdoptionRouteImport.update({
+  id: '/adoption',
+  path: '/adoption',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -110,10 +128,13 @@ const AuthenticatedMemorialSlugEditRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/adoption': typeof AdoptionRoute
   '/community': typeof CommunityRoute
   '/garden': typeof GardenRoute
+  '/grief-support': typeof GriefSupportRoute
   '/login': typeof LoginRoute
   '/marketplace': typeof MarketplaceRoute
+  '/medical': typeof MedicalRoute
   '/resources': typeof ResourcesRoute
   '/signup': typeof SignupRoute
   '/create': typeof AuthenticatedCreateRoute
@@ -127,10 +148,13 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/adoption': typeof AdoptionRoute
   '/community': typeof CommunityRoute
   '/garden': typeof GardenRoute
+  '/grief-support': typeof GriefSupportRoute
   '/login': typeof LoginRoute
   '/marketplace': typeof MarketplaceRoute
+  '/medical': typeof MedicalRoute
   '/resources': typeof ResourcesRoute
   '/signup': typeof SignupRoute
   '/create': typeof AuthenticatedCreateRoute
@@ -146,10 +170,13 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/about': typeof AboutRoute
+  '/adoption': typeof AdoptionRoute
   '/community': typeof CommunityRoute
   '/garden': typeof GardenRoute
+  '/grief-support': typeof GriefSupportRoute
   '/login': typeof LoginRoute
   '/marketplace': typeof MarketplaceRoute
+  '/medical': typeof MedicalRoute
   '/resources': typeof ResourcesRoute
   '/signup': typeof SignupRoute
   '/_authenticated/create': typeof AuthenticatedCreateRoute
@@ -165,10 +192,13 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/adoption'
     | '/community'
     | '/garden'
+    | '/grief-support'
     | '/login'
     | '/marketplace'
+    | '/medical'
     | '/resources'
     | '/signup'
     | '/create'
@@ -182,10 +212,13 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/adoption'
     | '/community'
     | '/garden'
+    | '/grief-support'
     | '/login'
     | '/marketplace'
+    | '/medical'
     | '/resources'
     | '/signup'
     | '/create'
@@ -200,10 +233,13 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/about'
+    | '/adoption'
     | '/community'
     | '/garden'
+    | '/grief-support'
     | '/login'
     | '/marketplace'
+    | '/medical'
     | '/resources'
     | '/signup'
     | '/_authenticated/create'
@@ -219,10 +255,13 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   AboutRoute: typeof AboutRoute
+  AdoptionRoute: typeof AdoptionRoute
   CommunityRoute: typeof CommunityRoute
   GardenRoute: typeof GardenRoute
+  GriefSupportRoute: typeof GriefSupportRoute
   LoginRoute: typeof LoginRoute
   MarketplaceRoute: typeof MarketplaceRoute
+  MedicalRoute: typeof MedicalRoute
   ResourcesRoute: typeof ResourcesRoute
   SignupRoute: typeof SignupRoute
   MemorialSlugRoute: typeof MemorialSlugRoute
@@ -245,6 +284,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResourcesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/medical': {
+      id: '/medical'
+      path: '/medical'
+      fullPath: '/medical'
+      preLoaderRoute: typeof MedicalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/marketplace': {
       id: '/marketplace'
       path: '/marketplace'
@@ -259,6 +305,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/grief-support': {
+      id: '/grief-support'
+      path: '/grief-support'
+      fullPath: '/grief-support'
+      preLoaderRoute: typeof GriefSupportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/garden': {
       id: '/garden'
       path: '/garden'
@@ -271,6 +324,13 @@ declare module '@tanstack/react-router' {
       path: '/community'
       fullPath: '/community'
       preLoaderRoute: typeof CommunityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/adoption': {
+      id: '/adoption'
+      path: '/adoption'
+      fullPath: '/adoption'
+      preLoaderRoute: typeof AdoptionRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -370,10 +430,13 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AboutRoute: AboutRoute,
+  AdoptionRoute: AdoptionRoute,
   CommunityRoute: CommunityRoute,
   GardenRoute: GardenRoute,
+  GriefSupportRoute: GriefSupportRoute,
   LoginRoute: LoginRoute,
   MarketplaceRoute: MarketplaceRoute,
+  MedicalRoute: MedicalRoute,
   ResourcesRoute: ResourcesRoute,
   SignupRoute: SignupRoute,
   MemorialSlugRoute: MemorialSlugRoute,
