@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
-import { LifeBuoy, Phone, MessageCircle, Users, Heart } from "lucide-react";
+import { PageHero } from "@/components/site/PageHero";
+import { Phone, MessageCircle, Users, Heart } from "lucide-react";
 
 export const Route = createFileRoute("/grief-support")({
   component: GriefSupport,
@@ -23,14 +24,15 @@ function GriefSupport() {
   return (
     <div className="min-h-screen bg-background paper-grain">
       <SiteHeader />
-      <main className="mx-auto max-w-2xl px-5 py-12 pb-32">
-        <div className="text-xs uppercase tracking-[0.2em] text-[var(--cta)]">You are not alone</div>
-        <h1 className="mt-3 font-display text-4xl text-foreground">Grief Support</h1>
-        <p className="mt-3 text-muted-foreground">
-          Pet grief is real grief. Reach out — someone is waiting to listen.
-        </p>
+      <main className="mx-auto max-w-2xl px-5 py-10 pb-32">
+        <PageHero
+          eyebrow="chapter four"
+          title="Grief Support"
+          handwritten="you are not alone in this"
+          intro="Pet grief is real grief. Reach out — someone is waiting to listen."
+        />
 
-        <ul className="mt-8 space-y-3">
+        <ul className="space-y-3">
           {lines.map(({ name, detail, href, icon: Icon }) => (
             <li key={name}>
               <a href={href} className="flex items-center gap-4 rounded-2xl border border-border/60 bg-card p-5 soft-shadow hover:bg-cream/40">

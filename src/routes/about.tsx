@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
+import { PageHero } from "@/components/site/PageHero";
 import candleImg from "@/assets/candle.jpg";
 
 export const Route = createFileRoute("/about")({
@@ -17,15 +18,15 @@ function About() {
   return (
     <div className="min-h-screen bg-background paper-grain">
       <SiteHeader />
-      <main className="mx-auto max-w-3xl px-5 py-16">
-        <div className="text-xs uppercase tracking-[0.2em] text-sage-deep">About</div>
-        <h1 className="mt-3 font-display text-5xl text-foreground">Grief deserves a beautiful home.</h1>
-        <p className="mt-6 text-lg text-muted-foreground">
-          When we lose a pet, the world often asks us to move on quickly. Rememfur was built to do the opposite —
-          to slow down, to honor what was real, and to give your love a place to live.
-        </p>
+      <main className="mx-auto max-w-3xl px-5 py-10 pb-24">
+        <PageHero
+          eyebrow="the prologue"
+          title="Grief deserves a beautiful home."
+          handwritten="why we made this place"
+          intro="When we lose a pet, the world often asks us to move on quickly. Rememfur was built to do the opposite — to slow down, to honor what was real, and to give your love a place to live."
+        />
 
-        <figure className="my-12 overflow-hidden rounded-3xl border border-border/60 soft-shadow">
+        <figure className="my-10 overflow-hidden rounded-3xl border border-border/60 soft-shadow">
           <img src={candleImg} alt="A memorial candle" width={1024} height={1024} loading="lazy" className="w-full" />
         </figure>
 

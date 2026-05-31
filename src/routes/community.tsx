@@ -4,6 +4,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
+import { PageHero } from "@/components/site/PageHero";
 import { PostCard } from "@/components/feed/PostCard";
 import { PostSkeleton } from "@/components/feed/PostSkeleton";
 import { ComposePost } from "@/components/feed/ComposePost";
@@ -69,10 +70,12 @@ function CommunityPage() {
     <div className="min-h-screen bg-background paper-grain">
       <SiteHeader />
       <main className="mx-auto max-w-2xl px-5 py-10">
-        <header className="mb-8 text-center">
-          <h1 className="font-display text-4xl text-foreground md:text-5xl">Community</h1>
-          <p className="mt-2 text-muted-foreground">A gentle place to share memories, photos, and kind words.</p>
-        </header>
+        <PageHero
+          eyebrow="chapter two"
+          title="The Memory Wall"
+          handwritten="share a story, light a candle"
+          intro="A gentle place to share memories, photos, and kind words with people who understand."
+        />
 
         {user ? (
           <div className="mb-6"><ComposePost /></div>

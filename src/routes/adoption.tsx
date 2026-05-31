@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
+import { PageHero } from "@/components/site/PageHero";
 import { HandHeart, MapPin } from "lucide-react";
 
 export const Route = createFileRoute("/adoption")({
@@ -24,14 +25,19 @@ function Adoption() {
   return (
     <div className="min-h-screen bg-background paper-grain">
       <SiteHeader />
-      <main className="mx-auto max-w-3xl px-5 py-12 pb-32">
-        <div className="text-xs uppercase tracking-[0.2em] text-[var(--cta)]">When you're ready</div>
-        <h1 className="mt-3 font-display text-4xl text-foreground">Adoption</h1>
-        <p className="mt-3 max-w-xl text-muted-foreground">
-          A new companion never replaces the one you lost — they continue the love your pet taught you to give.
-        </p>
+      <main className="mx-auto max-w-3xl px-5 py-10 pb-32">
+        <PageHero
+          eyebrow="chapter five"
+          title="Adoption"
+          handwritten="a new chapter, when you're ready"
+          intro="A new companion never replaces the one you lost — they continue the love your pet taught you to give."
+          polaroids={[
+            { img: pets[0].img, caption: "hello, friend" },
+            { img: pets[2].img, caption: "soft beginnings" },
+          ]}
+        />
 
-        <div className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-3">
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
           {pets.map((p) => (
             <article key={p.name} className="overflow-hidden rounded-2xl border border-border/60 bg-card soft-shadow">
               <img src={p.img} alt={p.name} className="h-40 w-full object-cover" loading="lazy" />
