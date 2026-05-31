@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
+import { PageHero } from "@/components/site/PageHero";
 import { Heart, Phone, BookOpen, Users } from "lucide-react";
 
 export const Route = createFileRoute("/resources")({
@@ -30,14 +31,15 @@ function Resources() {
   return (
     <div className="min-h-screen bg-background paper-grain">
       <SiteHeader />
-      <main className="mx-auto max-w-4xl px-5 py-16">
-        <div className="text-xs uppercase tracking-[0.2em] text-sage-deep">Resources</div>
-        <h1 className="mt-3 font-display text-5xl text-foreground">You don't have to walk this alone.</h1>
-        <p className="mt-5 max-w-2xl text-muted-foreground">
-          A small library of helplines, articles, and communities for the hardest days.
-        </p>
+      <main className="mx-auto max-w-4xl px-5 py-10 pb-24">
+        <PageHero
+          eyebrow="the little library"
+          title="You don't have to walk this alone."
+          handwritten="words for the hardest days"
+          intro="A small library of helplines, articles, and communities for the days that hurt the most."
+        />
 
-        <section className="mt-12">
+        <section>
           <h2 className="flex items-center gap-2 font-display text-2xl text-foreground">
             <Phone className="h-5 w-5 text-terracotta" /> Helplines & support
           </h2>
