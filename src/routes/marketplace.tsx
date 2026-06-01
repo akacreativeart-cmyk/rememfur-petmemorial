@@ -13,6 +13,9 @@ import {
   ShoppingBag,
   Sparkles,
   ShieldCheck,
+  LifeBuoy,
+  Shield,
+  Medal,
 } from "lucide-react";
 
 export const Route = createFileRoute("/marketplace")({
@@ -20,12 +23,14 @@ export const Route = createFileRoute("/marketplace")({
   head: () => ({
     meta: [
       { title: "Marketplace — Rememfur" },
-      { name: "description", content: "A curated directory of memory gifts, vetted pet products, and trusted services — funeral care, vets, shelters, training and more." },
+      { name: "description", content: "Curated memory gifts, vetted pet products, trusted services — plus grief support, adoption listings, hero & service pets." },
       { property: "og:title", content: "Rememfur Marketplace — Curated with care" },
       { property: "og:description", content: "Memory gifts, vetted products and trusted services for pet parents." },
     ],
   }),
 });
+
+type Item = { name: string; tag: string; price?: string; note?: string; img: string };
 
 type Section = {
   id: string;
@@ -33,8 +38,10 @@ type Section = {
   blurb: string;
   icon: any;
   accent: string;
-  items: { name: string; tag: string; price?: string; note?: string }[];
+  items: Item[];
 };
+
+const u = (id: string, w = 400) => `https://images.unsplash.com/${id}?w=${w}&q=70&auto=format&fit=crop`;
 
 const sections: Section[] = [
   {
@@ -44,12 +51,12 @@ const sections: Section[] = [
     icon: Gift,
     accent: "bg-terracotta/15 text-terracotta",
     items: [
-      { name: "Engraved name tag", tag: "Keepsake", price: "from $24" },
-      { name: "Framed portrait print", tag: "Keepsake", price: "from $48" },
-      { name: "Cushion with their photo", tag: "Home", price: "from $36" },
-      { name: "Paw-print key chain", tag: "Pocket", price: "from $18" },
-      { name: "Replica plush of your pet", tag: "Custom", price: "from $89" },
-      { name: "Hand-painted watercolor", tag: "Art", price: "from $120" },
+      { name: "Engraved name tag", tag: "Keepsake", price: "from $24", img: u("photo-1601758228041-f3b2795255f1") },
+      { name: "Framed portrait print", tag: "Keepsake", price: "from $48", img: u("photo-1583337130417-3346a1be7dee") },
+      { name: "Cushion with their photo", tag: "Home", price: "from $36", img: u("photo-1591946614720-90a587da4a36") },
+      { name: "Paw-print key chain", tag: "Pocket", price: "from $18", img: u("photo-1518791841217-8f162f1e1131") },
+      { name: "Replica plush of your pet", tag: "Custom", price: "from $89", img: u("photo-1535268647677-300dbf3d78d1") },
+      { name: "Hand-painted watercolor", tag: "Art", price: "from $120", img: u("photo-1561948955-570b270e7c36") },
     ],
   },
   {
@@ -59,9 +66,9 @@ const sections: Section[] = [
     icon: HeartHandshake,
     accent: "bg-mauve/20 text-ink",
     items: [
-      { name: "Digital candle card", tag: "Free", note: "Sent instantly" },
-      { name: "Printed sympathy card", tag: "Mailed", price: "from $6" },
-      { name: "Tribute donation card", tag: "Giving back", price: "from $15" },
+      { name: "Digital candle card", tag: "Free", note: "Sent instantly", img: u("photo-1606293459339-aa5d34a7b0e1") },
+      { name: "Printed sympathy card", tag: "Mailed", price: "from $6", img: u("photo-1512314889357-e157c22f938d") },
+      { name: "Tribute donation card", tag: "Giving back", price: "from $15", img: u("photo-1518770660439-4636190af475") },
     ],
   },
   {
@@ -71,11 +78,11 @@ const sections: Section[] = [
     icon: Flame,
     accent: "bg-sage/20 text-sage-deep",
     items: [
-      { name: "Private cremation", tag: "Service", note: "Same-day urn return" },
-      { name: "Communal cremation", tag: "Service", note: "Eco-friendly" },
-      { name: "Memorial urns", tag: "Product", price: "from $65" },
-      { name: "Burial plot directory", tag: "Directory" },
-      { name: "Home ceremony kit", tag: "Ritual", price: "from $40" },
+      { name: "Private cremation", tag: "Service", note: "Same-day urn return", img: u("photo-1518709268805-4e9042af2176") },
+      { name: "Communal cremation", tag: "Service", note: "Eco-friendly", img: u("photo-1469474968028-56623f02e42e") },
+      { name: "Memorial urns", tag: "Product", price: "from $65", img: u("photo-1578319439584-104c94d37305") },
+      { name: "Burial plot directory", tag: "Directory", img: u("photo-1500382017468-9049fed747ef") },
+      { name: "Home ceremony kit", tag: "Ritual", price: "from $40", img: u("photo-1602938749384-44f6a92acab9") },
     ],
   },
   {
@@ -85,24 +92,66 @@ const sections: Section[] = [
     icon: Stethoscope,
     accent: "bg-cream text-ink border border-border/60",
     items: [
-      { name: "Find a local vet", tag: "Directory" },
-      { name: "Tele-vet consult", tag: "Service", price: "from $29" },
-      { name: "Hospice & palliative care", tag: "Care" },
-      { name: "Home euthanasia", tag: "Care" },
-      { name: "Pet health insurance", tag: "Coverage" },
+      { name: "Find a local vet", tag: "Directory", img: u("photo-1628009368231-7bb7cfcb0def") },
+      { name: "Tele-vet consult", tag: "Service", price: "from $29", img: u("photo-1581888227599-779811939961") },
+      { name: "Hospice & palliative care", tag: "Care", img: u("photo-1450778869180-41d0601e046e") },
+      { name: "Home euthanasia", tag: "Care", img: u("photo-1583511655826-05700d52f4d9") },
+      { name: "Pet health insurance", tag: "Coverage", img: u("photo-1450778869180-41d0601e046e") },
+    ],
+  },
+  {
+    id: "grief",
+    title: "Grief Support",
+    blurb: "Helplines, counselors and circles for pet parents.",
+    icon: LifeBuoy,
+    accent: "bg-mauve/20 text-ink",
+    items: [
+      { name: "Pet Loss Helpline (24/7)", tag: "Free", note: "Confidential", img: u("photo-1573497019940-1c28c88b4f3e") },
+      { name: "1:1 grief counselor", tag: "Service", price: "from $45/session", img: u("photo-1573497019418-b400bb3ab074") },
+      { name: "Weekly support circle", tag: "Community", note: "Sundays · online", img: u("photo-1529156069898-49953e39b3ac") },
+      { name: "Grief journaling kit", tag: "Product", price: "from $22", img: u("photo-1455390582262-044cdead277a") },
     ],
   },
   {
     id: "adoption",
-    title: "Adoption & Shelters",
-    blurb: "When you're ready — meet pets looking for love.",
+    title: "Adoption Listings",
+    blurb: "Pets near you, waiting for a soft place to land.",
     icon: HomeIcon,
     accent: "bg-sage/15 text-sage-deep",
     items: [
-      { name: "Browse adoptable pets", tag: "Directory" },
-      { name: "Partner shelters near you", tag: "Directory" },
-      { name: "Foster programs", tag: "Volunteer" },
-      { name: "Donate in their memory", tag: "Giving back" },
+      { name: "Mango · tabby kitten", tag: "Austin, TX", note: "4 months", img: u("photo-1574144611937-0df059b5ef3e") },
+      { name: "Biscuit · beagle mix", tag: "Portland, OR", note: "2 years", img: u("photo-1543466835-00a7907e9de1") },
+      { name: "Luna · black lab", tag: "Brooklyn, NY", note: "5 years", img: u("photo-1583337130417-3346a1be7dee") },
+      { name: "Pixel · bunny", tag: "Seattle, WA", note: "1 year", img: u("photo-1535241749838-299277b6305f") },
+      { name: "Olive · senior cat", tag: "Denver, CO", note: "10 years", img: u("photo-1514888286974-6c03e2ca1dba") },
+      { name: "Browse all shelters", tag: "Directory", img: u("photo-1450778869180-41d0601e046e") },
+    ],
+  },
+  {
+    id: "hero",
+    title: "Hero Pets",
+    blurb: "Honoring search, rescue and working pups who saved lives.",
+    icon: Medal,
+    accent: "bg-terracotta/15 text-terracotta",
+    items: [
+      { name: "Search & rescue K-9s", tag: "Tribute", img: u("photo-1552053831-71594a27632d") },
+      { name: "Avalanche dogs", tag: "Tribute", img: u("photo-1583511655857-d19b40a7a54e") },
+      { name: "Therapy dogs of 9/11", tag: "Memorial", img: u("photo-1587300003388-59208cc962cb") },
+      { name: "Nominate a hero pet", tag: "Submit", note: "Community-curated", img: u("photo-1601758228041-f3b2795255f1") },
+    ],
+  },
+  {
+    id: "service",
+    title: "Service Pets",
+    blurb: "Guide, assistance and emotional-support partners.",
+    icon: Shield,
+    accent: "bg-sage/15 text-sage-deep",
+    items: [
+      { name: "Guide dogs", tag: "Working", img: u("photo-1561037404-61cd46aa615b") },
+      { name: "Mobility assistance dogs", tag: "Working", img: u("photo-1517849845537-4d257902454a") },
+      { name: "Diabetic alert dogs", tag: "Medical", img: u("photo-1587300003388-59208cc962cb") },
+      { name: "ESA registration help", tag: "Service", price: "from $35", img: u("photo-1583337130417-3346a1be7dee") },
+      { name: "Training partners directory", tag: "Directory", img: u("photo-1450778869180-41d0601e046e") },
     ],
   },
   {
@@ -112,10 +161,10 @@ const sections: Section[] = [
     icon: ShoppingBag,
     accent: "bg-terracotta/10 text-terracotta",
     items: [
-      { name: "Fresh meal subscriptions", tag: "Subscription" },
-      { name: "Senior-pet nutrition", tag: "Specialty" },
-      { name: "Joint & mobility supplements", tag: "Wellness" },
-      { name: "Calming chews", tag: "Wellness" },
+      { name: "Fresh meal subscriptions", tag: "Subscription", img: u("photo-1568640347023-a616a30bc3bd") },
+      { name: "Senior-pet nutrition", tag: "Specialty", img: u("photo-1589924691995-400dc9ecc119") },
+      { name: "Joint & mobility supplements", tag: "Wellness", img: u("photo-1559757175-5700dde675bc") },
+      { name: "Calming chews", tag: "Wellness", img: u("photo-1583337130417-3346a1be7dee") },
     ],
   },
   {
@@ -125,9 +174,9 @@ const sections: Section[] = [
     icon: Scissors,
     accent: "bg-mauve/15 text-ink",
     items: [
-      { name: "Mobile groomers", tag: "Service" },
-      { name: "Sensitive-skin shampoo", tag: "Product" },
-      { name: "Brushing kits", tag: "Product" },
+      { name: "Mobile groomers", tag: "Service", img: u("photo-1591946614720-90a587da4a36") },
+      { name: "Sensitive-skin shampoo", tag: "Product", img: u("photo-1535268647677-300dbf3d78d1") },
+      { name: "Brushing kits", tag: "Product", img: u("photo-1601758228041-f3b2795255f1") },
     ],
   },
   {
@@ -137,9 +186,9 @@ const sections: Section[] = [
     icon: GraduationCap,
     accent: "bg-sage/10 text-sage-deep",
     items: [
-      { name: "Puppy foundations (online)", tag: "Course", price: "from $39" },
-      { name: "Reactive-dog programs", tag: "1:1" },
-      { name: "Cat enrichment guides", tag: "Guide", note: "Free" },
+      { name: "Puppy foundations (online)", tag: "Course", price: "from $39", img: u("photo-1587300003388-59208cc962cb") },
+      { name: "Reactive-dog programs", tag: "1:1", img: u("photo-1552053831-71594a27632d") },
+      { name: "Cat enrichment guides", tag: "Guide", note: "Free", img: u("photo-1514888286974-6c03e2ca1dba") },
     ],
   },
 ];
@@ -151,14 +200,14 @@ function MarketplacePage() {
   return (
     <div className="min-h-screen bg-background paper-grain">
       <SiteHeader />
-      <main className="mx-auto max-w-md px-4 pt-4 pb-12 md:max-w-3xl">
+      <main className="mx-auto max-w-md px-4 pt-4 pb-32 md:max-w-3xl">
         <header className="rounded-3xl bg-cream/60 px-5 py-6 text-center">
           <div className="inline-flex items-center gap-1.5 rounded-full bg-sage/15 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-sage-deep">
             <ShieldCheck className="h-3 w-3" /> Curated with care
           </div>
           <h1 className="mt-3 font-display text-3xl text-foreground md:text-4xl">Marketplace</h1>
           <p className="mt-2 text-sm text-muted-foreground">
-            Memory gifts, vetted products and trusted services — chosen for health, safety and heart.
+            Memory gifts, vetted products, trusted services — plus grief support, adoption, hero & service pets.
           </p>
         </header>
 
@@ -169,7 +218,7 @@ function MarketplacePage() {
               onClick={() => setActive(s.id)}
               className={`shrink-0 rounded-full px-3.5 py-1.5 text-xs transition ${
                 active === s.id
-                  ? "bg-sage-deep text-primary-foreground"
+                  ? "bg-[var(--cta)] text-[var(--cta-foreground)]"
                   : "border border-border/60 bg-card text-foreground/80 hover:bg-accent/10"
               }`}
             >
@@ -190,27 +239,37 @@ function MarketplacePage() {
                   <p className="text-xs text-muted-foreground">{blurb}</p>
                 </div>
               </div>
-              <ul className="mt-4 grid gap-2 sm:grid-cols-2">
+              <ul className="mt-4 grid gap-3 sm:grid-cols-2">
                 {items.map((it) => (
                   <li
                     key={it.name}
-                    className="flex items-start justify-between gap-3 rounded-2xl bg-cream/50 px-3.5 py-3"
+                    className="flex gap-3 rounded-2xl bg-cream/50 p-2.5"
                   >
-                    <div className="min-w-0">
-                      <div className="truncate text-sm font-medium text-foreground">{it.name}</div>
-                      <div className="mt-0.5 flex items-center gap-1.5 text-[10px] text-muted-foreground">
-                        <span className="rounded-full bg-background px-1.5 py-0.5">{it.tag}</span>
-                        {it.note && <span className="italic">{it.note}</span>}
+                    <img
+                      src={it.img}
+                      alt={it.name}
+                      loading="lazy"
+                      className="h-20 w-20 shrink-0 rounded-xl object-cover"
+                    />
+                    <div className="flex min-w-0 flex-1 flex-col justify-between">
+                      <div className="min-w-0">
+                        <div className="truncate text-sm font-medium text-foreground">{it.name}</div>
+                        <div className="mt-0.5 flex flex-wrap items-center gap-1.5 text-[10px] text-muted-foreground">
+                          <span className="rounded-full bg-background px-1.5 py-0.5">{it.tag}</span>
+                          {it.note && <span className="italic">{it.note}</span>}
+                        </div>
                       </div>
-                    </div>
-                    <div className="shrink-0 text-right">
-                      {it.price && <div className="text-xs font-medium text-sage-deep">{it.price}</div>}
-                      <button
-                        disabled
-                        className="mt-1 rounded-full border border-border/60 bg-background px-2.5 py-0.5 text-[10px] text-muted-foreground"
-                      >
-                        Soon
-                      </button>
+                      <div className="mt-2 flex items-center justify-between gap-2">
+                        {it.price ? (
+                          <div className="text-xs font-medium text-[var(--cta)]">{it.price}</div>
+                        ) : <span />}
+                        <button
+                          disabled
+                          className="rounded-full border border-border/60 bg-background px-2.5 py-0.5 text-[10px] text-muted-foreground"
+                        >
+                          Soon
+                        </button>
+                      </div>
                     </div>
                   </li>
                 ))}
@@ -219,10 +278,10 @@ function MarketplacePage() {
           ))}
         </div>
 
-        <div className="mt-8 rounded-3xl bg-sage-deep/95 px-5 py-6 text-center text-primary-foreground">
+        <div className="mt-8 rounded-3xl bg-[var(--cta)] px-5 py-6 text-center text-[var(--cta-foreground)]">
           <Sparkles className="mx-auto h-5 w-5" />
           <h3 className="mt-2 font-display text-xl">A curated ecosystem, opening soon</h3>
-          <p className="mt-1 text-xs text-primary-foreground/85">
+          <p className="mt-1 text-xs opacity-85">
             We're onboarding partners that meet our health & safety bar. Create a memorial today — your space will be ready when the marketplace opens.
           </p>
           <Link to="/create" className="mt-4 inline-block">
