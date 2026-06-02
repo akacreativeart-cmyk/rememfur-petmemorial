@@ -1,9 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { PawIcon } from "@/components/site/PawIcon";
+import { CandleDialog } from "@/components/site/CandleDialog";
+import { pickFeaturedMemorial } from "@/lib/candle-guest.functions";
 import { Heart, Feather, Flame, Users, PenLine, ImagePlus, MessageCircleHeart, ShoppingBag, Gift, Sparkles } from "lucide-react";
+
 
 // Warm, vintage pet photography
 const pet1 = "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=600&q=80";
@@ -69,7 +74,14 @@ const feed = [
 ];
 
 function LandingPage() {
+  const featuredFn = useServerFn(pickFeaturedMemorial);
+  const { data: featured } = useQuery({
+    queryKey: ["featured-memorial"],
+    queryFn: () => featuredFn(),
+    staleTime: 60_000,
+  });
   return (
+
     <div className="min-h-screen paper-bg paper-grain text-foreground">
       <SiteHeader />
 
@@ -350,14 +362,31 @@ function LandingPage() {
             <p className="mt-3 max-w-md font-serif text-base text-[color-mix(in_oklab,var(--ink)_72%,transparent)]">
               When you light one here, it joins thousands drifting across the sky tonight.
             </p>
-            <Link to="/garden" className="mt-5">
-              <Button size="lg" className="rounded-full px-7">
-                <Flame className="mr-2 h-4 w-4" /> Light a candle
-              </Button>
-            </Link>
+            {featured ? (
+              <div className="mt-5 flex flex-col items-center gap-2">
+                <CandleDialog
+                  target={{ kind: "memorial", memorial_id: featured.id, pet_name: featured.pet_name }}
+                  trigger={
+                    <Button size="lg" className="rounded-full px-7">
+                      <Flame className="mr-2 h-4 w-4" /> Light a candle for {featured.pet_name}
+                    </Button>
+                  }
+                />
+                <Link to="/garden" className="font-hand text-base text-[color-mix(in_oklab,var(--ink)_60%,transparent)] hover:underline">
+                  or wander the garden →
+                </Link>
+              </div>
+            ) : (
+              <Link to="/garden" className="mt-5">
+                <Button size="lg" className="rounded-full px-7">
+                  <Flame className="mr-2 h-4 w-4" /> Light a candle
+                </Button>
+              </Link>
+            )}
           </div>
         </div>
       </section>
+
 
       {/* ─────────────────────────── Memorabilia Marketplace ─────────────────────────── */}
       <section className="mx-auto max-w-6xl px-5 py-16">

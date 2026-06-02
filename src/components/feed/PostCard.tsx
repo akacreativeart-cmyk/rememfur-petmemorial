@@ -16,8 +16,10 @@ import {
   type FeedPost,
 } from "@/lib/feed.functions";
 import { lightCandleOnPost } from "@/lib/post-candle.functions";
+import { CandleDialog } from "@/components/site/CandleDialog";
 import { toast } from "sonner";
 import { formatDistanceToNow } from "date-fns";
+
 
 export function PostCard({ post }: { post: FeedPost }) {
   const { user } = useAuth();
@@ -147,16 +149,21 @@ export function PostCard({ post }: { post: FeedPost }) {
             {post.comment_count}
           </button>
           {post.memorial_slug && (
-            <button
-              onClick={() => user ? candle.mutate() : toast.error("Sign in to light a candle")}
-              disabled={candle.isPending}
-              aria-label="Light a candle"
-              className="flex items-center gap-1.5 rounded-full bg-[color-mix(in_oklab,var(--cta)_12%,transparent)] px-3 py-1.5 text-sm text-[var(--cta)] transition hover:bg-[color-mix(in_oklab,var(--cta)_20%,transparent)]"
-            >
-              <Flame className="h-4 w-4" />
-              Candle
-            </button>
+            <CandleDialog
+              target={{ kind: "post", post_id: post.id }}
+              onLit={() => qc.invalidateQueries({ queryKey: ["feed"] })}
+              trigger={
+                <button
+                  aria-label="Light a candle"
+                  className="flex items-center gap-1.5 rounded-full bg-[color-mix(in_oklab,var(--cta)_12%,transparent)] px-3 py-1.5 text-sm text-[var(--cta)] transition hover:bg-[color-mix(in_oklab,var(--cta)_20%,transparent)]"
+                >
+                  <Flame className="h-4 w-4" />
+                  Candle
+                </button>
+              }
+            />
           )}
+
           <div className="ml-auto flex gap-1 text-base" aria-label="React">
             {["🐾", "🦴", "❤️", "🐶", "🐱"].map((e) => (
               <button

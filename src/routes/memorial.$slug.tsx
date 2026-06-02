@@ -8,6 +8,8 @@ import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { getMemorialBySlug } from "@/lib/memorials.functions";
 import { lightCandle, postMessage } from "@/lib/tributes.functions";
+import { CandleDialog } from "@/components/site/CandleDialog";
+
 import { useAuth } from "@/hooks/use-auth";
 import { Flame, Heart, MessageCircle, Share2, Pencil, Gift } from "lucide-react";
 import { toast } from "sonner";
@@ -190,10 +192,22 @@ function MemorialPage() {
                   </Button>
                 </div>
               ) : (
-                <Link to="/login" className="mt-4 inline-block">
-                  <Button variant="outline" className="rounded-full">Sign in to light</Button>
-                </Link>
+                <div className="mt-4">
+                  <CandleDialog
+                    target={{ kind: "memorial", memorial_id: m.id, pet_name: m.pet_name }}
+                    onLit={() => qc.invalidateQueries({ queryKey: ["memorial", m.slug] })}
+                    trigger={
+                      <Button className="w-full rounded-full bg-terracotta text-accent-foreground hover:bg-terracotta/90">
+                        <Flame className="mr-1.5 h-4 w-4" /> Light a candle
+                      </Button>
+                    }
+                  />
+                  <p className="mt-2 text-[11px] text-muted-foreground">
+                    No account needed. <Link to="/signup" className="underline">Join</Link> to share memories.
+                  </p>
+                </div>
               )}
+
             </div>
 
             {current.candles.length > 0 && (
