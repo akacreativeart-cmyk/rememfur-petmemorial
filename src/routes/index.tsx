@@ -1,9 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { PawIcon } from "@/components/site/PawIcon";
+import { CandleDialog } from "@/components/site/CandleDialog";
+import { pickFeaturedMemorial } from "@/lib/candle-guest.functions";
 import { Heart, Feather, Flame, Users, PenLine, ImagePlus, MessageCircleHeart, ShoppingBag, Gift, Sparkles } from "lucide-react";
+
 
 // Warm, vintage pet photography
 const pet1 = "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=600&q=80";
