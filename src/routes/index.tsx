@@ -74,7 +74,14 @@ const feed = [
 ];
 
 function LandingPage() {
+  const featuredFn = useServerFn(pickFeaturedMemorial);
+  const { data: featured } = useQuery({
+    queryKey: ["featured-memorial"],
+    queryFn: () => featuredFn(),
+    staleTime: 60_000,
+  });
   return (
+
     <div className="min-h-screen paper-bg paper-grain text-foreground">
       <SiteHeader />
 
