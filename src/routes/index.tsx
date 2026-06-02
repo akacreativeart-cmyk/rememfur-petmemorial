@@ -362,14 +362,31 @@ function LandingPage() {
             <p className="mt-3 max-w-md font-serif text-base text-[color-mix(in_oklab,var(--ink)_72%,transparent)]">
               When you light one here, it joins thousands drifting across the sky tonight.
             </p>
-            <Link to="/garden" className="mt-5">
-              <Button size="lg" className="rounded-full px-7">
-                <Flame className="mr-2 h-4 w-4" /> Light a candle
-              </Button>
-            </Link>
+            {featured ? (
+              <div className="mt-5 flex flex-col items-center gap-2">
+                <CandleDialog
+                  target={{ kind: "memorial", memorial_id: featured.id, pet_name: featured.pet_name }}
+                  trigger={
+                    <Button size="lg" className="rounded-full px-7">
+                      <Flame className="mr-2 h-4 w-4" /> Light a candle for {featured.pet_name}
+                    </Button>
+                  }
+                />
+                <Link to="/garden" className="font-hand text-base text-[color-mix(in_oklab,var(--ink)_60%,transparent)] hover:underline">
+                  or wander the garden →
+                </Link>
+              </div>
+            ) : (
+              <Link to="/garden" className="mt-5">
+                <Button size="lg" className="rounded-full px-7">
+                  <Flame className="mr-2 h-4 w-4" /> Light a candle
+                </Button>
+              </Link>
+            )}
           </div>
         </div>
       </section>
+
 
       {/* ─────────────────────────── Memorabilia Marketplace ─────────────────────────── */}
       <section className="mx-auto max-w-6xl px-5 py-16">
