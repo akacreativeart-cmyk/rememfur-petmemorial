@@ -161,14 +161,17 @@ export function PostCard({ post }: { post: FeedPost }) {
           {post.memorial_slug && (
             <CandleDialog
               target={{ kind: "post", post_id: post.id }}
-              onLit={() => qc.invalidateQueries({ queryKey: ["feed"] })}
+              onLit={() => {
+                qc.invalidateQueries({ queryKey: ["feed"] });
+                qc.invalidateQueries({ queryKey: ["post-candles", post.id] });
+              }}
               trigger={
                 <button
                   aria-label="Light a candle"
                   className="flex items-center gap-1.5 rounded-full bg-[color-mix(in_oklab,var(--cta)_12%,transparent)] px-3 py-1.5 text-sm text-[var(--cta)] transition hover:bg-[color-mix(in_oklab,var(--cta)_20%,transparent)]"
                 >
                   <Flame className="h-4 w-4" />
-                  Candle
+                  {candleData?.count ? `${candleData.count} ` : ""}Candle{candleData?.count === 1 ? "" : "s"}
                 </button>
               }
             />
