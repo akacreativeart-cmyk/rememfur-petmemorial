@@ -84,11 +84,33 @@ function MemorialPage() {
 
   const share = async () => {
     const url = window.location.href;
-    if (navigator.share) {
-      try { await navigator.share({ title: `${m.pet_name} — Rememfur`, url }); } catch {}
-    } else {
+    const title = `${m.pet_name} — Rememfur`;
+    if (typeof navigator !== "undefined" && typeof navigator.share === "function") {
+      try {
+        await navigator.share({ title, url });
+        return;
+      } catch (err: any) {
+        if (err?.name === "AbortError") return;
+      }
+    }
+    try {
       await navigator.clipboard.writeText(url);
-      toast.success("Link copied");
+      toast.success("Link copied to clipboard");
+      return;
+    } catch {}
+    // Last-resort fallback for restricted contexts (e.g. iframes without clipboard permission)
+    try {
+      const ta = document.createElement("textarea");
+      ta.value = url;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+      toast.success("Link copied to clipboard");
+    } catch {
+      toast.error("Couldn't share. Copy the URL from your browser bar.");
     }
   };
 
