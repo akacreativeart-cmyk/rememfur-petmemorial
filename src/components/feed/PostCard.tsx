@@ -15,7 +15,7 @@ import {
   toggleLike,
   type FeedPost,
 } from "@/lib/feed.functions";
-import { lightCandleOnPost } from "@/lib/post-candle.functions";
+import { lightCandleOnPost, listCandlesForPost } from "@/lib/post-candle.functions";
 import { CandleDialog } from "@/components/site/CandleDialog";
 import { toast } from "sonner";
 import { formatDistanceToNow } from "date-fns";
@@ -32,10 +32,20 @@ export function PostCard({ post }: { post: FeedPost }) {
   const commentsFn = useServerFn(listComments);
   const addCommentFn = useServerFn(addComment);
   const candleFn = useServerFn(lightCandleOnPost);
+  const candlesListFn = useServerFn(listCandlesForPost);
+
+  const { data: candleData } = useQuery({
+    queryKey: ["post-candles", post.id],
+    queryFn: () => candlesListFn({ data: { post_id: post.id, limit: 5 } }),
+    enabled: !!post.memorial_slug,
+  });
 
   const candle = useMutation({
     mutationFn: () => candleFn({ data: { post_id: post.id, message: null } }),
-    onSuccess: () => toast.success("Candle lit 🕯️ — they would have felt it."),
+    onSuccess: () => {
+      toast.success("Candle lit 🕯️ — they would have felt it.");
+      qc.invalidateQueries({ queryKey: ["post-candles", post.id] });
+    },
     onError: (e: Error) => toast.error(e.message),
   });
 
@@ -151,14 +161,17 @@ export function PostCard({ post }: { post: FeedPost }) {
           {post.memorial_slug && (
             <CandleDialog
               target={{ kind: "post", post_id: post.id }}
-              onLit={() => qc.invalidateQueries({ queryKey: ["feed"] })}
+              onLit={() => {
+                qc.invalidateQueries({ queryKey: ["feed"] });
+                qc.invalidateQueries({ queryKey: ["post-candles", post.id] });
+              }}
               trigger={
                 <button
                   aria-label="Light a candle"
                   className="flex items-center gap-1.5 rounded-full bg-[color-mix(in_oklab,var(--cta)_12%,transparent)] px-3 py-1.5 text-sm text-[var(--cta)] transition hover:bg-[color-mix(in_oklab,var(--cta)_20%,transparent)]"
                 >
                   <Flame className="h-4 w-4" />
-                  Candle
+                  {candleData?.count ? `${candleData.count} ` : ""}Candle{candleData?.count === 1 ? "" : "s"}
                 </button>
               }
             />
@@ -177,6 +190,29 @@ export function PostCard({ post }: { post: FeedPost }) {
             ))}
           </div>
         </div>
+
+        {post.memorial_slug && candleData && candleData.candles.length > 0 && (
+          <div className="rounded-xl border border-[color-mix(in_oklab,var(--cta)_25%,transparent)] bg-[color-mix(in_oklab,var(--cta)_6%,transparent)] p-3">
+            <div className="mb-2 flex items-center gap-1.5 text-xs font-medium uppercase tracking-wider text-[var(--cta)]">
+              <Flame className="h-3.5 w-3.5" />
+              Candles lit {candleData.count > candleData.candles.length ? `(showing ${candleData.candles.length} of ${candleData.count})` : `(${candleData.count})`}
+            </div>
+            <ul className="space-y-2">
+              {candleData.candles.map((c) => (
+                <li key={c.id} className="flex gap-2 text-sm">
+                  <span aria-hidden className="mt-0.5 text-base leading-none">🕯️</span>
+                  <div className="flex-1">
+                    <div className="text-xs font-medium text-foreground">{c.lit_by_name ?? "A friend"}</div>
+                    {c.message && (
+                      <div className="whitespace-pre-line text-sm leading-snug text-foreground/85">{c.message}</div>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
 
         {showComments && (
           <div className="space-y-3 border-t border-border/60 pt-3">
