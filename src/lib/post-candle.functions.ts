@@ -56,3 +56,32 @@ export const countCandlesForPost = createServerFn({ method: "GET" })
       .eq("memorial_id", post.memorial_id);
     return { count: count ?? 0 };
   });
+
+export const listCandlesForPost = createServerFn({ method: "GET" })
+  .inputValidator((input: { post_id: string; limit?: number }) =>
+    z.object({
+      post_id: z.string().uuid(),
+      limit: z.number().int().min(1).max(20).default(5),
+    }).parse(input),
+  )
+  .handler(async ({ data }) => {
+    const { data: post } = await supabaseAdmin
+      .from("posts")
+      .select("memorial_id")
+      .eq("id", data.post_id)
+      .maybeSingle();
+    if (!post?.memorial_id) return { candles: [], count: 0 };
+    const [{ data: rows }, { count }] = await Promise.all([
+      supabaseAdmin
+        .from("candles")
+        .select("id, lit_by_name, message, created_at")
+        .eq("memorial_id", post.memorial_id)
+        .order("created_at", { ascending: false })
+        .limit(data.limit),
+      supabaseAdmin
+        .from("candles")
+        .select("*", { count: "exact", head: true })
+        .eq("memorial_id", post.memorial_id),
+    ]);
+    return { candles: rows ?? [], count: count ?? 0 };
+  });
