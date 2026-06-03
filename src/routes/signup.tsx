@@ -61,7 +61,7 @@ function SignupPage() {
             <h1 className="font-display text-3xl text-foreground">Join Rememfur</h1>
             <p className="mt-1 text-sm text-muted-foreground">A quiet place for the love that stays. Free, always.</p>
 
-            <Button type="button" variant="outline" onClick={google} className="mt-6 w-full rounded-full">
+            <Button type="button" variant="outline" onClick={google} className="mt-6 w-full rounded-full border-ink/15 bg-cream/80 text-foreground hover:bg-cream">
               Continue with Google
             </Button>
             <div className="my-5 flex items-center gap-3 text-xs text-muted-foreground">
