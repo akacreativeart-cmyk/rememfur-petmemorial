@@ -32,10 +32,20 @@ export function PostCard({ post }: { post: FeedPost }) {
   const commentsFn = useServerFn(listComments);
   const addCommentFn = useServerFn(addComment);
   const candleFn = useServerFn(lightCandleOnPost);
+  const candlesListFn = useServerFn(listCandlesForPost);
+
+  const { data: candleData } = useQuery({
+    queryKey: ["post-candles", post.id],
+    queryFn: () => candlesListFn({ data: { post_id: post.id, limit: 5 } }),
+    enabled: !!post.memorial_slug,
+  });
 
   const candle = useMutation({
     mutationFn: () => candleFn({ data: { post_id: post.id, message: null } }),
-    onSuccess: () => toast.success("Candle lit 🕯️ — they would have felt it."),
+    onSuccess: () => {
+      toast.success("Candle lit 🕯️ — they would have felt it.");
+      qc.invalidateQueries({ queryKey: ["post-candles", post.id] });
+    },
     onError: (e: Error) => toast.error(e.message),
   });
 
