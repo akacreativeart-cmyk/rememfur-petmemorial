@@ -15,7 +15,7 @@ import {
   toggleLike,
   type FeedPost,
 } from "@/lib/feed.functions";
-import { lightCandleOnPost } from "@/lib/post-candle.functions";
+import { lightCandleOnPost, listCandlesForPost } from "@/lib/post-candle.functions";
 import { CandleDialog } from "@/components/site/CandleDialog";
 import { toast } from "sonner";
 import { formatDistanceToNow } from "date-fns";
