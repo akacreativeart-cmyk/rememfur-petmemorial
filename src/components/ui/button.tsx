@@ -22,9 +22,9 @@ const buttonVariants = cva(
           "bg-[var(--cta)] text-primary-foreground hover:bg-[color-mix(in_oklab,var(--cta)_92%,white_8%)]",
         destructive:
           "bg-[var(--destructive)] text-destructive-foreground hover:bg-[color-mix(in_oklab,var(--destructive)_92%,white_8%)]",
-        // Translucent "secondary" pill — Apple's frosted style on dark hero
+        // Paper-themed outline pill — readable on cream backgrounds, still works over imagery.
         outline:
-          "bg-white/10 text-white backdrop-blur-xl border border-white/15 hover:bg-white/15",
+          "bg-[color-mix(in_oklab,var(--cream)_85%,transparent)] text-foreground border border-[color-mix(in_oklab,var(--ink)_15%,transparent)] hover:bg-[color-mix(in_oklab,var(--cream)_95%,transparent)]",
         secondary:
           "bg-[color-mix(in_oklab,var(--foreground)_8%,transparent)] text-foreground hover:bg-[color-mix(in_oklab,var(--foreground)_12%,transparent)]",
         ghost:
