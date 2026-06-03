@@ -191,6 +191,29 @@ export function PostCard({ post }: { post: FeedPost }) {
           </div>
         </div>
 
+        {post.memorial_slug && candleData && candleData.candles.length > 0 && (
+          <div className="rounded-xl border border-[color-mix(in_oklab,var(--cta)_25%,transparent)] bg-[color-mix(in_oklab,var(--cta)_6%,transparent)] p-3">
+            <div className="mb-2 flex items-center gap-1.5 text-xs font-medium uppercase tracking-wider text-[var(--cta)]">
+              <Flame className="h-3.5 w-3.5" />
+              Candles lit {candleData.count > candleData.candles.length ? `(showing ${candleData.candles.length} of ${candleData.count})` : `(${candleData.count})`}
+            </div>
+            <ul className="space-y-2">
+              {candleData.candles.map((c) => (
+                <li key={c.id} className="flex gap-2 text-sm">
+                  <span aria-hidden className="mt-0.5 text-base leading-none">🕯️</span>
+                  <div className="flex-1">
+                    <div className="text-xs font-medium text-foreground">{c.lit_by_name ?? "A friend"}</div>
+                    {c.message && (
+                      <div className="whitespace-pre-line text-sm leading-snug text-foreground/85">{c.message}</div>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+
         {showComments && (
           <div className="space-y-3 border-t border-border/60 pt-3">
             {(comments ?? []).map((c) => {
