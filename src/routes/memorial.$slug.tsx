@@ -150,6 +150,30 @@ function MemorialPage() {
           </div>
         </div>
 
+        {/* Light a candle — prominent, just below the photo */}
+        <div className="mt-6 flex flex-col items-center justify-between gap-4 rounded-3xl border border-border/60 bg-card p-5 soft-shadow sm:flex-row sm:p-6">
+          <div className="flex items-center gap-3">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-terracotta/15">
+              <Flame className="h-6 w-6 text-terracotta" />
+            </div>
+            <div>
+              <div className="font-display text-xl text-foreground">
+                {current.candles.length} {current.candles.length === 1 ? "candle" : "candles"} lit for {m.pet_name}
+              </div>
+              <div className="text-sm text-muted-foreground">Keep their memory shining bright.</div>
+            </div>
+          </div>
+          <CandleDialog
+            target={{ kind: "memorial", memorial_id: m.id, pet_name: m.pet_name }}
+            onLit={() => qc.invalidateQueries({ queryKey: ["memorial", m.slug] })}
+            trigger={
+              <Button size="lg" className="w-full rounded-full bg-terracotta text-accent-foreground hover:bg-terracotta/90 sm:w-auto">
+                <Flame className="mr-2 h-4 w-4" /> Light a candle
+              </Button>
+            }
+          />
+        </div>
+
         <div className="mt-10 grid gap-8 md:grid-cols-3">
           <div className="space-y-8 md:col-span-2">
             {m.story && (

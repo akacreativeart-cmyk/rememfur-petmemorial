@@ -262,6 +262,28 @@ function LandingPage() {
                 </div>
               </div>
             </div>
+            {/* Quick candle CTA right below the photo */}
+            <div className="mt-5 flex flex-col items-center gap-2">
+              {featured ? (
+                <CandleDialog
+                  target={{ kind: "memorial", memorial_id: featured.id, pet_name: featured.pet_name }}
+                  trigger={
+                    <Button size="lg" className="rounded-full px-7">
+                      <Flame className="mr-2 h-4 w-4" /> Light a candle for {featured.pet_name}
+                    </Button>
+                  }
+                />
+              ) : (
+                <Link to="/garden">
+                  <Button size="lg" className="rounded-full px-7">
+                    <Flame className="mr-2 h-4 w-4" /> Light a candle
+                  </Button>
+                </Link>
+              )}
+              <div className="font-hand text-base text-[color-mix(in_oklab,var(--ink)_60%,transparent)]">
+                anyone can light one — no account needed
+              </div>
+            </div>
           </div>
 
           <div>
