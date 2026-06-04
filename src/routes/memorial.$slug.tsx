@@ -9,6 +9,7 @@ import { SiteFooter } from "@/components/site/SiteFooter";
 import { getMemorialBySlug } from "@/lib/memorials.functions";
 import { lightCandle, postMessage } from "@/lib/tributes.functions";
 import { CandleDialog } from "@/components/site/CandleDialog";
+import { CandleCountdown } from "@/components/site/CandleCountdown";
 
 import { useAuth } from "@/hooks/use-auth";
 import { Flame, Heart, MessageCircle, Share2, Pencil, Gift } from "lucide-react";
