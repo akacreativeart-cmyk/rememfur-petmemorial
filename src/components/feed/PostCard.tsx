@@ -17,6 +17,7 @@ import {
 } from "@/lib/feed.functions";
 import { lightCandleOnPost, listCandlesForPost } from "@/lib/post-candle.functions";
 import { CandleDialog } from "@/components/site/CandleDialog";
+import { CandleCountdown } from "@/components/site/CandleCountdown";
 import { toast } from "sonner";
 import { formatDistanceToNow } from "date-fns";
 
