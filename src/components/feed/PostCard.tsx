@@ -202,11 +202,12 @@ export function PostCard({ post }: { post: FeedPost }) {
               {candleData.candles.map((c) => (
                 <li key={c.id} className="flex gap-2 text-sm">
                   <span aria-hidden className="mt-0.5 text-base leading-none">🕯️</span>
-                  <div className="flex-1">
+                  <div className="flex-1 min-w-0">
                     <div className="text-xs font-medium text-foreground">{c.lit_by_name ?? "A friend"}</div>
                     {c.message && (
                       <div className="whitespace-pre-line text-sm leading-snug text-foreground/85">{c.message}</div>
                     )}
+                    <CandleCountdown litAt={c.created_at} className="mt-1" />
                   </div>
                 </li>
               ))}
