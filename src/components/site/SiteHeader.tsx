@@ -96,7 +96,14 @@ export function SiteHeader() {
                 <Menu className="h-5 w-5" />
               </button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[86vw] max-w-sm paper-bg paper-grain border-l border-border/60">
+            <SheetContent
+              side="right"
+              className="flex w-[86vw] max-w-sm flex-col overflow-y-auto overscroll-contain paper-bg paper-grain border-l border-border/60 text-foreground"
+              style={{
+                paddingTop: "calc(env(safe-area-inset-top) + 1.5rem)",
+                paddingBottom: "calc(env(safe-area-inset-bottom) + 6rem)",
+              }}
+            >
               <SheetHeader className="text-left">
                 <SheetTitle className="font-display text-2xl text-[var(--ink)]">
                   Rememfur
@@ -135,6 +142,25 @@ export function SiteHeader() {
                     ))}
                   </nav>
                 </>
+              )}
+
+              {!user && (
+                <div className="mt-4 grid gap-2">
+                  <Link
+                    to="/login"
+                    onClick={() => setOpen(false)}
+                    className="flex items-center justify-center rounded-full border border-ink/15 bg-cream/80 px-4 py-2.5 text-sm font-medium text-foreground hover:bg-cream"
+                  >
+                    Log in
+                  </Link>
+                  <Link
+                    to="/signup"
+                    onClick={() => setOpen(false)}
+                    className="flex items-center justify-center rounded-full bg-[var(--cta)] px-4 py-2.5 text-sm font-medium text-primary-foreground hover:opacity-90"
+                  >
+                    Create a free account
+                  </Link>
+                </div>
               )}
 
               <div className="mt-6 rounded-2xl bg-cream/60 p-4">
