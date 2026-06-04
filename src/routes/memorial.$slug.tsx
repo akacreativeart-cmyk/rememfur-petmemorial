@@ -9,6 +9,7 @@ import { SiteFooter } from "@/components/site/SiteFooter";
 import { getMemorialBySlug } from "@/lib/memorials.functions";
 import { lightCandle, postMessage } from "@/lib/tributes.functions";
 import { CandleDialog } from "@/components/site/CandleDialog";
+import { CandleCountdown } from "@/components/site/CandleCountdown";
 
 import { useAuth } from "@/hooks/use-auth";
 import { Flame, Heart, MessageCircle, Share2, Pencil, Gift } from "lucide-react";
@@ -263,10 +264,13 @@ function MemorialPage() {
                   {current.candles.slice(0, 8).map((c: any) => (
                     <li key={c.id} className="flex gap-2">
                       <Flame className="mt-0.5 h-3.5 w-3.5 shrink-0 text-terracotta" />
-                      <div>
+                      <div className="min-w-0">
                         <div className="text-foreground">{c.lit_by_name ?? "Someone"}</div>
                         {c.message && <div className="text-xs italic text-muted-foreground">"{c.message}"</div>}
-                        <div className="text-[10px] text-muted-foreground">{format(new Date(c.created_at), "MMM d, yyyy")}</div>
+                        <div className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5">
+                          <span className="text-[10px] text-muted-foreground">{format(new Date(c.created_at), "MMM d, yyyy")}</span>
+                          <CandleCountdown litAt={c.created_at} />
+                        </div>
                       </div>
                     </li>
                   ))}
