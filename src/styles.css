@@ -65,10 +65,10 @@
   --navy: oklch(0.32 0.05 250);
   --gold: oklch(0.72 0.13 78);             /* aged gold */
 
-  /* CTA — deep, comforting purple (lavender → violet) */
-  --cta: oklch(0.52 0.17 295);
-  --cta-deep: oklch(0.42 0.18 295);
-  --cta-foreground: oklch(0.985 0.01 295);
+  /* CTA — warm, sun-baked terracotta */
+  --cta: oklch(0.62 0.16 38);
+  --cta-deep: oklch(0.50 0.16 35);
+  --cta-foreground: oklch(0.99 0.01 80);
 
   --background: var(--paper);
   --foreground: var(--ink);
