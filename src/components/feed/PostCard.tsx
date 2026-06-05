@@ -34,6 +34,7 @@ export function PostCard({ post }: { post: FeedPost }) {
   const commentsFn = useServerFn(listComments);
   const addCommentFn = useServerFn(addComment);
   const candleFn = useServerFn(lightCandleOnPost);
+  const candleGuestFn = useServerFn(lightCandleGuestOnPost);
   const candlesListFn = useServerFn(listCandlesForPost);
 
   const { data: candleData } = useQuery({
@@ -42,14 +43,52 @@ export function PostCard({ post }: { post: FeedPost }) {
     enabled: !!post.memorial_slug,
   });
 
+  const [bursts, setBursts] = useState<Array<{ id: number; bx: number; by: number }>>([]);
+  const [popKey, setPopKey] = useState(0);
+  const burstIdRef = useRef(0);
+
   const candle = useMutation({
-    mutationFn: () => candleFn({ data: { post_id: post.id, message: null } }),
+    mutationFn: () =>
+      user
+        ? candleFn({ data: { post_id: post.id, message: null } })
+        : candleGuestFn({ data: { post_id: post.id, name: null, message: null } }),
+    onMutate: async () => {
+      await qc.cancelQueries({ queryKey: ["post-candles", post.id] });
+      const prev = qc.getQueryData<{ candles: unknown[]; count: number }>(["post-candles", post.id]);
+      qc.setQueryData(["post-candles", post.id], (old: { candles: unknown[]; count: number } | undefined) => ({
+        candles: old?.candles ?? [],
+        count: (old?.count ?? 0) + 1,
+      }));
+      setPopKey((k) => k + 1);
+      return { prev };
+    },
     onSuccess: () => {
       toast.success("Candle lit 🕯️ — they would have felt it.");
       qc.invalidateQueries({ queryKey: ["post-candles", post.id] });
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error, _v, ctx) => {
+      if (ctx?.prev) qc.setQueryData(["post-candles", post.id], ctx.prev);
+      toast.error(e.message);
+    },
   });
+
+  function triggerBurst() {
+    const next = Array.from({ length: 5 }).map(() => ({
+      id: ++burstIdRef.current,
+      bx: -50 + (Math.random() * 80 - 40),
+      by: -40 - Math.random() * 30,
+    }));
+    setBursts((b) => [...b, ...next]);
+    setTimeout(() => {
+      setBursts((b) => b.filter((x) => !next.find((n) => n.id === x.id)));
+    }, 950);
+  }
+
+  function quickLight() {
+    if (!post.memorial_slug) return;
+    triggerBurst();
+    candle.mutate();
+  }
 
   const like = useMutation({
     mutationFn: () => likeFn({ data: { post_id: post.id } }),
