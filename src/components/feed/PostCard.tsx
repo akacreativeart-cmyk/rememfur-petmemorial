@@ -230,6 +230,7 @@ export function PostCard({ post }: { post: FeedPost }) {
                 onLit={() => {
                   qc.invalidateQueries({ queryKey: ["feed"] });
                   qc.invalidateQueries({ queryKey: ["post-candles", post.id] });
+                  qc.invalidateQueries({ queryKey: ["candles-this-week"] });
                 }}
                 trigger={
                   <button
