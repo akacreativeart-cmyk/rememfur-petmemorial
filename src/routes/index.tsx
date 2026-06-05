@@ -80,6 +80,13 @@ function LandingPage() {
     queryFn: () => featuredFn(),
     staleTime: 60_000,
   });
+  const weeklyFn = useServerFn(countCandlesThisWeek);
+  const { data: weekly } = useQuery({
+    queryKey: ["candles-this-week"],
+    queryFn: () => weeklyFn(),
+    refetchInterval: 30_000,
+  });
+  const weeklyCount = (weekly?.count ?? 0).toLocaleString();
   return (
 
     <div className="min-h-screen paper-bg paper-grain text-foreground">
