@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient, InfiniteData } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -16,6 +16,7 @@ import {
   type FeedPost,
 } from "@/lib/feed.functions";
 import { lightCandleOnPost, listCandlesForPost } from "@/lib/post-candle.functions";
+import { lightCandleGuestOnPost } from "@/lib/candle-guest.functions";
 import { CandleDialog } from "@/components/site/CandleDialog";
 import { CandleCountdown } from "@/components/site/CandleCountdown";
 import { toast } from "sonner";
@@ -33,6 +34,7 @@ export function PostCard({ post }: { post: FeedPost }) {
   const commentsFn = useServerFn(listComments);
   const addCommentFn = useServerFn(addComment);
   const candleFn = useServerFn(lightCandleOnPost);
+  const candleGuestFn = useServerFn(lightCandleGuestOnPost);
   const candlesListFn = useServerFn(listCandlesForPost);
 
   const { data: candleData } = useQuery({
@@ -41,14 +43,53 @@ export function PostCard({ post }: { post: FeedPost }) {
     enabled: !!post.memorial_slug,
   });
 
+  const [bursts, setBursts] = useState<Array<{ id: number; bx: number; by: number }>>([]);
+  const [popKey, setPopKey] = useState(0);
+  const burstIdRef = useRef(0);
+
   const candle = useMutation({
-    mutationFn: () => candleFn({ data: { post_id: post.id, message: null } }),
+    mutationFn: () =>
+      user
+        ? candleFn({ data: { post_id: post.id, message: null } })
+        : candleGuestFn({ data: { post_id: post.id, name: null, message: null } }),
+    onMutate: async () => {
+      await qc.cancelQueries({ queryKey: ["post-candles", post.id] });
+      const prev = qc.getQueryData<{ candles: unknown[]; count: number }>(["post-candles", post.id]);
+      qc.setQueryData(["post-candles", post.id], (old: { candles: unknown[]; count: number } | undefined) => ({
+        candles: old?.candles ?? [],
+        count: (old?.count ?? 0) + 1,
+      }));
+      setPopKey((k) => k + 1);
+      return { prev };
+    },
     onSuccess: () => {
       toast.success("Candle lit 🕯️ — they would have felt it.");
       qc.invalidateQueries({ queryKey: ["post-candles", post.id] });
+      qc.invalidateQueries({ queryKey: ["candles-this-week"] });
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error, _v, ctx) => {
+      if (ctx?.prev) qc.setQueryData(["post-candles", post.id], ctx.prev);
+      toast.error(e.message);
+    },
   });
+
+  function triggerBurst() {
+    const next = Array.from({ length: 5 }).map(() => ({
+      id: ++burstIdRef.current,
+      bx: -50 + (Math.random() * 80 - 40),
+      by: -40 - Math.random() * 30,
+    }));
+    setBursts((b) => [...b, ...next]);
+    setTimeout(() => {
+      setBursts((b) => b.filter((x) => !next.find((n) => n.id === x.id)));
+    }, 950);
+  }
+
+  function quickLight() {
+    if (!post.memorial_slug) return;
+    triggerBurst();
+    candle.mutate();
+  }
 
   const like = useMutation({
     mutationFn: () => likeFn({ data: { post_id: post.id } }),
@@ -160,22 +201,47 @@ export function PostCard({ post }: { post: FeedPost }) {
             {post.comment_count}
           </button>
           {post.memorial_slug ? (
-            <CandleDialog
-              target={{ kind: "post", post_id: post.id }}
-              onLit={() => {
-                qc.invalidateQueries({ queryKey: ["feed"] });
-                qc.invalidateQueries({ queryKey: ["post-candles", post.id] });
-              }}
-              trigger={
-                <button
-                  aria-label="Light a candle"
-                  className="candle-pulse flex items-center gap-1.5 rounded-full bg-[color-mix(in_oklab,var(--cta)_14%,transparent)] px-3 py-1.5 text-sm font-medium text-[var(--cta)] transition hover:bg-[color-mix(in_oklab,var(--cta)_22%,transparent)]"
-                >
-                  <Flame className="h-4 w-4 flame-flicker" />
-                  {candleData?.count ?? 0} burning
-                </button>
-              }
-            />
+            <div className="relative inline-flex items-center">
+              <button
+                onClick={quickLight}
+                disabled={candle.isPending}
+                aria-label="Light a candle"
+                className="candle-pulse relative flex items-center gap-1.5 rounded-full bg-[color-mix(in_oklab,var(--cta)_14%,transparent)] px-3 py-1.5 text-sm font-medium text-[var(--cta)] transition hover:bg-[color-mix(in_oklab,var(--cta)_24%,transparent)] active:scale-95"
+              >
+                <Flame className="h-4 w-4 flame-flicker" />
+                <span key={popKey} className="count-pop tabular-nums">
+                  {candleData?.count ?? 0}
+                </span>
+                <span>burning</span>
+                {/* burst overlay */}
+                {bursts.map((b) => (
+                  <span
+                    key={b.id}
+                    className="candle-burst"
+                    style={{ ["--bx" as string]: `${b.bx}%`, ["--by" as string]: `${b.by}px` }}
+                    aria-hidden
+                  >
+                    🕯️
+                  </span>
+                ))}
+              </button>
+              <CandleDialog
+                target={{ kind: "post", post_id: post.id }}
+                onLit={() => {
+                  qc.invalidateQueries({ queryKey: ["feed"] });
+                  qc.invalidateQueries({ queryKey: ["post-candles", post.id] });
+                  qc.invalidateQueries({ queryKey: ["candles-this-week"] });
+                }}
+                trigger={
+                  <button
+                    aria-label="Light a candle with a note"
+                    className="ml-1 rounded-full px-2 py-1.5 text-xs text-[var(--cta)] hover:bg-[color-mix(in_oklab,var(--cta)_12%,transparent)]"
+                  >
+                    + note
+                  </button>
+                }
+              />
+            </div>
           ) : (
             <span
               aria-label="Candles burning"

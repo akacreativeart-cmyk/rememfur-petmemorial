@@ -60,15 +60,15 @@
   --ink: oklch(0.24 0.025 40);             /* warm dark brown ink */
   --sage: oklch(0.72 0.06 145);            /* eucalyptus */
   --sage-deep: oklch(0.42 0.06 150);
-  --terracotta: oklch(0.62 0.16 38);       /* sun-baked terracotta */
-  --mauve: oklch(0.68 0.07 350);           /* dusty rose */
-  --navy: oklch(0.32 0.05 250);
+  --terracotta: oklch(0.55 0.20 295);      /* deep purple (replaces terracotta orange) */
+  --mauve: oklch(0.68 0.10 320);           /* dusty violet */
+  --navy: oklch(0.32 0.05 280);
   --gold: oklch(0.72 0.13 78);             /* aged gold */
 
-  /* CTA — warm, sun-baked terracotta */
-  --cta: oklch(0.62 0.16 38);
-  --cta-deep: oklch(0.50 0.16 35);
-  --cta-foreground: oklch(0.99 0.01 80);
+  /* CTA — vivid purple */
+  --cta: oklch(0.55 0.20 295);
+  --cta-deep: oklch(0.42 0.22 290);
+  --cta-foreground: oklch(0.99 0.01 295);
 
   --background: var(--paper);
   --foreground: var(--ink);
@@ -327,9 +327,9 @@
     position: absolute; left: 50%; top: -18px;
     width: 12px; height: 18px;
     transform: translateX(-50%);
-    background: radial-gradient(circle at 50% 70%, oklch(0.95 0.18 80) 0%, oklch(0.82 0.22 50) 45%, oklch(0.62 0.22 30) 75%, transparent 80%);
+    background: radial-gradient(circle at 50% 70%, oklch(0.96 0.10 300) 0%, oklch(0.78 0.22 295) 45%, oklch(0.55 0.24 290) 75%, transparent 80%);
     border-radius: 50% 50% 45% 45% / 60% 60% 40% 40%;
-    filter: blur(0.2px) drop-shadow(0 0 10px oklch(0.85 0.2 60 / 0.7));
+    filter: blur(0.2px) drop-shadow(0 0 10px oklch(0.7 0.22 295 / 0.7));
     transform-origin: 50% 100%;
     animation: flame-flicker 1.2s ease-in-out infinite;
   }
@@ -337,6 +337,28 @@
     0%, 100% { transform: translateX(-50%) scale(1) rotate(-1deg); opacity: 0.95; }
     50%      { transform: translateX(-50%) scale(1.08, 0.95) rotate(2deg); opacity: 1; }
   }
+
+  /* Candle burst — fires when a candle is lit */
+  @keyframes candle-burst {
+    0%   { transform: translate(-50%, 0) scale(0.6); opacity: 0; }
+    20%  { opacity: 1; }
+    100% { transform: translate(var(--bx, -50%), var(--by, -40px)) scale(1.1); opacity: 0; }
+  }
+  .candle-burst {
+    position: absolute;
+    left: 50%; top: 50%;
+    pointer-events: none;
+    font-size: 14px;
+    animation: candle-burst 900ms ease-out forwards;
+    filter: drop-shadow(0 0 6px color-mix(in oklab, var(--cta) 70%, transparent));
+  }
+  @keyframes count-pop {
+    0%   { transform: scale(1); }
+    40%  { transform: scale(1.25); }
+    100% { transform: scale(1); }
+  }
+  .count-pop { animation: count-pop 450ms ease-out; }
+
 
   /* Flickering flame for lucide icons */
   @keyframes icon-flicker {

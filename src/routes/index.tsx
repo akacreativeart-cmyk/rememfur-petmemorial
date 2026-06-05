@@ -6,7 +6,7 @@ import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { PawIcon } from "@/components/site/PawIcon";
 import { CandleDialog } from "@/components/site/CandleDialog";
-import { pickFeaturedMemorial } from "@/lib/candle-guest.functions";
+import { pickFeaturedMemorial, countCandlesThisWeek } from "@/lib/candle-guest.functions";
 import { Heart, Feather, Flame, Users, PenLine, ImagePlus, MessageCircleHeart, ShoppingBag, Gift, Sparkles } from "lucide-react";
 
 
@@ -80,6 +80,13 @@ function LandingPage() {
     queryFn: () => featuredFn(),
     staleTime: 60_000,
   });
+  const weeklyFn = useServerFn(countCandlesThisWeek);
+  const { data: weekly } = useQuery({
+    queryKey: ["candles-this-week"],
+    queryFn: () => weeklyFn(),
+    refetchInterval: 30_000,
+  });
+  const weeklyCount = (weekly?.count ?? 0).toLocaleString();
   return (
 
     <div className="min-h-screen paper-bg paper-grain text-foreground">
@@ -242,7 +249,7 @@ function LandingPage() {
 
               <div className="mt-5 inline-flex items-center gap-2 rounded-full bg-[color-mix(in_oklab,var(--cta)_12%,transparent)] px-3 py-1.5 text-sm text-[var(--cta)]">
                 <Flame className="h-4 w-4 flame-flicker" />
-                <span className="font-medium">2,418 candles lit this week</span>
+                <span className="font-medium"><span className="tabular-nums">{weeklyCount}</span> candles lit this week</span>
               </div>
             </div>
           </div>
@@ -414,7 +421,7 @@ function LandingPage() {
             </Button>
           </Link>
           <div className="mt-3 font-hand text-lg text-[color-mix(in_oklab,var(--ink)_60%,transparent)]">
-            2,418 candles lit this week
+            <span className="tabular-nums">{weeklyCount}</span> candles lit this week
           </div>
         </div>
       </section>
