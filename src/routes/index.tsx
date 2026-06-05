@@ -249,7 +249,7 @@ function LandingPage() {
 
               <div className="mt-5 inline-flex items-center gap-2 rounded-full bg-[color-mix(in_oklab,var(--cta)_12%,transparent)] px-3 py-1.5 text-sm text-[var(--cta)]">
                 <Flame className="h-4 w-4 flame-flicker" />
-                <span className="font-medium">2,418 candles lit this week</span>
+                <span className="font-medium"><span className="tabular-nums">{weeklyCount}</span> candles lit this week</span>
               </div>
             </div>
           </div>
