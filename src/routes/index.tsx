@@ -421,7 +421,7 @@ function LandingPage() {
             </Button>
           </Link>
           <div className="mt-3 font-hand text-lg text-[color-mix(in_oklab,var(--ink)_60%,transparent)]">
-            2,418 candles lit this week
+            <span className="tabular-nums">{weeklyCount}</span> candles lit this week
           </div>
         </div>
       </section>
