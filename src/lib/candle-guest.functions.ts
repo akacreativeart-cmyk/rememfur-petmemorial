@@ -97,3 +97,14 @@ export const pickFeaturedMemorial = createServerFn({ method: "GET" })
       .maybeSingle();
     return data;
   });
+
+export const countCandlesThisWeek = createServerFn({ method: "GET" })
+  .handler(async () => {
+    const since = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+    const { count } = await supabaseAdmin
+      .from("candles")
+      .select("*", { count: "exact", head: true })
+      .gte("created_at", since);
+    return { count: count ?? 0 };
+  });
+
