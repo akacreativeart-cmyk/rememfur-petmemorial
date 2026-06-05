@@ -16,6 +16,7 @@ import {
   type FeedPost,
 } from "@/lib/feed.functions";
 import { lightCandleOnPost, listCandlesForPost } from "@/lib/post-candle.functions";
+import { lightCandleGuestOnPost } from "@/lib/candle-guest.functions";
 import { CandleDialog } from "@/components/site/CandleDialog";
 import { CandleCountdown } from "@/components/site/CandleCountdown";
 import { toast } from "sonner";
