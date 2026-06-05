@@ -200,22 +200,46 @@ export function PostCard({ post }: { post: FeedPost }) {
             {post.comment_count}
           </button>
           {post.memorial_slug ? (
-            <CandleDialog
-              target={{ kind: "post", post_id: post.id }}
-              onLit={() => {
-                qc.invalidateQueries({ queryKey: ["feed"] });
-                qc.invalidateQueries({ queryKey: ["post-candles", post.id] });
-              }}
-              trigger={
-                <button
-                  aria-label="Light a candle"
-                  className="candle-pulse flex items-center gap-1.5 rounded-full bg-[color-mix(in_oklab,var(--cta)_14%,transparent)] px-3 py-1.5 text-sm font-medium text-[var(--cta)] transition hover:bg-[color-mix(in_oklab,var(--cta)_22%,transparent)]"
-                >
-                  <Flame className="h-4 w-4 flame-flicker" />
-                  {candleData?.count ?? 0} burning
-                </button>
-              }
-            />
+            <div className="relative inline-flex items-center">
+              <button
+                onClick={quickLight}
+                disabled={candle.isPending}
+                aria-label="Light a candle"
+                className="candle-pulse relative flex items-center gap-1.5 rounded-full bg-[color-mix(in_oklab,var(--cta)_14%,transparent)] px-3 py-1.5 text-sm font-medium text-[var(--cta)] transition hover:bg-[color-mix(in_oklab,var(--cta)_24%,transparent)] active:scale-95"
+              >
+                <Flame className="h-4 w-4 flame-flicker" />
+                <span key={popKey} className="count-pop tabular-nums">
+                  {candleData?.count ?? 0}
+                </span>
+                <span>burning</span>
+                {/* burst overlay */}
+                {bursts.map((b) => (
+                  <span
+                    key={b.id}
+                    className="candle-burst"
+                    style={{ ["--bx" as string]: `${b.bx}%`, ["--by" as string]: `${b.by}px` }}
+                    aria-hidden
+                  >
+                    🕯️
+                  </span>
+                ))}
+              </button>
+              <CandleDialog
+                target={{ kind: "post", post_id: post.id }}
+                onLit={() => {
+                  qc.invalidateQueries({ queryKey: ["feed"] });
+                  qc.invalidateQueries({ queryKey: ["post-candles", post.id] });
+                }}
+                trigger={
+                  <button
+                    aria-label="Light a candle with a note"
+                    className="ml-1 rounded-full px-2 py-1.5 text-xs text-[var(--cta)] hover:bg-[color-mix(in_oklab,var(--cta)_12%,transparent)]"
+                  >
+                    + note
+                  </button>
+                }
+              />
+            </div>
           ) : (
             <span
               aria-label="Candles burning"
