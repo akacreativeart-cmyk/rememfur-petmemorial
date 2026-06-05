@@ -159,7 +159,7 @@ export function PostCard({ post }: { post: FeedPost }) {
             <MessageCircle className="h-4 w-4" />
             {post.comment_count}
           </button>
-          {post.memorial_slug && (
+          {post.memorial_slug ? (
             <CandleDialog
               target={{ kind: "post", post_id: post.id }}
               onLit={() => {
@@ -169,13 +169,21 @@ export function PostCard({ post }: { post: FeedPost }) {
               trigger={
                 <button
                   aria-label="Light a candle"
-                  className="flex items-center gap-1.5 rounded-full bg-[color-mix(in_oklab,var(--cta)_12%,transparent)] px-3 py-1.5 text-sm text-[var(--cta)] transition hover:bg-[color-mix(in_oklab,var(--cta)_20%,transparent)]"
+                  className="candle-pulse flex items-center gap-1.5 rounded-full bg-[color-mix(in_oklab,var(--cta)_14%,transparent)] px-3 py-1.5 text-sm font-medium text-[var(--cta)] transition hover:bg-[color-mix(in_oklab,var(--cta)_22%,transparent)]"
                 >
-                  <Flame className="h-4 w-4" />
-                  {candleData?.count ? `${candleData.count} ` : ""}Candle{candleData?.count === 1 ? "" : "s"}
+                  <Flame className="h-4 w-4 flame-flicker" />
+                  {candleData?.count ?? 0} burning
                 </button>
               }
             />
+          ) : (
+            <span
+              aria-label="Candles burning"
+              className="flex items-center gap-1.5 rounded-full bg-muted/60 px-3 py-1.5 text-sm text-muted-foreground"
+            >
+              <Flame className="h-4 w-4" />
+              0 burning
+            </span>
           )}
 
           <div className="ml-auto flex gap-1 text-base" aria-label="React">
