@@ -65,6 +65,7 @@ export function PostCard({ post }: { post: FeedPost }) {
     onSuccess: () => {
       toast.success("Candle lit 🕯️ — they would have felt it.");
       qc.invalidateQueries({ queryKey: ["post-candles", post.id] });
+      qc.invalidateQueries({ queryKey: ["candles-this-week"] });
     },
     onError: (e: Error, _v, ctx) => {
       if (ctx?.prev) qc.setQueryData(["post-candles", post.id], ctx.prev);
