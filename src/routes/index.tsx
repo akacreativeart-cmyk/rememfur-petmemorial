@@ -185,6 +185,70 @@ function LandingPage() {
         </div>
       </section>
 
+      {/* ─────────────────────────── Light a candle — open to everyone ─────────────────────────── */}
+      <section className="mx-auto max-w-6xl px-5 pt-2 pb-8">
+        <div className="relative overflow-hidden rounded-3xl border border-[color-mix(in_oklab,var(--cta)_25%,transparent)] bg-[color-mix(in_oklab,var(--cta)_6%,transparent)] px-6 py-10 md:px-12 md:py-14">
+          {/* drifting candles backdrop */}
+          <div className="pointer-events-none absolute inset-0 opacity-60">
+            <div className="candle-drift"><div className="candle"><div className="flame" /></div></div>
+            <div className="candle-drift delay-1"><div className="candle"><div className="flame" /></div></div>
+            <div className="candle-drift delay-2"><div className="candle"><div className="flame" /></div></div>
+            <div className="candle-drift delay-3"><div className="candle"><div className="flame" /></div></div>
+          </div>
+
+          <div className="relative z-10 grid items-center gap-10 md:grid-cols-[auto_1fr]">
+            {/* Big animated candle */}
+            <div className="flex flex-col items-center">
+              <div className="hero-candle candle-glow">
+                <div className="flame" />
+              </div>
+              <div className="mt-4 font-hand text-base text-[color-mix(in_oklab,var(--ink)_60%,transparent)]">
+                one small light, sent with love
+              </div>
+            </div>
+
+            <div className="text-center md:text-left">
+              <div className="text-xs uppercase tracking-[0.4em] text-[var(--cta)]">A moment of light</div>
+              <h2 className="mt-3 font-display text-3xl text-[var(--ink)] md:text-5xl">
+                Light a candle <span className="italic">for someone you loved.</span>
+              </h2>
+              <p className="mt-3 font-serif text-base text-[color-mix(in_oklab,var(--ink)_75%,transparent)] md:text-lg">
+                No account, no sign-in, no waiting. Anyone can light a candle right now — it will burn for 24 hours,
+                gently visible to everyone who visits.
+              </p>
+
+              <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:justify-center md:justify-start">
+                {featured ? (
+                  <CandleDialog
+                    target={{ kind: "memorial", memorial_id: featured.id, pet_name: featured.pet_name }}
+                    trigger={
+                      <Button size="lg" className="candle-pulse rounded-full px-7 bg-[var(--cta)] text-[var(--cta-foreground,white)] hover:opacity-90">
+                        <Flame className="mr-2 h-5 w-5 flame-flicker" />
+                        Light a candle for {featured.pet_name}
+                      </Button>
+                    }
+                  />
+                ) : (
+                  <Link to="/garden">
+                    <Button size="lg" className="candle-pulse rounded-full px-7 bg-[var(--cta)] text-[var(--cta-foreground,white)] hover:opacity-90">
+                      <Flame className="mr-2 h-5 w-5 flame-flicker" /> Light a candle
+                    </Button>
+                  </Link>
+                )}
+                <Link to="/garden" className="font-hand text-base text-[color-mix(in_oklab,var(--ink)_60%,transparent)] hover:underline">
+                  or wander the garden of names →
+                </Link>
+              </div>
+
+              <div className="mt-5 inline-flex items-center gap-2 rounded-full bg-[color-mix(in_oklab,var(--cta)_12%,transparent)] px-3 py-1.5 text-sm text-[var(--cta)]">
+                <Flame className="h-4 w-4 flame-flicker" />
+                <span className="font-medium">2,418 candles lit this week</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ─────────────────────────── Emotional promise strip ─────────────────────────── */}
       <section className="mx-auto max-w-5xl px-5 py-8">
         <div className="grid gap-4 text-center md:grid-cols-3">
