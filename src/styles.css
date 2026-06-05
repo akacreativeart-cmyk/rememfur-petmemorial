@@ -67,8 +67,8 @@
 
   /* CTA — vivid purple */
   --cta: oklch(0.55 0.20 295);
-  --cta-deep: oklch(0.50 0.16 35);
-  --cta-foreground: oklch(0.99 0.01 80);
+  --cta-deep: oklch(0.42 0.22 290);
+  --cta-foreground: oklch(0.99 0.01 295);
 
   --background: var(--paper);
   --foreground: var(--ink);
