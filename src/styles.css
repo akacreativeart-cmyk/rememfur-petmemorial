@@ -338,6 +338,42 @@
     50%      { transform: translateX(-50%) scale(1.08, 0.95) rotate(2deg); opacity: 1; }
   }
 
+  /* Flickering flame for lucide icons */
+  @keyframes icon-flicker {
+    0%, 100% { transform: scale(1) rotate(-2deg); filter: drop-shadow(0 0 4px color-mix(in oklab, var(--cta) 60%, transparent)); }
+    25%      { transform: scale(1.08) rotate(1deg);  filter: drop-shadow(0 0 8px color-mix(in oklab, var(--cta) 80%, transparent)); }
+    50%      { transform: scale(0.96) rotate(2deg);  filter: drop-shadow(0 0 6px color-mix(in oklab, var(--cta) 70%, transparent)); }
+    75%      { transform: scale(1.05) rotate(-1deg); filter: drop-shadow(0 0 10px color-mix(in oklab, var(--cta) 90%, transparent)); }
+  }
+  .flame-flicker {
+    animation: icon-flicker 1.6s ease-in-out infinite;
+    transform-origin: 50% 90%;
+    color: var(--cta);
+  }
+
+  /* Halo pulse around the candle count chip */
+  @keyframes candle-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--cta) 35%, transparent); }
+    50%      { box-shadow: 0 0 0 8px color-mix(in oklab, var(--cta) 0%, transparent); }
+  }
+  .candle-pulse { animation: candle-pulse 2.2s ease-out infinite; }
+
+  /* Big standalone hero candle */
+  .hero-candle {
+    position: relative;
+    width: 64px; height: 110px;
+    margin: 0 auto;
+    background: linear-gradient(180deg, oklch(0.96 0.04 80) 0%, oklch(0.88 0.07 70) 100%);
+    border-radius: 6px 6px 10px 10px;
+    box-shadow: inset -8px 0 14px -8px oklch(0.4 0.06 40 / 0.4), 0 12px 30px -10px oklch(0.4 0.1 40 / 0.35);
+  }
+  .hero-candle::after {
+    content: ""; position: absolute; left: 50%; top: -6px;
+    width: 2px; height: 8px; background: oklch(0.2 0.02 40);
+    transform: translateX(-50%);
+  }
+  .hero-candle .flame { top: -28px; width: 20px; height: 30px; }
+
   /* Instagram-style preview filters */
   .filt-none      { filter: none; }
   .filt-warm      { filter: sepia(0.18) saturate(1.15) contrast(1.05) hue-rotate(-6deg); }
