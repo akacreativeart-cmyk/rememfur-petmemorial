@@ -321,7 +321,7 @@ function LandingPage() {
                   The porch is empty without her queen."
                 </p>
                 <div className="mt-3 flex items-center justify-center gap-2 text-[var(--terracotta)]">
-                  <Flame className="h-4 w-4" />
+                  <Flame className="h-4 w-4 flame-flicker" />
                   <span className="font-hand text-lg">142 candles lit</span>
                 </div>
               </div>
