@@ -75,15 +75,24 @@ export const lightCandleGuestOnPost = createServerFn({ method: "POST" })
 
 export const listRecentCandles = createServerFn({ method: "GET" })
   .inputValidator((input: { limit?: number } | undefined) =>
-    z.object({ limit: z.number().int().min(1).max(20).default(6) }).parse(input ?? {}),
+    z.object({ limit: z.number().int().min(1).max(60).default(24) }).parse(input ?? {}),
   )
   .handler(async ({ data }) => {
     const { data: rows } = await supabaseAdmin
       .from("candles")
-      .select("id, lit_by_name, message, created_at, memorial_id")
+      .select("id, lit_by_name, message, created_at, memorial_id, memorials!inner(slug, pet_name, is_public)")
+      .eq("memorials.is_public", true)
       .order("created_at", { ascending: false })
       .limit(data.limit);
-    return rows ?? [];
+    return (rows ?? []).map((r: any) => ({
+      id: r.id as string,
+      lit_by_name: r.lit_by_name as string | null,
+      message: r.message as string | null,
+      created_at: r.created_at as string,
+      memorial_id: r.memorial_id as string,
+      memorial_slug: r.memorials?.slug as string | null,
+      pet_name: r.memorials?.pet_name as string | null,
+    }));
   });
 
 export const pickFeaturedMemorial = createServerFn({ method: "GET" })

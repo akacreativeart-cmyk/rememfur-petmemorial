@@ -6,7 +6,7 @@ import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { PawIcon } from "@/components/site/PawIcon";
 import { CandleDialog } from "@/components/site/CandleDialog";
-import { pickFeaturedMemorial, countCandlesThisWeek } from "@/lib/candle-guest.functions";
+import { pickFeaturedMemorial, countCandlesThisWeek, listRecentCandles } from "@/lib/candle-guest.functions";
 import { Heart, Feather, Flame, Users, PenLine, ImagePlus, MessageCircleHeart, ShoppingBag, Gift, Sparkles } from "lucide-react";
 
 
@@ -87,6 +87,12 @@ function LandingPage() {
     refetchInterval: 30_000,
   });
   const weeklyCount = (weekly?.count ?? 0).toLocaleString();
+  const recentCandlesFn = useServerFn(listRecentCandles);
+  const { data: recentCandles } = useQuery({
+    queryKey: ["recent-candles-wall"],
+    queryFn: () => recentCandlesFn({ data: { limit: 24 } }),
+    refetchInterval: 30_000,
+  });
   return (
 
     <div className="min-h-screen paper-bg paper-grain text-foreground">
@@ -255,6 +261,56 @@ function LandingPage() {
           </div>
         </div>
       </section>
+
+      {/* ─────────────────────────── Wall of candles lit ─────────────────────────── */}
+      <section className="mx-auto max-w-6xl px-5 pb-10">
+        <div className="rounded-3xl border border-[color-mix(in_oklab,var(--cta)_22%,transparent)] bg-[color-mix(in_oklab,var(--cta)_5%,transparent)] p-6 md:p-8">
+          <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <div className="font-hand text-xl text-[var(--cta)]">a wall of light</div>
+              <h2 className="font-display text-2xl italic text-[var(--ink)] md:text-3xl">
+                Candles burning right now
+              </h2>
+            </div>
+            <span className="inline-flex items-center gap-2 rounded-full bg-[color-mix(in_oklab,var(--cta)_14%,transparent)] px-3 py-1.5 text-sm text-[var(--cta)]">
+              <Flame className="h-4 w-4 flame-flicker" />
+              <span className="tabular-nums font-medium">{weeklyCount}</span> this week
+            </span>
+          </div>
+
+          {recentCandles && recentCandles.length > 0 ? (
+            <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+              {recentCandles.map((c) => (
+                <li key={c.id}>
+                  <Link
+                    to="/memorial/$slug"
+                    params={{ slug: c.memorial_slug ?? "" }}
+                    className="group flex h-full flex-col items-center gap-2 rounded-2xl border border-[color-mix(in_oklab,var(--cta)_18%,transparent)] bg-card/60 px-3 py-4 text-center transition hover:-translate-y-0.5 hover:border-[var(--cta)] hover:bg-card"
+                  >
+                    <span className="text-3xl leading-none flame-flicker" aria-hidden>🕯️</span>
+                    <div className="min-w-0 text-xs font-medium text-[var(--cta)] truncate w-full">
+                      for {c.pet_name ?? "a friend"}
+                    </div>
+                    {c.message && (
+                      <div className="line-clamp-2 text-[11px] italic text-foreground/75">
+                        "{c.message}"
+                      </div>
+                    )}
+                    <div className="mt-auto text-[10px] uppercase tracking-wider text-muted-foreground">
+                      by {c.lit_by_name ?? "a friend"}
+                    </div>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div className="rounded-2xl bg-card/60 p-6 text-center text-sm text-muted-foreground">
+              Be the first to light a candle today.
+            </div>
+          )}
+        </div>
+      </section>
+
 
       {/* ─────────────────────────── Emotional promise strip ─────────────────────────── */}
       <section className="mx-auto max-w-5xl px-5 py-8">
