@@ -1,5 +1,5 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { Home, Flower2, PlusCircle, Users, User } from "lucide-react";
+import { Home, Flower2, PlusCircle, Users, ShoppingBag } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 
 type Tab = { to: string; label: string; icon: any; match?: (p: string) => boolean };
