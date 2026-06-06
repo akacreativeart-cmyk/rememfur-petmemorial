@@ -327,9 +327,9 @@
     position: absolute; left: 50%; top: -18px;
     width: 12px; height: 18px;
     transform: translateX(-50%);
-    background: radial-gradient(circle at 50% 70%, oklch(0.96 0.10 300) 0%, oklch(0.78 0.22 295) 45%, oklch(0.55 0.24 290) 75%, transparent 80%);
+    background: radial-gradient(circle at 50% 70%, oklch(0.98 0.08 90) 0%, oklch(0.82 0.18 60) 45%, oklch(0.62 0.20 35) 75%, transparent 80%);
     border-radius: 50% 50% 45% 45% / 60% 60% 40% 40%;
-    filter: blur(0.2px) drop-shadow(0 0 10px oklch(0.7 0.22 295 / 0.7));
+    filter: blur(0.2px) drop-shadow(0 0 10px oklch(0.75 0.18 55 / 0.7));
     transform-origin: 50% 100%;
     animation: flame-flicker 1.2s ease-in-out infinite;
   }
