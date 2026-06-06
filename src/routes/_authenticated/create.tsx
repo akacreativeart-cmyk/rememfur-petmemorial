@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { Button } from "@/components/ui/button";
@@ -11,7 +11,20 @@ import { useAuth } from "@/hooks/use-auth";
 import { createMemorial } from "@/lib/memorials.functions";
 import { transformPortrait } from "@/lib/transform.functions";
 import { lightCandle } from "@/lib/tributes.functions";
-import { Sparkles, Upload, Heart, Check, Loader2, X } from "lucide-react";
+import { assistCaption } from "@/lib/ai-assist.functions";
+import {
+  Sparkles,
+  Upload,
+  Heart,
+  Check,
+  Loader2,
+  X,
+  ShoppingBag,
+  Phone,
+  Users,
+  HandHeart,
+  ArrowRight,
+} from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -38,12 +51,18 @@ const STYLES = [
 
 type StyleKey = (typeof STYLES)[number]["key"];
 
+const TRAIT_TAGS = [
+  "playful", "loyal", "gentle", "mischievous", "cuddly", "brave",
+  "curious", "goofy", "wise", "sunshine", "shadow", "best friend",
+];
+
 function CreatePage() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const transformFn = useServerFn(transformPortrait);
   const createFn = useServerFn(createMemorial);
   const candleFn = useServerFn(lightCandle);
+  const assistFn = useServerFn(assistCaption);
 
   const [step, setStep] = useState(1);
   const [heroUrl, setHeroUrl] = useState<string | null>(null);
@@ -59,10 +78,13 @@ function CreatePage() {
   const [passingDate, setPassingDate] = useState("");
   const [epitaph, setEpitaph] = useState("");
   const [story, setStory] = useState("");
+  const [tags, setTags] = useState<string[]>([]);
+  const [assisting, setAssisting] = useState(false);
 
   const [candleMsg, setCandleMsg] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [cancelling, setCancelling] = useState(false);
+  const [publishedSlug, setPublishedSlug] = useState<string | null>(null);
 
   const hasProgress =
     !!heroUrl || !!transformedUrl || !!petName || !!epitaph || !!story || !!candleMsg;
@@ -99,10 +121,33 @@ function CreatePage() {
     }
   };
 
+  const toggleTag = (t: string) => {
+    setTags((prev) => (prev.includes(t) ? prev.filter((x) => x !== t) : [...prev, t]));
+  };
+
+  const aiAssist = async () => {
+    setAssisting(true);
+    try {
+      const seed = [
+        petName && `About ${petName}, a ${species}.`,
+        tags.length && `They were ${tags.join(", ")}.`,
+        story.trim(),
+      ].filter(Boolean).join(" ");
+      const res = await assistFn({ data: { draft: seed, tone: "tender" } });
+      if (res?.caption) setStory(res.caption);
+      toast.success("AI draft ready — edit freely.");
+    } catch (e: any) {
+      toast.error(e.message ?? "AI assist unavailable");
+    } finally {
+      setAssisting(false);
+    }
+  };
+
   const finish = async () => {
     if (!petName) return toast.error("Please add their name.");
     setSubmitting(true);
     try {
+      const fullStory = [story.trim(), tags.length ? `\n\nThey were ${tags.join(", ")}.` : ""].join("");
       const res = await createFn({
         data: {
           pet_name: petName,
@@ -110,7 +155,7 @@ function CreatePage() {
           birth_date: birthDate || null,
           passing_date: passingDate || null,
           epitaph: epitaph || null,
-          story: story || null,
+          story: fullStory || null,
           hero_image_url: heroUrl,
           transformed_image_url: transformedUrl,
           transform_style: transformedUrl ? style : null,
@@ -121,7 +166,8 @@ function CreatePage() {
         await candleFn({ data: { memorial_id: res.id, message: candleMsg || null } });
       } catch {}
       toast.success("Memorial created with love.");
-      navigate({ to: "/memorial/$slug", params: { slug: res.slug } });
+      setPublishedSlug(res.slug);
+      setStep(5);
     } catch (e: any) {
       toast.error(e.message ?? "Could not create memorial");
     } finally {
@@ -141,10 +187,10 @@ function CreatePage() {
         <div>
           <h1 className="font-display text-4xl text-foreground">Create a memorial</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            A four-step ritual: photo, transform, tribute, candle.
+            A gentle ritual: photo, transform, tribute, candle.
           </p>
         </div>
-        {hasProgress ? (
+        {step < 5 && (hasProgress ? (
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button variant="ghost" size="sm" className="rounded-full text-muted-foreground">
@@ -180,10 +226,11 @@ function CreatePage() {
           >
             <X className="mr-1 h-4 w-4" /> Cancel
           </Button>
-        )}
+        ))}
       </div>
 
 
+      {step < 5 && (
       <ol className="mt-7 flex items-center gap-3 text-xs">
         {["Photo", "Transform", "Tribute", "Candle"].map((label, i) => {
           const n = i + 1;
@@ -191,7 +238,7 @@ function CreatePage() {
           const done = step > n;
           return (
             <li key={label} className="flex flex-1 items-center gap-2">
-              <span className={`flex h-7 w-7 items-center justify-center rounded-full text-xs ${done ? "bg-sage-deep text-primary-foreground" : active ? "bg-terracotta text-accent-foreground" : "bg-muted text-muted-foreground"}`}>
+              <span className={`flex h-7 w-7 items-center justify-center rounded-full text-xs ${done ? "bg-sage-deep text-primary-foreground" : active ? "bg-[var(--cta)] text-[var(--cta-foreground)]" : "bg-muted text-muted-foreground"}`}>
                 {done ? <Check className="h-3.5 w-3.5" /> : n}
               </span>
               <span className={`${active ? "text-foreground" : "text-muted-foreground"}`}>{label}</span>
@@ -200,6 +247,7 @@ function CreatePage() {
           );
         })}
       </ol>
+      )}
 
       <div className="mt-8 rounded-3xl border border-border/60 bg-card p-8 soft-shadow">
         {step === 1 && (
@@ -219,7 +267,7 @@ function CreatePage() {
               <input type="file" accept="image/*" className="hidden" onChange={(e) => e.target.files?.[0] && handleUpload(e.target.files[0])} />
             </label>
             <div className="mt-6 flex justify-end">
-              <Button disabled={!heroUrl} onClick={() => setStep(2)} className="rounded-full bg-sage-deep text-primary-foreground hover:bg-sage-deep/90">Next</Button>
+              <Button disabled={!heroUrl} onClick={() => setStep(2)} className="rounded-full bg-[var(--cta)] text-[var(--cta-foreground)] hover:bg-[var(--cta-deep)]">Next</Button>
             </div>
           </section>
         )}
@@ -230,8 +278,8 @@ function CreatePage() {
             <p className="mt-1 text-sm text-muted-foreground">AI gently paints your photo in the style you pick.</p>
             <div className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-4">
               {STYLES.map((s) => (
-                <button key={s.key} onClick={() => setStyle(s.key)} className={`rounded-2xl border-2 p-4 text-left transition ${style === s.key ? "border-sage-deep bg-sage/10" : "border-border hover:border-sage/40"}`}>
-                  <Sparkles className="h-5 w-5 text-terracotta" />
+                <button key={s.key} onClick={() => setStyle(s.key)} className={`rounded-2xl border-2 p-4 text-left transition ${style === s.key ? "border-[var(--cta)] bg-[color-mix(in_oklab,var(--cta)_8%,transparent)]" : "border-border hover:border-sage/40"}`}>
+                  <Sparkles className="h-5 w-5 text-[var(--cta)]" />
                   <div className="mt-2 font-display text-sm text-foreground">{s.label}</div>
                   <div className="text-xs text-muted-foreground">{s.note}</div>
                 </button>
@@ -261,7 +309,7 @@ function CreatePage() {
                 <Button onClick={runTransform} disabled={transforming || !heroUrl} variant="outline" className="rounded-full">
                   {transforming ? "Painting…" : transformedUrl ? "Repaint" : "Paint portrait"}
                 </Button>
-                <Button onClick={() => setStep(3)} className="rounded-full bg-sage-deep text-primary-foreground hover:bg-sage-deep/90">
+                <Button onClick={() => setStep(3)} className="rounded-full bg-[var(--cta)] text-[var(--cta-foreground)] hover:bg-[var(--cta-deep)]">
                   {transformedUrl ? "Next" : "Skip and continue"}
                 </Button>
               </div>
@@ -298,22 +346,62 @@ function CreatePage() {
                 <Label htmlFor="ep">A short epitaph</Label>
                 <Input id="ep" value={epitaph} onChange={(e) => setEpitaph(e.target.value)} placeholder="You were my sunshine, every single day." />
               </div>
+
               <div className="md:col-span-2">
-                <Label htmlFor="st">Their story</Label>
+                <Label>Tap a few traits that capture them</Label>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {TRAIT_TAGS.map((t) => {
+                    const active = tags.includes(t);
+                    return (
+                      <button
+                        type="button"
+                        key={t}
+                        onClick={() => toggleTag(t)}
+                        className={`rounded-full border px-3 py-1 text-xs transition ${
+                          active
+                            ? "border-[var(--cta)] bg-[var(--cta)] text-[var(--cta-foreground)]"
+                            : "border-border bg-card text-foreground hover:bg-muted/50"
+                        }`}
+                      >
+                        {active ? "✓ " : "+ "}{t}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="md:col-span-2">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="st">Their story</Label>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="ghost"
+                    disabled={assisting}
+                    onClick={aiAssist}
+                    className="h-7 text-xs text-[var(--cta)] hover:bg-[color-mix(in_oklab,var(--cta)_10%,transparent)]"
+                  >
+                    <Sparkles className="mr-1 h-3.5 w-3.5" />
+                    {assisting ? "Writing…" : "AI assist"}
+                  </Button>
+                </div>
                 <Textarea id="st" rows={6} value={story} onChange={(e) => setStory(e.target.value)} placeholder="What made them uniquely them? What will you miss most?" />
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Tip: add a few traits above, then tap <span className="text-[var(--cta)]">AI assist</span> to draft a starting paragraph.
+                </p>
               </div>
             </div>
             <div className="mt-6 flex justify-between">
               <Button variant="ghost" onClick={() => setStep(2)} className="rounded-full">Back</Button>
-              <Button disabled={!petName} onClick={() => setStep(4)} className="rounded-full bg-sage-deep text-primary-foreground hover:bg-sage-deep/90">Next</Button>
+              <Button disabled={!petName} onClick={() => setStep(4)} className="rounded-full bg-[var(--cta)] text-[var(--cta-foreground)] hover:bg-[var(--cta-deep)]">Next</Button>
             </div>
           </section>
         )}
 
         {step === 4 && (
           <section className="text-center">
-            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-terracotta/15 candle-glow">
-              <Heart className="h-9 w-9 text-terracotta" />
+            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-[color-mix(in_oklab,var(--cta)_15%,transparent)] candle-glow">
+              <Heart className="h-9 w-9 text-[var(--cta)]" />
             </div>
             <h2 className="mt-5 font-display text-3xl text-foreground">Light their first candle</h2>
             <p className="mt-2 text-sm text-muted-foreground">A flame to mark the moment.</p>
@@ -323,8 +411,115 @@ function CreatePage() {
             </div>
             <div className="mt-7 flex justify-center gap-3">
               <Button variant="ghost" onClick={() => setStep(3)} className="rounded-full">Back</Button>
-              <Button disabled={submitting} onClick={finish} size="lg" className="rounded-full bg-terracotta px-7 text-accent-foreground hover:bg-terracotta/90">
+              <Button disabled={submitting} onClick={finish} size="lg" className="rounded-full bg-[var(--cta)] px-7 text-[var(--cta-foreground)] hover:bg-[var(--cta-deep)]">
                 {submitting ? "Lighting…" : "Light candle & publish"}
+              </Button>
+            </div>
+          </section>
+        )}
+
+        {step === 5 && (
+          <section className="animate-fade-in">
+            <div className="text-center">
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-sage/20">
+                <Check className="h-7 w-7 text-sage-deep" />
+              </div>
+              <h2 className="mt-4 font-display text-3xl text-foreground">
+                {petName ? `${petName}'s memorial is live` : "Memorial published"}
+              </h2>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Their story has a home now. When you're ready, here are gentle next steps.
+              </p>
+              {publishedSlug && (
+                <Link
+                  to="/memorial/$slug"
+                  params={{ slug: publishedSlug }}
+                  className="mt-4 inline-flex items-center gap-1 text-sm text-[var(--cta)] hover:underline"
+                >
+                  Visit memorial <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
+              )}
+            </div>
+
+            <div className="chapter-rule mt-8" aria-hidden />
+            <h3 className="mt-6 text-center font-display text-xl text-foreground">Continue the journey</h3>
+
+            <div className="mt-5 grid gap-3 md:grid-cols-2">
+              {/* Adoption — most important, first + full width */}
+              <Link
+                to="/adoption"
+                className="group md:col-span-2 flex items-center gap-4 rounded-2xl border border-border/60 bg-gradient-to-br from-[color-mix(in_oklab,var(--sage)_18%,var(--card))] to-card p-5 soft-shadow transition hover:border-sage-deep/40"
+              >
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-sage/25 text-sage-deep">
+                  <HandHeart className="h-6 w-6" />
+                </span>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2">
+                    <span className="font-display text-lg text-foreground">Open your home again</span>
+                    <span className="rounded-full bg-sage-deep/15 px-2 py-0.5 text-[10px] uppercase tracking-wider text-sage-deep">
+                      most loved
+                    </span>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    When the time is right, another soul is waiting. Browse pets from partner shelters near you.
+                  </p>
+                </div>
+                <ArrowRight className="h-5 w-5 text-muted-foreground transition group-hover:translate-x-0.5 group-hover:text-foreground" />
+              </Link>
+
+              <Link
+                to="/grief-support"
+                className="group flex items-start gap-3 rounded-2xl border border-border/60 bg-card p-5 soft-shadow transition hover:border-[var(--cta)]/40"
+              >
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_oklab,var(--cta)_12%,transparent)] text-[var(--cta)]">
+                  <Phone className="h-5 w-5" />
+                </span>
+                <div>
+                  <div className="font-display text-base text-foreground">Grief helpline</div>
+                  <p className="text-xs text-muted-foreground">
+                    Talk to a counselor who understands pet loss — 24/7, confidential.
+                  </p>
+                </div>
+              </Link>
+
+              <Link
+                to="/community"
+                className="group flex items-start gap-3 rounded-2xl border border-border/60 bg-card p-5 soft-shadow transition hover:border-sage/60"
+              >
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-sage/20 text-sage-deep">
+                  <Users className="h-5 w-5" />
+                </span>
+                <div>
+                  <div className="font-display text-base text-foreground">Community circles</div>
+                  <p className="text-xs text-muted-foreground">
+                    Weekly online support groups with others who get it.
+                  </p>
+                </div>
+              </Link>
+
+              <Link
+                to="/marketplace"
+                className="group md:col-span-2 flex items-start gap-3 rounded-2xl border border-border/60 bg-card p-5 soft-shadow transition hover:border-gold/60"
+              >
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_oklab,var(--gold)_25%,transparent)] text-foreground">
+                  <ShoppingBag className="h-5 w-5" />
+                </span>
+                <div className="flex-1">
+                  <div className="font-display text-base text-foreground">Keepsakes & memorial gifts</div>
+                  <p className="text-xs text-muted-foreground">
+                    Custom portraits, paw-print jewelry, urns, garden stones — handpicked from artisan makers.
+                  </p>
+                </div>
+                <ArrowRight className="h-5 w-5 text-muted-foreground transition group-hover:translate-x-0.5 group-hover:text-foreground" />
+              </Link>
+            </div>
+
+            <div className="mt-8 flex justify-center">
+              <Button
+                onClick={() => publishedSlug ? navigate({ to: "/memorial/$slug", params: { slug: publishedSlug } }) : navigate({ to: "/dashboard" })}
+                className="rounded-full bg-[var(--cta)] px-6 text-[var(--cta-foreground)] hover:bg-[var(--cta-deep)]"
+              >
+                Visit the memorial
               </Button>
             </div>
           </section>
