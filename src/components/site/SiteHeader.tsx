@@ -131,15 +131,15 @@ export function SiteHeader() {
                   <div className="my-4 h-px bg-border/60" />
                   <nav className="space-y-1">
                     {authItems.map(({ to, label, icon: Icon }) => (
-                      <Link
+                      <a
                         key={to}
-                        to={to}
+                        href={to}
                         onClick={() => setOpen(false)}
                         className="flex items-center gap-3 rounded-xl px-3 py-3 text-base text-foreground hover:bg-cream/70"
                       >
                         <Icon className="h-5 w-5 text-sage-deep" />
                         {label}
-                      </Link>
+                      </a>
                     ))}
                   </nav>
                 </>
