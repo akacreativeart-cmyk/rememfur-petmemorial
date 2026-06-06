@@ -6,7 +6,7 @@ import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { PawIcon } from "@/components/site/PawIcon";
 import { CandleDialog } from "@/components/site/CandleDialog";
-import { pickFeaturedMemorial, countCandlesThisWeek } from "@/lib/candle-guest.functions";
+import { pickFeaturedMemorial, countCandlesThisWeek, listRecentCandles } from "@/lib/candle-guest.functions";
 import { Heart, Feather, Flame, Users, PenLine, ImagePlus, MessageCircleHeart, ShoppingBag, Gift, Sparkles } from "lucide-react";
 
 
