@@ -13,7 +13,7 @@ export function MobileTabBar() {
     { to: "/garden", label: "Garden", icon: Flower2 },
     { to: user ? "/create" : "/signup", label: "Create", icon: PlusCircle },
     { to: "/community", label: "Feed", icon: Users },
-    { to: user ? "/settings" : "/login", label: "Profile", icon: User },
+    { to: "/marketplace", label: "Shop", icon: ShoppingBag },
   ];
 
   return (
