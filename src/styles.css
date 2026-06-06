@@ -60,12 +60,12 @@
   --ink: oklch(0.24 0.025 40);             /* warm dark brown ink */
   --sage: oklch(0.72 0.06 145);            /* eucalyptus */
   --sage-deep: oklch(0.42 0.06 150);
-  --terracotta: oklch(0.55 0.20 295);      /* deep purple (replaces terracotta orange) */
-  --mauve: oklch(0.68 0.10 320);           /* dusty violet */
-  --navy: oklch(0.32 0.05 280);
+  --terracotta: oklch(0.62 0.16 38);       /* warm terracotta orange */
+  --mauve: oklch(0.72 0.07 25);            /* dusty rose */
+  --navy: oklch(0.32 0.05 250);
   --gold: oklch(0.72 0.13 78);             /* aged gold */
 
-  /* CTA — vivid purple */
+  /* CTA — vivid purple (the only purple in the palette) */
   --cta: oklch(0.55 0.20 295);
   --cta-deep: oklch(0.42 0.22 290);
   --cta-foreground: oklch(0.99 0.01 295);
