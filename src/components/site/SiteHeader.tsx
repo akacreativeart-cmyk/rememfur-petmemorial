@@ -35,7 +35,8 @@ export function SiteHeader() {
         { to: "/create", label: "Create memorial", icon: PlusCircle },
         { to: "/dashboard", label: "My dashboard", icon: UserIcon },
         { to: "/journal", label: "My journal", icon: HeartHandshake },
-        { to: "/settings", label: "Profile & Settings", icon: Settings },
+        { to: `/u/${user.id}`, label: "Profile", icon: UserIcon },
+        { to: "/settings", label: "Settings", icon: Settings },
       ]
     : [];
 
