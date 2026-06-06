@@ -87,6 +87,12 @@ function LandingPage() {
     refetchInterval: 30_000,
   });
   const weeklyCount = (weekly?.count ?? 0).toLocaleString();
+  const recentCandlesFn = useServerFn(listRecentCandles);
+  const { data: recentCandles } = useQuery({
+    queryKey: ["recent-candles-wall"],
+    queryFn: () => recentCandlesFn({ data: { limit: 24 } }),
+    refetchInterval: 30_000,
+  });
   return (
 
     <div className="min-h-screen paper-bg paper-grain text-foreground">
