@@ -313,6 +313,24 @@ function LandingPage() {
               Be the first to light a candle today.
             </div>
           )}
+          {recentCandles && recentCandles.length > 0 && (
+            <div className="mt-5 flex justify-center">
+              {canLoadMore ? (
+                <Button
+                  variant="outline"
+                  onClick={() => setWallLimit((n) => Math.min(60, n + 24))}
+                  disabled={wallFetching}
+                  className="rounded-full"
+                >
+                  {wallFetching ? "Lighting more…" : "Show more candles"}
+                </Button>
+              ) : (
+                <Link to="/garden" className="text-sm text-[var(--cta)] hover:underline">
+                  Wander the whole garden of names →
+                </Link>
+              )}
+            </div>
+          )}
         </div>
       </section>
 
