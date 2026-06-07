@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { Flame, Share2, Copy, Twitter, Facebook, MessageCircle } from "lucide-react";
+import { Flame, Share2, Copy, Twitter, Facebook, MessageCircle, Lock } from "lucide-react";
 import { toast } from "sonner";
+import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -37,13 +38,16 @@ export function CandleDialog({ target, trigger, onLit }: Props) {
 
   const mut = useMutation({
     mutationFn: async () => {
+      // Only authenticated users may attach name/message. Guests light anonymously.
+      const safeName = user ? name || null : null;
+      const safeMessage = user ? message || null : null;
       if (target.kind === "memorial") {
         return memorialFn({
-          data: { memorial_id: target.memorial_id, name: name || null, message: message || null },
+          data: { memorial_id: target.memorial_id, name: safeName, message: safeMessage },
         });
       }
       return postFn({
-        data: { post_id: target.post_id, name: name || null, message: message || null },
+        data: { post_id: target.post_id, name: safeName, message: safeMessage },
       });
     },
     onSuccess: () => {
@@ -57,7 +61,7 @@ export function CandleDialog({ target, trigger, onLit }: Props) {
   const lines = message.split(/\r?\n/);
   const tooManyLines = lines.length > 2;
   const tooLong = message.length > 180;
-  const disabled = mut.isPending || tooManyLines || tooLong;
+  const disabled = mut.isPending || (!!user && (tooManyLines || tooLong));
 
   const shareUrl =
     typeof window !== "undefined"
@@ -78,9 +82,7 @@ export function CandleDialog({ target, trigger, onLit }: Props) {
         await navigator.clipboard.writeText(`${shareText} ${shareUrl}`);
         toast.success("Link copied to share");
       }
-    } catch {
-      /* user cancelled */
-    }
+    } catch { /* user cancelled */ }
   }
 
   function copyLink() {
@@ -90,17 +92,13 @@ export function CandleDialog({ target, trigger, onLit }: Props) {
 
   function resetAndClose(o: boolean) {
     setOpen(o);
-    if (!o) {
-      setLit(false);
-      setName("");
-      setMessage("");
-    }
+    if (!o) { setLit(false); setName(""); setMessage(""); }
   }
 
   return (
     <Dialog open={open} onOpenChange={resetAndClose}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md overflow-hidden">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 font-display text-2xl">
             <Flame className="h-5 w-5 text-[var(--cta)]" />
@@ -111,57 +109,81 @@ export function CandleDialog({ target, trigger, onLit }: Props) {
           </DialogTitle>
           <DialogDescription>
             {lit
-              ? "Thank you. Their light is a little brighter because of you. Share so others can light one too."
-              : "Anyone can light a candle — no account needed. Leave up to two short lines."}
+              ? "Thank you. Their light is a little brighter because of you."
+              : user
+                ? "Leave up to two short lines — they'll glow softly beside the flame."
+                : "Anyone can light a candle right now — no account needed."}
           </DialogDescription>
         </DialogHeader>
 
         {!lit ? (
           <div className="space-y-3 pt-1">
-            <div>
-              <label className="text-xs uppercase tracking-wider text-muted-foreground">Your name</label>
-              <Input
-                value={name || user?.user_metadata?.display_name || ""}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="A friend"
-                maxLength={40}
-              />
-            </div>
-            <div>
-              <label className="text-xs uppercase tracking-wider text-muted-foreground">A few words (optional)</label>
-              <Textarea
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                placeholder={"thinking of you\nthank you for everything"}
-                rows={2}
-                className="resize-none"
-              />
-              <div className="mt-1 flex justify-between text-[11px] text-muted-foreground">
-                <span className={tooManyLines ? "text-destructive" : ""}>Two lines max</span>
-                <span className={tooLong ? "text-destructive" : ""}>{message.length}/180</span>
+            {user ? (
+              <>
+                <div>
+                  <label className="text-xs uppercase tracking-wider text-muted-foreground">Your name</label>
+                  <Input
+                    value={name || user?.user_metadata?.display_name || ""}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="A friend"
+                    maxLength={40}
+                  />
+                </div>
+                <div>
+                  <label className="text-xs uppercase tracking-wider text-muted-foreground">A few words (optional)</label>
+                  <Textarea
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    placeholder={"thinking of you\nthank you for everything"}
+                    rows={2}
+                    className="resize-none"
+                  />
+                  <div className="mt-1 flex justify-between text-[11px] text-muted-foreground">
+                    <span className={tooManyLines ? "text-destructive" : ""}>Two lines max</span>
+                    <span className={tooLong ? "text-destructive" : ""}>{message.length}/180</span>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <div className="rounded-2xl border border-dashed border-[color-mix(in_oklab,var(--cta)_40%,transparent)] bg-[color-mix(in_oklab,var(--cta)_5%,transparent)] p-4 text-center">
+                <div className="mx-auto mb-2 flex h-9 w-9 items-center justify-center rounded-full bg-[color-mix(in_oklab,var(--cta)_12%,transparent)] text-[var(--cta)]">
+                  <Lock className="h-4 w-4" />
+                </div>
+                <p className="text-sm text-foreground">
+                  Want to leave your name or a few words?
+                </p>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  <Link to="/signup" className="font-medium text-[var(--cta)] underline-offset-2 hover:underline">Create a free account</Link>{" "}
+                  or{" "}
+                  <Link to="/login" className="font-medium text-[var(--cta)] underline-offset-2 hover:underline">sign in</Link>{" "}
+                  — it takes a moment. Your candle will still be lit if you'd rather not.
+                </p>
               </div>
-            </div>
+            )}
+
             <Button
               onClick={() => mut.mutate()}
               disabled={disabled}
               className="w-full rounded-full bg-[var(--cta)] text-[var(--cta-foreground,white)] hover:opacity-90"
             >
               <Flame className="mr-2 h-4 w-4" />
-              {mut.isPending ? "Lighting…" : "Light the candle"}
+              {mut.isPending ? "Lighting…" : user ? "Light the candle" : "Light a candle anonymously"}
             </Button>
-            {!user && (
-              <p className="text-center text-[11px] text-muted-foreground">
-                Want to share photos or join the community? <a href="/signup" className="underline">Create a free account</a>.
-              </p>
-            )}
           </div>
         ) : (
-          <div className="space-y-4 pt-1">
-            <div className="flex items-center justify-center py-4">
-              <div className="relative">
-                <div className="hero-candle candle-glow scale-90" />
+          <div className="relative space-y-4 pt-1">
+            {/* Dark → bright bloom background */}
+            <div className="relative -mx-6 -mt-2 overflow-hidden rounded-xl">
+              <div className="candle-lighting-bg relative flex h-44 items-center justify-center">
+                <div className="candle-rays" aria-hidden />
+                <div className="hero-candle candle-glow scale-110 relative z-10">
+                  <div className="flame" />
+                </div>
               </div>
             </div>
+            <p className="text-center text-sm text-muted-foreground">
+              Share so others can light one too.
+            </p>
             <div className="grid grid-cols-2 gap-2">
               <Button
                 onClick={nativeShare}
@@ -176,32 +198,31 @@ export function CandleDialog({ target, trigger, onLit }: Props) {
             <div className="flex items-center justify-center gap-2">
               <a
                 href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Share on X / Twitter"
+                target="_blank" rel="noopener noreferrer" aria-label="Share on X / Twitter"
                 className="flex h-10 w-10 items-center justify-center rounded-full bg-muted hover:bg-muted/70"
               >
                 <Twitter className="h-4 w-4" />
               </a>
               <a
                 href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Share on Facebook"
+                target="_blank" rel="noopener noreferrer" aria-label="Share on Facebook"
                 className="flex h-10 w-10 items-center justify-center rounded-full bg-muted hover:bg-muted/70"
               >
                 <Facebook className="h-4 w-4" />
               </a>
               <a
                 href={`https://wa.me/?text=${encodeURIComponent(`${shareText} ${shareUrl}`)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Share on WhatsApp"
+                target="_blank" rel="noopener noreferrer" aria-label="Share on WhatsApp"
                 className="flex h-10 w-10 items-center justify-center rounded-full bg-muted hover:bg-muted/70"
               >
                 <MessageCircle className="h-4 w-4" />
               </a>
             </div>
+            {!user && (
+              <p className="text-center text-[11px] text-muted-foreground">
+                <Link to="/signup" className="underline">Create an account</Link> to leave your name on future candles.
+              </p>
+            )}
             <Button variant="ghost" onClick={() => resetAndClose(false)} className="w-full rounded-full">
               Done
             </Button>
