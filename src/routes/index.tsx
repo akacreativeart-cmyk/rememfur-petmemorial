@@ -90,11 +90,14 @@ function LandingPage() {
   });
   const weeklyCount = (weekly?.count ?? 0).toLocaleString();
   const recentCandlesFn = useServerFn(listRecentCandles);
-  const { data: recentCandles } = useQuery({
-    queryKey: ["recent-candles-wall"],
-    queryFn: () => recentCandlesFn({ data: { limit: 24 } }),
+  const [wallLimit, setWallLimit] = useState(24);
+  const { data: recentCandles, isFetching: wallFetching } = useQuery({
+    queryKey: ["recent-candles-wall", wallLimit],
+    queryFn: () => recentCandlesFn({ data: { limit: wallLimit } }),
     refetchInterval: 30_000,
   });
+  const canLoadMore = (recentCandles?.length ?? 0) >= wallLimit && wallLimit < 60;
+
   return (
 
     <div className="min-h-screen paper-bg paper-grain text-foreground">
