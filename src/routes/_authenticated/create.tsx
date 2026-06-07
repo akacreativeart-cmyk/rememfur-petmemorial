@@ -66,11 +66,15 @@ function CreatePage() {
 
   const [step, setStep] = useState(1);
   const [heroUrl, setHeroUrl] = useState<string | null>(null);
+  const [heroKind, setHeroKind] = useState<"image" | "video" | "audio" | "file">("image");
   const [uploading, setUploading] = useState(false);
 
   const [style, setStyle] = useState<StyleKey>("painting");
   const [transformedUrl, setTransformedUrl] = useState<string | null>(null);
   const [transforming, setTransforming] = useState(false);
+  const [modFilter, setModFilter] = useState<"none" | "warm" | "noir" | "bloom" | "honey" | "dream" | "fade">("none");
+  const [compareView, setCompareView] = useState<"split" | "stack">("split");
+
 
   const [petName, setPetName] = useState("");
   const [species, setSpecies] = useState<"dog" | "cat" | "other">("dog");
