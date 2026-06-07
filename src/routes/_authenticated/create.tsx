@@ -101,15 +101,18 @@ function CreatePage() {
   const handleUpload = async (file: File) => {
     if (!user) return;
     setUploading(true);
-    const ext = file.name.split(".").pop() || "jpg";
+    const ext = file.name.split(".").pop() || "bin";
     const path = `${user.id}/${Date.now()}.${ext}`;
     const { error } = await supabase.storage.from("pet-photos").upload(path, file, { contentType: file.type });
     setUploading(false);
     if (error) return toast.error(error.message);
     const { data } = supabase.storage.from("pet-photos").getPublicUrl(path);
     setHeroUrl(data.publicUrl);
-    toast.success("Photo uploaded.");
+    const t = file.type;
+    setHeroKind(t.startsWith("video/") ? "video" : t.startsWith("audio/") ? "audio" : t.startsWith("image/") ? "image" : "file");
+    toast.success("Memory uploaded.");
   };
+
 
   const runTransform = async () => {
     if (!heroUrl) return;
