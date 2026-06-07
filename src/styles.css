@@ -405,4 +405,36 @@
   .filt-vintage   { filter: sepia(0.35) hue-rotate(-15deg) saturate(1.2) contrast(1.05); }
   .filt-cool      { filter: saturate(1.1) hue-rotate(8deg) brightness(1.02); }
   .filt-glow      { filter: brightness(1.08) saturate(1.2) contrast(0.96); }
+  .filt-noir      { filter: grayscale(1) contrast(1.25) brightness(0.95); }
+  .filt-bloom     { filter: brightness(1.1) saturate(1.3) contrast(1.05); }
+  .filt-honey     { filter: sepia(0.3) saturate(1.35) hue-rotate(-12deg) brightness(1.05); }
+  .filt-dream     { filter: saturate(1.15) brightness(1.08) contrast(0.92); }
+
+  /* Lighting-the-candle radial bloom: dark → bright */
+  @keyframes candle-lighting-bg {
+    0%   { background: radial-gradient(circle at 50% 60%, oklch(0.20 0.04 50) 0%, oklch(0.12 0.02 280) 70%); }
+    40%  { background: radial-gradient(circle at 50% 55%, oklch(0.55 0.18 60) 0%, oklch(0.25 0.05 40) 70%); }
+    100% { background: radial-gradient(circle at 50% 50%, oklch(0.96 0.06 80) 0%, oklch(0.92 0.05 70) 100%); }
+  }
+  .candle-lighting-bg { animation: candle-lighting-bg 1600ms ease-out forwards; }
+
+  @keyframes ray-spin {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to   { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+  @keyframes ray-fade {
+    0% { opacity: 0; }
+    40% { opacity: 0.9; }
+    100% { opacity: 0.55; }
+  }
+  .candle-rays {
+    position: absolute; left: 50%; top: 50%;
+    width: 360px; height: 360px;
+    background: conic-gradient(from 0deg, transparent 0 8deg, color-mix(in oklab, var(--cta) 40%, transparent) 8deg 12deg, transparent 12deg 36deg, color-mix(in oklab, var(--cta) 30%, transparent) 36deg 40deg, transparent 40deg 72deg, color-mix(in oklab, var(--cta) 35%, transparent) 72deg 76deg, transparent 76deg 360deg);
+    border-radius: 50%;
+    filter: blur(2px);
+    pointer-events: none;
+    animation: ray-spin 8s linear infinite, ray-fade 1600ms ease-out forwards;
+  }
 }
+

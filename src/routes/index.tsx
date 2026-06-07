@@ -1,5 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+
 import { useServerFn } from "@tanstack/react-start";
 import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/site/SiteHeader";
@@ -88,11 +90,14 @@ function LandingPage() {
   });
   const weeklyCount = (weekly?.count ?? 0).toLocaleString();
   const recentCandlesFn = useServerFn(listRecentCandles);
-  const { data: recentCandles } = useQuery({
-    queryKey: ["recent-candles-wall"],
-    queryFn: () => recentCandlesFn({ data: { limit: 24 } }),
+  const [wallLimit, setWallLimit] = useState(24);
+  const { data: recentCandles, isFetching: wallFetching } = useQuery({
+    queryKey: ["recent-candles-wall", wallLimit],
+    queryFn: () => recentCandlesFn({ data: { limit: wallLimit } }),
     refetchInterval: 30_000,
   });
+  const canLoadMore = (recentCandles?.length ?? 0) >= wallLimit && wallLimit < 60;
+
   return (
 
     <div className="min-h-screen paper-bg paper-grain text-foreground">
@@ -306,6 +311,24 @@ function LandingPage() {
           ) : (
             <div className="rounded-2xl bg-card/60 p-6 text-center text-sm text-muted-foreground">
               Be the first to light a candle today.
+            </div>
+          )}
+          {recentCandles && recentCandles.length > 0 && (
+            <div className="mt-5 flex justify-center">
+              {canLoadMore ? (
+                <Button
+                  variant="outline"
+                  onClick={() => setWallLimit((n) => Math.min(60, n + 24))}
+                  disabled={wallFetching}
+                  className="rounded-full"
+                >
+                  {wallFetching ? "Lighting more…" : "Show more candles"}
+                </Button>
+              ) : (
+                <Link to="/garden" className="text-sm text-[var(--cta)] hover:underline">
+                  Wander the whole garden of names →
+                </Link>
+              )}
             </div>
           )}
         </div>

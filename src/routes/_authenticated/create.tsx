@@ -66,11 +66,15 @@ function CreatePage() {
 
   const [step, setStep] = useState(1);
   const [heroUrl, setHeroUrl] = useState<string | null>(null);
+  const [heroKind, setHeroKind] = useState<"image" | "video" | "audio" | "file">("image");
   const [uploading, setUploading] = useState(false);
 
   const [style, setStyle] = useState<StyleKey>("painting");
   const [transformedUrl, setTransformedUrl] = useState<string | null>(null);
   const [transforming, setTransforming] = useState(false);
+  const [modFilter, setModFilter] = useState<"none" | "warm" | "noir" | "bloom" | "honey" | "dream" | "fade">("none");
+  const [compareView, setCompareView] = useState<"split" | "stack">("split");
+
 
   const [petName, setPetName] = useState("");
   const [species, setSpecies] = useState<"dog" | "cat" | "other">("dog");
@@ -97,15 +101,18 @@ function CreatePage() {
   const handleUpload = async (file: File) => {
     if (!user) return;
     setUploading(true);
-    const ext = file.name.split(".").pop() || "jpg";
+    const ext = file.name.split(".").pop() || "bin";
     const path = `${user.id}/${Date.now()}.${ext}`;
     const { error } = await supabase.storage.from("pet-photos").upload(path, file, { contentType: file.type });
     setUploading(false);
     if (error) return toast.error(error.message);
     const { data } = supabase.storage.from("pet-photos").getPublicUrl(path);
     setHeroUrl(data.publicUrl);
-    toast.success("Photo uploaded.");
+    const t = file.type;
+    setHeroKind(t.startsWith("video/") ? "video" : t.startsWith("audio/") ? "audio" : t.startsWith("image/") ? "image" : "file");
+    toast.success("Memory uploaded.");
   };
+
 
   const runTransform = async () => {
     if (!heroUrl) return;
@@ -252,19 +259,35 @@ function CreatePage() {
       <div className="mt-8 rounded-3xl border border-border/60 bg-card p-8 soft-shadow">
         {step === 1 && (
           <section>
-            <h2 className="font-display text-2xl text-foreground">Upload a photo</h2>
-            <p className="mt-1 text-sm text-muted-foreground">Choose one that feels like them.</p>
-            <label className="mt-6 flex h-64 cursor-pointer flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-border bg-cream/40 transition hover:border-sage">
+            <h2 className="font-display text-2xl text-foreground">Upload a memory</h2>
+            <p className="mt-1 text-sm text-muted-foreground">A photo, a short video, a voice note — anything that feels like them.</p>
+            <label className="mt-6 flex h-64 cursor-pointer flex-col items-center justify-center gap-3 overflow-hidden rounded-2xl border-2 border-dashed border-border bg-cream/40 transition hover:border-sage">
               {heroUrl ? (
-                <img src={heroUrl} alt="" className="h-full w-full rounded-2xl object-cover" />
+                heroKind === "video" ? (
+                  <video src={heroUrl} controls className="h-full w-full rounded-2xl object-cover" />
+                ) : heroKind === "audio" ? (
+                  <div className="flex w-full flex-col items-center gap-3 p-6">
+                    <div className="text-sm text-muted-foreground">Voice memory</div>
+                    <audio src={heroUrl} controls className="w-full" />
+                  </div>
+                ) : heroKind === "image" ? (
+                  <img src={heroUrl} alt="" className="h-full w-full rounded-2xl object-cover" />
+                ) : (
+                  <a href={heroUrl} target="_blank" rel="noreferrer" className="text-sm text-sage-deep underline">View file</a>
+                )
               ) : (
                 <>
                   <Upload className="h-8 w-8 text-sage-deep" />
-                  <div className="text-sm text-foreground">{uploading ? "Uploading…" : "Click to upload or drop a photo"}</div>
-                  <div className="text-xs text-muted-foreground">JPG / PNG up to ~10MB</div>
+                  <div className="text-sm text-foreground">{uploading ? "Uploading…" : "Click to upload or drop a memory"}</div>
+                  <div className="text-xs text-muted-foreground">Photo, video, or audio · up to ~25MB</div>
                 </>
               )}
-              <input type="file" accept="image/*" className="hidden" onChange={(e) => e.target.files?.[0] && handleUpload(e.target.files[0])} />
+              <input
+                type="file"
+                accept="image/*,video/*,audio/*"
+                className="hidden"
+                onChange={(e) => e.target.files?.[0] && handleUpload(e.target.files[0])}
+              />
             </label>
             <div className="mt-6 flex justify-end">
               <Button disabled={!heroUrl} onClick={() => setStep(2)} className="rounded-full bg-[var(--cta)] text-[var(--cta-foreground)] hover:bg-[var(--cta-deep)]">Next</Button>
@@ -274,41 +297,94 @@ function CreatePage() {
 
         {step === 2 && (
           <section>
-            <h2 className="font-display text-2xl text-foreground">Choose a transformation</h2>
-            <p className="mt-1 text-sm text-muted-foreground">AI gently paints your photo in the style you pick.</p>
-            <div className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-4">
-              {STYLES.map((s) => (
-                <button key={s.key} onClick={() => setStyle(s.key)} className={`rounded-2xl border-2 p-4 text-left transition ${style === s.key ? "border-[var(--cta)] bg-[color-mix(in_oklab,var(--cta)_8%,transparent)]" : "border-border hover:border-sage/40"}`}>
-                  <Sparkles className="h-5 w-5 text-[var(--cta)]" />
-                  <div className="mt-2 font-display text-sm text-foreground">{s.label}</div>
-                  <div className="text-xs text-muted-foreground">{s.note}</div>
-                </button>
-              ))}
-            </div>
-            <div className="mt-6 grid gap-4 md:grid-cols-2">
-              <div className="rounded-2xl border border-border bg-muted/30 p-3 text-center">
-                <div className="text-xs uppercase tracking-wider text-muted-foreground">Original</div>
-                {heroUrl && <img src={heroUrl} alt="" className="mt-2 aspect-square w-full rounded-xl object-cover" />}
-              </div>
-              <div className="rounded-2xl border border-border bg-muted/30 p-3 text-center">
-                <div className="text-xs uppercase tracking-wider text-muted-foreground">Painted portrait</div>
-                {transforming ? (
-                  <div className="mt-2 flex aspect-square w-full items-center justify-center rounded-xl bg-cream/40 text-sage-deep">
-                    <Loader2 className="h-6 w-6 animate-spin" />
+            <h2 className="font-display text-2xl text-foreground">Transform & refine</h2>
+            <p className="mt-1 text-sm text-muted-foreground">
+              {heroKind === "image"
+                ? "Paint their portrait in a style — then add a modern filter. See the original and transformed side by side."
+                : "Painted portraits work best with photos. You can skip this step."}
+            </p>
+
+            {heroKind === "image" && (
+              <>
+                <div className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-4">
+                  {STYLES.map((s) => (
+                    <button key={s.key} onClick={() => setStyle(s.key)} className={`rounded-2xl border-2 p-4 text-left transition ${style === s.key ? "border-[var(--cta)] bg-[color-mix(in_oklab,var(--cta)_8%,transparent)]" : "border-border hover:border-sage/40"}`}>
+                      <Sparkles className="h-5 w-5 text-[var(--cta)]" />
+                      <div className="mt-2 font-display text-sm text-foreground">{s.label}</div>
+                      <div className="text-xs text-muted-foreground">{s.note}</div>
+                    </button>
+                  ))}
+                </div>
+
+                {/* Compare toggle */}
+                <div className="mt-5 flex items-center justify-between gap-3">
+                  <div className="text-xs uppercase tracking-wider text-muted-foreground">View</div>
+                  <div className="inline-flex rounded-full border border-border bg-muted/40 p-0.5 text-xs">
+                    <button onClick={() => setCompareView("split")} className={`rounded-full px-3 py-1 ${compareView === "split" ? "bg-[var(--cta)] text-[var(--cta-foreground)]" : "text-muted-foreground"}`}>Side by side</button>
+                    <button onClick={() => setCompareView("stack")} className={`rounded-full px-3 py-1 ${compareView === "stack" ? "bg-[var(--cta)] text-[var(--cta-foreground)]" : "text-muted-foreground"}`}>Overlay</button>
                   </div>
-                ) : transformedUrl ? (
-                  <img src={transformedUrl} alt="" className="mt-2 aspect-square w-full rounded-xl object-cover" />
+                </div>
+
+                {compareView === "split" ? (
+                  <div className="mt-3 grid gap-4 md:grid-cols-2">
+                    <div className="rounded-2xl border border-border bg-muted/30 p-3 text-center">
+                      <div className="text-xs uppercase tracking-wider text-muted-foreground">Original</div>
+                      {heroUrl && <img src={heroUrl} alt="" className={`mt-2 aspect-square w-full rounded-xl object-cover filt-${modFilter}`} />}
+                    </div>
+                    <div className="rounded-2xl border border-border bg-muted/30 p-3 text-center">
+                      <div className="text-xs uppercase tracking-wider text-muted-foreground">Painted portrait</div>
+                      {transforming ? (
+                        <div className="mt-2 flex aspect-square w-full items-center justify-center rounded-xl bg-cream/40 text-sage-deep">
+                          <Loader2 className="h-6 w-6 animate-spin" />
+                        </div>
+                      ) : transformedUrl ? (
+                        <img src={transformedUrl} alt="" className={`mt-2 aspect-square w-full rounded-xl object-cover filt-${modFilter}`} />
+                      ) : (
+                        <div className="mt-2 flex aspect-square w-full items-center justify-center rounded-xl bg-cream/40 text-sm text-muted-foreground">Preview will appear here</div>
+                      )}
+                    </div>
+                  </div>
                 ) : (
-                  <div className="mt-2 flex aspect-square w-full items-center justify-center rounded-xl bg-cream/40 text-sm text-muted-foreground">Preview will appear here</div>
+                  <div className="mt-3 relative mx-auto aspect-square w-full max-w-md overflow-hidden rounded-2xl border border-border bg-muted/30">
+                    {heroUrl && <img src={heroUrl} alt="original" className={`absolute inset-0 h-full w-full object-cover filt-${modFilter}`} />}
+                    {transformedUrl && (
+                      <img src={transformedUrl} alt="painted" className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 filt-${modFilter}`} style={{ clipPath: "inset(0 0 0 50%)" }} />
+                    )}
+                    <div className="pointer-events-none absolute inset-y-0 left-1/2 w-px bg-white/80 mix-blend-difference" />
+                    <div className="absolute left-2 top-2 rounded-full bg-black/50 px-2 py-0.5 text-[10px] uppercase tracking-wider text-white">Original</div>
+                    {transformedUrl && (
+                      <div className="absolute right-2 top-2 rounded-full bg-black/50 px-2 py-0.5 text-[10px] uppercase tracking-wider text-white">Painted</div>
+                    )}
+                  </div>
                 )}
-              </div>
-            </div>
+
+                {/* Modern filter strip */}
+                <div className="mt-5">
+                  <div className="text-xs uppercase tracking-wider text-muted-foreground">Modern filters</div>
+                  <div className="mt-2 -mx-1 flex gap-2 overflow-x-auto pb-1">
+                    {(["none","warm","noir","bloom","honey","dream","fade"] as const).map((f) => (
+                      <button
+                        key={f}
+                        onClick={() => setModFilter(f)}
+                        className={`shrink-0 rounded-xl border p-1.5 text-center transition ${modFilter === f ? "border-[var(--cta)] ring-2 ring-[var(--cta)]/30" : "border-border/60"}`}
+                      >
+                        <img src={transformedUrl ?? heroUrl ?? ""} alt="" className={`h-14 w-14 rounded-md object-cover filt-${f}`} />
+                        <div className="mt-1 text-[10px] capitalize text-muted-foreground">{f}</div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
+
             <div className="mt-6 flex flex-wrap justify-between gap-2">
               <Button variant="ghost" onClick={() => setStep(1)} className="rounded-full">Back</Button>
               <div className="flex gap-2">
-                <Button onClick={runTransform} disabled={transforming || !heroUrl} variant="outline" className="rounded-full">
-                  {transforming ? "Painting…" : transformedUrl ? "Repaint" : "Paint portrait"}
-                </Button>
+                {heroKind === "image" && (
+                  <Button onClick={runTransform} disabled={transforming || !heroUrl} variant="outline" className="rounded-full">
+                    {transforming ? "Painting…" : transformedUrl ? "Repaint" : "Paint portrait"}
+                  </Button>
+                )}
                 <Button onClick={() => setStep(3)} className="rounded-full bg-[var(--cta)] text-[var(--cta-foreground)] hover:bg-[var(--cta-deep)]">
                   {transformedUrl ? "Next" : "Skip and continue"}
                 </Button>
@@ -316,6 +392,7 @@ function CreatePage() {
             </div>
           </section>
         )}
+
 
         {step === 3 && (
           <section>
