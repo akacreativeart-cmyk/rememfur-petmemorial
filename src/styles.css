@@ -7,11 +7,11 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  /* Storybook: warm serif display, clean sans body, handwritten accents */
-  --font-display: "Fraunces", "Cormorant Garamond", Georgia, serif;
-  --font-serif: "Fraunces", Georgia, serif;
-  --font-hand: "Caveat", "Segoe Script", cursive;
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  /* iOS Human Interface — SF system stack with storybook accents kept for editorial moments */
+  --font-display: "Fraunces", "New York", ui-serif, Georgia, serif;
+  --font-serif: "Fraunces", "New York", ui-serif, Georgia, serif;
+  --font-hand: "Caveat", "Snell Roundhand", cursive;
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", "Inter", system-ui, sans-serif;
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
