@@ -129,7 +129,6 @@ export function GravestoneCard({ name, birth, passing, epitaph }: Props) {
           {/* Epitaph */}
           <foreignObject x="60" y="275" width="280" height="80">
             <div
-              xmlns="http://www.w3.org/1999/xhtml"
               style={{
                 fontFamily: "Georgia, serif",
                 fontSize: "13px",
@@ -143,6 +142,7 @@ export function GravestoneCard({ name, birth, passing, epitaph }: Props) {
               "{line}"
             </div>
           </foreignObject>
+
 
           {/* Flower bouquet (left) */}
           <g transform="translate(120 405)">
