@@ -442,5 +442,125 @@
     pointer-events: none;
     animation: ray-spin 8s linear infinite, ray-fade 1600ms ease-out forwards;
   }
+
+  /* ─────── iOS Human Interface utilities ─────── */
+
+  /* iOS system colors (light) — used sparingly alongside brand */
+  :root {
+    --ios-blue:   oklch(0.62 0.18 250);
+    --ios-green:  oklch(0.72 0.17 145);
+    --ios-red:    oklch(0.62 0.22 25);
+    --ios-orange: oklch(0.72 0.17 55);
+    --ios-yellow: oklch(0.85 0.15 95);
+    --ios-pink:   oklch(0.68 0.20 0);
+    --ios-gray-1: oklch(0.96 0.005 80);
+    --ios-gray-2: oklch(0.92 0.006 80);
+    --ios-gray-3: oklch(0.86 0.008 80);
+    --ios-separator: color-mix(in oklab, var(--ink) 14%, transparent);
+  }
+
+  /* Translucent navigation bar — iOS top/bottom chrome */
+  .ios-bar {
+    background: color-mix(in oklab, var(--paper) 72%, transparent);
+    -webkit-backdrop-filter: saturate(180%) blur(24px);
+    backdrop-filter: saturate(180%) blur(24px);
+    border-bottom: 0.5px solid var(--ios-separator);
+  }
+  .ios-tabbar {
+    background: color-mix(in oklab, var(--paper) 78%, transparent);
+    -webkit-backdrop-filter: saturate(180%) blur(28px);
+    backdrop-filter: saturate(180%) blur(28px);
+    border-top: 0.5px solid var(--ios-separator);
+  }
+
+  /* Grouped inset list (Settings-style) */
+  .ios-list {
+    background: var(--card);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 0 0 0.5px var(--ios-separator);
+  }
+  .ios-list > * + * { border-top: 0.5px solid var(--ios-separator); }
+  .ios-row {
+    display: flex; align-items: center; gap: 12px;
+    min-height: 44px;           /* iOS HIG touch target */
+    padding: 11px 16px;
+    background: transparent;
+    transition: background 120ms ease;
+  }
+  .ios-row:active { background: color-mix(in oklab, var(--ink) 6%, transparent); }
+  .ios-section-header {
+    text-transform: uppercase;
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    color: var(--muted-foreground);
+    padding: 8px 16px 6px;
+  }
+
+  /* iOS card — softly rounded, hairline border, subtle elevation */
+  .ios-card {
+    background: var(--card);
+    border-radius: 16px;
+    box-shadow:
+      0 0 0 0.5px var(--ios-separator),
+      0 1px 2px oklch(0.3 0.02 50 / 0.04),
+      0 8px 24px -18px oklch(0.3 0.05 40 / 0.18);
+  }
+
+  /* iOS pill button */
+  .ios-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-height: 44px; padding: 0 20px;
+    border-radius: 999px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    background: var(--cta);
+    color: var(--cta-foreground);
+    transition: transform 120ms ease, opacity 120ms ease, background 120ms ease;
+  }
+  .ios-btn:active { transform: scale(0.97); opacity: 0.92; }
+  .ios-btn-secondary {
+    background: color-mix(in oklab, var(--cta) 12%, transparent);
+    color: var(--cta);
+  }
+  .ios-btn-ghost { background: transparent; color: var(--cta); }
+
+  /* iOS segmented control */
+  .ios-segmented {
+    display: inline-flex;
+    padding: 2px;
+    background: var(--ios-gray-2);
+    border-radius: 10px;
+    gap: 2px;
+  }
+  .ios-segmented > * {
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--foreground);
+    transition: background 150ms ease;
+  }
+  .ios-segmented > [data-active="true"] {
+    background: var(--card);
+    box-shadow: 0 1px 2px oklch(0.3 0.02 50 / 0.12);
+  }
+
+  /* iOS large title */
+  .ios-large-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 34px;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+  }
+
+  /* iOS spring-like tap feedback */
+  .ios-tappable { transition: transform 120ms ease, opacity 120ms ease; }
+  .ios-tappable:active { transform: scale(0.97); opacity: 0.85; }
+
+  /* Hairline (0.5px) separator helper */
+  .hairline { box-shadow: inset 0 -0.5px 0 var(--ios-separator); }
 }
+
 
