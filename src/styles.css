@@ -119,21 +119,27 @@
 }
 
 @layer base {
-  * { border-color: var(--color-border); }
-  html { scroll-behavior: smooth; }
+  * { border-color: var(--color-border); -webkit-tap-highlight-color: transparent; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
+    font-size: 17px;             /* iOS body */
+    line-height: 1.4;
+    letter-spacing: -0.01em;     /* SF tracking */
     -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
+  /* iOS-style typography scale (SF Pro Display feel for big titles) */
   h1, h2, h3, h4 {
     font-family: var(--font-display);
-    letter-spacing: -0.015em;
+    letter-spacing: -0.022em;
     font-weight: 600;
   }
-  h1 { letter-spacing: -0.025em; font-weight: 700; }
-  .font-display { font-family: var(--font-display); font-weight: 600; letter-spacing: -0.015em; }
+  h1 { letter-spacing: -0.03em; font-weight: 700; }
+  button, input, select, textarea { font-family: inherit; font-size: inherit; }
+  .font-display { font-family: var(--font-display); font-weight: 600; letter-spacing: -0.022em; }
   .font-hand { font-family: var(--font-hand); font-weight: 600; }
   .font-serif { font-family: var(--font-serif); }
 }
