@@ -85,6 +85,7 @@ function CreatePage() {
   const [story, setStory] = useState("");
   const [tags, setTags] = useState<string[]>([]);
   const [assisting, setAssisting] = useState(false);
+  const [showGravestone, setShowGravestone] = useState(false);
 
   const [candleMsg, setCandleMsg] = useState("");
   const [submitting, setSubmitting] = useState(false);
