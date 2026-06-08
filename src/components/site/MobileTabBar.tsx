@@ -19,10 +19,10 @@ export function MobileTabBar() {
   return (
     <nav
       aria-label="Primary"
-      className="fixed inset-x-3 bottom-3 z-50 glass-strong rounded-full"
+      className="ios-tabbar fixed inset-x-0 bottom-0 z-50"
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
-      <ul className="mx-auto flex max-w-md items-stretch justify-between px-1">
+      <ul className="mx-auto flex max-w-md items-stretch justify-between px-2">
         {tabs.map(({ to, label, icon: Icon, match }) => {
           const active = match ? match(pathname) : pathname === to || pathname.startsWith(to + "/");
           const isCreate = label === "Create";
@@ -30,18 +30,21 @@ export function MobileTabBar() {
             <li key={label} className="flex-1">
               <Link
                 to={to}
-                className={`flex flex-col items-center justify-center gap-0.5 py-2.5 text-[10px] tracking-wide transition ${
+                className={`ios-tappable flex flex-col items-center justify-center gap-1 pt-2 pb-1.5 text-[10px] font-medium tracking-tight transition-colors ${
                   active ? "text-[var(--cta)]" : "text-muted-foreground"
                 }`}
               >
                 {isCreate ? (
-                  <span className="-mt-5 mb-0.5 flex h-12 w-12 items-center justify-center rounded-full bg-[var(--cta)] text-[var(--cta-foreground)] soft-shadow">
-                    <Icon className="h-6 w-6" />
+                  <span className="-mt-6 mb-0.5 flex h-12 w-12 items-center justify-center rounded-full bg-[var(--cta)] text-[var(--cta-foreground)] shadow-[0_8px_20px_-6px_color-mix(in_oklab,var(--cta)_55%,transparent)]">
+                    <Icon className="h-6 w-6" strokeWidth={2.25} />
                   </span>
                 ) : (
-                  <Icon className={`h-5 w-5 ${active ? "fill-[color-mix(in_oklab,var(--cta)_20%,transparent)]" : ""}`} />
+                  <Icon
+                    className="h-[26px] w-[26px]"
+                    strokeWidth={active ? 2.25 : 1.8}
+                  />
                 )}
-                <span className={active ? "font-medium" : ""}>{label}</span>
+                <span>{label}</span>
               </Link>
             </li>
           );
