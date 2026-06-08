@@ -25,6 +25,7 @@ import {
   HandHeart,
   ArrowRight,
 } from "lucide-react";
+import { GravestoneCard } from "@/components/site/GravestoneCard";
 import {
   AlertDialog,
   AlertDialogAction,
