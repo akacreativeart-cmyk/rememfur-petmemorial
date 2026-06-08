@@ -73,9 +73,16 @@ function LoginPage() {
             <h1 className="font-display text-3xl text-foreground">Welcome back</h1>
             <p className="mt-1 text-sm text-muted-foreground">Sign in to your Rememfur space.</p>
 
-            <Button type="button" variant="outline" onClick={google} className="mt-6 w-full rounded-full border-ink/15 bg-cream/80 text-foreground hover:bg-cream">
-              Continue with Google
-            </Button>
+            <div className="mt-6 grid gap-2.5">
+              <Button type="button" variant="outline" onClick={google} className="w-full gap-2.5 rounded-full border-ink/15 bg-cream/80 text-foreground hover:bg-cream">
+                <GoogleLogo />
+                Continue with Google
+              </Button>
+              <Button type="button" variant="outline" onClick={apple} className="w-full gap-2.5 rounded-full border-ink/15 bg-cream/80 text-foreground hover:bg-cream">
+                <AppleLogo />
+                Continue with Apple
+              </Button>
+            </div>
             <div className="my-5 flex items-center gap-3 text-xs text-muted-foreground">
               <div className="h-px flex-1 bg-border" /> or <div className="h-px flex-1 bg-border" />
             </div>
