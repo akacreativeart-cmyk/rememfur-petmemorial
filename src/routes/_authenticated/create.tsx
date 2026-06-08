@@ -470,7 +470,42 @@ function CreatePage() {
                 </p>
               </div>
             </div>
+
+            <div className="mt-6 rounded-2xl border border-border/60 bg-cream/30 p-4">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <div className="font-display text-lg text-foreground">Gravestone keepsake</div>
+                  <p className="text-xs text-muted-foreground">
+                    A gentle headstone with their name, dates, a small message, fresh flowers and a burning candle.
+                  </p>
+                </div>
+                <Button
+                  type="button"
+                  variant={showGravestone ? "default" : "outline"}
+                  size="sm"
+                  className={`rounded-full ${showGravestone ? "bg-[var(--cta)] text-[var(--cta-foreground)] hover:bg-[var(--cta-deep)]" : ""}`}
+                  onClick={() => setShowGravestone((v) => !v)}
+                >
+                  {showGravestone ? "Hide preview" : "Preview gravestone"}
+                </Button>
+              </div>
+              {showGravestone && (
+                <div className="mt-4 animate-fade-in">
+                  <GravestoneCard
+                    name={petName}
+                    birth={birthDate}
+                    passing={passingDate}
+                    epitaph={epitaph}
+                  />
+                  <p className="mt-2 text-center text-[11px] text-muted-foreground">
+                    Updates live as you edit the fields above.
+                  </p>
+                </div>
+              )}
+            </div>
+
             <div className="mt-6 flex justify-between">
+
               <Button variant="ghost" onClick={() => setStep(2)} className="rounded-full">Back</Button>
               <Button disabled={!petName} onClick={() => setStep(4)} className="rounded-full bg-[var(--cta)] text-[var(--cta-foreground)] hover:bg-[var(--cta-deep)]">Next</Button>
             </div>
