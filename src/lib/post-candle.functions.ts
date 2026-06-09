@@ -50,6 +50,12 @@ export const countCandlesForPost = createServerFn({ method: "GET" })
       .eq("id", data.post_id)
       .maybeSingle();
     if (!post?.memorial_id) return { count: 0 };
+    const { data: mem } = await supabaseAdmin
+      .from("memorials")
+      .select("is_public")
+      .eq("id", post.memorial_id)
+      .maybeSingle();
+    if (!mem?.is_public) return { count: 0 };
     const { count } = await supabaseAdmin
       .from("candles")
       .select("*", { count: "exact", head: true })
@@ -71,6 +77,12 @@ export const listCandlesForPost = createServerFn({ method: "GET" })
       .eq("id", data.post_id)
       .maybeSingle();
     if (!post?.memorial_id) return { candles: [], count: 0 };
+    const { data: mem } = await supabaseAdmin
+      .from("memorials")
+      .select("is_public")
+      .eq("id", post.memorial_id)
+      .maybeSingle();
+    if (!mem?.is_public) return { candles: [], count: 0 };
     const [{ data: rows }, { count }] = await Promise.all([
       supabaseAdmin
         .from("candles")
@@ -85,3 +97,4 @@ export const listCandlesForPost = createServerFn({ method: "GET" })
     ]);
     return { candles: rows ?? [], count: count ?? 0 };
   });
+

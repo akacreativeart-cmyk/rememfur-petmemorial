@@ -30,8 +30,9 @@ async function hydratePosts(rows: any[], viewerId: string | null): Promise<FeedP
     supabaseAdmin.from("post_likes").select("post_id").in("post_id", ids),
     supabaseAdmin.from("post_comments").select("post_id").in("post_id", ids),
     memorialIds.length
-      ? supabaseAdmin.from("memorials").select("id, slug, pet_name").in("id", memorialIds)
+      ? supabaseAdmin.from("memorials").select("id, slug, pet_name").eq("is_public", true).in("id", memorialIds)
       : Promise.resolve({ data: [] as any[] }),
+
     viewerId
       ? supabaseAdmin.from("post_likes").select("post_id").eq("user_id", viewerId).in("post_id", ids)
       : Promise.resolve({ data: [] as any[] }),
@@ -157,6 +158,17 @@ export const createPost = createServerFn({ method: "POST" })
   )
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
+    if (data.memorial_id) {
+      // RLS on memorials limits visibility to owner or public memorials.
+      const { data: mem } = await supabase
+        .from("memorials")
+        .select("id, owner_id, is_public")
+        .eq("id", data.memorial_id)
+        .maybeSingle();
+      if (!mem || (mem.owner_id !== userId && !mem.is_public)) {
+        throw new Error("Memorial not found or not accessible");
+      }
+    }
     const { data: row, error } = await supabase
       .from("posts")
       .insert({ ...data, author_id: userId })
@@ -165,6 +177,7 @@ export const createPost = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return row!;
   });
+
 
 export const deletePost = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -211,6 +224,20 @@ export const toggleFollow = createServerFn({ method: "POST" })
 export const listComments = createServerFn({ method: "GET" })
   .inputValidator((input: { post_id: string }) => z.object({ post_id: z.string().uuid() }).parse(input))
   .handler(async ({ data }) => {
+    // Block reading comments on posts that belong to private memorials.
+    const { data: post } = await supabaseAdmin
+      .from("posts")
+      .select("memorial_id")
+      .eq("id", data.post_id)
+      .maybeSingle();
+    if (post?.memorial_id) {
+      const { data: mem } = await supabaseAdmin
+        .from("memorials")
+        .select("is_public")
+        .eq("id", post.memorial_id)
+        .maybeSingle();
+      if (!mem?.is_public) return [];
+    }
     const { data: rows, error } = await supabaseAdmin
       .from("post_comments")
       .select("id, body, author_id, created_at")
@@ -229,6 +256,7 @@ export const listComments = createServerFn({ method: "GET" })
       author_avatar: map[r.author_id]?.avatar_url ?? null,
     }));
   });
+
 
 export const addComment = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
