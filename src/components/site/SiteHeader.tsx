@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { ChevronLeft, LogOut, ShoppingBag, Menu, Home, Flower2, Users, BookOpen, PlusCircle, User as UserIcon, Settings, HeartHandshake, Info, HandHeart, Stethoscope, LifeBuoy } from "lucide-react";
 import logo from "@/assets/logo.png";
+import { NotificationBell } from "@/components/site/NotificationBell";
 import {
   Sheet,
   SheetContent,
@@ -10,6 +11,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+
 
 export function SiteHeader() {
   const { user, signOut } = useAuth();
@@ -71,6 +73,8 @@ export function SiteHeader() {
           >
             <ShoppingBag className="h-4 w-4" />
           </Link>
+          <NotificationBell />
+
           {user ? (
             <button
               onClick={() => signOut()}
