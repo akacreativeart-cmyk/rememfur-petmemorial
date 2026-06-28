@@ -252,6 +252,53 @@ export type Database = {
           },
         ]
       }
+      notifications: {
+        Row: {
+          actor_id: string | null
+          actor_name: string | null
+          created_at: string
+          id: string
+          memorial_id: string | null
+          post_id: string | null
+          preview: string | null
+          read_at: string | null
+          recipient_id: string
+          type: string
+        }
+        Insert: {
+          actor_id?: string | null
+          actor_name?: string | null
+          created_at?: string
+          id?: string
+          memorial_id?: string | null
+          post_id?: string | null
+          preview?: string | null
+          read_at?: string | null
+          recipient_id: string
+          type: string
+        }
+        Update: {
+          actor_id?: string | null
+          actor_name?: string | null
+          created_at?: string
+          id?: string
+          memorial_id?: string | null
+          post_id?: string | null
+          preview?: string | null
+          read_at?: string | null
+          recipient_id?: string
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_memorial_id_fkey"
+            columns: ["memorial_id"]
+            isOneToOne: false
+            referencedRelation: "memorials"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       post_comments: {
         Row: {
           author_id: string
