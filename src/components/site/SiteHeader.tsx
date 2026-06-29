@@ -44,25 +44,29 @@ export function SiteHeader() {
 
   return (
     <header
-      className="sticky top-3 z-40 mx-3 mt-3 glass-strong rounded-full"
+      className="sticky top-0 z-40 glass-strong"
       style={{ paddingTop: "env(safe-area-inset-top)" }}
     >
-      <div className="mx-auto flex h-14 max-w-md items-center justify-between gap-2 px-4">
+      <div className="mx-auto flex h-[54px] max-w-md items-center justify-between gap-2 px-5">
         <div className="flex min-w-0 items-center gap-2">
           {!isHome ? (
             <button
               type="button"
               onClick={() => router.history.back()}
               aria-label="Back"
-              className="-ml-1 flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground hover:bg-muted"
+              className="-ml-2 flex h-9 w-9 items-center justify-center rounded-full text-[var(--cr2)] hover:bg-white/[0.06]"
             >
               <ChevronLeft className="h-5 w-5" />
             </button>
           ) : (
-            <img src={logo} alt="" width={28} height={28} className="h-7 w-7" />
+            <img src={logo} alt="" width={24} height={24} className="h-6 w-6 opacity-90" />
           )}
-          <Link to="/" className="font-display text-lg tracking-tight text-foreground">
-            Rememfur
+          <Link
+            to="/"
+            className="small-caps font-display text-[18px] font-medium text-[var(--cr)]"
+            style={{ letterSpacing: "0.18em" }}
+          >
+            rememfur
           </Link>
         </div>
         <div className="flex items-center gap-1">
