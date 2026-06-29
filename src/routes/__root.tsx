@@ -12,6 +12,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 import { MobileTabBar } from "@/components/site/MobileTabBar";
+import { SkyBackground } from "@/components/site/SkyBackground";
 
 import appCss from "../styles.css?url";
 
