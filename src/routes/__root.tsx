@@ -12,6 +12,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 import { MobileTabBar } from "@/components/site/MobileTabBar";
+import { SkyBackground } from "@/components/site/SkyBackground";
 
 import appCss from "../styles.css?url";
 
@@ -122,6 +123,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <AuthInvalidator />
+        <SkyBackground />
         <div className="pb-[calc(72px+env(safe-area-inset-bottom))]">
           <Outlet />
         </div>

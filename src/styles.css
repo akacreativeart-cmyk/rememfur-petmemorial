@@ -70,7 +70,7 @@
   --cta-deep: oklch(0.42 0.22 290);
   --cta-foreground: oklch(0.99 0.01 295);
 
-  --background: var(--paper);
+  --background: color-mix(in oklab, var(--paper) 78%, transparent);
   --foreground: var(--ink);
 
   --card: oklch(0.985 0.012 80);
@@ -147,12 +147,13 @@
 @layer utilities {
   /* Aged paper background — warm, textured, slightly speckled */
   .paper-bg {
-    background-color: var(--paper);
+    background-color: color-mix(in oklab, var(--paper) 78%, transparent);
     background-image:
       radial-gradient(circle at 18% 22%, color-mix(in oklab, var(--terracotta) 12%, transparent), transparent 35%),
       radial-gradient(circle at 85% 12%, color-mix(in oklab, var(--gold) 14%, transparent), transparent 38%),
       radial-gradient(circle at 78% 88%, color-mix(in oklab, var(--sage) 12%, transparent), transparent 40%),
       radial-gradient(circle at 12% 80%, color-mix(in oklab, var(--mauve) 10%, transparent), transparent 38%);
+    backdrop-filter: blur(2px);
   }
   .paper-grain {
     position: relative;

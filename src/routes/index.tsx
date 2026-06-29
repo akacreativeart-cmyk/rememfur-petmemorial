@@ -8,7 +8,7 @@ import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { PawIcon } from "@/components/site/PawIcon";
 import { CandleDialog } from "@/components/site/CandleDialog";
-import { pickFeaturedMemorial, countCandlesThisWeek, listRecentCandles } from "@/lib/candle-guest.functions";
+import { pickFeaturedMemorial, countCandlesThisWeek, listBurningMemorials } from "@/lib/candle-guest.functions";
 import { Heart, Feather, Flame, Users, PenLine, ImagePlus, MessageCircleHeart, ShoppingBag, Gift, Sparkles } from "lucide-react";
 
 
@@ -89,14 +89,14 @@ function LandingPage() {
     refetchInterval: 30_000,
   });
   const weeklyCount = (weekly?.count ?? 0).toLocaleString();
-  const recentCandlesFn = useServerFn(listRecentCandles);
+  const burningFn = useServerFn(listBurningMemorials);
   const [wallLimit, setWallLimit] = useState(24);
-  const { data: recentCandles, isFetching: wallFetching } = useQuery({
-    queryKey: ["recent-candles-wall", wallLimit],
-    queryFn: () => recentCandlesFn({ data: { limit: wallLimit } }),
+  const { data: burning, isFetching: wallFetching } = useQuery({
+    queryKey: ["burning-memorials", wallLimit],
+    queryFn: () => burningFn({ data: { limit: wallLimit } }),
     refetchInterval: 30_000,
   });
-  const canLoadMore = (recentCandles?.length ?? 0) >= wallLimit && wallLimit < 60;
+  const canLoadMore = (burning?.length ?? 0) >= wallLimit && wallLimit < 60;
 
   return (
 
@@ -283,26 +283,31 @@ function LandingPage() {
             </span>
           </div>
 
-          {recentCandles && recentCandles.length > 0 ? (
+          {burning && burning.length > 0 ? (
             <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-              {recentCandles.map((c) => (
-                <li key={c.id}>
+              {burning.map((m) => (
+                <li key={m.memorial_id}>
                   <Link
                     to="/memorial/$slug"
-                    params={{ slug: c.memorial_slug ?? "" }}
-                    className="group flex h-full flex-col items-center gap-2 rounded-2xl border border-[color-mix(in_oklab,var(--cta)_18%,transparent)] bg-card/60 px-3 py-4 text-center transition hover:-translate-y-0.5 hover:border-[var(--cta)] hover:bg-card"
+                    params={{ slug: m.memorial_slug ?? "" }}
+                    className="group relative flex h-full flex-col items-center gap-2 rounded-2xl border border-[color-mix(in_oklab,var(--cta)_18%,transparent)] bg-card/60 px-3 py-4 text-center transition hover:-translate-y-0.5 hover:border-[var(--cta)] hover:bg-card"
                   >
-                    <span className="text-3xl leading-none flame-flicker" aria-hidden>🕯️</span>
+                    <span className="relative text-3xl leading-none" aria-hidden>
+                      <span className="flame-flicker inline-block">🕯️</span>
+                      <span className="absolute -right-2 -top-1 inline-flex min-w-[20px] items-center justify-center rounded-full bg-[var(--cta)] px-1.5 text-[10px] font-semibold leading-[18px] text-white shadow tabular-nums">
+                        {m.count}
+                      </span>
+                    </span>
                     <div className="min-w-0 text-xs font-medium text-[var(--cta)] truncate w-full">
-                      for {c.pet_name ?? "a friend"}
+                      for {m.pet_name ?? "a friend"}
                     </div>
-                    {c.message && (
+                    {m.latest_message && (
                       <div className="line-clamp-2 text-[11px] italic text-foreground/75">
-                        "{c.message}"
+                        "{m.latest_message}"
                       </div>
                     )}
                     <div className="mt-auto text-[10px] uppercase tracking-wider text-muted-foreground">
-                      by {c.lit_by_name ?? "a friend"}
+                      {m.count === 1 ? "1 candle burning" : `${m.count} candles burning`}
                     </div>
                   </Link>
                 </li>
@@ -313,7 +318,7 @@ function LandingPage() {
               Be the first to light a candle today.
             </div>
           )}
-          {recentCandles && recentCandles.length > 0 && (
+          {burning && burning.length > 0 && (
             <div className="mt-5 flex justify-center">
               {canLoadMore ? (
                 <Button
