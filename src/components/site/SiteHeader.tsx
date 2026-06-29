@@ -63,8 +63,8 @@ export function SiteHeader() {
           )}
           <Link
             to="/"
-            className="small-caps font-display text-[18px] font-medium text-[var(--cr)]"
-            style={{ letterSpacing: "0.18em" }}
+            className="font-display text-[18px] font-semibold text-[var(--cr)]"
+            style={{ fontVariant: "small-caps", letterSpacing: "0.12em" }}
           >
             rememfur
           </Link>

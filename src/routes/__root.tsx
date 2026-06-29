@@ -126,7 +126,10 @@ function RootComponent() {
       <AuthProvider>
         <AuthInvalidator />
         {standalone ? (
-          <Outlet />
+          <>
+            <Outlet />
+            <MobileTabBar />
+          </>
         ) : (
           <>
             <SkyBackground />
