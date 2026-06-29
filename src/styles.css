@@ -70,7 +70,7 @@
   --cta-deep: oklch(0.42 0.22 290);
   --cta-foreground: oklch(0.99 0.01 295);
 
-  --background: var(--paper);
+  --background: color-mix(in oklab, var(--paper) 78%, transparent);
   --foreground: var(--ink);
 
   --card: oklch(0.985 0.012 80);
