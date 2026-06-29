@@ -189,12 +189,12 @@ export function SkyBackground() {
         />
       )}
 
-      {/* Soft cloud wash to keep text legible */}
+      {/* Bottom vignette — sinks the sky into the dark UI */}
       <div
-        className="absolute inset-x-0 bottom-0 h-1/3"
+        className="absolute inset-x-0 bottom-0 h-1/2"
         style={{
           background:
-            "linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.25) 100%)",
+            "linear-gradient(180deg, transparent 0%, rgba(9,13,26,0.85) 100%)",
         }}
       />
 
