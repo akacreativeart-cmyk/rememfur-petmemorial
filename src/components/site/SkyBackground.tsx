@@ -76,12 +76,31 @@ function phaseForHour(h: number): Phase {
 }
 
 function useHour() {
-  const [h, setH] = useState(() =>
-    typeof window === "undefined" ? 12 : new Date().getHours(),
-  );
+  const [h, setH] = useState(() => {
+    if (typeof window === "undefined") return 12;
+    const d = new Date();
+    return d.getHours() + d.getMinutes() / 60 + d.getSeconds() / 3600;
+  });
   useEffect(() => {
-    const id = setInterval(() => setH(new Date().getHours()), 60_000);
-    return () => clearInterval(id);
+    const tick = () => {
+      const d = new Date();
+      setH(d.getHours() + d.getMinutes() / 60 + d.getSeconds() / 3600);
+    };
+    // Poll every 30s so the gradient drifts smoothly through the day and
+    // automatically follows the viewer's local clock, including DST shifts
+    // (new Date() always reflects the current local timezone).
+    const id = window.setInterval(tick, 30_000);
+    const onVis = () => {
+      if (document.visibilityState === "visible") tick();
+    };
+    document.addEventListener("visibilitychange", onVis);
+    window.addEventListener("focus", tick);
+    tick();
+    return () => {
+      clearInterval(id);
+      document.removeEventListener("visibilitychange", onVis);
+      window.removeEventListener("focus", tick);
+    };
   }, []);
   return h;
 }
