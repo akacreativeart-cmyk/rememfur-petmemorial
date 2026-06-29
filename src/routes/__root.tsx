@@ -64,7 +64,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Rememfur — A gentle pet memorial for the love that stays" },
       { name: "description", content: "Honor, remember, and celebrate your pet with a beautiful AI-illustrated memorial, a candle wall, and a community that understands." },
-      { name: "theme-color", content: "#f5efe4" },
+      { name: "theme-color", content: "#090d1a" },
       { property: "og:title", content: "Rememfur — A gentle pet memorial for the love that stays" },
       { property: "og:description", content: "Honor, remember, and celebrate your pet with a beautiful AI-illustrated memorial, a candle wall, and a community that understands." },
       { property: "og:type", content: "website" },
@@ -80,7 +80,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400;1,9..144,600&family=Caveat:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@200;300;400;500;600&family=Caveat:wght@400;600;700&display=swap",
       },
     ],
   }),
