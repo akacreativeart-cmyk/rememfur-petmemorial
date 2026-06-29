@@ -11,66 +11,59 @@ type Phase = {
 };
 
 function phaseForHour(h: number): Phase {
-  // Smooth phases across the day
   if (h >= 5 && h < 7) {
-    // Pre-dawn / dawn
     return {
       name: "dawn",
       gradient:
-        "linear-gradient(180deg, #1b1b3a 0%, #5b3a6b 35%, #f5a26b 70%, #ffd9a8 100%)",
-      stars: 0.5,
+        "linear-gradient(180deg, #0a0f24 0%, #1a2342 35%, #3d3a5c 70%, #8a5a6a 100%)",
+      stars: 0.55,
     };
   }
   if (h >= 7 && h < 10) {
-    // Sunrise → morning
     return {
       name: "sunrise",
       gradient:
-        "linear-gradient(180deg, #ffb27a 0%, #ffd9a8 35%, #d6ecff 75%, #eaf6ff 100%)",
-      stars: 0,
+        "linear-gradient(180deg, #1a2342 0%, #3a4a72 30%, #7a6a8a 60%, #d49a7a 90%, #f0b878 100%)",
+      stars: 0.15,
     };
   }
   if (h >= 10 && h < 16) {
-    // Midday — clear blue sky
     return {
       name: "day",
       gradient:
-        "linear-gradient(180deg, #74b8f0 0%, #a9d4f5 50%, #e6f1fa 100%)",
+        "linear-gradient(180deg, #1c3050 0%, #2a4a74 45%, #5878a0 100%)",
       stars: 0,
     };
   }
   if (h >= 16 && h < 18) {
-    // Late afternoon, golden hour
     return {
       name: "golden",
       gradient:
-        "linear-gradient(180deg, #f0c27b 0%, #f7a072 50%, #efb480 100%)",
-      stars: 0,
+        "linear-gradient(180deg, #2a2a52 0%, #6a4a6a 45%, #d49a6a 100%)",
+      stars: 0.1,
     };
   }
   if (h >= 18 && h < 20) {
-    // Sunset
     return {
       name: "sunset",
       gradient:
-        "linear-gradient(180deg, #2c3e7b 0%, #7a3b75 30%, #e15d4a 65%, #ffb480 100%)",
-      stars: 0.3,
+        "linear-gradient(180deg, #0e1424 0%, #2a2a52 25%, #5a3a62 55%, #a85a5a 80%, #e08858 100%)",
+      stars: 0.35,
     };
   }
   if (h >= 20 && h < 22) {
-    // Dusk
     return {
       name: "dusk",
       gradient:
-        "linear-gradient(180deg, #0c1336 0%, #2a2256 45%, #6b3a78 90%, #b56b80 100%)",
-      stars: 0.8,
+        "linear-gradient(180deg, #060a18 0%, #141a38 40%, #28244a 75%, #4a3458 100%)",
+      stars: 0.85,
     };
   }
-  // 22 → 5: deep night
+  // Deep night — matches reference #090d1a body
   return {
     name: "night",
     gradient:
-      "linear-gradient(180deg, #04061a 0%, #0a0e2c 50%, #14163a 100%)",
+      "radial-gradient(ellipse 120% 80% at 50% 0%, #0e1530 0%, #0a1024 35%, #060912 70%), linear-gradient(to bottom, #080d1a, #05080f)",
     stars: 1,
   };
 }
