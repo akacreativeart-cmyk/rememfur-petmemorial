@@ -117,3 +117,59 @@ export const countCandlesThisWeek = createServerFn({ method: "GET" })
     return { count: count ?? 0 };
   });
 
+/**
+ * Memorials with at least one candle lit in the past 24h, grouped with a count
+ * and the most recent message. Powers the "Candles burning right now" wall.
+ */
+export const listBurningMemorials = createServerFn({ method: "GET" })
+  .inputValidator((input: { limit?: number } | undefined) =>
+    z.object({ limit: z.number().int().min(1).max(60).default(24) }).parse(input ?? {}),
+  )
+  .handler(async ({ data }) => {
+    const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+    const { data: rows } = await supabaseAdmin
+      .from("candles")
+      .select("id, lit_by_name, message, created_at, memorial_id, memorials!inner(slug, pet_name, is_public)")
+      .eq("memorials.is_public", true)
+      .gte("created_at", since)
+      .order("created_at", { ascending: false })
+      .limit(500);
+
+    const grouped = new Map<
+      string,
+      {
+        memorial_id: string;
+        memorial_slug: string | null;
+        pet_name: string | null;
+        count: number;
+        latest_message: string | null;
+        latest_name: string | null;
+        latest_at: string;
+      }
+    >();
+    for (const r of rows ?? []) {
+      const key = r.memorial_id as string;
+      const existing = grouped.get(key);
+      if (existing) {
+        existing.count += 1;
+        if (!existing.latest_message && r.message) {
+          existing.latest_message = r.message as string;
+          existing.latest_name = (r.lit_by_name as string | null) ?? existing.latest_name;
+        }
+      } else {
+        grouped.set(key, {
+          memorial_id: key,
+          memorial_slug: (r as any).memorials?.slug ?? null,
+          pet_name: (r as any).memorials?.pet_name ?? null,
+          count: 1,
+          latest_message: (r.message as string | null) ?? null,
+          latest_name: (r.lit_by_name as string | null) ?? null,
+          latest_at: r.created_at as string,
+        });
+      }
+    }
+    return Array.from(grouped.values())
+      .sort((a, b) => b.count - a.count || (b.latest_at > a.latest_at ? 1 : -1))
+      .slice(0, data.limit);
+  });
+
