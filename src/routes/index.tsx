@@ -89,14 +89,14 @@ function LandingPage() {
     refetchInterval: 30_000,
   });
   const weeklyCount = (weekly?.count ?? 0).toLocaleString();
-  const recentCandlesFn = useServerFn(listRecentCandles);
+  const burningFn = useServerFn(listBurningMemorials);
   const [wallLimit, setWallLimit] = useState(24);
-  const { data: recentCandles, isFetching: wallFetching } = useQuery({
-    queryKey: ["recent-candles-wall", wallLimit],
-    queryFn: () => recentCandlesFn({ data: { limit: wallLimit } }),
+  const { data: burning, isFetching: wallFetching } = useQuery({
+    queryKey: ["burning-memorials", wallLimit],
+    queryFn: () => burningFn({ data: { limit: wallLimit } }),
     refetchInterval: 30_000,
   });
-  const canLoadMore = (recentCandles?.length ?? 0) >= wallLimit && wallLimit < 60;
+  const canLoadMore = (burning?.length ?? 0) >= wallLimit && wallLimit < 60;
 
   return (
 
