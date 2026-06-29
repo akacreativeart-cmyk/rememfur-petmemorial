@@ -119,15 +119,23 @@ function AuthInvalidator() {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const { pathname } = useRouter().state.location;
+  const standalone = pathname === "/";
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <AuthInvalidator />
-        <SkyBackground />
-        <div className="pb-[calc(72px+env(safe-area-inset-bottom))]">
+        {standalone ? (
           <Outlet />
-        </div>
-        <MobileTabBar />
+        ) : (
+          <>
+            <SkyBackground />
+            <div className="pb-[calc(72px+env(safe-area-inset-bottom))]">
+              <Outlet />
+            </div>
+            <MobileTabBar />
+          </>
+        )}
         <Toaster richColors position="top-center" />
       </AuthProvider>
     </QueryClientProvider>
