@@ -31,11 +31,11 @@ export function MobileTabBar() {
               <Link
                 to={to}
                 className={`ios-tappable flex flex-col items-center justify-center gap-1 pt-2 pb-1.5 text-[10px] font-medium tracking-tight transition-colors ${
-                  active ? "text-[var(--cta)]" : "text-muted-foreground"
+                  active ? "text-neutral-900 dark:text-neutral-100" : "text-neutral-500"
                 }`}
               >
                 {isCreate ? (
-                  <span className="-mt-6 mb-0.5 flex h-12 w-12 items-center justify-center rounded-full bg-[var(--cta)] text-[var(--cta-foreground)] shadow-[0_8px_20px_-6px_color-mix(in_oklab,var(--cta)_55%,transparent)]">
+                  <span className="-mt-6 mb-0.5 flex h-12 w-12 items-center justify-center rounded-full bg-neutral-900 text-white shadow-[0_8px_20px_-6px_rgba(0,0,0,0.35)] dark:bg-neutral-100 dark:text-neutral-900">
                     <Icon className="h-6 w-6" strokeWidth={2.25} />
                   </span>
                 ) : (
