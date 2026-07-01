@@ -113,8 +113,8 @@ export function SiteHeader() {
               }}
             >
               <SheetHeader className="text-left">
-                <SheetTitle className="font-display text-2xl text-[var(--ink)]">
-                  Rememfur
+                <SheetTitle className="brand-wordmark text-2xl">
+                  rememfur
                 </SheetTitle>
                 <p className="font-hand text-lg text-[var(--terracotta)]">a sanctuary, always open</p>
               </SheetHeader>
