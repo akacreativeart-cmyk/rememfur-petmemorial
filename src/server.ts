@@ -25,6 +25,14 @@ function brandedErrorResponse(): Response {
   });
 }
 
+function normalizeHomeUrl(request: Request): Request {
+  const url = new URL(request.url);
+  if (url.pathname !== "/index") return request;
+
+  url.pathname = "/";
+  return new Request(url, request);
+}
+
 function isCatastrophicSsrErrorBody(body: string, responseStatus: number): boolean {
   let payload: unknown;
   try {
@@ -70,7 +78,7 @@ export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
       const handler = await getServerEntry();
-      const response = await handler.fetch(request, env, ctx);
+      const response = await handler.fetch(normalizeHomeUrl(request), env, ctx);
       return await normalizeCatastrophicSsrResponse(response);
     } catch (error) {
       console.error(error);
