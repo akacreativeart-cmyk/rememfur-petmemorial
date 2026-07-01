@@ -21,18 +21,36 @@ export type FeedPost = {
 
 async function hydratePosts(rows: any[], viewerId: string | null): Promise<FeedPost[]> {
   if (!rows.length) return [];
-  const ids = rows.map((r) => r.id);
-  const authorIds = Array.from(new Set(rows.map((r) => r.author_id)));
   const memorialIds = Array.from(new Set(rows.map((r) => r.memorial_id).filter(Boolean)));
 
-  const [profsRes, likesRes, commentsRes, memorialsRes, myLikesRes] = await Promise.all([
+  // Fetch visibility for all referenced memorials (public OR owned by viewer).
+  const { data: visibleMemorials } = memorialIds.length
+    ? await supabaseAdmin
+        .from("memorials")
+        .select("id, slug, pet_name, is_public, owner_id")
+        .in("id", memorialIds)
+    : { data: [] as any[] };
+  const visibleMemMap = new Map(
+    ((visibleMemorials ?? []) as any[])
+      .filter((m) => m.is_public === true || (viewerId && m.owner_id === viewerId))
+      .map((m) => [m.id, m]),
+  );
+
+  // Drop posts whose memorial is set but not visible to the viewer.
+  // Orphan posts (no memorial) are only visible to their author.
+  rows = rows.filter((r) => {
+    if (r.memorial_id) return visibleMemMap.has(r.memorial_id);
+    return viewerId && r.author_id === viewerId;
+  });
+  if (!rows.length) return [];
+
+  const ids = rows.map((r) => r.id);
+  const authorIds = Array.from(new Set(rows.map((r) => r.author_id)));
+
+  const [profsRes, likesRes, commentsRes, myLikesRes] = await Promise.all([
     supabaseAdmin.from("profiles").select("id, display_name, avatar_url").in("id", authorIds),
     supabaseAdmin.from("post_likes").select("post_id").in("post_id", ids),
     supabaseAdmin.from("post_comments").select("post_id").in("post_id", ids),
-    memorialIds.length
-      ? supabaseAdmin.from("memorials").select("id, slug, pet_name").eq("is_public", true).in("id", memorialIds)
-      : Promise.resolve({ data: [] as any[] }),
-
     viewerId
       ? supabaseAdmin.from("post_likes").select("post_id").eq("user_id", viewerId).in("post_id", ids)
       : Promise.resolve({ data: [] as any[] }),
@@ -40,11 +58,10 @@ async function hydratePosts(rows: any[], viewerId: string | null): Promise<FeedP
   const profs = profsRes.data ?? [];
   const likes = likesRes.data ?? [];
   const comments = commentsRes.data ?? [];
-  const memorials = (memorialsRes as any).data ?? [];
   const myLikes = (myLikesRes as any).data ?? [];
 
   const profMap = new Map(profs.map((p: any) => [p.id, p]));
-  const memMap = new Map((memorials as any[]).map((m: any) => [m.id, m]));
+  const memMap = visibleMemMap;
   const likeCounts: Record<string, number> = {};
   (likes as any[]).forEach((l: any) => { likeCounts[l.post_id] = (likeCounts[l.post_id] ?? 0) + 1; });
   const commentCounts: Record<string, number> = {};
