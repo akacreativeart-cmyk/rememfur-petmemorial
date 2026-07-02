@@ -25,12 +25,12 @@ function UserProfilePage() {
 
   const { data: profile, isLoading } = useQuery({
     queryKey: ["user-profile", userId, user?.id ?? "anon"],
-    queryFn: () => profileFn({ data: { userId, viewerId: user?.id ?? undefined } }),
+    queryFn: () => profileFn({ data: { userId } }),
   });
 
   const { data: posts } = useQuery({
     queryKey: ["user-posts", userId, user?.id ?? "anon"],
-    queryFn: () => postsFn({ data: { userId, viewerId: user?.id ?? undefined } }),
+    queryFn: () => postsFn({ data: { userId } }),
   });
 
   const follow = useMutation({

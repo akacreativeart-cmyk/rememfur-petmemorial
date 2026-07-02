@@ -40,7 +40,7 @@ function CommunityPage() {
   } = useInfiniteQuery({
     queryKey: ["feed", scope, user?.id ?? "anon"],
     queryFn: ({ pageParam }) =>
-      feedFn({ data: { scope, viewerId: user?.id ?? undefined, cursor: pageParam, limit: 10 } }),
+      feedFn({ data: { scope, cursor: pageParam, limit: 10 } }),
     initialPageParam: null as string | null,
     getNextPageParam: (lastPage) => {
       if (lastPage.length < 10) return undefined;
