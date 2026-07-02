@@ -31,7 +31,7 @@ export function MobileTabBar() {
               <Link
                 to={to}
                 className={`ios-tappable flex flex-col items-center justify-center gap-1 pt-2 pb-1.5 text-[10px] font-medium tracking-tight transition-colors ${
-                  active ? "text-neutral-900 dark:text-neutral-100" : "text-neutral-500"
+                  active ? "text-white" : "text-neutral-400"
                 }`}
               >
                 {isCreate ? (
