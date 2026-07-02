@@ -433,3 +433,36 @@ function SupportCard({
     </Link>
   );
 }
+
+function IdeaCard({ n, title, body }: { n: string; title: string; body: string }) {
+  return (
+    <div className="flex gap-4 rounded-2xl bg-white/[0.04] p-5 ring-1 ring-white/10">
+      <span className="font-display text-[22px] leading-none text-amber-200/80">{n}</span>
+      <div className="flex-1">
+        <h3 className="font-display text-[17px] leading-tight text-white">{title}</h3>
+        <p className="mt-1.5 text-[13.5px] leading-relaxed text-white/60">{body}</p>
+      </div>
+    </div>
+  );
+}
+
+function CopingItem({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div className="rounded-2xl bg-white/[0.03] p-4 ring-1 ring-white/10">
+      <p className="font-display text-[15px] text-white">{title}</p>
+      <p className="mt-1 text-[13.5px] leading-relaxed text-white/60">{children}</p>
+    </div>
+  );
+}
+
+function FaqItem({ q, children }: { q: string; children: React.ReactNode }) {
+  return (
+    <details className="group rounded-2xl bg-white/[0.03] p-4 ring-1 ring-white/10 open:bg-white/[0.05]">
+      <summary className="cursor-pointer list-none font-display text-[15px] text-white marker:hidden">
+        <span className="mr-2 text-amber-200/70 transition group-open:rotate-45 inline-block">+</span>
+        {q}
+      </summary>
+      <p className="mt-2 pl-6 text-[13.5px] leading-relaxed text-white/65">{children}</p>
+    </details>
+  );
+}
