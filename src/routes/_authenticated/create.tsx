@@ -24,6 +24,12 @@ import {
   Users,
   HandHeart,
   ArrowRight,
+  Copy,
+  Share2,
+  Mail,
+  MessageCircle,
+  Facebook,
+  Twitter,
 } from "lucide-react";
 import { GravestoneCard } from "@/components/site/GravestoneCard";
 import {
