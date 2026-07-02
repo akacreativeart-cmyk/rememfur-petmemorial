@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { Heart, PhoneCall, Users, BookOpen, Flower2, Sparkles, X } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
+import { SiteHeader } from "@/components/site/SiteHeader";
 
 export const Route = createFileRoute("/")({
   component: HomePage,
@@ -189,10 +190,11 @@ function HomePage() {
       {showExplainer && <Explainer onClose={dismiss} />}
 
       <div className="min-h-screen bg-[#05070f] text-white">
-        {/* Hero iframe — sized to viewport minus tab bar so nothing scrolls beneath it */}
+        <SiteHeader />
+        {/* Hero iframe — sized to viewport minus header and tab bar */}
         <div
           className="relative w-full overflow-hidden bg-[#090d1a]"
-          style={{ height: "calc(100dvh - 72px - env(safe-area-inset-bottom))" }}
+          style={{ height: "calc(100dvh - 54px - 72px - env(safe-area-inset-top) - env(safe-area-inset-bottom))" }}
         >
           <iframe
             src="/app.html"
