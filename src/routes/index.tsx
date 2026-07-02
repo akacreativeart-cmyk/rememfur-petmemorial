@@ -18,10 +18,9 @@ function HomePage() {
       style={{
         position: "fixed",
         left: 0,
-        right: 0,
         top: 0,
-        bottom: "calc(72px + env(safe-area-inset-bottom))",
         width: "100vw",
+        height: "calc(100dvh - 72px - env(safe-area-inset-bottom))",
         border: 0,
         zIndex: 40,
         background: "#090d1a",
