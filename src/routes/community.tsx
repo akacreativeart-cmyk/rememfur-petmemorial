@@ -8,7 +8,7 @@ import { PageHero } from "@/components/site/PageHero";
 import { PostCard } from "@/components/feed/PostCard";
 import { PostSkeleton } from "@/components/feed/PostSkeleton";
 import { ComposePost } from "@/components/feed/ComposePost";
-import { DummyPosts } from "@/components/feed/DummyPosts";
+import { Flame, PlusCircle } from "lucide-react";
 import { listFeed } from "@/lib/feed.functions";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
@@ -115,18 +115,36 @@ function CommunityPage() {
             </>
           )}
           {!isLoading && posts.length === 0 && (
-            <div className="rounded-2xl border border-dashed border-border bg-card/50 p-6 text-center">
-              <p className="font-display text-xl text-foreground">It&apos;s quiet here.</p>
-              <p className="mt-2 text-sm text-muted-foreground">
-                {scope === "following" ? "Follow people to fill your feed." : "Be the first to share a memory — or scroll a few stories from the community."}
+            <div className="flex flex-col items-center rounded-2xl border border-dashed border-border bg-card/50 p-8 text-center">
+              <span className="hero-candle scale-90" aria-hidden>
+                <span className="flame" />
+              </span>
+              <p className="mt-4 font-display text-xl text-foreground">
+                Be among the first to share a memory
               </p>
+              <p className="mt-2 max-w-xs text-sm text-muted-foreground">
+                {scope === "following"
+                  ? "Follow people whose stories move you and their memories will land here."
+                  : "This is a quiet, tender room. A photo, a sentence, a small story — anything is welcome."}
+              </p>
+              <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
+                <Link to={user ? "/create" : "/signup"} search={user ? undefined : ({ redirect: "/create" } as never)}>
+                  <Button size="sm" className="rounded-full bg-[var(--cta)] text-[var(--cta-foreground,white)] hover:opacity-90">
+                    <PlusCircle className="mr-2 h-4 w-4" /> Create a post
+                  </Button>
+                </Link>
+                <Link to="/">
+                  <Button size="sm" variant="outline" className="rounded-full">
+                    <Flame className="mr-2 h-4 w-4" /> Light a candle
+                  </Button>
+                </Link>
+              </div>
             </div>
           )}
           {posts.map((p) => (
             <PostCard key={p.id} post={p} />
           ))}
 
-          <DummyPosts />
 
           <div ref={sentinelRef} className="h-1" aria-hidden="true" />
 
