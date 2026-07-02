@@ -8,7 +8,7 @@ import { PageHero } from "@/components/site/PageHero";
 import { PostCard } from "@/components/feed/PostCard";
 import { PostSkeleton } from "@/components/feed/PostSkeleton";
 import { ComposePost } from "@/components/feed/ComposePost";
-import { DummyPosts } from "@/components/feed/DummyPosts";
+import { Flame, PlusCircle } from "lucide-react";
 import { listFeed } from "@/lib/feed.functions";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
