@@ -24,6 +24,12 @@ import {
   Users,
   HandHeart,
   ArrowRight,
+  Copy,
+  Share2,
+  Mail,
+  MessageCircle,
+  Facebook,
+  Twitter,
 } from "lucide-react";
 import { GravestoneCard } from "@/components/site/GravestoneCard";
 import {
@@ -240,22 +246,40 @@ function CreatePage() {
 
 
       {step < 5 && (
-      <ol className="mt-7 flex items-center gap-3 text-xs">
-        {["Photo", "Transform", "Tribute", "Candle"].map((label, i) => {
-          const n = i + 1;
-          const active = step === n;
-          const done = step > n;
-          return (
-            <li key={label} className="flex flex-1 items-center gap-2">
-              <span className={`flex h-7 w-7 items-center justify-center rounded-full text-xs ${done ? "bg-sage-deep text-primary-foreground" : active ? "bg-[var(--cta)] text-[var(--cta-foreground)]" : "bg-muted text-muted-foreground"}`}>
-                {done ? <Check className="h-3.5 w-3.5" /> : n}
-              </span>
-              <span className={`${active ? "text-foreground" : "text-muted-foreground"}`}>{label}</span>
-              {i < 3 && <div className="ml-1 h-px flex-1 bg-border" />}
-            </li>
-          );
-        })}
-      </ol>
+      <div className="mt-7">
+        <div
+          className="h-1.5 w-full overflow-hidden rounded-full bg-muted"
+          role="progressbar"
+          aria-valuemin={0}
+          aria-valuemax={4}
+          aria-valuenow={step}
+          aria-label={`Wizard progress: step ${step} of 4`}
+        >
+          <div
+            className="h-full rounded-full bg-[var(--cta)] transition-all duration-500 ease-out"
+            style={{ width: `${(step / 4) * 100}%` }}
+          />
+        </div>
+        <ol className="mt-4 flex items-center gap-3 text-xs">
+          {["Photo", "Transform", "Tribute", "Candle"].map((label, i) => {
+            const n = i + 1;
+            const active = step === n;
+            const done = step > n;
+            return (
+              <li key={label} className="flex flex-1 items-center gap-2">
+                <span className={`flex h-7 w-7 items-center justify-center rounded-full text-xs ${done ? "bg-sage-deep text-primary-foreground" : active ? "bg-[var(--cta)] text-[var(--cta-foreground)]" : "bg-muted text-muted-foreground"}`}>
+                  {done ? <Check className="h-3.5 w-3.5" /> : n}
+                </span>
+                <span className={`${active ? "text-foreground" : "text-muted-foreground"}`}>{label}</span>
+                {i < 3 && <div className="ml-1 h-px flex-1 bg-border" />}
+              </li>
+            );
+          })}
+        </ol>
+        <p className="mt-2 text-center text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+          Step {step} of 4 · {Math.round((step / 4) * 100)}%
+        </p>
+      </div>
       )}
 
       <div className="mt-8 rounded-3xl border border-border/60 bg-card p-8 soft-shadow">
@@ -555,6 +579,10 @@ function CreatePage() {
               )}
             </div>
 
+            {publishedSlug && (
+              <ShareMemorialCard slug={publishedSlug} petName={petName} epitaph={epitaph} />
+            )}
+
             <div className="chapter-rule mt-8" aria-hidden />
             <h3 className="mt-6 text-center font-display text-xl text-foreground">Continue the journey</h3>
 
@@ -638,6 +666,140 @@ function CreatePage() {
             </div>
           </section>
         )}
+      </div>
+    </div>
+  );
+}
+
+function ShareMemorialCard({
+  slug,
+  petName,
+  epitaph,
+}: {
+  slug: string;
+  petName: string;
+  epitaph: string;
+}) {
+  const [copied, setCopied] = useState(false);
+  const url =
+    typeof window !== "undefined"
+      ? `${window.location.origin}/memorial/${slug}`
+      : `/memorial/${slug}`;
+  const shareTitle = petName ? `${petName}'s memorial` : "A memorial on Rememfur";
+  const shareText = epitaph
+    ? `${shareTitle} — "${epitaph}"`
+    : `${shareTitle} — light a candle and leave a memory.`;
+
+  const encodedUrl = encodeURIComponent(url);
+  const encodedText = encodeURIComponent(shareText);
+
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      toast.success("Link copied");
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      toast.error("Could not copy — please copy manually.");
+    }
+  };
+
+  const nativeShare = async () => {
+    if (typeof navigator !== "undefined" && "share" in navigator) {
+      try {
+        await (navigator as any).share({ title: shareTitle, text: shareText, url });
+      } catch {
+        /* user cancelled */
+      }
+    } else {
+      copy();
+    }
+  };
+
+  const socials: { label: string; href: string; icon: any }[] = [
+    {
+      label: "Share on WhatsApp",
+      icon: MessageCircle,
+      href: `https://wa.me/?text=${encodedText}%20${encodedUrl}`,
+    },
+    {
+      label: "Share by email",
+      icon: Mail,
+      href: `mailto:?subject=${encodeURIComponent(shareTitle)}&body=${encodedText}%0A%0A${encodedUrl}`,
+    },
+    {
+      label: "Share on Facebook",
+      icon: Facebook,
+      href: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
+    },
+    {
+      label: "Share on X",
+      icon: Twitter,
+      href: `https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}`,
+    },
+  ];
+
+  return (
+    <div className="mt-8 rounded-2xl border border-border/60 bg-cream/30 p-5 soft-shadow">
+      <div className="flex items-center gap-2">
+        <Share2 className="h-4 w-4 text-[var(--cta)]" />
+        <h3 className="font-display text-lg text-foreground">Share their memorial</h3>
+      </div>
+      <p className="mt-1 text-xs text-muted-foreground">
+        Send this gentle link to family and friends so they can light a candle too.
+      </p>
+
+      <label htmlFor="memorial-url" className="sr-only">
+        Memorial URL
+      </label>
+      <div className="mt-4 flex items-stretch gap-2">
+        <input
+          id="memorial-url"
+          readOnly
+          value={url}
+          onFocus={(e) => e.currentTarget.select()}
+          className="min-w-0 flex-1 truncate rounded-full border border-border bg-background px-4 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-[var(--cta)]/40"
+          aria-label="Memorial URL"
+        />
+        <Button
+          type="button"
+          onClick={copy}
+          className="shrink-0 rounded-full bg-[var(--cta)] px-4 text-[var(--cta-foreground)] hover:bg-[var(--cta-deep)]"
+          aria-live="polite"
+        >
+          {copied ? (
+            <>
+              <Check className="mr-1 h-4 w-4" /> Copied
+            </>
+          ) : (
+            <>
+              <Copy className="mr-1 h-4 w-4" /> Copy
+            </>
+          )}
+        </Button>
+      </div>
+
+      <div className="mt-4 flex flex-wrap items-center gap-2">
+        <Button
+          type="button"
+          variant="outline"
+          onClick={nativeShare}
+          className="rounded-full"
+        >
+          <Share2 className="mr-1.5 h-4 w-4" /> Share…
+        </Button>
+        {socials.map(({ label, href, icon: Icon }) => (
+          <a
+            key={label}
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={label}
+            className="ios-tappable inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background text-foreground transition hover:bg-muted"
+          >
+            <Icon className="h-4 w-4" aria-hidden="true" />
+          </a>
+        ))}
       </div>
     </div>
   );
