@@ -168,8 +168,8 @@ function HomePage() {
             <ul className="mt-4 divide-y divide-white/5 text-[14px]">
               <li className="flex items-center justify-between py-2.5">
                 <span className="text-white/80">ASPCA Pet Loss (US)</span>
-                <a href="tel:+18779727729" className="font-medium text-amber-200 hover:text-amber-100">
-                  877-972-7729
+                <a href="tel:+18774743310" className="font-medium text-amber-200 hover:text-amber-100">
+                  877-474-3310
                 </a>
               </li>
               <li className="flex items-center justify-between py-2.5">
@@ -180,8 +180,8 @@ function HomePage() {
               </li>
               <li className="flex items-center justify-between py-2.5">
                 <span className="text-white/80">Lap of Love (24/7, US)</span>
-                <a href="tel:+18555522643" className="font-medium text-amber-200 hover:text-amber-100">
-                  855-552-2643
+                <a href="tel:+18559335683" className="font-medium text-amber-200 hover:text-amber-100">
+                  855-933-5683
                 </a>
               </li>
             </ul>
