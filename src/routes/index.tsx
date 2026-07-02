@@ -206,7 +206,7 @@ function HomePage() {
         <section
           aria-labelledby="grief-heading"
           className="relative bg-gradient-to-b from-[#05070f] via-[#0a0e1f] to-[#05070f] px-5 pt-14"
-          style={{ paddingBottom: "calc(96px + env(safe-area-inset-bottom))" }}
+          style={{ paddingBottom: "calc(120px + env(safe-area-inset-bottom))" }}
         >
           <div className="mx-auto max-w-md">
             <p className="text-center text-[11px] uppercase tracking-[0.28em] text-amber-200/70">
