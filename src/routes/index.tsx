@@ -292,13 +292,19 @@ function HomePage() {
               </p>
             </div>
 
-            <div className="mt-8 flex justify-center">
+            <div className="mt-8 flex flex-col items-center gap-3">
               <Link
-                to="/create"
-                className="ios-tappable inline-flex items-center justify-center rounded-full bg-white px-7 py-3.5 text-[15px] font-semibold text-neutral-900 hover:bg-white/90"
+                to={user ? "/create" : "/signup"}
+                search={user ? undefined : ({ redirect: "/create" } as never)}
+                className="ios-tappable inline-flex items-center justify-center rounded-full bg-white px-7 py-3.5 text-[15px] font-semibold text-neutral-900 hover:bg-white/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-200 focus-visible:ring-offset-2 focus-visible:ring-offset-[#05070f]"
               >
                 Create a memorial
               </Link>
+              {!user && (
+                <p className="text-[12px] text-white/50">
+                  Free — takes about a minute. Sign in to save your memorial.
+                </p>
+              )}
             </div>
           </div>
         </section>
