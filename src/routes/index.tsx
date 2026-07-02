@@ -202,12 +202,57 @@ function HomePage() {
           />
         </div>
 
+        {/* About the idea */}
+        <section
+          aria-labelledby="idea-heading"
+          className="relative bg-gradient-to-b from-[#05070f] to-[#0a0e1f] px-5 pt-16 pb-10"
+        >
+          <div className="mx-auto max-w-md">
+            <p className="text-center text-[11px] uppercase tracking-[0.28em] text-amber-200/70">
+              What rememfur is
+            </p>
+            <h2
+              id="idea-heading"
+              className="mt-3 text-center font-display text-[30px] leading-[1.1] tracking-tight text-white"
+            >
+              A quiet home for the love that outlives them
+            </h2>
+            <p className="mt-4 text-center text-[15px] leading-relaxed text-white/70">
+              Rememfur is a sanctuary for pet parents — a place to build a beautiful memorial, gather with others who understand, and find real grief support when the ache comes back.
+            </p>
+
+            <div className="mt-8 grid gap-3">
+              <IdeaCard
+                n="01"
+                title="Build a memorial that feels like them"
+                body="Photos, video, voice notes, a keepsake gravestone, and the little stories only you know — kept somewhere safe, forever."
+              />
+              <IdeaCard
+                n="02"
+                title="Light a candle, leave a note"
+                body="Anyone can light a candle on any memorial. Watch them flicker for 24 hours across a shared Wall of Light. No login needed to give kindness."
+              />
+              <IdeaCard
+                n="03"
+                title="Sit with a community that gets it"
+                body="Share the good days and the hard nights. Read stories from others who loved and lost. Send a paw, a candle, a comment."
+              />
+              <IdeaCard
+                n="04"
+                title="Grief support, adoption, medical, memorabilia"
+                body="Helplines and counsellors, shelters for when you're ready, vet resources for the road, and keepsakes made with care."
+              />
+            </div>
+          </div>
+        </section>
+
         {/* Grief support section */}
         <section
           aria-labelledby="grief-heading"
           className="relative bg-gradient-to-b from-[#05070f] via-[#0a0e1f] to-[#05070f] px-5 pt-14"
           style={{ paddingBottom: "calc(120px + env(safe-area-inset-bottom))" }}
         >
+
           <div className="mx-auto max-w-md">
             <p className="text-center text-[11px] uppercase tracking-[0.28em] text-amber-200/70">
               You are not alone
