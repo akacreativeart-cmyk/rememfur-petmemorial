@@ -108,21 +108,21 @@ async function hydratePosts(rows: any[], viewerId: string | null): Promise<FeedP
 }
 
 export const listFeed = createServerFn({ method: "GET" })
-  .inputValidator((input: { scope?: "all" | "following"; viewerId?: string; cursor?: string | null; limit?: number } | undefined) =>
+  .inputValidator((input: { scope?: "all" | "following"; cursor?: string | null; limit?: number } | undefined) =>
     z.object({
       scope: z.enum(["all", "following"]).default("all"),
-      viewerId: z.string().uuid().nullish(),
       cursor: z.string().nullish(),
       limit: z.number().int().min(1).max(50).default(10),
     }).parse(input ?? {}),
   )
   .handler(async ({ data }) => {
+    const viewerId = await getOptionalViewerId();
     let authorFilter: string[] | null = null;
-    if (data.scope === "following" && data.viewerId) {
+    if (data.scope === "following" && viewerId) {
       const { data: f } = await supabaseAdmin
         .from("follows")
         .select("following_id")
-        .eq("follower_id", data.viewerId);
+        .eq("follower_id", viewerId);
       authorFilter = (f ?? []).map((r: any) => r.following_id);
       if (authorFilter.length === 0) return [];
     }
@@ -136,14 +136,15 @@ export const listFeed = createServerFn({ method: "GET" })
     if (authorFilter) q = q.in("author_id", authorFilter);
     const { data: rows, error } = await q;
     if (error) throw new Error(error.message);
-    return hydratePosts(rows ?? [], data.viewerId ?? null);
+    return hydratePosts(rows ?? [], viewerId);
   });
 
 export const listUserPosts = createServerFn({ method: "GET" })
-  .inputValidator((input: { userId: string; viewerId?: string }) =>
-    z.object({ userId: z.string().uuid(), viewerId: z.string().uuid().nullish() }).parse(input),
+  .inputValidator((input: { userId: string }) =>
+    z.object({ userId: z.string().uuid() }).parse(input),
   )
   .handler(async ({ data }) => {
+    const viewerId = await getOptionalViewerId();
     const { data: rows, error } = await supabaseAdmin
       .from("posts")
       .select("id, author_id, image_url, caption, memorial_id, created_at")
@@ -151,8 +152,9 @@ export const listUserPosts = createServerFn({ method: "GET" })
       .order("created_at", { ascending: false })
       .limit(60);
     if (error) throw new Error(error.message);
-    return hydratePosts(rows ?? [], data.viewerId ?? null);
+    return hydratePosts(rows ?? [], viewerId);
   });
+
 
 export const getUserProfile = createServerFn({ method: "GET" })
   .inputValidator((input: { userId: string; viewerId?: string }) =>
