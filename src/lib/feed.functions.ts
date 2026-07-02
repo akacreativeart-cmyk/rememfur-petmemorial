@@ -157,10 +157,11 @@ export const listUserPosts = createServerFn({ method: "GET" })
 
 
 export const getUserProfile = createServerFn({ method: "GET" })
-  .inputValidator((input: { userId: string; viewerId?: string }) =>
-    z.object({ userId: z.string().uuid(), viewerId: z.string().uuid().nullish() }).parse(input),
+  .inputValidator((input: { userId: string }) =>
+    z.object({ userId: z.string().uuid() }).parse(input),
   )
   .handler(async ({ data }) => {
+    const viewerId = await getOptionalViewerId();
     const { data: profile } = await supabaseAdmin
       .from("profiles")
       .select("id, display_name, avatar_url, created_at")
@@ -171,8 +172,8 @@ export const getUserProfile = createServerFn({ method: "GET" })
       supabaseAdmin.from("follows").select("*", { count: "exact", head: true }).eq("following_id", data.userId),
       supabaseAdmin.from("follows").select("*", { count: "exact", head: true }).eq("follower_id", data.userId),
       supabaseAdmin.from("posts").select("*", { count: "exact", head: true }).eq("author_id", data.userId),
-      data.viewerId
-        ? supabaseAdmin.from("follows").select("follower_id").eq("follower_id", data.viewerId).eq("following_id", data.userId).maybeSingle()
+      viewerId
+        ? supabaseAdmin.from("follows").select("follower_id").eq("follower_id", viewerId).eq("following_id", data.userId).maybeSingle()
         : Promise.resolve({ data: null }),
     ]);
     return {
