@@ -1,30 +1,275 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { Heart, PhoneCall, Users, BookOpen, Flower2, Sparkles, X } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   component: HomePage,
   head: () => ({
     meta: [
-      { title: "rememfur" },
-      { name: "description", content: "A gentle pet memorial for the love that stays." },
+      { title: "rememfur — a gentle place for pet grief" },
+      { name: "description", content: "A gentle pet memorial for the love that stays. Light a candle, share a memory, and find grief support." },
     ],
   }),
 });
 
-function HomePage() {
+const EXPLAINER_KEY = "rememfur_explainer_seen_v1";
+
+const SLIDES = [
+  {
+    icon: Flower2,
+    title: "A place for the love that stays",
+    body: "Rememfur is a gentle sanctuary to honour the pets who shaped us — and to feel a little less alone in missing them.",
+  },
+  {
+    icon: Heart,
+    title: "Light a candle. Share a memory.",
+    body: "Create a beautiful memorial, light candles for others, and leave short notes of love that anyone can see.",
+  },
+  {
+    icon: Users,
+    title: "You are not grieving alone",
+    body: "Find grief support, community stories, adoption resources and helplines — always one tap away.",
+  },
+];
+
+function Explainer({ onClose }: { onClose: () => void }) {
+  const [i, setI] = useState(0);
+  const Slide = SLIDES[i];
+  const Icon = Slide.icon;
+  const last = i === SLIDES.length - 1;
+
   return (
-    <iframe
-      src="/app.html"
-      title="rememfur"
-      style={{
-        position: "fixed",
-        left: 0,
-        top: 0,
-        width: "100vw",
-        height: "calc(100dvh - 72px - env(safe-area-inset-bottom))",
-        border: 0,
-        zIndex: 40,
-        background: "#090d1a",
-      }}
-    />
+    <div
+      className="fixed inset-0 z-[100] flex items-end justify-center bg-[#05070f]/95 backdrop-blur-md"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="explainer-title"
+    >
+      <div
+        className="relative w-full max-w-md rounded-t-3xl bg-gradient-to-b from-[#0f1530] to-[#05070f] px-6 pt-10 pb-10 text-white shadow-2xl"
+        style={{ paddingBottom: "calc(2.5rem + env(safe-area-inset-bottom))" }}
+      >
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Skip introduction"
+          className="absolute right-4 top-4 rounded-full p-2 text-white/60 hover:bg-white/10 hover:text-white"
+        >
+          <X className="h-5 w-5" />
+        </button>
+
+        <div className="flex justify-center">
+          <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 ring-1 ring-white/15">
+            <Icon className="h-8 w-8 text-amber-200" strokeWidth={1.5} />
+          </span>
+        </div>
+
+        <h2
+          id="explainer-title"
+          className="mt-6 text-center font-display text-[26px] leading-tight tracking-tight"
+        >
+          {Slide.title}
+        </h2>
+        <p className="mt-3 text-center text-[15px] leading-relaxed text-white/70">
+          {Slide.body}
+        </p>
+
+        <div className="mt-8 flex items-center justify-center gap-2" aria-hidden>
+          {SLIDES.map((_, idx) => (
+            <span
+              key={idx}
+              className={`h-1.5 rounded-full transition-all ${
+                idx === i ? "w-6 bg-white" : "w-1.5 bg-white/30"
+              }`}
+            />
+          ))}
+        </div>
+
+        <div className="mt-8 flex flex-col gap-3">
+          <button
+            type="button"
+            onClick={() => (last ? onClose() : setI(i + 1))}
+            className="ios-tappable w-full rounded-full bg-white py-3.5 text-[15px] font-semibold text-neutral-900 hover:bg-white/90"
+          >
+            {last ? "Enter Rememfur" : "Continue"}
+          </button>
+          {!last && (
+            <button
+              type="button"
+              onClick={onClose}
+              className="text-[13px] text-white/50 hover:text-white/80"
+            >
+              Skip
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function HomePage() {
+  const [showExplainer, setShowExplainer] = useState(false);
+
+  useEffect(() => {
+    try {
+      if (!localStorage.getItem(EXPLAINER_KEY)) setShowExplainer(true);
+    } catch {}
+  }, []);
+
+  const dismiss = () => {
+    try {
+      localStorage.setItem(EXPLAINER_KEY, "1");
+    } catch {}
+    setShowExplainer(false);
+  };
+
+  return (
+    <>
+      {showExplainer && <Explainer onClose={dismiss} />}
+
+      <div className="min-h-screen bg-[#05070f] text-white">
+        {/* Hero iframe — sized to viewport minus tab bar so nothing scrolls beneath it */}
+        <div
+          className="relative w-full overflow-hidden bg-[#090d1a]"
+          style={{ height: "calc(100dvh - 72px - env(safe-area-inset-bottom))" }}
+        >
+          <iframe
+            src="/app.html"
+            title="rememfur"
+            className="h-full w-full border-0"
+            style={{ background: "#090d1a" }}
+          />
+        </div>
+
+        {/* Grief support section */}
+        <section
+          aria-labelledby="grief-heading"
+          className="relative bg-gradient-to-b from-[#05070f] via-[#0a0e1f] to-[#05070f] px-5 pt-14"
+          style={{ paddingBottom: "calc(96px + env(safe-area-inset-bottom))" }}
+        >
+          <div className="mx-auto max-w-md">
+            <p className="text-center text-[11px] uppercase tracking-[0.28em] text-amber-200/70">
+              You are not alone
+            </p>
+            <h2
+              id="grief-heading"
+              className="mt-3 text-center font-display text-[30px] leading-[1.1] tracking-tight text-white"
+            >
+              Grief support, whenever it finds you
+            </h2>
+            <p className="mt-3 text-center text-[15px] leading-relaxed text-white/65">
+              The love doesn't end — and neither does the ache. These small doorways are here for the hard nights and the quiet mornings.
+            </p>
+
+            {/* Helpline card */}
+            <div className="mt-8 rounded-2xl bg-white/5 p-5 ring-1 ring-white/10">
+              <div className="flex items-center gap-3">
+                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-200/15 text-amber-200">
+                  <PhoneCall className="h-5 w-5" strokeWidth={1.75} />
+                </span>
+                <div>
+                  <h3 className="font-display text-lg text-white">Talk to someone tonight</h3>
+                  <p className="text-[12px] text-white/55">Free, confidential pet-loss support lines</p>
+                </div>
+              </div>
+              <ul className="mt-4 divide-y divide-white/5 text-[14px]">
+                <li className="flex items-center justify-between py-2.5">
+                  <span className="text-white/80">ASPCA Pet Loss (US)</span>
+                  <a href="tel:+18779727729" className="font-medium text-amber-200 hover:text-amber-100">
+                    877-GRIEF-10
+                  </a>
+                </li>
+                <li className="flex items-center justify-between py-2.5">
+                  <span className="text-white/80">Blue Cross Pet Bereavement (UK)</span>
+                  <a href="tel:+448000966606" className="font-medium text-amber-200 hover:text-amber-100">
+                    0800 096 6606
+                  </a>
+                </li>
+                <li className="flex items-center justify-between py-2.5">
+                  <span className="text-white/80">Lap of Love (24/7, US)</span>
+                  <a href="tel:+18555522643" className="font-medium text-amber-200 hover:text-amber-100">
+                    855-352-5683
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            {/* Ways to feel held */}
+            <div className="mt-6 grid gap-3">
+              <SupportCard
+                to="/grief-support"
+                icon={Heart}
+                title="Ways to feel held"
+                body="Rituals, journaling prompts, and gentle guides for the first days, the first month, and the year that follows."
+              />
+              <SupportCard
+                to="/community"
+                icon={Users}
+                title="A community that understands"
+                body="Read stories from others who loved and lost. Leave a candle, a note, a small kindness."
+              />
+              <SupportCard
+                to="/resources"
+                icon={BookOpen}
+                title="Reading & resources"
+                body="Books for children, guides for anticipatory grief, and articles from grief counsellors."
+              />
+              <SupportCard
+                to="/adoption"
+                icon={Sparkles}
+                title="When you're ready — not before"
+                body="Adoption stories and shelters, for the day (however far away) you're ready to love again."
+              />
+            </div>
+
+            <div className="mt-10 rounded-2xl border border-white/10 bg-black/30 p-5 text-center">
+              <p className="font-serif italic text-[15px] leading-relaxed text-white/70">
+                "Grief is just love with no place to go."
+              </p>
+              <p className="mt-2 text-[11px] uppercase tracking-[0.25em] text-white/40">
+                — Jamie Anderson
+              </p>
+            </div>
+
+            <div className="mt-8 flex justify-center">
+              <Link
+                to="/create"
+                className="ios-tappable inline-flex items-center justify-center rounded-full bg-white px-7 py-3.5 text-[15px] font-semibold text-neutral-900 hover:bg-white/90"
+              >
+                Create a memorial
+              </Link>
+            </div>
+          </div>
+        </section>
+      </div>
+    </>
+  );
+}
+
+function SupportCard({
+  to,
+  icon: Icon,
+  title,
+  body,
+}: {
+  to: string;
+  icon: any;
+  title: string;
+  body: string;
+}) {
+  return (
+    <Link
+      to={to}
+      className="group flex gap-4 rounded-2xl bg-white/[0.04] p-4 ring-1 ring-white/10 transition hover:bg-white/[0.07]"
+    >
+      <span className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/10 text-amber-200">
+        <Icon className="h-5 w-5" strokeWidth={1.75} />
+      </span>
+      <span className="flex-1">
+        <span className="block font-display text-[17px] leading-tight text-white">{title}</span>
+        <span className="mt-1 block text-[13.5px] leading-relaxed text-white/60">{body}</span>
+      </span>
+    </Link>
   );
 }
