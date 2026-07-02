@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Heart, PhoneCall, Users, BookOpen, Flower2, Sparkles, X } from "lucide-react";
+import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/")({
   component: HomePage,
@@ -37,6 +38,47 @@ function Explainer({ onClose }: { onClose: () => void }) {
   const Slide = SLIDES[i];
   const Icon = Slide.icon;
   const last = i === SLIDES.length - 1;
+  const primaryRef = useRef<HTMLButtonElement | null>(null);
+  const closeRef = useRef<HTMLButtonElement | null>(null);
+  const previouslyFocused = useRef<HTMLElement | null>(null);
+
+  // Restore focus, lock scroll, and handle Escape to close
+  useEffect(() => {
+    previouslyFocused.current = document.activeElement as HTMLElement | null;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    primaryRef.current?.focus();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        onClose();
+      } else if (e.key === "Tab") {
+        // Simple focus trap between the two focusable controls
+        const focusables = [primaryRef.current, closeRef.current].filter(Boolean) as HTMLElement[];
+        if (focusables.length === 0) return;
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prevOverflow;
+      previouslyFocused.current?.focus?.();
+    };
+  }, [onClose]);
+
+  // Move focus to primary button whenever the slide changes
+  useEffect(() => {
+    primaryRef.current?.focus();
+  }, [i]);
 
   return (
     <div
@@ -44,6 +86,10 @@ function Explainer({ onClose }: { onClose: () => void }) {
       role="dialog"
       aria-modal="true"
       aria-labelledby="explainer-title"
+      aria-describedby="explainer-body"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
     >
       <div
         className="relative w-full max-w-md rounded-t-3xl bg-gradient-to-b from-[#0f1530] to-[#05070f] px-6 pt-10 pb-10 text-white shadow-2xl"
@@ -51,35 +97,47 @@ function Explainer({ onClose }: { onClose: () => void }) {
       >
         <button
           type="button"
+          ref={closeRef}
           onClick={onClose}
-          aria-label="Skip introduction"
-          className="absolute right-4 top-4 rounded-full p-2 text-white/60 hover:bg-white/10 hover:text-white"
+          aria-label="Skip introduction and enter Rememfur"
+          className="absolute right-4 top-4 rounded-full p-2 text-white/70 hover:bg-white/10 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
         >
-          <X className="h-5 w-5" />
+          <X className="h-5 w-5" aria-hidden="true" />
         </button>
 
         <div className="flex justify-center">
-          <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 ring-1 ring-white/15">
+          <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 ring-1 ring-white/15" aria-hidden="true">
             <Icon className="h-8 w-8 text-amber-200" strokeWidth={1.5} />
           </span>
         </div>
 
-        <h2
-          id="explainer-title"
-          className="mt-6 text-center font-display text-[26px] leading-tight tracking-tight"
-        >
-          {Slide.title}
-        </h2>
-        <p className="mt-3 text-center text-[15px] leading-relaxed text-white/70">
-          {Slide.body}
-        </p>
+        <div aria-live="polite" aria-atomic="true">
+          <h2
+            id="explainer-title"
+            className="mt-6 text-center font-display text-[26px] leading-tight tracking-tight"
+          >
+            {Slide.title}
+          </h2>
+          <p id="explainer-body" className="mt-3 text-center text-[15px] leading-relaxed text-white/75">
+            {Slide.body}
+          </p>
+        </div>
 
-        <div className="mt-8 flex items-center justify-center gap-2" aria-hidden>
-          {SLIDES.map((_, idx) => (
-            <span
+        <div
+          className="mt-8 flex items-center justify-center gap-2"
+          role="tablist"
+          aria-label={`Introduction, step ${i + 1} of ${SLIDES.length}`}
+        >
+          {SLIDES.map((s, idx) => (
+            <button
               key={idx}
-              className={`h-1.5 rounded-full transition-all ${
-                idx === i ? "w-6 bg-white" : "w-1.5 bg-white/30"
+              type="button"
+              role="tab"
+              aria-selected={idx === i}
+              aria-label={`Go to step ${idx + 1}: ${s.title}`}
+              onClick={() => setI(idx)}
+              className={`h-2 rounded-full transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70 ${
+                idx === i ? "w-6 bg-white" : "w-2 bg-white/30 hover:bg-white/50"
               }`}
             />
           ))}
@@ -88,8 +146,9 @@ function Explainer({ onClose }: { onClose: () => void }) {
         <div className="mt-8 flex flex-col gap-3">
           <button
             type="button"
+            ref={primaryRef}
             onClick={() => (last ? onClose() : setI(i + 1))}
-            className="ios-tappable w-full rounded-full bg-white py-3.5 text-[15px] font-semibold text-neutral-900 hover:bg-white/90"
+            className="ios-tappable w-full rounded-full bg-white py-3.5 text-[15px] font-semibold text-neutral-900 hover:bg-white/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-200 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0f1530]"
           >
             {last ? "Enter Rememfur" : "Continue"}
           </button>
@@ -97,9 +156,9 @@ function Explainer({ onClose }: { onClose: () => void }) {
             <button
               type="button"
               onClick={onClose}
-              className="text-[13px] text-white/50 hover:text-white/80"
+              className="rounded-full py-2 text-[13px] text-white/60 hover:text-white/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
             >
-              Skip
+              Skip introduction
             </button>
           )}
         </div>
@@ -110,6 +169,7 @@ function Explainer({ onClose }: { onClose: () => void }) {
 
 function HomePage() {
   const [showExplainer, setShowExplainer] = useState(false);
+  const { user } = useAuth();
 
   useEffect(() => {
     try {
@@ -146,7 +206,7 @@ function HomePage() {
         <section
           aria-labelledby="grief-heading"
           className="relative bg-gradient-to-b from-[#05070f] via-[#0a0e1f] to-[#05070f] px-5 pt-14"
-          style={{ paddingBottom: "calc(96px + env(safe-area-inset-bottom))" }}
+          style={{ paddingBottom: "calc(120px + env(safe-area-inset-bottom))" }}
         >
           <div className="mx-auto max-w-md">
             <p className="text-center text-[11px] uppercase tracking-[0.28em] text-amber-200/70">
@@ -232,13 +292,18 @@ function HomePage() {
               </p>
             </div>
 
-            <div className="mt-8 flex justify-center">
+            <div className="mt-8 flex flex-col items-center gap-3">
               <Link
-                to="/create"
-                className="ios-tappable inline-flex items-center justify-center rounded-full bg-white px-7 py-3.5 text-[15px] font-semibold text-neutral-900 hover:bg-white/90"
+                to={user ? "/create" : "/signup"}
+                className="ios-tappable inline-flex items-center justify-center rounded-full bg-white px-7 py-3.5 text-[15px] font-semibold text-neutral-900 hover:bg-white/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-200 focus-visible:ring-offset-2 focus-visible:ring-offset-[#05070f]"
               >
                 Create a memorial
               </Link>
+              {!user && (
+                <p className="text-[12px] text-white/50">
+                  Free — takes about a minute. Sign in to save your memorial.
+                </p>
+              )}
             </div>
           </div>
         </section>
