@@ -13,7 +13,7 @@ export const Route = createFileRoute("/")({
   }),
 });
 
-const EXPLAINER_KEY = "rememfur_explainer_seen_v1";
+const EXPLAINER_KEY = "rememfur_explainer_seen_v2";
 
 const SLIDES = [
   {
