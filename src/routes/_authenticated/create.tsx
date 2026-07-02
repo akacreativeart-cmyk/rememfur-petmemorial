@@ -246,22 +246,40 @@ function CreatePage() {
 
 
       {step < 5 && (
-      <ol className="mt-7 flex items-center gap-3 text-xs">
-        {["Photo", "Transform", "Tribute", "Candle"].map((label, i) => {
-          const n = i + 1;
-          const active = step === n;
-          const done = step > n;
-          return (
-            <li key={label} className="flex flex-1 items-center gap-2">
-              <span className={`flex h-7 w-7 items-center justify-center rounded-full text-xs ${done ? "bg-sage-deep text-primary-foreground" : active ? "bg-[var(--cta)] text-[var(--cta-foreground)]" : "bg-muted text-muted-foreground"}`}>
-                {done ? <Check className="h-3.5 w-3.5" /> : n}
-              </span>
-              <span className={`${active ? "text-foreground" : "text-muted-foreground"}`}>{label}</span>
-              {i < 3 && <div className="ml-1 h-px flex-1 bg-border" />}
-            </li>
-          );
-        })}
-      </ol>
+      <div className="mt-7">
+        <div
+          className="h-1.5 w-full overflow-hidden rounded-full bg-muted"
+          role="progressbar"
+          aria-valuemin={0}
+          aria-valuemax={4}
+          aria-valuenow={step}
+          aria-label={`Wizard progress: step ${step} of 4`}
+        >
+          <div
+            className="h-full rounded-full bg-[var(--cta)] transition-all duration-500 ease-out"
+            style={{ width: `${(step / 4) * 100}%` }}
+          />
+        </div>
+        <ol className="mt-4 flex items-center gap-3 text-xs">
+          {["Photo", "Transform", "Tribute", "Candle"].map((label, i) => {
+            const n = i + 1;
+            const active = step === n;
+            const done = step > n;
+            return (
+              <li key={label} className="flex flex-1 items-center gap-2">
+                <span className={`flex h-7 w-7 items-center justify-center rounded-full text-xs ${done ? "bg-sage-deep text-primary-foreground" : active ? "bg-[var(--cta)] text-[var(--cta-foreground)]" : "bg-muted text-muted-foreground"}`}>
+                  {done ? <Check className="h-3.5 w-3.5" /> : n}
+                </span>
+                <span className={`${active ? "text-foreground" : "text-muted-foreground"}`}>{label}</span>
+                {i < 3 && <div className="ml-1 h-px flex-1 bg-border" />}
+              </li>
+            );
+          })}
+        </ol>
+        <p className="mt-2 text-center text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+          Step {step} of 4 · {Math.round((step / 4) * 100)}%
+        </p>
+      </div>
       )}
 
       <div className="mt-8 rounded-3xl border border-border/60 bg-card p-8 soft-shadow">
