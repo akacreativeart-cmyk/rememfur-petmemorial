@@ -670,3 +670,137 @@ function CreatePage() {
     </div>
   );
 }
+
+function ShareMemorialCard({
+  slug,
+  petName,
+  epitaph,
+}: {
+  slug: string;
+  petName: string;
+  epitaph: string;
+}) {
+  const [copied, setCopied] = useState(false);
+  const url =
+    typeof window !== "undefined"
+      ? `${window.location.origin}/memorial/${slug}`
+      : `/memorial/${slug}`;
+  const shareTitle = petName ? `${petName}'s memorial` : "A memorial on Rememfur";
+  const shareText = epitaph
+    ? `${shareTitle} — "${epitaph}"`
+    : `${shareTitle} — light a candle and leave a memory.`;
+
+  const encodedUrl = encodeURIComponent(url);
+  const encodedText = encodeURIComponent(shareText);
+
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      toast.success("Link copied");
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      toast.error("Could not copy — please copy manually.");
+    }
+  };
+
+  const nativeShare = async () => {
+    if (typeof navigator !== "undefined" && "share" in navigator) {
+      try {
+        await (navigator as any).share({ title: shareTitle, text: shareText, url });
+      } catch {
+        /* user cancelled */
+      }
+    } else {
+      copy();
+    }
+  };
+
+  const socials: { label: string; href: string; icon: any }[] = [
+    {
+      label: "Share on WhatsApp",
+      icon: MessageCircle,
+      href: `https://wa.me/?text=${encodedText}%20${encodedUrl}`,
+    },
+    {
+      label: "Share by email",
+      icon: Mail,
+      href: `mailto:?subject=${encodeURIComponent(shareTitle)}&body=${encodedText}%0A%0A${encodedUrl}`,
+    },
+    {
+      label: "Share on Facebook",
+      icon: Facebook,
+      href: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
+    },
+    {
+      label: "Share on X",
+      icon: Twitter,
+      href: `https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}`,
+    },
+  ];
+
+  return (
+    <div className="mt-8 rounded-2xl border border-border/60 bg-cream/30 p-5 soft-shadow">
+      <div className="flex items-center gap-2">
+        <Share2 className="h-4 w-4 text-[var(--cta)]" />
+        <h3 className="font-display text-lg text-foreground">Share their memorial</h3>
+      </div>
+      <p className="mt-1 text-xs text-muted-foreground">
+        Send this gentle link to family and friends so they can light a candle too.
+      </p>
+
+      <label htmlFor="memorial-url" className="sr-only">
+        Memorial URL
+      </label>
+      <div className="mt-4 flex items-stretch gap-2">
+        <input
+          id="memorial-url"
+          readOnly
+          value={url}
+          onFocus={(e) => e.currentTarget.select()}
+          className="min-w-0 flex-1 truncate rounded-full border border-border bg-background px-4 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-[var(--cta)]/40"
+          aria-label="Memorial URL"
+        />
+        <Button
+          type="button"
+          onClick={copy}
+          className="shrink-0 rounded-full bg-[var(--cta)] px-4 text-[var(--cta-foreground)] hover:bg-[var(--cta-deep)]"
+          aria-live="polite"
+        >
+          {copied ? (
+            <>
+              <Check className="mr-1 h-4 w-4" /> Copied
+            </>
+          ) : (
+            <>
+              <Copy className="mr-1 h-4 w-4" /> Copy
+            </>
+          )}
+        </Button>
+      </div>
+
+      <div className="mt-4 flex flex-wrap items-center gap-2">
+        <Button
+          type="button"
+          variant="outline"
+          onClick={nativeShare}
+          className="rounded-full"
+        >
+          <Share2 className="mr-1.5 h-4 w-4" /> Share…
+        </Button>
+        {socials.map(({ label, href, icon: Icon }) => (
+          <a
+            key={label}
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={label}
+            className="ios-tappable inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background text-foreground transition hover:bg-muted"
+          >
+            <Icon className="h-4 w-4" aria-hidden="true" />
+          </a>
+        ))}
+      </div>
+    </div>
+  );
+}
