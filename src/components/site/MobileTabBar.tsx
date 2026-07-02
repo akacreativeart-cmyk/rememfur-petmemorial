@@ -31,13 +31,16 @@ export function MobileTabBar() {
             <li key={label} className="flex-1">
               <Link
                 to={to}
+                aria-label={label}
                 className={`ios-tappable flex flex-col items-center justify-center gap-1 pt-2 pb-1.5 text-[10px] font-medium tracking-tight transition-colors ${
-                  active ? "text-white" : "text-neutral-400"
+                  isCreate ? "text-amber-300" : active ? "text-white" : "text-neutral-400"
                 }`}
               >
                 {isCreate ? (
-                  <span className="-mt-6 mb-0.5 flex h-12 w-12 items-center justify-center rounded-full bg-neutral-900 text-white shadow-[0_8px_20px_-6px_rgba(0,0,0,0.35)] dark:bg-neutral-100 dark:text-neutral-900">
-                    <Icon className="h-6 w-6" strokeWidth={2.25} />
+                  <span
+                    className="-mt-8 mb-0.5 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-b from-amber-300 to-amber-500 text-[#1a1200] ring-4 ring-[#05070f] shadow-[0_0_28px_-2px_rgba(251,191,36,0.75),0_10px_30px_-8px_rgba(251,191,36,0.55)]"
+                  >
+                    <Icon className="h-8 w-8" strokeWidth={2.25} />
                   </span>
                 ) : (
                   <Icon
@@ -45,7 +48,7 @@ export function MobileTabBar() {
                     strokeWidth={active ? 2.25 : 1.8}
                   />
                 )}
-                <span>{label}</span>
+                <span className={isCreate ? "uppercase tracking-[0.18em] text-[9px]" : ""}>{label}</span>
               </Link>
             </li>
           );
