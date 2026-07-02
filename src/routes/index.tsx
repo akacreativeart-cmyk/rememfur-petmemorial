@@ -328,6 +328,55 @@ function HomePage() {
               />
             </div>
 
+            {/* Coping — gentle guidance */}
+            <div className="mt-10">
+              <h3 className="text-center font-display text-[22px] leading-tight text-white">
+                Small things that help
+              </h3>
+              <p className="mt-2 text-center text-[13px] text-white/55">
+                Gentle practices, taken from grief counsellors and pet parents who've walked this road.
+              </p>
+              <div className="mt-5 space-y-3">
+                <CopingItem title="Name what you feel">
+                  Sadness, guilt, anger, relief — all of it belongs. Write one sentence tonight: "Right now I feel…"
+                </CopingItem>
+                <CopingItem title="Keep a small ritual">
+                  Light a candle at the same time each evening. Say their name out loud. Rituals give grief a shape.
+                </CopingItem>
+                <CopingItem title="Tell one story">
+                  Post a memory here, or tell one person today. Grief that is spoken is grief that is shared.
+                </CopingItem>
+                <CopingItem title="Let the body grieve too">
+                  Walk their old route. Drink water. Sleep when you can. The body carries what words can't.
+                </CopingItem>
+                <CopingItem title="Be careful with the 'shoulds'">
+                  You don't have to be over it by any date. Grief isn't linear and it isn't a project to finish.
+                </CopingItem>
+              </div>
+            </div>
+
+            {/* What people ask */}
+            <div className="mt-10">
+              <h3 className="text-center font-display text-[22px] leading-tight text-white">
+                What people quietly wonder
+              </h3>
+              <div className="mt-5 space-y-3">
+                <FaqItem q="Is it silly to grieve a pet this much?">
+                  No. You are grieving a daily witness to your life — someone who greeted you, slept beside you, needed you. The size of the love decides the size of the loss.
+                </FaqItem>
+                <FaqItem q="When will it stop hurting?">
+                  It softens. It doesn't disappear, and it isn't meant to. The ache becomes a quieter companion that means you loved well.
+                </FaqItem>
+                <FaqItem q="Should I get another pet?">
+                  Only when it feels like welcoming, not replacing. There is no right timeline — for some it's weeks, for others years. Both are okay.
+                </FaqItem>
+                <FaqItem q="What do I do with their things?">
+                  Keep what comforts you, donate what would help another animal, and don't rush. Grief has its own pace with objects too.
+                </FaqItem>
+              </div>
+            </div>
+
+
             <div className="mt-10 rounded-2xl border border-white/10 bg-black/30 p-5 text-center">
               <p className="font-serif italic text-[15px] leading-relaxed text-white/70">
                 "Grief is just love with no place to go."
