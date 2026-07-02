@@ -13,20 +13,32 @@ import heroImg from "@/assets/hero-meadow.jpg";
 
 export const Route = createFileRoute("/signup")({
   component: SignupPage,
+  validateSearch: (search: Record<string, unknown>) => ({
+    redirect: typeof search.redirect === "string" ? search.redirect : undefined,
+  }),
   head: () => ({ meta: [{ title: "Create your Rememfur account" }] }),
 });
+
+// Only allow same-origin relative paths as post-auth redirect targets.
+function safeRedirect(value: string | undefined, fallback = "/dashboard") {
+  if (!value) return fallback;
+  if (!value.startsWith("/") || value.startsWith("//")) return fallback;
+  return value;
+}
 
 function SignupPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const search = Route.useSearch();
+  const redirectTo = safeRedirect(search.redirect);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
-    if (user) navigate({ to: "/dashboard" });
-  }, [user, navigate]);
+    if (user) navigate({ to: redirectTo });
+  }, [user, navigate, redirectTo]);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,7 +47,7 @@ function SignupPage() {
       email,
       password,
       options: {
-        emailRedirectTo: window.location.origin + "/dashboard",
+        emailRedirectTo: window.location.origin + redirectTo,
         data: { display_name: name },
       },
     });
@@ -45,12 +57,12 @@ function SignupPage() {
   };
 
   const google = async () => {
-    const r = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + "/dashboard" });
+    const r = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + redirectTo });
     if (r.error) toast.error("Could not sign in with Google");
   };
 
   const apple = async () => {
-    const r = await lovable.auth.signInWithOAuth("apple", { redirect_uri: window.location.origin + "/dashboard" });
+    const r = await lovable.auth.signInWithOAuth("apple", { redirect_uri: window.location.origin + redirectTo });
     if (r.error) toast.error("Could not sign in with Apple");
   };
 
