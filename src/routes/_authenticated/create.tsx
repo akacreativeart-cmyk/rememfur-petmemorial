@@ -579,6 +579,10 @@ function CreatePage() {
               )}
             </div>
 
+            {publishedSlug && (
+              <ShareMemorialCard slug={publishedSlug} petName={petName} epitaph={epitaph} />
+            )}
+
             <div className="chapter-rule mt-8" aria-hidden />
             <h3 className="mt-6 text-center font-display text-xl text-foreground">Continue the journey</h3>
 
