@@ -169,6 +169,7 @@ function Explainer({ onClose }: { onClose: () => void }) {
 
 function HomePage() {
   const [showExplainer, setShowExplainer] = useState(false);
+  const { user } = useAuth();
 
   useEffect(() => {
     try {
