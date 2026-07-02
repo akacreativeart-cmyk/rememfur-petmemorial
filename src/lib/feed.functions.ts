@@ -1,7 +1,25 @@
 import { createServerFn } from "@tanstack/react-start";
+import { getRequest } from "@tanstack/react-start/server";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
+
+// Derive viewer identity from the bearer token if present. Never trust a
+// client-supplied viewerId for authorization decisions.
+async function getOptionalViewerId(): Promise<string | null> {
+  try {
+    const req = getRequest();
+    const authHeader = req?.headers?.get("authorization");
+    if (!authHeader?.startsWith("Bearer ")) return null;
+    const token = authHeader.slice("Bearer ".length).trim();
+    if (!token) return null;
+    const { data, error } = await supabaseAdmin.auth.getClaims(token);
+    if (error || !data?.claims?.sub) return null;
+    return data.claims.sub as string;
+  } catch {
+    return null;
+  }
+}
 
 export type FeedPost = {
   id: string;
