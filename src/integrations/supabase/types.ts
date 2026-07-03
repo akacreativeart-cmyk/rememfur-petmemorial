@@ -122,6 +122,30 @@ export type Database = {
           },
         ]
       }
+      marketplace_waitlist: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          item_name: string
+          section: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          item_name: string
+          section: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          item_name?: string
+          section?: string
+        }
+        Relationships: []
+      }
       memorial_photos: {
         Row: {
           caption: string | null
