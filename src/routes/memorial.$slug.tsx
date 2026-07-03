@@ -188,7 +188,7 @@ function MemorialPage() {
             {photos.length > 0 && (
               <section className="rounded-3xl border border-border/60 bg-card p-7 soft-shadow">
                 <h2 className="font-display text-2xl text-foreground">Gallery</h2>
-                <div className="mt-4 grid grid-cols-3 gap-3">
+                <div className="mt-4 grid grid-cols-3 gap-3 md:grid-cols-4 lg:grid-cols-5">
                   {photos.map((p: any) => (
                     <img key={p.id} src={p.image_url} alt={p.caption ?? m.pet_name} loading="lazy" className="aspect-square rounded-2xl object-cover" />
                   ))}
