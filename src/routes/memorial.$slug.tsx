@@ -228,7 +228,7 @@ function MemorialPage() {
           </div>
 
           {/* Sidebar */}
-          <aside className="space-y-6">
+          <aside className="space-y-6 lg:sticky lg:top-24 lg:self-start">
             <div className="rounded-3xl border border-border/60 bg-card p-6 text-center soft-shadow">
               <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-terracotta/15">
                 <Flame className="h-7 w-7 text-terracotta" />
