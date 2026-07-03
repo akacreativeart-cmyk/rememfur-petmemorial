@@ -1,7 +1,8 @@
 import { Link, useRouter, useLocation } from "@tanstack/react-router";
 import { useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
-import { ChevronLeft, LogOut, ShoppingBag, Menu, Home, Flower2, Users, BookOpen, PlusCircle, User as UserIcon, Settings, HeartHandshake, Info, HandHeart, Stethoscope, LifeBuoy } from "lucide-react";
+import { useIsAdmin } from "@/hooks/use-admin";
+import { ChevronLeft, LogOut, ShoppingBag, Menu, Home, Flower2, Users, BookOpen, PlusCircle, User as UserIcon, Settings, HeartHandshake, Info, HandHeart, Stethoscope, LifeBuoy, ShieldCheck } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { NotificationBell } from "@/components/site/NotificationBell";
 import {
@@ -18,6 +19,7 @@ export function SiteHeader() {
   const router = useRouter();
   const { pathname } = useLocation();
   const isHome = pathname === "/";
+  const isAdmin = useIsAdmin();
   const [open, setOpen] = useState(false);
 
   const navItems: { to: string; label: string; icon: any }[] = [
@@ -148,6 +150,16 @@ export function SiteHeader() {
                         {label}
                       </a>
                     ))}
+                    {isAdmin && (
+                      <a
+                        href="/admin"
+                        onClick={() => setOpen(false)}
+                        className="flex items-center gap-3 rounded-xl px-3 py-3 text-base text-foreground hover:bg-cream/70"
+                      >
+                        <ShieldCheck className="h-5 w-5 text-[var(--terracotta)]" />
+                        Admin · Moderation
+                      </a>
+                    )}
                   </nav>
                 </>
               )}
