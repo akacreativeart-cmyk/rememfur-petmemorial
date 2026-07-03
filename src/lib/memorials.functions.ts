@@ -29,7 +29,45 @@ export const createMemorial = createServerFn({ method: "POST" })
       .select("id, slug")
       .single();
     if (error) throw new Error(error.message);
+
+    // Seed the gallery with any uploaded photos so `memorial_photos` reflects reality.
+    const photoRows: Array<{ memorial_id: string; image_url: string; caption?: string | null }> = [];
+    if (data.hero_image_url) {
+      photoRows.push({ memorial_id: row!.id, image_url: data.hero_image_url, caption: "Original photo" });
+    }
+    if (data.transformed_image_url && data.transformed_image_url !== data.hero_image_url) {
+      photoRows.push({ memorial_id: row!.id, image_url: data.transformed_image_url, caption: "Painted portrait" });
+    }
+    if (photoRows.length) {
+      // best-effort — never fail the whole create because of a gallery hiccup
+      await supabase.from("memorial_photos").insert(photoRows);
+    }
+
     return row!;
+  });
+
+/**
+ * Add a single photo to an existing memorial gallery. Owner-only via RLS.
+ */
+export const addMemorialPhoto = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: { memorial_id: string; image_url: string; caption?: string | null }) =>
+    z
+      .object({
+        memorial_id: z.string().uuid(),
+        image_url: z.string().url(),
+        caption: z.string().max(200).nullable().optional(),
+      })
+      .parse(input),
+  )
+  .handler(async ({ data, context }) => {
+    const { error } = await context.supabase.from("memorial_photos").insert({
+      memorial_id: data.memorial_id,
+      image_url: data.image_url,
+      caption: data.caption ?? null,
+    });
+    if (error) throw new Error(error.message);
+    return { ok: true };
   });
 
 export const listGardenMemorials = createServerFn({ method: "GET" })

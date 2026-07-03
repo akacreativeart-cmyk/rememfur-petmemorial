@@ -18,6 +18,7 @@ import { Route as GriefSupportRouteImport } from './routes/grief-support'
 import { Route as GardenRouteImport } from './routes/garden'
 import { Route as CommunityRouteImport } from './routes/community'
 import { Route as AdoptionRouteImport } from './routes/adoption'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
@@ -74,6 +75,11 @@ const AdoptionRoute = AdoptionRouteImport.update({
   path: '/adoption',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -128,6 +134,7 @@ const AuthenticatedMemorialSlugEditRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/admin': typeof AdminRoute
   '/adoption': typeof AdoptionRoute
   '/community': typeof CommunityRoute
   '/garden': typeof GardenRoute
@@ -148,6 +155,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/admin': typeof AdminRoute
   '/adoption': typeof AdoptionRoute
   '/community': typeof CommunityRoute
   '/garden': typeof GardenRoute
@@ -170,6 +178,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/about': typeof AboutRoute
+  '/admin': typeof AdminRoute
   '/adoption': typeof AdoptionRoute
   '/community': typeof CommunityRoute
   '/garden': typeof GardenRoute
@@ -192,6 +201,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/admin'
     | '/adoption'
     | '/community'
     | '/garden'
@@ -212,6 +222,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/admin'
     | '/adoption'
     | '/community'
     | '/garden'
@@ -233,6 +244,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/about'
+    | '/admin'
     | '/adoption'
     | '/community'
     | '/garden'
@@ -255,6 +267,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   AboutRoute: typeof AboutRoute
+  AdminRoute: typeof AdminRoute
   AdoptionRoute: typeof AdoptionRoute
   CommunityRoute: typeof CommunityRoute
   GardenRoute: typeof GardenRoute
@@ -331,6 +344,13 @@ declare module '@tanstack/react-router' {
       path: '/adoption'
       fullPath: '/adoption'
       preLoaderRoute: typeof AdoptionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -430,6 +450,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AboutRoute: AboutRoute,
+  AdminRoute: AdminRoute,
   AdoptionRoute: AdoptionRoute,
   CommunityRoute: CommunityRoute,
   GardenRoute: GardenRoute,
