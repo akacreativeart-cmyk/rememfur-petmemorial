@@ -9,6 +9,7 @@ import { lovable } from "@/integrations/lovable";
 import { useAuth } from "@/hooks/use-auth";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
+import { setPostAuthIntent } from "@/lib/post-auth-intent";
 import heroImg from "@/assets/hero-meadow.jpg";
 
 export const Route = createFileRoute("/signup")({
