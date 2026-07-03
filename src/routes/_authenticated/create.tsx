@@ -193,6 +193,8 @@ function CreatePage() {
     }
   };
 
+  const { welcome } = Route.useSearch();
+
   return (
     <div
       className={
@@ -201,6 +203,16 @@ function CreatePage() {
           : "animate-fade-in"
       }
     >
+      {welcome === 1 && step === 1 && (
+        <div className="mb-8 overflow-hidden rounded-3xl border border-amber-400/25 bg-gradient-to-br from-amber-400/10 via-amber-300/5 to-transparent p-8 text-center soft-shadow md:p-12">
+          <p className="font-display text-3xl text-foreground md:text-4xl lg:text-5xl">
+            Welcome. Who are we remembering?
+          </p>
+          <p className="mx-auto mt-3 max-w-xl text-sm text-muted-foreground md:text-base">
+            Take your time. We'll keep everything safe as you go.
+          </p>
+        </div>
+      )}
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h1 className="font-display text-4xl text-foreground">Create a memorial</h1>
