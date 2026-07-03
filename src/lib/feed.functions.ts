@@ -282,6 +282,7 @@ export const listComments = createServerFn({ method: "GET" })
       .from("post_comments")
       .select("id, body, author_id, created_at")
       .eq("post_id", data.post_id)
+      .eq("is_hidden", false)
       .order("created_at", { ascending: true });
     if (error) throw new Error(error.message);
     const authorIds = Array.from(new Set((rows ?? []).map((r) => r.author_id)));
