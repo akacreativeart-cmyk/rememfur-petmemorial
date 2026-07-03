@@ -295,7 +295,7 @@ function CandleStrip({
           </ul>
         </div>
       ) : (
-        <div className="mx-auto mt-4 max-w-md px-5">
+        <div className="mx-auto mt-4 max-w-md px-5 md:max-w-[1200px] md:px-8">
           <div className="flex flex-col items-center rounded-2xl bg-white/[0.03] p-6 text-center ring-1 ring-white/10">
             <span className="hero-candle scale-90" aria-hidden>
               <span className="flame" />
