@@ -9,40 +9,55 @@ import { lovable } from "@/integrations/lovable";
 import { useAuth } from "@/hooks/use-auth";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
+import { setPostAuthIntent } from "@/lib/post-auth-intent";
 import heroImg from "@/assets/hero-meadow.jpg";
 
 export const Route = createFileRoute("/login")({
   component: LoginPage,
+  validateSearch: (search: Record<string, unknown>) => ({
+    redirect: typeof search.redirect === "string" ? search.redirect : undefined,
+  }),
   head: () => ({ meta: [{ title: "Sign in — Rememfur" }] }),
 });
+
+function safeRedirect(value: string | undefined, fallback = "/dashboard") {
+  if (!value) return fallback;
+  if (!value.startsWith("/") || value.startsWith("//")) return fallback;
+  return value;
+}
 
 function LoginPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const search = Route.useSearch();
+  const redirectTo = safeRedirect(search.redirect);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
-    if (user) navigate({ to: "/dashboard" });
-  }, [user, navigate]);
+    if (user) navigate({ to: redirectTo });
+  }, [user, navigate, redirectTo]);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!search.redirect) setPostAuthIntent("return");
     setBusy(true);
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     setBusy(false);
     if (error) toast.error(error.message);
-    else navigate({ to: "/dashboard" });
+    else navigate({ to: redirectTo });
   };
 
   const google = async () => {
-    const r = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + "/dashboard" });
+    if (!search.redirect) setPostAuthIntent("return");
+    const r = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + redirectTo });
     if (r.error) toast.error("Could not sign in with Google");
   };
 
   const apple = async () => {
-    const r = await lovable.auth.signInWithOAuth("apple", { redirect_uri: window.location.origin + "/dashboard" });
+    if (!search.redirect) setPostAuthIntent("return");
+    const r = await lovable.auth.signInWithOAuth("apple", { redirect_uri: window.location.origin + redirectTo });
     if (r.error) toast.error("Could not sign in with Apple");
   };
 
