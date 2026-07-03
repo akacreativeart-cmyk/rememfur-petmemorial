@@ -1,6 +1,39 @@
 import { createServerFn } from "@tanstack/react-start";
+import { getRequest, getRequestIP } from "@tanstack/react-start/server";
+import { createHash } from "crypto";
 import { z } from "zod";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
+
+// Hash a stable client identifier (IP + UA) so we can throttle without storing raw IPs.
+function clientHash(): string {
+  let ip = "";
+  try { ip = getRequestIP({ xForwardedFor: true }) ?? ""; } catch { /* ignore */ }
+  let ua = "";
+  try { ua = getRequest()?.headers?.get("user-agent") ?? ""; } catch { /* ignore */ }
+  return createHash("sha256").update(`${ip}::${ua}`).digest("hex");
+}
+
+// Gentle rate-limit: max `perScope` candles for `scope_id` and `perGlobal` overall per hour.
+async function assertCandleLimit(scopeId: string | null) {
+  const hash = clientHash();
+  if (!hash || hash.length === 0) return;
+  const since = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+  const [scoped, overall] = await Promise.all([
+    scopeId
+      ? supabaseAdmin.from("rate_limits").select("id", { count: "exact", head: true })
+          .eq("bucket", "candle_guest").eq("client_hash", hash).eq("scope_id", scopeId).gte("created_at", since)
+      : Promise.resolve({ count: 0 } as any),
+    supabaseAdmin.from("rate_limits").select("id", { count: "exact", head: true })
+      .eq("bucket", "candle_guest").eq("client_hash", hash).gte("created_at", since),
+  ]);
+  if (scopeId && (scoped as any).count && (scoped as any).count >= 3) {
+    throw new Error("Take a breath — you can light another candle in a little while.");
+  }
+  if ((overall as any).count && (overall as any).count >= 10) {
+    throw new Error("Take a breath — you can light another candle in a little while.");
+  }
+  await supabaseAdmin.from("rate_limits").insert({ bucket: "candle_guest", client_hash: hash, scope_id: scopeId });
+}
 
 // Two short lines max — keep candles tender, not essays.
 const messageSchema = z
