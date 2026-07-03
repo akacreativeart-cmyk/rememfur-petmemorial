@@ -99,7 +99,7 @@ function AdminPage() {
   return (
     <div className="min-h-screen bg-[#05070f] text-white">
       <SiteHeader />
-      <main className="mx-auto max-w-2xl px-5 pt-6 pb-24">
+      <main className="mx-auto max-w-2xl px-5 pt-6 pb-24 md:max-w-4xl md:px-8">
         <Link to="/" className="inline-flex items-center gap-1 text-xs text-white/60 hover:text-white">
           <ChevronLeft className="h-3.5 w-3.5" /> Back
         </Link>
