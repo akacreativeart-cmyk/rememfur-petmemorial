@@ -247,7 +247,7 @@ function CandleStrip({
       aria-label="Recent candles"
       className="relative bg-gradient-to-b from-[#05070f] to-[#05070f] px-0 pt-10"
     >
-      <div className="mx-auto max-w-md px-5">
+      <div className="mx-auto max-w-md px-5 md:max-w-[1200px] md:px-8">
         <div className="flex items-baseline justify-between">
           <p className="text-[11px] uppercase tracking-[0.28em] text-amber-200/70">
             Candles burning
