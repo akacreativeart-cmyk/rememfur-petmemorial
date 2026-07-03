@@ -129,6 +129,7 @@ export const listFeed = createServerFn({ method: "GET" })
     let q = supabaseAdmin
       .from("posts")
       .select("id, author_id, image_url, caption, memorial_id, created_at")
+      .eq("is_hidden", false)
       .order("created_at", { ascending: false })
       .order("id", { ascending: false })
       .limit(data.limit);
