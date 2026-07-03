@@ -19,6 +19,7 @@ import { lightCandleOnPost, listCandlesForPost } from "@/lib/post-candle.functio
 import { lightCandleGuestOnPost } from "@/lib/candle-guest.functions";
 import { CandleDialog } from "@/components/site/CandleDialog";
 import { CandleCountdown } from "@/components/site/CandleCountdown";
+import { ReportButton } from "@/components/site/ReportButton";
 import { toast } from "sonner";
 import { formatDistanceToNow } from "date-fns";
 
@@ -154,11 +155,14 @@ export function PostCard({ post }: { post: FeedPost }) {
             </div>
           </div>
         </Link>
-        {isOwner && (
-          <Button variant="ghost" size="icon" onClick={() => del.mutate()} aria-label="Delete">
-            <Trash2 className="h-4 w-4 text-muted-foreground" />
-          </Button>
-        )}
+        <div className="flex items-center gap-1">
+          {!isOwner && <ReportButton contentType="post" contentId={post.id} label="Report post" />}
+          {isOwner && (
+            <Button variant="ghost" size="icon" onClick={() => del.mutate()} aria-label="Delete">
+              <Trash2 className="h-4 w-4 text-muted-foreground" />
+            </Button>
+          )}
+        </div>
       </header>
 
       {post.image_url && (
