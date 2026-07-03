@@ -50,7 +50,7 @@ function HomePage() {
 
       {/* Hero — the iframe scene. CTAs live inside the scene so nothing floats over content below. */}
       <div
-        className="relative w-full overflow-hidden bg-[#090d1a]"
+        className="relative w-full overflow-hidden bg-[#090d1a] md:h-[75vh] lg:h-[80vh]"
         style={{ height: "calc(100dvh - 54px - 72px - env(safe-area-inset-top) - env(safe-area-inset-bottom))" }}
       >
         <iframe
@@ -62,7 +62,7 @@ function HomePage() {
       </div>
 
       {/* Quiet candle affordance directly below the hero — no floating panel. */}
-      <div className="mx-auto flex max-w-md items-center justify-center gap-2 px-5 pt-5 text-[12px] uppercase tracking-[0.28em] text-white/70">
+      <div className="mx-auto flex max-w-md items-center justify-center gap-2 px-5 pt-5 text-[12px] uppercase tracking-[0.28em] text-white/70 md:max-w-[1200px]">
         {featured.data ? (
           <CandleDialog
             target={{
@@ -99,23 +99,23 @@ function HomePage() {
       {/* About the idea */}
       <section
         aria-labelledby="idea-heading"
-        className="relative bg-gradient-to-b from-[#05070f] to-[#0a0e1f] px-5 pt-16 pb-10"
+        className="relative bg-gradient-to-b from-[#05070f] to-[#0a0e1f] px-5 pt-16 pb-10 md:px-8"
       >
-        <div className="mx-auto max-w-md">
+        <div className="mx-auto max-w-md md:max-w-[1200px]">
           <p className="text-center text-[11px] uppercase tracking-[0.28em] text-amber-200/70">
             What rememfur is
           </p>
           <h2
             id="idea-heading"
-            className="mt-3 text-center font-display text-[30px] leading-[1.1] tracking-tight text-white"
+            className="mt-3 text-center font-display text-[30px] leading-[1.1] tracking-tight text-white md:text-5xl lg:text-6xl"
           >
             A quiet home for the love that outlives them
           </h2>
-          <p className="mt-4 text-center text-[15px] leading-relaxed text-white/70">
+          <p className="mt-4 text-center text-[15px] leading-relaxed text-white/70 md:mx-auto md:max-w-2xl md:text-lg">
             Rememfur is a sanctuary for pet parents — a place to build a beautiful memorial, gather with others who understand, and find real grief support when the ache comes back.
           </p>
 
-          <div className="mt-8 grid gap-3">
+          <div className="mt-8 grid gap-3 md:mt-12 md:grid-cols-2 md:gap-4 lg:grid-cols-4">
             <IdeaCard n="01" title="Build a memorial that feels like them" body="Photos, their story, and the little details only you know — a keepsake gravestone, a painted portrait if you like — all kept somewhere safe." />
             <IdeaCard n="02" title="Light a candle, leave a note" body="Anyone can light a candle on any memorial. Watch them flicker for 24 hours across a shared Wall of Light. No login needed to give kindness." />
             <IdeaCard n="03" title="Sit with a community that gets it" body="Share the good days and the hard nights. Read stories from others who loved and lost. Send a paw, a candle, a comment." />
