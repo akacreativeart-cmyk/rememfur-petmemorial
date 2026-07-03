@@ -129,7 +129,7 @@ function AdminPage() {
             return (
               <article
                 key={r.id}
-                className="rounded-2xl bg-white/[0.05] p-5 ring-1 ring-white/10"
+                className="rounded-2xl bg-white/[0.05] p-5 ring-1 ring-white/10 md:grid md:grid-cols-[1fr_auto] md:gap-6"
               >
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
