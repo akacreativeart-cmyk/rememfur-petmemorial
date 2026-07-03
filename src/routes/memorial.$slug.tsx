@@ -119,7 +119,7 @@ function MemorialPage() {
   return (
     <div className="min-h-screen bg-background paper-grain">
       <SiteHeader />
-      <main className="mx-auto max-w-5xl px-5 py-10">
+      <main className="mx-auto max-w-6xl px-5 py-10 md:px-8">
         <div className="overflow-hidden rounded-[2rem] border border-border/60 soft-shadow">
           <div className="relative">
             {hero ? (
