@@ -53,6 +53,7 @@ export const listGardenMemorials = createServerFn({ method: "GET" })
       const { data: candleRows } = await supabaseAdmin
         .from("candles")
         .select("memorial_id")
+        .eq("is_hidden", false)
         .in("memorial_id", ids);
       (candleRows ?? []).forEach((c) => {
         counts[c.memorial_id] = (counts[c.memorial_id] ?? 0) + 1;
