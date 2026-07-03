@@ -152,6 +152,7 @@ export const countCandlesThisWeek = createServerFn({ method: "GET" })
     const { count } = await supabaseAdmin
       .from("candles")
       .select("*", { count: "exact", head: true })
+      .eq("is_hidden", false)
       .gte("created_at", since);
     return { count: count ?? 0 };
   });
