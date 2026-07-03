@@ -259,7 +259,7 @@ function CandleStrip({
       </div>
 
       {enough ? (
-        <div className="mt-4 overflow-x-auto px-5 pb-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+        <div className="mx-auto mt-4 max-w-[1200px] overflow-x-auto px-5 pb-2 md:px-8 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
           <ul className="flex gap-3">
             {candles.map((c) => {
               const inner = (
