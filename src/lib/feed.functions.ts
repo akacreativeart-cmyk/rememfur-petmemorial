@@ -129,6 +129,7 @@ export const listFeed = createServerFn({ method: "GET" })
     let q = supabaseAdmin
       .from("posts")
       .select("id, author_id, image_url, caption, memorial_id, created_at")
+      .eq("is_hidden", false)
       .order("created_at", { ascending: false })
       .order("id", { ascending: false })
       .limit(data.limit);
@@ -149,6 +150,7 @@ export const listUserPosts = createServerFn({ method: "GET" })
       .from("posts")
       .select("id, author_id, image_url, caption, memorial_id, created_at")
       .eq("author_id", data.userId)
+      .eq("is_hidden", false)
       .order("created_at", { ascending: false })
       .limit(60);
     if (error) throw new Error(error.message);
@@ -280,6 +282,7 @@ export const listComments = createServerFn({ method: "GET" })
       .from("post_comments")
       .select("id, body, author_id, created_at")
       .eq("post_id", data.post_id)
+      .eq("is_hidden", false)
       .order("created_at", { ascending: true });
     if (error) throw new Error(error.message);
     const authorIds = Array.from(new Set((rows ?? []).map((r) => r.author_id)));

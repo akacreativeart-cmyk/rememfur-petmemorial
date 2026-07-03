@@ -18,6 +18,7 @@ export type Database = {
         Row: {
           created_at: string
           id: string
+          is_hidden: boolean
           lit_by: string | null
           lit_by_name: string | null
           memorial_id: string
@@ -26,6 +27,7 @@ export type Database = {
         Insert: {
           created_at?: string
           id?: string
+          is_hidden?: boolean
           lit_by?: string | null
           lit_by_name?: string | null
           memorial_id: string
@@ -34,6 +36,7 @@ export type Database = {
         Update: {
           created_at?: string
           id?: string
+          is_hidden?: boolean
           lit_by?: string | null
           lit_by_name?: string | null
           memorial_id?: string
@@ -219,6 +222,7 @@ export type Database = {
           body: string
           created_at: string
           id: string
+          is_hidden: boolean
           memorial_id: string
         }
         Insert: {
@@ -226,6 +230,7 @@ export type Database = {
           body: string
           created_at?: string
           id?: string
+          is_hidden?: boolean
           memorial_id: string
         }
         Update: {
@@ -233,6 +238,7 @@ export type Database = {
           body?: string
           created_at?: string
           id?: string
+          is_hidden?: boolean
           memorial_id?: string
         }
         Relationships: [
@@ -305,6 +311,7 @@ export type Database = {
           body: string
           created_at: string
           id: string
+          is_hidden: boolean
           post_id: string
         }
         Insert: {
@@ -312,6 +319,7 @@ export type Database = {
           body: string
           created_at?: string
           id?: string
+          is_hidden?: boolean
           post_id: string
         }
         Update: {
@@ -319,6 +327,7 @@ export type Database = {
           body?: string
           created_at?: string
           id?: string
+          is_hidden?: boolean
           post_id?: string
         }
         Relationships: [
@@ -364,6 +373,7 @@ export type Database = {
           created_at: string
           id: string
           image_url: string | null
+          is_hidden: boolean
           memorial_id: string | null
           updated_at: string
         }
@@ -373,6 +383,7 @@ export type Database = {
           created_at?: string
           id?: string
           image_url?: string | null
+          is_hidden?: boolean
           memorial_id?: string | null
           updated_at?: string
         }
@@ -382,6 +393,7 @@ export type Database = {
           created_at?: string
           id?: string
           image_url?: string | null
+          is_hidden?: boolean
           memorial_id?: string | null
           updated_at?: string
         }
@@ -401,6 +413,7 @@ export type Database = {
           created_at: string
           display_name: string | null
           id: string
+          is_admin: boolean
           updated_at: string
         }
         Insert: {
@@ -408,6 +421,7 @@ export type Database = {
           created_at?: string
           display_name?: string | null
           id: string
+          is_admin?: boolean
           updated_at?: string
         }
         Update: {
@@ -415,7 +429,59 @@ export type Database = {
           created_at?: string
           display_name?: string | null
           id?: string
+          is_admin?: boolean
           updated_at?: string
+        }
+        Relationships: []
+      }
+      rate_limits: {
+        Row: {
+          bucket: string
+          client_hash: string
+          created_at: string
+          id: number
+          scope_id: string | null
+        }
+        Insert: {
+          bucket: string
+          client_hash: string
+          created_at?: string
+          id?: number
+          scope_id?: string | null
+        }
+        Update: {
+          bucket?: string
+          client_hash?: string
+          created_at?: string
+          id?: number
+          scope_id?: string | null
+        }
+        Relationships: []
+      }
+      reports: {
+        Row: {
+          content_id: string
+          content_type: string
+          created_at: string
+          id: string
+          reason: string | null
+          reporter_id: string | null
+        }
+        Insert: {
+          content_id: string
+          content_type: string
+          created_at?: string
+          id?: string
+          reason?: string | null
+          reporter_id?: string | null
+        }
+        Update: {
+          content_id?: string
+          content_type?: string
+          created_at?: string
+          id?: string
+          reason?: string | null
+          reporter_id?: string | null
         }
         Relationships: []
       }
@@ -424,7 +490,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_admin: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
       [_ in never]: never

@@ -1,6 +1,39 @@
 import { createServerFn } from "@tanstack/react-start";
+import { getRequest, getRequestIP } from "@tanstack/react-start/server";
+import { createHash } from "crypto";
 import { z } from "zod";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
+
+// Hash a stable client identifier (IP + UA) so we can throttle without storing raw IPs.
+function clientHash(): string {
+  let ip = "";
+  try { ip = getRequestIP({ xForwardedFor: true }) ?? ""; } catch { /* ignore */ }
+  let ua = "";
+  try { ua = getRequest()?.headers?.get("user-agent") ?? ""; } catch { /* ignore */ }
+  return createHash("sha256").update(`${ip}::${ua}`).digest("hex");
+}
+
+// Gentle rate-limit: max `perScope` candles for `scope_id` and `perGlobal` overall per hour.
+async function assertCandleLimit(scopeId: string | null) {
+  const hash = clientHash();
+  if (!hash || hash.length === 0) return;
+  const since = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+  const [scoped, overall] = await Promise.all([
+    scopeId
+      ? supabaseAdmin.from("rate_limits").select("id", { count: "exact", head: true })
+          .eq("bucket", "candle_guest").eq("client_hash", hash).eq("scope_id", scopeId).gte("created_at", since)
+      : Promise.resolve({ count: 0 } as any),
+    supabaseAdmin.from("rate_limits").select("id", { count: "exact", head: true })
+      .eq("bucket", "candle_guest").eq("client_hash", hash).gte("created_at", since),
+  ]);
+  if (scopeId && (scoped as any).count && (scoped as any).count >= 3) {
+    throw new Error("Take a breath — you can light another candle in a little while.");
+  }
+  if ((overall as any).count && (overall as any).count >= 10) {
+    throw new Error("Take a breath — you can light another candle in a little while.");
+  }
+  await supabaseAdmin.from("rate_limits").insert({ bucket: "candle_guest", client_hash: hash, scope_id: scopeId });
+}
 
 // Two short lines max — keep candles tender, not essays.
 const messageSchema = z
@@ -29,6 +62,8 @@ export const lightCandleGuest = createServerFn({ method: "POST" })
       .eq("id", data.memorial_id)
       .maybeSingle();
     if (!m || !m.is_public) throw new Error("This memorial isn't open to visitors.");
+
+    await assertCandleLimit(data.memorial_id);
 
     const { error } = await supabaseAdmin.from("candles").insert({
       memorial_id: data.memorial_id,
@@ -63,6 +98,8 @@ export const lightCandleGuestOnPost = createServerFn({ method: "POST" })
       .maybeSingle();
     if (!m?.is_public) throw new Error("This memorial isn't open to visitors.");
 
+    await assertCandleLimit(post.memorial_id);
+
     const { error } = await supabaseAdmin.from("candles").insert({
       memorial_id: post.memorial_id,
       lit_by: null,
@@ -73,6 +110,7 @@ export const lightCandleGuestOnPost = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
+
 export const listRecentCandles = createServerFn({ method: "GET" })
   .inputValidator((input: { limit?: number } | undefined) =>
     z.object({ limit: z.number().int().min(1).max(60).default(24) }).parse(input ?? {}),
@@ -82,6 +120,7 @@ export const listRecentCandles = createServerFn({ method: "GET" })
       .from("candles")
       .select("id, lit_by_name, message, created_at, memorial_id, memorials!inner(slug, pet_name, is_public)")
       .eq("memorials.is_public", true)
+      .eq("is_hidden", false)
       .order("created_at", { ascending: false })
       .limit(data.limit);
     return (rows ?? []).map((r: any) => ({
@@ -113,6 +152,7 @@ export const countCandlesThisWeek = createServerFn({ method: "GET" })
     const { count } = await supabaseAdmin
       .from("candles")
       .select("*", { count: "exact", head: true })
+      .eq("is_hidden", false)
       .gte("created_at", since);
     return { count: count ?? 0 };
   });
@@ -131,6 +171,7 @@ export const listBurningMemorials = createServerFn({ method: "GET" })
       .from("candles")
       .select("id, lit_by_name, message, created_at, memorial_id, memorials!inner(slug, pet_name, is_public)")
       .eq("memorials.is_public", true)
+      .eq("is_hidden", false)
       .gte("created_at", since)
       .order("created_at", { ascending: false })
       .limit(500);

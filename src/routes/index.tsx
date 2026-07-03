@@ -48,7 +48,7 @@ function HomePage() {
     <div className="min-h-screen bg-[#05070f] text-white">
       <SiteHeader />
 
-      {/* Hero — the iframe scene with a candle-first overlay CTA */}
+      {/* Hero — the iframe scene. CTAs live inside the scene so nothing floats over content below. */}
       <div
         className="relative w-full overflow-hidden bg-[#090d1a]"
         style={{ height: "calc(100dvh - 54px - 72px - env(safe-area-inset-top) - env(safe-area-inset-bottom))" }}
@@ -59,49 +59,34 @@ function HomePage() {
           className="h-full w-full border-0"
           style={{ background: "#090d1a" }}
         />
+      </div>
 
-        {/* Overlay CTA — candle first */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex flex-col items-center px-6 pb-10">
-          <div className="pointer-events-auto flex flex-col items-center gap-3 rounded-3xl bg-[#05070f]/55 px-6 py-5 backdrop-blur-md ring-1 ring-white/10">
-            <p className="text-center text-[11px] uppercase tracking-[0.32em] text-amber-200/85">
-              Light a candle for a friend
-            </p>
-            {featured.data ? (
-              <CandleDialog
-                target={{
-                  kind: "memorial",
-                  memorial_id: featured.data.id,
-                  pet_name: featured.data.pet_name,
-                  slug: featured.data.slug,
-                }}
-                trigger={
-                  <button
-                    type="button"
-                    className="ios-tappable inline-flex items-center gap-2 rounded-full bg-amber-300 px-7 py-3.5 text-[13px] font-semibold uppercase tracking-[0.22em] text-[#1a1200] shadow-[0_10px_40px_-8px_rgba(251,191,36,0.55)] hover:bg-amber-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-100"
-                  >
-                    <Flame className="h-4 w-4" strokeWidth={2} />
-                    Light a candle
-                  </button>
-                }
-              />
-            ) : (
-              <Link
-                to="/garden"
-                className="ios-tappable inline-flex items-center gap-2 rounded-full bg-amber-300 px-7 py-3.5 text-[13px] font-semibold uppercase tracking-[0.22em] text-[#1a1200] shadow-[0_10px_40px_-8px_rgba(251,191,36,0.55)] hover:bg-amber-200"
+      {/* Quiet candle affordance directly below the hero — no floating panel. */}
+      <div className="mx-auto flex max-w-md items-center justify-center gap-2 px-5 pt-5 text-[12px] uppercase tracking-[0.28em] text-white/70">
+        {featured.data ? (
+          <CandleDialog
+            target={{
+              kind: "memorial",
+              memorial_id: featured.data.id,
+              pet_name: featured.data.pet_name,
+              slug: featured.data.slug,
+            }}
+            trigger={
+              <button
+                type="button"
+                className="inline-flex items-center gap-1.5 underline-offset-4 hover:text-amber-100 hover:underline focus:outline-none"
               >
-                <Flame className="h-4 w-4" strokeWidth={2} />
-                Light a candle
-              </Link>
-            )}
-            <Link
-              to={user ? "/create" : "/signup"}
-              search={user ? undefined : ({ redirect: "/create" } as never)}
-              className="text-[12px] uppercase tracking-[0.28em] text-white/70 underline-offset-4 hover:text-white hover:underline"
-            >
-              or create a memorial
-            </Link>
-          </div>
-        </div>
+                <Flame className="h-3.5 w-3.5" strokeWidth={2} />
+                or light a candle
+              </button>
+            }
+          />
+        ) : (
+          <Link to="/garden" className="inline-flex items-center gap-1.5 underline-offset-4 hover:text-amber-100 hover:underline">
+            <Flame className="h-3.5 w-3.5" strokeWidth={2} />
+            or light a candle
+          </Link>
+        )}
       </div>
 
       {/* Live candle strip */}

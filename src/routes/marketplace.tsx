@@ -198,15 +198,15 @@ function MarketplacePage() {
   const visible = active === "all" ? sections : sections.filter((s) => s.id === active);
 
   return (
-    <div className="min-h-screen bg-background paper-grain">
+    <div className="min-h-screen bg-[#05070f] text-white">
       <SiteHeader />
       <main className="mx-auto max-w-md px-4 pt-4 pb-32 md:max-w-3xl">
-        <header className="rounded-3xl bg-cream/60 px-5 py-6 text-center">
-          <div className="inline-flex items-center gap-1.5 rounded-full bg-sage/15 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-sage-deep">
+        <header className="rounded-3xl bg-white/[0.05] px-5 py-6 text-center ring-1 ring-white/10">
+          <div className="inline-flex items-center gap-1.5 rounded-full bg-amber-200/15 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-amber-200">
             <ShieldCheck className="h-3 w-3" /> Curated with care
           </div>
-          <h1 className="mt-3 font-display text-3xl text-foreground md:text-4xl">Marketplace</h1>
-          <p className="mt-2 text-sm text-muted-foreground">
+          <h1 className="mt-3 font-display text-3xl text-white md:text-4xl">Marketplace</h1>
+          <p className="mt-2 text-sm text-white/70">
             Memory gifts, vetted products, trusted services — plus grief support, adoption, hero & service pets.
           </p>
         </header>
@@ -218,8 +218,8 @@ function MarketplacePage() {
               onClick={() => setActive(s.id)}
               className={`shrink-0 rounded-full px-3.5 py-1.5 text-xs transition ${
                 active === s.id
-                  ? "bg-[var(--cta)] text-[var(--cta-foreground)]"
-                  : "border border-border/60 bg-card text-foreground/80 hover:bg-accent/10"
+                  ? "bg-amber-300 text-[#1a1200]"
+                  : "border border-white/10 bg-white/[0.05] text-white/80 hover:bg-white/[0.1]"
               }`}
             >
               {s.title}
@@ -228,22 +228,22 @@ function MarketplacePage() {
         </nav>
 
         <div className="mt-5 space-y-7">
-          {visible.map(({ id, title, blurb, icon: Icon, accent, items }) => (
-            <section key={id} id={id} className="rounded-3xl border border-border/60 bg-card p-5 soft-shadow">
+          {visible.map(({ id, title, blurb, icon: Icon, items }) => (
+            <section key={id} id={id} className="rounded-3xl border border-white/10 bg-white/[0.05] p-5">
               <div className="flex items-start gap-3">
-                <div className={`flex h-10 w-10 items-center justify-center rounded-2xl ${accent}`}>
+                <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-amber-200/15 text-amber-200">
                   <Icon className="h-5 w-5" />
                 </div>
                 <div className="flex-1">
-                  <h2 className="font-display text-xl text-foreground">{title}</h2>
-                  <p className="text-xs text-muted-foreground">{blurb}</p>
+                  <h2 className="font-display text-xl text-white">{title}</h2>
+                  <p className="text-xs text-white/60">{blurb}</p>
                 </div>
               </div>
               <ul className="mt-4 grid gap-3 sm:grid-cols-2">
                 {items.map((it) => (
                   <li
                     key={it.name}
-                    className="flex gap-3 rounded-2xl bg-cream/50 p-2.5"
+                    className="flex gap-3 rounded-2xl bg-white/[0.04] p-2.5 ring-1 ring-white/10"
                   >
                     <img
                       src={it.img}
@@ -253,19 +253,19 @@ function MarketplacePage() {
                     />
                     <div className="flex min-w-0 flex-1 flex-col justify-between">
                       <div className="min-w-0">
-                        <div className="truncate text-sm font-medium text-foreground">{it.name}</div>
-                        <div className="mt-0.5 flex flex-wrap items-center gap-1.5 text-[10px] text-muted-foreground">
-                          <span className="rounded-full bg-background px-1.5 py-0.5">{it.tag}</span>
-                          {it.note && <span className="italic">{it.note}</span>}
+                        <div className="truncate text-sm font-medium text-white">{it.name}</div>
+                        <div className="mt-0.5 flex flex-wrap items-center gap-1.5 text-[10px] text-white/60">
+                          <span className="rounded-full bg-white/10 px-1.5 py-0.5 text-white/80">{it.tag}</span>
+                          {it.note && <span className="italic text-white/55">{it.note}</span>}
                         </div>
                       </div>
                       <div className="mt-2 flex items-center justify-between gap-2">
                         {it.price ? (
-                          <div className="text-xs font-medium text-[var(--cta)]">{it.price}</div>
+                          <div className="text-xs font-medium text-amber-200">{it.price}</div>
                         ) : <span />}
                         <button
                           disabled
-                          className="rounded-full border border-border/60 bg-background px-2.5 py-0.5 text-[10px] text-muted-foreground"
+                          className="rounded-full border border-white/10 bg-white/[0.06] px-2.5 py-0.5 text-[10px] text-white/60"
                         >
                           Soon
                         </button>
@@ -278,14 +278,14 @@ function MarketplacePage() {
           ))}
         </div>
 
-        <div className="mt-8 rounded-3xl bg-[var(--cta)] px-5 py-6 text-center text-[var(--cta-foreground)]">
+        <div className="mt-8 rounded-3xl bg-amber-300 px-5 py-6 text-center text-[#1a1200]">
           <Sparkles className="mx-auto h-5 w-5" />
           <h3 className="mt-2 font-display text-xl">A curated ecosystem, opening soon</h3>
           <p className="mt-1 text-xs opacity-85">
             We're onboarding partners that meet our health & safety bar. Create a memorial today — your space will be ready when the marketplace opens.
           </p>
           <Link to="/create" className="mt-4 inline-block">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-cream px-4 py-2 text-xs font-medium text-ink">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-[#1a1200] px-4 py-2 text-xs font-medium text-amber-200">
               Begin a memorial
             </span>
           </Link>
