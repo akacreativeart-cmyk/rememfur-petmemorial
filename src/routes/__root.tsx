@@ -133,7 +133,7 @@ function RootComponent() {
         ) : (
           <>
             <SkyBackground />
-            <div className="pb-[calc(72px+env(safe-area-inset-bottom))]">
+            <div className="pb-[calc(72px+env(safe-area-inset-bottom))] md:pb-0">
               <Outlet />
             </div>
             <MobileTabBar />
