@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Heart, PhoneCall, Users, BookOpen, Flame, Sparkles } from "lucide-react";
+import { Flame } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useAuth } from "@/hooks/use-auth";
@@ -15,8 +15,8 @@ export const Route = createFileRoute("/")({
   component: HomePage,
   head: () => ({
     meta: [
-      { title: "rememfur — a gentle place for pet grief" },
-      { name: "description", content: "A gentle pet memorial for the love that stays. Light a candle, share a memory, and find grief support." },
+      { title: "RememFur — Light a candle for the pet you loved." },
+      { name: "description", content: "A quiet place to remember them. Say their name, light their candle, keep them close. No account needed." },
     ],
   }),
 });
@@ -44,11 +44,37 @@ function HomePage() {
     staleTime: 60_000,
   });
 
+  const primaryCandle = featured.data ? (
+    <CandleDialog
+      target={{
+        kind: "memorial",
+        memorial_id: featured.data.id,
+        pet_name: featured.data.pet_name,
+        slug: featured.data.slug,
+      }}
+      trigger={
+        <button
+          type="button"
+          className="ios-tappable inline-flex items-center justify-center rounded-full bg-white px-7 py-3.5 text-[15px] font-semibold text-neutral-900 hover:bg-white/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-200 focus-visible:ring-offset-2 focus-visible:ring-offset-[#05070f]"
+        >
+          Light a candle 🕯️
+        </button>
+      }
+    />
+  ) : (
+    <Link
+      to="/garden"
+      className="ios-tappable inline-flex items-center justify-center rounded-full bg-white px-7 py-3.5 text-[15px] font-semibold text-neutral-900 hover:bg-white/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-200 focus-visible:ring-offset-2 focus-visible:ring-offset-[#05070f]"
+    >
+      Light a candle 🕯️
+    </Link>
+  );
+
   return (
     <div className="min-h-screen bg-[#05070f] text-white">
       <SiteHeader />
 
-      {/* Hero — the iframe scene. CTAs live inside the scene so nothing floats over content below. */}
+      {/* Hero — the candle sky scene. */}
       <div
         className="relative w-full overflow-hidden bg-[#090d1a] md:h-[75vh] lg:h-[80vh]"
         style={{ height: "calc(100dvh - 54px - 72px - env(safe-area-inset-top) - env(safe-area-inset-bottom))" }}
@@ -61,164 +87,111 @@ function HomePage() {
         />
       </div>
 
-      {/* Quiet candle affordance directly below the hero — no floating panel. */}
-      <div className="mx-auto flex max-w-md items-center justify-center gap-2 px-5 pt-5 text-[12px] uppercase tracking-[0.28em] text-white/70 md:max-w-[1200px]">
-        {featured.data ? (
-          <CandleDialog
-            target={{
-              kind: "memorial",
-              memorial_id: featured.data.id,
-              pet_name: featured.data.pet_name,
-              slug: featured.data.slug,
-            }}
-            trigger={
-              <button
-                type="button"
-                className="inline-flex items-center gap-1.5 underline-offset-4 hover:text-amber-100 hover:underline focus:outline-none"
-              >
-                <Flame className="h-3.5 w-3.5" strokeWidth={2} />
-                or light a candle
-              </button>
-            }
-          />
-        ) : (
-          <Link to="/garden" className="inline-flex items-center gap-1.5 underline-offset-4 hover:text-amber-100 hover:underline">
-            <Flame className="h-3.5 w-3.5" strokeWidth={2} />
-            or light a candle
-          </Link>
-        )}
-      </div>
+      {/* Hero copy — placed just below the sky so the candle stays first. */}
+      <section className="relative bg-[#05070f] px-5 pt-10 pb-12 text-center md:px-8 md:pt-14 md:pb-16">
+        <div className="mx-auto max-w-md md:max-w-2xl">
+          <h1 className="font-display text-[32px] leading-[1.05] tracking-tight text-white md:text-5xl lg:text-6xl">
+            <span className="block">Grief is just love with nowhere to go.</span>
+            <span className="mt-1 block text-[var(--gold)] italic">Now it has somewhere.</span>
+          </h1>
+          <p className="mt-5 text-[15px] leading-relaxed text-white/70 md:text-lg">
+            Light a candle for the pet you loved. Say their name. Keep them close.
+          </p>
+          <div className="mt-7 flex flex-col items-center gap-3">
+            {primaryCandle}
+            <Link
+              to="/garden"
+              className="text-[13px] text-white/55 underline-offset-4 hover:text-white/80 hover:underline"
+            >
+              Visit the sky — see who's being remembered
+            </Link>
+          </div>
+        </div>
+      </section>
 
-      {/* Live candle strip */}
+      {/* Empathy beat */}
+      <section className="relative bg-gradient-to-b from-[#05070f] to-[#0a0e1f] px-5 py-16 text-center md:px-8 md:py-24">
+        <div className="mx-auto max-w-md md:max-w-2xl">
+          <p className="text-[15px] leading-relaxed text-white/70 md:text-xl">
+            When a pet dies, the world expects you to move on quickly. But you know what they were. Not "just a dog." Not "just a cat." Seventeen years of coming home to someone.
+          </p>
+          <p className="mt-5 text-[15px] leading-relaxed text-white/70 md:text-xl">
+            All that love doesn't disappear. It just needs a place.
+          </p>
+        </div>
+      </section>
+
+      {/* How it works */}
+      <section className="relative bg-gradient-to-b from-[#0a0e1f] to-[#05070f] px-5 py-16 md:px-8 md:py-24">
+        <div className="mx-auto max-w-md md:max-w-[1200px]">
+          <h2 className="text-center font-display text-[28px] leading-[1.1] tracking-tight text-white md:text-4xl lg:text-5xl">
+            How it works
+          </h2>
+          <div className="mt-10 grid gap-6 md:mt-14 md:grid-cols-3 md:gap-8">
+            <StepCard
+              title="Say their name."
+              body="Tell us who they were — a name, a photo, a few words. Or just a name. That's enough."
+            />
+            <StepCard
+              title="Light their candle."
+              body="One flame, burning in a sky beside thousands of others. Theirs."
+            />
+            <StepCard
+              title="Return anytime."
+              body="Their light stays. Come back on the hard days — the birthdays, the anniversaries, the quiet Tuesdays."
+            />
+          </div>
+          <p className="mt-10 text-center text-[12px] uppercase tracking-[0.25em] text-white/45">
+            No account needed. It takes about a minute.
+          </p>
+        </div>
+      </section>
+
+      {/* The sky — live candle strip with social proof */}
       <CandleStrip
         candles={recent.data ?? []}
         weekCount={weekly.data?.count ?? 0}
         loading={recent.isLoading}
       />
 
-      {/* About the idea */}
-      <section
-        aria-labelledby="idea-heading"
-        className="relative bg-gradient-to-b from-[#05070f] to-[#0a0e1f] px-5 pt-16 pb-10 md:px-8"
-      >
-        <div className="mx-auto max-w-md md:max-w-[1200px]">
-          <p className="text-center text-[11px] uppercase tracking-[0.28em] text-amber-200/70">
-            What rememfur is
-          </p>
-          <h2
-            id="idea-heading"
-            className="mt-3 text-center font-display text-[30px] leading-[1.1] tracking-tight text-white md:text-5xl lg:text-6xl"
-          >
-            A quiet home for the love that outlives them
+      {/* Grief support */}
+      <section className="relative bg-gradient-to-b from-[#05070f] via-[#0a0e1f] to-[#05070f] px-5 py-16 text-center md:px-8 md:py-24">
+        <div className="mx-auto max-w-md md:max-w-2xl">
+          <h2 className="font-display text-[28px] leading-[1.1] tracking-tight text-white md:text-4xl">
+            You don't have to carry this alone.
           </h2>
-          <p className="mt-4 text-center text-[15px] leading-relaxed text-white/70 md:mx-auto md:max-w-2xl md:text-lg">
-            Rememfur is a sanctuary for pet parents — a place to build a beautiful memorial, gather with others who understand, and find real grief support when the ache comes back.
+          <p className="mt-4 text-[15px] leading-relaxed text-white/65 md:text-lg">
+            Losing them hurts in ways people don't always understand. We've gathered gentle resources — for the first night, for explaining it to children, for elderly owners saying goodbye to a lifelong companion, and for anyone who just needs to hear that this grief is real.
           </p>
-
-          <div className="mt-8 grid gap-3 md:mt-12 md:grid-cols-2 md:gap-4 lg:grid-cols-4">
-            <IdeaCard n="01" title="Build a memorial that feels like them" body="Photos, their story, and the little details only you know — a keepsake gravestone, a painted portrait if you like — all kept somewhere safe." />
-            <IdeaCard n="02" title="Light a candle, leave a note" body="Anyone can light a candle on any memorial. Watch them flicker for 24 hours across a shared Wall of Light. No login needed to give kindness." />
-            <IdeaCard n="03" title="Sit with a community that gets it" body="Share the good days and the hard nights. Read stories from others who loved and lost. Send a paw, a candle, a comment." />
-            <IdeaCard n="04" title="Grief support, adoption, medical, memorabilia" body="Helplines and counsellors, shelters for when you're ready, vet resources for the road, and keepsakes made with care." />
-          </div>
+          <Link
+            to="/grief-support"
+            className="mt-6 inline-flex items-center text-[15px] font-medium text-amber-200 hover:text-amber-100"
+          >
+            Grief support →
+          </Link>
+          <p className="mt-8 text-[12px] text-white/40">
+            Free pet-loss support lines:{" "}
+            <a href="tel:+18774743310" className="text-white/60 hover:text-white">ASPCA 877-474-3310</a>
+            {" "}·{" "}
+            <a href="tel:+18559335683" className="text-white/60 hover:text-white">Lap of Love 855-933-5683</a>
+          </p>
         </div>
       </section>
 
-      {/* Grief support section */}
+      {/* Closing */}
       <section
-        aria-labelledby="grief-heading"
-        className="relative bg-gradient-to-b from-[#05070f] via-[#0a0e1f] to-[#05070f] px-5 pt-14 md:px-8"
+        className="relative bg-[#05070f] px-5 py-16 text-center md:px-8 md:py-24"
         style={{ paddingBottom: "calc(120px + env(safe-area-inset-bottom))" }}
       >
-        <div className="mx-auto max-w-md md:max-w-[1200px]">
-          <p className="text-center text-[11px] uppercase tracking-[0.28em] text-amber-200/70">You are not alone</p>
-          <h2 id="grief-heading" className="mt-3 text-center font-display text-[30px] leading-[1.1] tracking-tight text-white md:text-5xl">
-            Grief support, whenever it finds you
+        <div className="mx-auto max-w-md md:max-w-2xl">
+          <h2 className="font-display text-[28px] leading-[1.1] tracking-tight text-white md:text-4xl">
+            They mattered. They still do.
           </h2>
-          <p className="mt-3 text-center text-[15px] leading-relaxed text-white/65 md:mx-auto md:max-w-2xl md:text-lg">
-            The love doesn't end — and neither does the ache. These small doorways are here for the hard nights and the quiet mornings.
+          <p className="mt-4 text-[15px] leading-relaxed text-white/65 md:text-lg">
+            Give the love somewhere to go. It takes a minute. It stays forever.
           </p>
-
-          {/* Ways to feel held — grid on desktop */}
-          <div className="mt-8 grid gap-3 md:mt-12 md:grid-cols-2 lg:grid-cols-4">
-            <SupportCard to="/grief-support" icon={Heart} title="Ways to feel held" body="Rituals, journaling prompts, and gentle guides for the first days, the first month, and the year that follows." />
-            <SupportCard to="/community" icon={Users} title="A community that understands" body="Read stories from others who loved and lost. Leave a candle, a note, a small kindness." />
-            <SupportCard to="/resources" icon={BookOpen} title="Reading & resources" body="Books for children, guides for anticipatory grief, and articles from grief counsellors." />
-            <SupportCard to="/adoption" icon={Sparkles} title="When you're ready — not before" body="Adoption stories and shelters, for the day (however far away) you're ready to love again." />
-          </div>
-
-          {/* Helplines + FAQ side by side on lg+ */}
-          <div className="mt-10 grid gap-6 lg:grid-cols-2 lg:gap-8">
-            <div className="rounded-2xl bg-white/5 p-5 ring-1 ring-white/10 md:p-6">
-              <div className="flex items-center gap-3">
-                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-200/15 text-amber-200">
-                  <PhoneCall className="h-5 w-5" strokeWidth={1.75} />
-                </span>
-                <div>
-                  <h3 className="font-display text-lg text-white">Talk to someone tonight</h3>
-                  <p className="text-[12px] text-white/55">Free, confidential pet-loss support lines</p>
-                </div>
-              </div>
-              <ul className="mt-4 divide-y divide-white/5 text-[14px]">
-                <li className="flex items-center justify-between py-2.5">
-                  <span className="text-white/80">ASPCA Pet Loss (US)</span>
-                  <a href="tel:+18774743310" className="font-medium text-amber-200 hover:text-amber-100">877-474-3310</a>
-                </li>
-                <li className="flex items-center justify-between py-2.5">
-                  <span className="text-white/80">Blue Cross Pet Bereavement (UK)</span>
-                  <a href="tel:+448000966606" className="font-medium text-amber-200 hover:text-amber-100">0800 096 6606</a>
-                </li>
-                <li className="flex items-center justify-between py-2.5">
-                  <span className="text-white/80">Lap of Love (24/7, US)</span>
-                  <a href="tel:+18559335683" className="font-medium text-amber-200 hover:text-amber-100">855-933-5683</a>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="font-display text-[22px] leading-tight text-white md:text-2xl">What people quietly wonder</h3>
-              <div className="mt-4 space-y-3">
-                <FaqItem q="Is it silly to grieve a pet this much?">No. You are grieving a daily witness to your life — someone who greeted you, slept beside you, needed you. The size of the love decides the size of the loss.</FaqItem>
-                <FaqItem q="When will it stop hurting?">It softens. It doesn't disappear, and it isn't meant to. The ache becomes a quieter companion that means you loved well.</FaqItem>
-                <FaqItem q="Should I get another pet?">Only when it feels like welcoming, not replacing. There is no right timeline — for some it's weeks, for others years. Both are okay.</FaqItem>
-                <FaqItem q="What do I do with their things?">Keep what comforts you, donate what would help another animal, and don't rush. Grief has its own pace with objects too.</FaqItem>
-              </div>
-            </div>
-          </div>
-
-          {/* Coping — gentle guidance */}
-          <div className="mt-12">
-            <h3 className="text-center font-display text-[22px] leading-tight text-white md:text-3xl">Small things that help</h3>
-            <p className="mt-2 text-center text-[13px] text-white/55 md:text-base">
-              Gentle practices, taken from grief counsellors and pet parents who've walked this road.
-            </p>
-            <div className="mt-5 grid gap-3 md:grid-cols-2 lg:grid-cols-3">
-              <CopingItem title="Name what you feel">Sadness, guilt, anger, relief — all of it belongs. Write one sentence tonight: "Right now I feel…"</CopingItem>
-              <CopingItem title="Keep a small ritual">Light a candle at the same time each evening. Say their name out loud. Rituals give grief a shape.</CopingItem>
-              <CopingItem title="Tell one story">Post a memory here, or tell one person today. Grief that is spoken is grief that is shared.</CopingItem>
-              <CopingItem title="Let the body grieve too">Walk their old route. Drink water. Sleep when you can. The body carries what words can't.</CopingItem>
-              <CopingItem title="Be careful with the 'shoulds'">You don't have to be over it by any date. Grief isn't linear and it isn't a project to finish.</CopingItem>
-            </div>
-          </div>
-
-          <div className="mt-10 rounded-2xl border border-white/10 bg-black/30 p-5 text-center md:mx-auto md:max-w-2xl md:p-8">
-            <p className="font-serif italic text-[15px] leading-relaxed text-white/70 md:text-xl">"Grief is just love with no place to go."</p>
-            <p className="mt-2 text-[11px] uppercase tracking-[0.25em] text-white/40">— Jamie Anderson</p>
-          </div>
-
-          <div className="mt-8 flex flex-col items-center gap-3">
-            <Link
-              to={user ? "/create" : "/signup"}
-              search={user ? undefined : ({ redirect: "/create" } as never)}
-              className="ios-tappable inline-flex items-center justify-center rounded-full bg-white px-7 py-3.5 text-[15px] font-semibold text-neutral-900 hover:bg-white/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-200 focus-visible:ring-offset-2 focus-visible:ring-offset-[#05070f]"
-            >
-              Create a memorial
-            </Link>
-            {!user && (
-              <p className="text-[12px] text-white/50">
-                Free — takes about a minute. Sign in to save your memorial.
-              </p>
-            )}
+          <div className="mt-8">
+            {primaryCandle}
           </div>
         </div>
       </section>
@@ -245,10 +218,25 @@ function CandleStrip({
   return (
     <section
       aria-label="Recent candles"
-      className="relative bg-gradient-to-b from-[#05070f] to-[#05070f] px-0 pt-10"
+      className="relative bg-gradient-to-b from-[#05070f] to-[#05070f] px-0 pt-16 md:pt-24"
     >
       <div className="mx-auto max-w-md px-5 md:max-w-[1200px] md:px-8">
-        <div className="flex items-baseline justify-between">
+        <h2 className="text-center font-display text-[28px] leading-[1.1] tracking-tight text-white md:text-4xl">
+          Strangers light candles for pets they never met.
+        </h2>
+        <p className="mt-4 text-center text-[15px] leading-relaxed text-white/65 md:text-lg">
+          Every flame in this sky is a pet who was deeply loved — and behind each one, people who understand exactly how you feel. Light a candle for someone else's companion, and someone may light one for yours.
+        </p>
+        <div className="mt-6 text-center">
+          <Link
+            to="/garden"
+            className="ios-tappable inline-flex items-center justify-center rounded-full bg-white/10 px-6 py-2.5 text-[14px] font-medium text-white ring-1 ring-white/15 hover:bg-white/15"
+          >
+            See the sky
+          </Link>
+        </div>
+
+        <div className="mt-10 flex items-baseline justify-between">
           <p className="text-[11px] uppercase tracking-[0.28em] text-amber-200/70">
             Candles burning
           </p>
@@ -301,10 +289,10 @@ function CandleStrip({
               <span className="flame" />
             </span>
             <p className="mt-3 font-display text-[17px] text-white">
-              The first candles are waiting to be lit.
+              The sky is just beginning. Light one of the first candles.
             </p>
             <p className="mt-1 text-[13px] text-white/55">
-              Light one for a friend — no account needed.
+              No account needed.
             </p>
           </div>
         </div>
@@ -313,52 +301,18 @@ function CandleStrip({
   );
 }
 
-function SupportCard({ to, icon: Icon, title, body }: { to: string; icon: any; title: string; body: string }) {
+function StepCard({ title, body }: { title: string; body: string }) {
   return (
-    <Link
-      to={to}
-      className="group flex gap-4 rounded-2xl bg-white/[0.04] p-4 ring-1 ring-white/10 transition hover:bg-white/[0.07]"
-    >
-      <span className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/10 text-amber-200">
-        <Icon className="h-5 w-5" strokeWidth={1.75} />
+    <div className="flex flex-col items-center rounded-2xl bg-white/[0.04] p-6 text-center ring-1 ring-white/10 md:p-8">
+      <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--gold3)] text-[var(--gold)]">
+        <Flame className="h-4 w-4" strokeWidth={2} />
       </span>
-      <span className="flex-1">
-        <span className="block font-display text-[17px] leading-tight text-white">{title}</span>
-        <span className="mt-1 block text-[13.5px] leading-relaxed text-white/60">{body}</span>
-      </span>
-    </Link>
-  );
-}
-
-function IdeaCard({ n, title, body }: { n: string; title: string; body: string }) {
-  return (
-    <div className="flex gap-4 rounded-2xl bg-white/[0.04] p-5 ring-1 ring-white/10">
-      <span className="font-display text-[22px] leading-none text-amber-200/80">{n}</span>
-      <div className="flex-1">
-        <h3 className="font-display text-[17px] leading-tight text-white">{title}</h3>
-        <p className="mt-1.5 text-[13.5px] leading-relaxed text-white/60">{body}</p>
-      </div>
+      <h3 className="mt-4 font-display text-[20px] leading-tight text-white md:text-[22px]">
+        {title}
+      </h3>
+      <p className="mt-2 text-[14px] leading-relaxed text-white/60">
+        {body}
+      </p>
     </div>
-  );
-}
-
-function CopingItem({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <div className="rounded-2xl bg-white/[0.03] p-4 ring-1 ring-white/10">
-      <p className="font-display text-[15px] text-white">{title}</p>
-      <p className="mt-1 text-[13.5px] leading-relaxed text-white/60">{children}</p>
-    </div>
-  );
-}
-
-function FaqItem({ q, children }: { q: string; children: React.ReactNode }) {
-  return (
-    <details className="group rounded-2xl bg-white/[0.03] p-4 ring-1 ring-white/10 open:bg-white/[0.05]">
-      <summary className="cursor-pointer list-none font-display text-[15px] text-white marker:hidden">
-        <span className="mr-2 text-amber-200/70 transition group-open:rotate-45 inline-block">+</span>
-        {q}
-      </summary>
-      <p className="mt-2 pl-6 text-[13.5px] leading-relaxed text-white/65">{children}</p>
-    </details>
   );
 }
