@@ -115,13 +115,11 @@ function HomePage() {
       <section className="relative bg-gradient-to-b from-[#05070f] to-[#0a0e1f] px-5 py-16 text-center md:px-8 md:py-24">
         <div className="mx-auto max-w-md md:max-w-2xl">
           <p className="text-[15px] leading-relaxed text-white/70 md:text-xl">
-            When a pet dies, the world expects you to move on quickly. But you know what they were. Not "just a dog." Not "just a cat." Seventeen years of coming home to someone.
-          </p>
-          <p className="mt-5 text-[15px] leading-relaxed text-white/70 md:text-xl">
-            All that love doesn't disappear. It just needs a place.
+            When a pet dies, the world expects you to move on quickly. But you know what they were. Not "just a dog." Not "just a cat." Seventeen years of coming home to someone. — All that love doesn't disappear. It just needs a place.
           </p>
         </div>
       </section>
+
 
       {/* How it works */}
       <section className="relative bg-gradient-to-b from-[#0a0e1f] to-[#05070f] px-5 py-16 md:px-8 md:py-24">
