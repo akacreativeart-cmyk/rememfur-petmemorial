@@ -241,7 +241,7 @@ function MarketplacePage() {
                   <p className="text-xs text-white/60">{blurb}</p>
                 </div>
               </div>
-              <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+              <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {items.map((it) => (
                   <li
                     key={it.name}
