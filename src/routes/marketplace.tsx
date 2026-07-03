@@ -265,12 +265,18 @@ function MarketplacePage() {
                         {it.price ? (
                           <div className="text-xs font-medium text-amber-200">{it.price}</div>
                         ) : <span />}
-                        <button
-                          disabled
-                          className="rounded-full border border-white/10 bg-white/[0.06] px-2.5 py-0.5 text-[10px] text-white/60"
-                        >
-                          Soon
-                        </button>
+                        <WaitlistDialog
+                          itemName={it.name}
+                          section={id}
+                          trigger={
+                            <button
+                              type="button"
+                              className="inline-flex items-center gap-1 rounded-full border border-amber-200/40 bg-amber-200/10 px-2.5 py-0.5 text-[10px] font-medium text-amber-100 transition hover:bg-amber-200/20"
+                            >
+                              <Bell className="h-3 w-3" /> Notify me
+                            </button>
+                          }
+                        />
                       </div>
                     </div>
                   </li>
