@@ -43,6 +43,8 @@ function SignupPage() {
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    // Signal welcome flow for the default (no ?redirect) landing.
+    if (!search.redirect) setPostAuthIntent("welcome");
     setBusy(true);
     const { error } = await supabase.auth.signUp({
       email,
@@ -58,11 +60,13 @@ function SignupPage() {
   };
 
   const google = async () => {
+    if (!search.redirect) setPostAuthIntent("welcome");
     const r = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + redirectTo });
     if (r.error) toast.error("Could not sign in with Google");
   };
 
   const apple = async () => {
+    if (!search.redirect) setPostAuthIntent("welcome");
     const r = await lovable.auth.signInWithOAuth("apple", { redirect_uri: window.location.origin + redirectTo });
     if (r.error) toast.error("Could not sign in with Apple");
   };
