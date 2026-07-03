@@ -116,7 +116,7 @@ function HomePage() {
           </p>
 
           <div className="mt-8 grid gap-3">
-            <IdeaCard n="01" title="Build a memorial that feels like them" body="Photos, video, voice notes, a keepsake gravestone, and the little stories only you know — kept somewhere safe, forever." />
+            <IdeaCard n="01" title="Build a memorial that feels like them" body="Photos, their story, and the little details only you know — a keepsake gravestone, a painted portrait if you like — all kept somewhere safe." />
             <IdeaCard n="02" title="Light a candle, leave a note" body="Anyone can light a candle on any memorial. Watch them flicker for 24 hours across a shared Wall of Light. No login needed to give kindness." />
             <IdeaCard n="03" title="Sit with a community that gets it" body="Share the good days and the hard nights. Read stories from others who loved and lost. Send a paw, a candle, a comment." />
             <IdeaCard n="04" title="Grief support, adoption, medical, memorabilia" body="Helplines and counsellors, shelters for when you're ready, vet resources for the road, and keepsakes made with care." />
