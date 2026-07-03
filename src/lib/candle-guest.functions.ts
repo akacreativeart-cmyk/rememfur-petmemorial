@@ -171,6 +171,7 @@ export const listBurningMemorials = createServerFn({ method: "GET" })
       .from("candles")
       .select("id, lit_by_name, message, created_at, memorial_id, memorials!inner(slug, pet_name, is_public)")
       .eq("memorials.is_public", true)
+      .eq("is_hidden", false)
       .gte("created_at", since)
       .order("created_at", { ascending: false })
       .limit(500);
