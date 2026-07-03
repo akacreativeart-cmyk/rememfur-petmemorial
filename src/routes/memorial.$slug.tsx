@@ -119,7 +119,7 @@ function MemorialPage() {
   return (
     <div className="min-h-screen bg-background paper-grain">
       <SiteHeader />
-      <main className="mx-auto max-w-5xl px-5 py-10">
+      <main className="mx-auto max-w-6xl px-5 py-10 md:px-8">
         <div className="overflow-hidden rounded-[2rem] border border-border/60 soft-shadow">
           <div className="relative">
             {hero ? (
@@ -188,7 +188,7 @@ function MemorialPage() {
             {photos.length > 0 && (
               <section className="rounded-3xl border border-border/60 bg-card p-7 soft-shadow">
                 <h2 className="font-display text-2xl text-foreground">Gallery</h2>
-                <div className="mt-4 grid grid-cols-3 gap-3">
+                <div className="mt-4 grid grid-cols-3 gap-3 md:grid-cols-4 lg:grid-cols-5">
                   {photos.map((p: any) => (
                     <img key={p.id} src={p.image_url} alt={p.caption ?? m.pet_name} loading="lazy" className="aspect-square rounded-2xl object-cover" />
                   ))}
@@ -228,7 +228,7 @@ function MemorialPage() {
           </div>
 
           {/* Sidebar */}
-          <aside className="space-y-6">
+          <aside className="space-y-6 lg:sticky lg:top-24 lg:self-start">
             <div className="rounded-3xl border border-border/60 bg-card p-6 text-center soft-shadow">
               <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-terracotta/15">
                 <Flame className="h-7 w-7 text-terracotta" />
