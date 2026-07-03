@@ -11,11 +11,13 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ResourcesRouteImport } from './routes/resources'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as MedicalRouteImport } from './routes/medical'
 import { Route as MarketplaceRouteImport } from './routes/marketplace'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as GriefSupportRouteImport } from './routes/grief-support'
 import { Route as GardenRouteImport } from './routes/garden'
+import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CommunityRouteImport } from './routes/community'
 import { Route as AdoptionRouteImport } from './routes/adoption'
 import { Route as AdminRouteImport } from './routes/admin'
@@ -38,6 +40,11 @@ const SignupRoute = SignupRouteImport.update({
 const ResourcesRoute = ResourcesRouteImport.update({
   id: '/resources',
   path: '/resources',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MedicalRoute = MedicalRouteImport.update({
@@ -63,6 +70,11 @@ const GriefSupportRoute = GriefSupportRouteImport.update({
 const GardenRoute = GardenRouteImport.update({
   id: '/garden',
   path: '/garden',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CommunityRoute = CommunityRouteImport.update({
@@ -137,11 +149,13 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRoute
   '/adoption': typeof AdoptionRoute
   '/community': typeof CommunityRoute
+  '/contact': typeof ContactRoute
   '/garden': typeof GardenRoute
   '/grief-support': typeof GriefSupportRoute
   '/login': typeof LoginRoute
   '/marketplace': typeof MarketplaceRoute
   '/medical': typeof MedicalRoute
+  '/privacy': typeof PrivacyRoute
   '/resources': typeof ResourcesRoute
   '/signup': typeof SignupRoute
   '/create': typeof AuthenticatedCreateRoute
@@ -158,11 +172,13 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRoute
   '/adoption': typeof AdoptionRoute
   '/community': typeof CommunityRoute
+  '/contact': typeof ContactRoute
   '/garden': typeof GardenRoute
   '/grief-support': typeof GriefSupportRoute
   '/login': typeof LoginRoute
   '/marketplace': typeof MarketplaceRoute
   '/medical': typeof MedicalRoute
+  '/privacy': typeof PrivacyRoute
   '/resources': typeof ResourcesRoute
   '/signup': typeof SignupRoute
   '/create': typeof AuthenticatedCreateRoute
@@ -181,11 +197,13 @@ export interface FileRoutesById {
   '/admin': typeof AdminRoute
   '/adoption': typeof AdoptionRoute
   '/community': typeof CommunityRoute
+  '/contact': typeof ContactRoute
   '/garden': typeof GardenRoute
   '/grief-support': typeof GriefSupportRoute
   '/login': typeof LoginRoute
   '/marketplace': typeof MarketplaceRoute
   '/medical': typeof MedicalRoute
+  '/privacy': typeof PrivacyRoute
   '/resources': typeof ResourcesRoute
   '/signup': typeof SignupRoute
   '/_authenticated/create': typeof AuthenticatedCreateRoute
@@ -204,11 +222,13 @@ export interface FileRouteTypes {
     | '/admin'
     | '/adoption'
     | '/community'
+    | '/contact'
     | '/garden'
     | '/grief-support'
     | '/login'
     | '/marketplace'
     | '/medical'
+    | '/privacy'
     | '/resources'
     | '/signup'
     | '/create'
@@ -225,11 +245,13 @@ export interface FileRouteTypes {
     | '/admin'
     | '/adoption'
     | '/community'
+    | '/contact'
     | '/garden'
     | '/grief-support'
     | '/login'
     | '/marketplace'
     | '/medical'
+    | '/privacy'
     | '/resources'
     | '/signup'
     | '/create'
@@ -247,11 +269,13 @@ export interface FileRouteTypes {
     | '/admin'
     | '/adoption'
     | '/community'
+    | '/contact'
     | '/garden'
     | '/grief-support'
     | '/login'
     | '/marketplace'
     | '/medical'
+    | '/privacy'
     | '/resources'
     | '/signup'
     | '/_authenticated/create'
@@ -270,11 +294,13 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRoute
   AdoptionRoute: typeof AdoptionRoute
   CommunityRoute: typeof CommunityRoute
+  ContactRoute: typeof ContactRoute
   GardenRoute: typeof GardenRoute
   GriefSupportRoute: typeof GriefSupportRoute
   LoginRoute: typeof LoginRoute
   MarketplaceRoute: typeof MarketplaceRoute
   MedicalRoute: typeof MedicalRoute
+  PrivacyRoute: typeof PrivacyRoute
   ResourcesRoute: typeof ResourcesRoute
   SignupRoute: typeof SignupRoute
   MemorialSlugRoute: typeof MemorialSlugRoute
@@ -295,6 +321,13 @@ declare module '@tanstack/react-router' {
       path: '/resources'
       fullPath: '/resources'
       preLoaderRoute: typeof ResourcesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/medical': {
@@ -330,6 +363,13 @@ declare module '@tanstack/react-router' {
       path: '/garden'
       fullPath: '/garden'
       preLoaderRoute: typeof GardenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/community': {
@@ -453,11 +493,13 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRoute,
   AdoptionRoute: AdoptionRoute,
   CommunityRoute: CommunityRoute,
+  ContactRoute: ContactRoute,
   GardenRoute: GardenRoute,
   GriefSupportRoute: GriefSupportRoute,
   LoginRoute: LoginRoute,
   MarketplaceRoute: MarketplaceRoute,
   MedicalRoute: MedicalRoute,
+  PrivacyRoute: PrivacyRoute,
   ResourcesRoute: ResourcesRoute,
   SignupRoute: SignupRoute,
   MemorialSlugRoute: MemorialSlugRoute,
@@ -466,3 +508,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
