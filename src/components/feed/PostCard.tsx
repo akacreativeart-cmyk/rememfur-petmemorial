@@ -278,10 +278,13 @@ export function PostCard({ post }: { post: FeedPost }) {
             </div>
             <ul className="space-y-2">
               {candleData.candles.map((c) => (
-                <li key={c.id} className="flex gap-2 text-sm">
+                <li key={c.id} className="group flex gap-2 text-sm">
                   <span aria-hidden className="mt-0.5 text-base leading-none">🕯️</span>
                   <div className="flex-1 min-w-0">
-                    <div className="text-xs font-medium text-foreground">{c.lit_by_name ?? "A friend"}</div>
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="text-xs font-medium text-foreground">{c.lit_by_name ?? "A friend"}</div>
+                      <ReportButton contentType="candle" contentId={c.id} label="Report candle" />
+                    </div>
                     {c.message && (
                       <div className="whitespace-pre-line text-sm leading-snug text-foreground/85">{c.message}</div>
                     )}
@@ -299,13 +302,16 @@ export function PostCard({ post }: { post: FeedPost }) {
             {(comments ?? []).map((c) => {
               const ci = (c.author_name || "?").split(/\s+/).map((s: string) => s[0]).slice(0, 2).join("").toUpperCase();
               return (
-                <div key={c.id} className="flex gap-2">
+                <div key={c.id} className="group flex gap-2">
                   <Avatar className="h-7 w-7">
                     {c.author_avatar && <AvatarImage src={c.author_avatar} alt="" />}
                     <AvatarFallback className="bg-sage/20 text-[10px] text-sage-deep">{ci}</AvatarFallback>
                   </Avatar>
                   <div className="flex-1 rounded-xl bg-muted/50 px-3 py-2">
-                    <div className="text-xs font-medium text-foreground">{c.author_name}</div>
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="text-xs font-medium text-foreground">{c.author_name}</div>
+                      <ReportButton contentType="comment" contentId={c.id} label="Report comment" />
+                    </div>
                     <div className="text-sm text-foreground/90">{c.body}</div>
                   </div>
                 </div>
