@@ -13,7 +13,7 @@ const links = [
 
 export function SiteFooter() {
   return (
-    <footer className="mx-auto max-w-md px-5 pb-6 pt-10 text-center text-xs text-muted-foreground">
+    <footer className="mx-auto max-w-md px-5 pb-6 pt-10 text-center text-xs text-muted-foreground md:max-w-[1200px] md:px-8">
       <div className="font-display text-base text-foreground">Rememfur</div>
       <p className="mt-1 font-hand text-base text-[var(--terracotta)]">
         Love leaves paw prints on the heart.
