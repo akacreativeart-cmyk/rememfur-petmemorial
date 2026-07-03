@@ -53,7 +53,7 @@ export const setContentHidden = createServerFn({ method: "POST" })
     if (!prof?.is_admin) throw new Error("Not authorized.");
 
     const table = tableFor[data.content_type as z.infer<typeof contentType>];
-    const { error } = await supabaseAdmin
+    const { error } = await (supabaseAdmin as any)
       .from(table)
       .update({ is_hidden: data.hidden })
       .eq("id", data.content_id);
