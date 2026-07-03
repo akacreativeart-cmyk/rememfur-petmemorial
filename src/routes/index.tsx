@@ -4,7 +4,9 @@ import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useAuth } from "@/hooks/use-auth";
 import { SiteHeader } from "@/components/site/SiteHeader";
+import { SiteFooter } from "@/components/site/SiteFooter";
 import { CandleDialog } from "@/components/site/CandleDialog";
+
 import {
   pickFeaturedMemorial,
   listRecentCandles,
