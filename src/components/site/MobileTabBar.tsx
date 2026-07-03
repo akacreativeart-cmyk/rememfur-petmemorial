@@ -19,7 +19,7 @@ export function MobileTabBar() {
   return (
     <nav
       aria-label="Primary"
-      className="ios-tabbar fixed inset-x-0 bottom-0 z-50 px-3"
+      className="ios-tabbar fixed inset-x-0 bottom-0 z-50 px-3 md:hidden"
       style={{ paddingBottom: "calc(env(safe-area-inset-bottom) + 10px)", paddingTop: "8px" }}
     >
       <ul className="ios-tabbar-inner mx-auto flex max-w-md items-stretch justify-between px-2">
