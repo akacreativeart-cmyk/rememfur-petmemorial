@@ -98,11 +98,12 @@ export function MobileTabBar() {
                     {!reduced && (
                       <span
                         aria-hidden
-                        className="absolute inset-0 rounded-full"
+                        className="pointer-events-none absolute -inset-4 rounded-full"
                         style={{
                           background:
-                            "radial-gradient(circle, rgba(255,246,224,0.55) 0%, rgba(255,238,200,0.25) 45%, transparent 70%)",
+                            "radial-gradient(circle, rgba(255,246,224,0.55) 0%, rgba(255,238,200,0.28) 40%, transparent 72%)",
                           animation: "candle-halo 3s ease-in-out infinite",
+                          filter: "blur(6px)",
                         }}
                       />
                     )}
