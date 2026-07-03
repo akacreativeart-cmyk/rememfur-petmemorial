@@ -76,8 +76,8 @@ export const getMemorialBySlug = createServerFn({ method: "GET" })
 
     const [{ data: photos }, { data: candles }, { data: messages }] = await Promise.all([
       supabaseAdmin.from("memorial_photos").select("*").eq("memorial_id", memorial.id).order("created_at"),
-      supabaseAdmin.from("candles").select("id, lit_by_name, message, created_at").eq("memorial_id", memorial.id).order("created_at", { ascending: false }),
-      supabaseAdmin.from("messages").select("id, body, author_id, created_at").eq("memorial_id", memorial.id).order("created_at", { ascending: false }),
+      supabaseAdmin.from("candles").select("id, lit_by_name, message, created_at").eq("memorial_id", memorial.id).eq("is_hidden", false).order("created_at", { ascending: false }),
+      supabaseAdmin.from("messages").select("id, body, author_id, created_at").eq("memorial_id", memorial.id).eq("is_hidden", false).order("created_at", { ascending: false }),
     ]);
 
     // author display names
