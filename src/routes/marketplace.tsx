@@ -202,7 +202,7 @@ function MarketplacePage() {
   return (
     <div className="min-h-screen bg-[#05070f] text-white">
       <SiteHeader />
-      <main className="mx-auto max-w-md px-4 pt-4 pb-32 md:max-w-3xl">
+      <main className="mx-auto max-w-md px-4 pt-4 pb-32 md:max-w-[1200px] md:px-8 md:pt-8">
         <header className="rounded-3xl bg-white/[0.05] px-5 py-6 text-center ring-1 ring-white/10">
           <div className="inline-flex items-center gap-1.5 rounded-full bg-amber-200/15 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-amber-200">
             <ShieldCheck className="h-3 w-3" /> Curated with care
