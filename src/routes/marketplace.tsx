@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
+import { WaitlistDialog } from "@/components/site/WaitlistDialog";
 import {
   Gift,
   HeartHandshake,
@@ -16,6 +17,7 @@ import {
   LifeBuoy,
   Shield,
   Medal,
+  Bell,
 } from "lucide-react";
 
 export const Route = createFileRoute("/marketplace")({
