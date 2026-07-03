@@ -120,6 +120,7 @@ export const listRecentCandles = createServerFn({ method: "GET" })
       .from("candles")
       .select("id, lit_by_name, message, created_at, memorial_id, memorials!inner(slug, pet_name, is_public)")
       .eq("memorials.is_public", true)
+      .eq("is_hidden", false)
       .order("created_at", { ascending: false })
       .limit(data.limit);
     return (rows ?? []).map((r: any) => ({
