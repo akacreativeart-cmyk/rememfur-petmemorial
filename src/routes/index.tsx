@@ -183,7 +183,6 @@ function HomePage() {
       {/* Closing */}
       <section
         className="relative bg-[#05070f] px-5 py-16 text-center md:px-8 md:py-24"
-        style={{ paddingBottom: "calc(120px + env(safe-area-inset-bottom))" }}
       >
         <div className="mx-auto max-w-md md:max-w-2xl">
           <h2 className="font-display text-[28px] leading-[1.1] tracking-tight text-white md:text-4xl">
@@ -197,9 +196,14 @@ function HomePage() {
           </div>
         </div>
       </section>
+
+      <div className="bg-[#05070f] pb-[calc(72px+env(safe-area-inset-bottom))] md:pb-6">
+        <SiteFooter />
+      </div>
     </div>
   );
 }
+
 
 function CandleStrip({
   candles,
