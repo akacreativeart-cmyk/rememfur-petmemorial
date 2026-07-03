@@ -72,3 +72,55 @@ export const markNotificationRead = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { ok: true };
   });
+
+/**
+ * Aggregate unread notifications grouped by memorial + type for the "since you
+ * were away" homecoming banner. Returns rows like:
+ *   { memorial_id, memorial_slug, pet_name, type, count }
+ */
+export const sinceYouWereAway = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { supabase, userId } = context;
+    const { data, error } = await supabase
+      .from("notifications")
+      .select("type, memorial_id")
+      .eq("recipient_id", userId)
+      .is("read_at", null)
+      .not("memorial_id", "is", null)
+      .limit(200);
+    if (error) throw new Error(error.message);
+
+    const buckets = new Map<string, { memorial_id: string; type: string; count: number }>();
+    for (const n of data ?? []) {
+      if (!n.memorial_id) continue;
+      const key = `${n.memorial_id}:${n.type}`;
+      const cur = buckets.get(key);
+      if (cur) cur.count += 1;
+      else buckets.set(key, { memorial_id: n.memorial_id, type: n.type, count: 1 });
+    }
+
+    const memorialIds = Array.from(new Set(Array.from(buckets.values()).map((b) => b.memorial_id)));
+    let slugMap: Record<string, { slug: string; pet_name: string }> = {};
+    if (memorialIds.length) {
+      const { data: mems } = await supabase
+        .from("memorials")
+        .select("id, slug, pet_name")
+        .in("id", memorialIds);
+      (mems ?? []).forEach((m) => {
+        slugMap[m.id] = { slug: m.slug, pet_name: m.pet_name };
+      });
+    }
+
+    return Array.from(buckets.values())
+      .map((b) => ({
+        memorial_id: b.memorial_id,
+        type: b.type,
+        count: b.count,
+        memorial: slugMap[b.memorial_id] ?? null,
+      }))
+      .filter((b) => b.memorial)
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 5);
+  });
+
