@@ -44,12 +44,25 @@ export function SiteHeader() {
       ]
     : [];
 
+  const desktopNav: { to: string; label: string }[] = [
+    { to: "/", label: "Home" },
+    { to: "/garden", label: "Garden" },
+    { to: "/community", label: "Feed" },
+    { to: "/marketplace", label: "Shop" },
+    { to: "/grief-support", label: "Support" },
+    { to: "/adoption", label: "Adoption" },
+  ];
+
+  const isActive = (to: string) =>
+    to === "/" ? pathname === "/" : pathname === to || pathname.startsWith(to + "/");
+
   return (
     <header
       className="sticky top-0 z-40 glass-strong"
       style={{ paddingTop: "env(safe-area-inset-top)" }}
     >
-      <div className="mx-auto flex h-[54px] max-w-md items-center justify-between gap-2 px-5">
+      {/* Mobile header */}
+      <div className="mx-auto flex h-[54px] max-w-md items-center justify-between gap-2 px-5 md:hidden">
         <div className="flex min-w-0 items-center gap-2">
           {!isHome ? (
             <button
@@ -63,12 +76,7 @@ export function SiteHeader() {
           ) : (
             <img src={logo} alt="" width={24} height={24} className="h-6 w-6 opacity-90" />
           )}
-          <Link
-            to="/"
-            className="brand-wordmark"
-          >
-            rememfur
-          </Link>
+          <Link to="/" className="brand-wordmark">rememfur</Link>
         </div>
         <div className="flex items-center gap-1">
           <Link
@@ -115,9 +123,7 @@ export function SiteHeader() {
               }}
             >
               <SheetHeader className="text-left">
-                <SheetTitle className="brand-wordmark text-2xl">
-                  rememfur
-                </SheetTitle>
+                <SheetTitle className="brand-wordmark text-2xl">rememfur</SheetTitle>
                 <p className="font-hand text-lg text-[var(--terracotta)]">a sanctuary, always open</p>
               </SheetHeader>
 
@@ -188,6 +194,122 @@ export function SiteHeader() {
                   "Grief is love with nowhere to go. Here, it has somewhere to go."
                 </p>
               </div>
+            </SheetContent>
+          </Sheet>
+        </div>
+      </div>
+
+      {/* Desktop header */}
+      <div className="mx-auto hidden h-16 max-w-[1200px] items-center justify-between gap-6 px-8 md:flex">
+        <Link to="/" className="flex items-center gap-2">
+          <img src={logo} alt="" width={28} height={28} className="h-7 w-7 opacity-90" />
+          <span className="brand-wordmark text-xl">rememfur</span>
+        </Link>
+
+        <nav className="flex items-center gap-1">
+          {desktopNav.map((item) => {
+            const active = isActive(item.to);
+            return (
+              <Link
+                key={item.to}
+                to={item.to}
+                className={`rounded-full px-3.5 py-1.5 text-sm transition ${
+                  active
+                    ? "bg-white/10 text-white"
+                    : "text-white/70 hover:bg-white/5 hover:text-white"
+                }`}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
+        </nav>
+
+        <div className="flex items-center gap-2">
+          <Link
+            to={user ? "/create" : "/signup"}
+            search={user ? undefined : ({ redirect: "/create" } as never)}
+            className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-b from-amber-300 to-amber-500 px-4 py-2 text-sm font-semibold text-[#1a1200] shadow-[0_0_20px_-4px_rgba(251,191,36,0.55)] hover:from-amber-200 hover:to-amber-400"
+          >
+            <PlusCircle className="h-4 w-4" strokeWidth={2.25} />
+            Create
+          </Link>
+          <NotificationBell />
+          {user ? (
+            <button
+              onClick={() => signOut()}
+              aria-label="Sign out"
+              className="flex h-9 w-9 items-center justify-center rounded-full text-white/70 hover:bg-white/10 hover:text-white"
+            >
+              <LogOut className="h-4 w-4" />
+            </button>
+          ) : (
+            <Link
+              to="/login"
+              className="rounded-full px-3 py-1.5 text-sm font-medium text-white/80 hover:bg-white/10 hover:text-white"
+            >
+              Log in
+            </Link>
+          )}
+          <Sheet open={open} onOpenChange={setOpen}>
+            <SheetTrigger asChild>
+              <button
+                aria-label="Open menu"
+                className="flex h-9 w-9 items-center justify-center rounded-full text-white/80 hover:bg-white/10 hover:text-white"
+              >
+                <Menu className="h-5 w-5" />
+              </button>
+            </SheetTrigger>
+            <SheetContent
+              side="right"
+              className="flex w-[380px] max-w-sm flex-col overflow-y-auto overscroll-contain paper-bg paper-grain border-l border-border/60 text-foreground"
+              style={{ paddingTop: "1.5rem", paddingBottom: "2rem" }}
+            >
+              <SheetHeader className="text-left">
+                <SheetTitle className="brand-wordmark text-2xl">rememfur</SheetTitle>
+                <p className="font-hand text-lg text-[var(--terracotta)]">a sanctuary, always open</p>
+              </SheetHeader>
+              <nav className="mt-6 space-y-1">
+                {navItems.map(({ to, label, icon: Icon }) => (
+                  <Link
+                    key={to}
+                    to={to}
+                    onClick={() => setOpen(false)}
+                    className="flex items-center gap-3 rounded-xl px-3 py-3 text-base text-foreground hover:bg-cream/70"
+                  >
+                    <Icon className="h-5 w-5 text-[var(--terracotta)]" />
+                    {label}
+                  </Link>
+                ))}
+              </nav>
+              {authItems.length > 0 && (
+                <>
+                  <div className="my-4 h-px bg-border/60" />
+                  <nav className="space-y-1">
+                    {authItems.map(({ to, label, icon: Icon }) => (
+                      <a
+                        key={to}
+                        href={to}
+                        onClick={() => setOpen(false)}
+                        className="flex items-center gap-3 rounded-xl px-3 py-3 text-base text-foreground hover:bg-cream/70"
+                      >
+                        <Icon className="h-5 w-5 text-sage-deep" />
+                        {label}
+                      </a>
+                    ))}
+                    {isAdmin && (
+                      <a
+                        href="/admin"
+                        onClick={() => setOpen(false)}
+                        className="flex items-center gap-3 rounded-xl px-3 py-3 text-base text-foreground hover:bg-cream/70"
+                      >
+                        <ShieldCheck className="h-5 w-5 text-[var(--terracotta)]" />
+                        Admin · Moderation
+                      </a>
+                    )}
+                  </nav>
+                </>
+              )}
             </SheetContent>
           </Sheet>
         </div>
