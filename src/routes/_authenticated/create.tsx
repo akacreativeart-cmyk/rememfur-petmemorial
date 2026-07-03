@@ -285,8 +285,9 @@ function CreatePage() {
       <div className="mt-8 rounded-3xl border border-border/60 bg-card p-8 soft-shadow">
         {step === 1 && (
           <section>
-            <h2 className="font-display text-2xl text-foreground">Upload a memory</h2>
-            <p className="mt-1 text-sm text-muted-foreground">A photo, a short video, a voice note — anything that feels like them.</p>
+            <h2 className="font-display text-2xl text-foreground">Upload a photo</h2>
+            <p className="mt-1 text-sm text-muted-foreground">A photo that feels most like them — the one you keep coming back to.</p>
+
             <label className="mt-6 flex h-64 cursor-pointer flex-col items-center justify-center gap-3 overflow-hidden rounded-2xl border-2 border-dashed border-border bg-cream/40 transition hover:border-sage">
               {heroUrl ? (
                 heroKind === "video" ? (
