@@ -17,7 +17,7 @@ function AuthenticatedLayout() {
   return (
     <div className="min-h-screen bg-background paper-grain">
       <SiteHeader />
-      <main className="mx-auto max-w-md px-4 py-6">
+      <main className="mx-auto max-w-md px-4 py-6 md:max-w-3xl md:px-8 md:py-10">
         <Outlet />
       </main>
     </div>
