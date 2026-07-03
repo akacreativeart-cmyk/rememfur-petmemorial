@@ -63,6 +63,8 @@ export const lightCandleGuest = createServerFn({ method: "POST" })
       .maybeSingle();
     if (!m || !m.is_public) throw new Error("This memorial isn't open to visitors.");
 
+    await assertCandleLimit(data.memorial_id);
+
     const { error } = await supabaseAdmin.from("candles").insert({
       memorial_id: data.memorial_id,
       lit_by: null,
