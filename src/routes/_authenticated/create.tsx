@@ -46,6 +46,9 @@ import {
 
 export const Route = createFileRoute("/_authenticated/create")({
   component: CreatePage,
+  validateSearch: (search: Record<string, unknown>) => ({
+    welcome: search.welcome === 1 || search.welcome === "1" ? 1 : undefined,
+  }),
   head: () => ({ meta: [{ title: "Create memorial — Rememfur" }] }),
 });
 
