@@ -157,7 +157,17 @@ export function NotificationBell() {
             </ul>
           )}
         </div>
+        <div className="border-t border-border/60 bg-cream/30 px-4 py-2 text-center">
+          <Link
+            to="/notifications"
+            onClick={() => setOpen(false)}
+            className="text-xs font-medium text-sage-deep hover:underline"
+          >
+            See all notifications →
+          </Link>
+        </div>
       </PopoverContent>
     </Popover>
   );
 }
+
