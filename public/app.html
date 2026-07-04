@@ -96,6 +96,13 @@ body.cflash #shell{animation:warmFlash 2.6s ease-out;}
   border:1px solid var(--line2);border-radius:100px;padding:6px 12px;cursor:pointer;
   font-family:'Jost',sans-serif;transition:all .2s;}
 .phase-chip:active{transform:scale(.94);}
+/* EMBED MODE — page is hosted inside site chrome, hide internal header */
+body.embed .hdr{display:none!important;}
+body.embed #shell{height:100%;}
+body.embed .scroll{display:none!important;}
+body.embed .phase-chip{top:12px;right:12px;opacity:.65;font-size:8px;padding:5px 10px;}
+body.embed .phase-chip:hover{opacity:1;}
+
 
 /* SHELL */
 #shell{position:relative;z-index:10;display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden;}
@@ -477,6 +484,7 @@ textarea::placeholder{color:var(--cr3);}
 </style>
 </head>
 <body>
+<script>if(/[?&]embed=1/.test(location.search))document.body.classList.add('embed');</script>
 
 <!-- SKY -->
 <div class="sky-layer sky-midnight" id="sky-midnight"></div>

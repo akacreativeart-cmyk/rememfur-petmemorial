@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Flame } from "lucide-react";
+import { Flame, Share2, Sparkles, Image as ImageIcon, Flower2, BookOpen, Users } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useAuth } from "@/hooks/use-auth";
@@ -82,7 +83,7 @@ function HomePage() {
         style={{ height: "calc(100dvh - 54px - 72px - env(safe-area-inset-top) - env(safe-area-inset-bottom))" }}
       >
         <iframe
-          src="/app.html"
+          src="/app.html?embed=1"
           title="rememfur"
           className="h-full w-full border-0"
           style={{ background: "#090d1a" }}
@@ -129,16 +130,19 @@ function HomePage() {
           </h2>
           <div className="mt-10 grid gap-6 md:mt-14 md:grid-cols-3 md:gap-8">
             <StepCard
-              title="Say their name."
-              body="Tell us who they were — a name, a photo, a few words. Or just a name. That's enough."
+              icon={ImageIcon}
+              title="Create their memorial."
+              body="A name, a photo, a few words about who they were. It takes about a minute."
             />
             <StepCard
-              title="Light their candle."
-              body="One flame, burning in a sky beside thousands of others. Theirs."
+              icon={Share2}
+              title="Share it with people who loved them."
+              body="Send the link to family and friends. They can visit, leave a candle, add a memory."
             />
             <StepCard
-              title="Return anytime."
-              body="Their light stays. Come back on the hard days — the birthdays, the anniversaries, the quiet Tuesdays."
+              icon={Flame}
+              title="Candles keep their flame alive."
+              body="Anyone — you, strangers, people who understand — can light a candle. Their light stays."
             />
           </div>
           <p className="mt-10 text-center text-[12px] uppercase tracking-[0.25em] text-white/45">
@@ -146,6 +150,84 @@ function HomePage() {
           </p>
         </div>
       </section>
+
+      {/* What lives here */}
+      <section className="relative bg-gradient-to-b from-[#05070f] to-[#0a0e1f] px-5 py-16 md:px-8 md:py-24">
+        <div className="mx-auto max-w-md md:max-w-[1200px]">
+          <div className="text-center">
+            <p className="text-[11px] uppercase tracking-[0.28em] text-amber-200/70">What lives here</p>
+            <h2 className="mt-3 font-display text-[28px] leading-[1.1] tracking-tight text-white md:text-4xl lg:text-5xl">
+              Small rooms for a big kind of love.
+            </h2>
+          </div>
+          <div className="mt-10 grid gap-5 md:mt-14 md:grid-cols-2 lg:grid-cols-3 md:gap-6">
+            <FeatureCard
+              icon={ImageIcon}
+              title="Memorials"
+              body="A page that stays — photos, their story, the details only you know. Share it, or keep it just for you."
+            />
+            <FeatureCard
+              icon={Flame}
+              title="Candles"
+              body="Anyone can light one, no account needed. Each candle burns on the Wall of Light for 24 hours; the count stays forever."
+            />
+            <FeatureCard
+              icon={Flower2}
+              title="The Garden"
+              body="Walk quietly among everyone's companions. Light a candle for a stranger's pet — they might light one for yours."
+              to="/garden"
+            />
+            <FeatureCard
+              icon={BookOpen}
+              title="The Journal"
+              body="A private place for the words you're not ready to share. Only you can see what you write here."
+            />
+            <FeatureCard
+              icon={Users}
+              title="The Feed"
+              body="Memories shared by people who understand. Photos, small stories, the good days and the hard ones."
+              to="/community"
+            />
+            <FeatureCard
+              icon={Sparkles}
+              title="Grief Support"
+              body="Gentle resources for the first night, for children, for anyone who just needs to hear that this grief is real."
+              to="/grief-support"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Why we built this — quiet full-width */}
+      <section className="relative bg-[#05070f] px-5 py-16 text-center md:px-8 md:py-24">
+        <div className="mx-auto max-w-md md:max-w-2xl">
+          <p className="text-[11px] uppercase tracking-[0.28em] text-amber-200/70">Why we built this</p>
+          <p className="mt-6 text-[16px] leading-relaxed text-white/70 md:text-xl">
+            Pet grief is real grief. When they go, the house gets quiet in a way nothing else can fix — and the world often expects you to be fine by Monday.
+          </p>
+          <p className="mt-4 text-[16px] leading-relaxed text-white/70 md:text-xl">
+            We made RememFur because a life that mattered deserves a place that stays. Somewhere the love can go, whenever you need it.
+          </p>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="relative bg-gradient-to-b from-[#05070f] to-[#0a0e1f] px-5 py-16 md:px-8 md:py-24">
+        <div className="mx-auto max-w-md md:max-w-3xl">
+          <h2 className="text-center font-display text-[28px] leading-[1.1] tracking-tight text-white md:text-4xl">
+            Gentle answers
+          </h2>
+          <div className="mt-8 grid gap-3 md:mt-10">
+            <FaqItem q="Is it free?" a="Yes. Creating a memorial, lighting a candle, and visiting the garden are all free." />
+            <FaqItem q="Do I need an account to light a candle?" a="No. You can light a candle for any pet without signing up. An account is only needed if you want to create your own memorial or keep a journal." />
+            <FaqItem q="Can I keep a memorial private?" a="Yes. You can keep a memorial just for you, share it only with a link, or let it live in the garden — your choice, and you can change it anytime." />
+            <FaqItem q="Can I add more photos later?" a="Yes. You can return anytime to add photos, edit their story, or update anything about their memorial." />
+            <FaqItem q="What happens to candles after 24 hours?" a="The flame rests, but the count remains. Every candle ever lit is remembered — and anyone can light a new one, any day." />
+            <FaqItem q="Can I take a memorial down?" a="Yes. You control your memorials completely, and you can quietly take one down whenever you need to." />
+          </div>
+        </div>
+      </section>
+
 
       {/* The sky — live candle strip with social proof */}
       <CandleStrip
@@ -305,11 +387,11 @@ function CandleStrip({
   );
 }
 
-function StepCard({ title, body }: { title: string; body: string }) {
+function StepCard({ title, body, icon: Icon = Flame }: { title: string; body: string; icon?: LucideIcon }) {
   return (
     <div className="flex flex-col items-center rounded-2xl bg-white/[0.04] p-6 text-center ring-1 ring-white/10 md:p-8">
       <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--gold3)] text-[var(--gold)]">
-        <Flame className="h-4 w-4" strokeWidth={2} />
+        <Icon className="h-4 w-4" strokeWidth={2} />
       </span>
       <h3 className="mt-4 font-display text-[20px] leading-tight text-white md:text-[22px]">
         {title}
@@ -320,3 +402,31 @@ function StepCard({ title, body }: { title: string; body: string }) {
     </div>
   );
 }
+
+function FeatureCard({ title, body, icon: Icon, to }: { title: string; body: string; icon: LucideIcon; to?: string }) {
+  const inner = (
+    <div className="flex h-full flex-col rounded-2xl bg-white/[0.04] p-6 ring-1 ring-white/10 transition hover:bg-white/[0.06] md:p-7">
+      <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--gold3)] text-[var(--gold)]">
+        <Icon className="h-4 w-4" strokeWidth={2} />
+      </span>
+      <h3 className="mt-4 font-display text-[19px] leading-tight text-white md:text-[21px]">{title}</h3>
+      <p className="mt-2 text-[14px] leading-relaxed text-white/60">{body}</p>
+      {to && <span className="mt-4 text-[13px] font-medium text-amber-200/85">Visit →</span>}
+    </div>
+  );
+  if (to) return <Link to={to}>{inner}</Link>;
+  return inner;
+}
+
+function FaqItem({ q, a }: { q: string; a: string }) {
+  return (
+    <details className="group rounded-2xl bg-white/[0.04] p-5 ring-1 ring-white/10 open:bg-white/[0.06] md:p-6">
+      <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-display text-[17px] text-white md:text-[18px]">
+        {q}
+        <span className="text-amber-200/70 transition group-open:rotate-45">+</span>
+      </summary>
+      <p className="mt-3 text-[14px] leading-relaxed text-white/65">{a}</p>
+    </details>
+  );
+}
+
