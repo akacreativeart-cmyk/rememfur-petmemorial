@@ -98,8 +98,6 @@ body.cflash #shell{animation:warmFlash 2.6s ease-out;}
 .phase-chip:active{transform:scale(.94);}
 /* EMBED MODE — page is hosted inside site chrome, hide internal header */
 body.embed .hdr{display:none!important;}
-body.embed #shell{height:100%;}
-body.embed .scroll{display:none!important;}
 body.embed .phase-chip{top:12px;right:12px;opacity:.65;font-size:8px;padding:5px 10px;}
 body.embed .phase-chip:hover{opacity:1;}
 
@@ -837,7 +835,7 @@ function applyPhase(p) {
   else if (p === 'dawn' || p === 'sunset') st.classList.add('dim');
   document.getElementById('moon').classList.toggle('on', ['midnight','night','dusk'].includes(p));
   var sun = document.getElementById('sun');
-  sun.classList.remove('on', 'low'); sun.style.opacity = '1';
+  sun.classList.remove('on', 'low'); sun.style.opacity = '';
   if (p === 'sunrise') { sun.classList.add('on','low'); sun.style.top = '62%'; sun.style.left = '14%'; }
   else if (p === 'day')    { sun.classList.add('on');      sun.style.top = '10%'; sun.style.left = '66%'; }
   else if (p === 'sunset') { sun.classList.add('on','low'); sun.style.top = '64%'; sun.style.left = '74%'; }
