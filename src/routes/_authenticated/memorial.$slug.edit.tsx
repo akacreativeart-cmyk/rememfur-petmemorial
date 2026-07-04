@@ -93,6 +93,7 @@ function EditMemorialPage() {
     }
   };
 
+  const [petName, setPetName] = useState(m.pet_name);
   const [species, setSpecies] = useState<"dog" | "cat" | "other">(
     (m.species ?? "other") as "dog" | "cat" | "other",
   );
