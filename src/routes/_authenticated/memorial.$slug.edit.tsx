@@ -47,10 +47,52 @@ export const Route = createFileRoute("/_authenticated/memorial/$slug/edit")({
 function EditMemorialPage() {
   const m = Route.useLoaderData();
   const navigate = useNavigate();
+  const qc = useQueryClient();
+  const { user } = useAuth();
   const fetchUpdate = useServerFn(updateMemorial);
   const fetchDelete = useServerFn(deleteMemorial);
+  const fetchPhotos = useServerFn(listMyMemorialPhotos);
+  const fetchAddPhoto = useServerFn(addMemorialPhoto);
+  const fetchDelPhoto = useServerFn(deleteMemorialPhoto);
 
-  const [petName, setPetName] = useState(m.pet_name);
+  const [uploadingPhoto, setUploadingPhoto] = useState(false);
+  const { data: photos = [] } = useQuery({
+    queryKey: ["mine-photos", m.id],
+    queryFn: () => fetchPhotos({ data: { memorial_id: m.id } }),
+  });
+
+  const handlePhotoUpload = async (file: File) => {
+    if (!user) return;
+    setUploadingPhoto(true);
+    const ext = file.name.split(".").pop() || "jpg";
+    const path = `${user.id}/${m.id}-${Date.now()}.${ext}`;
+    const { error: upErr } = await supabase.storage
+      .from("gallery")
+      .upload(path, file, { contentType: file.type });
+    if (upErr) {
+      setUploadingPhoto(false);
+      return toast.error(upErr.message);
+    }
+    const { data: pub } = supabase.storage.from("gallery").getPublicUrl(path);
+    try {
+      await fetchAddPhoto({ data: { memorial_id: m.id, image_url: pub.publicUrl } });
+      qc.invalidateQueries({ queryKey: ["mine-photos", m.id] });
+      toast.success("Photo added.");
+    } catch (e: any) {
+      toast.error(e.message);
+    }
+    setUploadingPhoto(false);
+  };
+
+  const handlePhotoDelete = async (photoId: string) => {
+    try {
+      await fetchDelPhoto({ data: { photo_id: photoId } });
+      qc.invalidateQueries({ queryKey: ["mine-photos", m.id] });
+    } catch (e: any) {
+      toast.error(e.message);
+    }
+  };
+
   const [species, setSpecies] = useState<"dog" | "cat" | "other">(
     (m.species ?? "other") as "dog" | "cat" | "other",
   );
