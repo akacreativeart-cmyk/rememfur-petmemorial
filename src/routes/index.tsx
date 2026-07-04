@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Flame } from "lucide-react";
+import { Flame, Share2, Sparkles, Image as ImageIcon, Flower2, BookOpen, Users } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useAuth } from "@/hooks/use-auth";
