@@ -82,7 +82,7 @@ function HomePage() {
         style={{ height: "calc(100dvh - 54px - 72px - env(safe-area-inset-top) - env(safe-area-inset-bottom))" }}
       >
         <iframe
-          src="/app.html"
+          src="/app.html?embed=1"
           title="rememfur"
           className="h-full w-full border-0"
           style={{ background: "#090d1a" }}
