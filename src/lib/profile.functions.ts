@@ -37,3 +37,17 @@ export const updateMyProfile = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { ok: true };
   });
+
+export const deleteMyAccount = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input) =>
+    z.object({ purge_memorials: z.boolean().default(false) }).parse(input),
+  )
+  .handler(async ({ data, context }) => {
+    const { supabase } = context;
+    const { error } = await supabase.rpc("delete_my_account", {
+      _purge_memorials: data.purge_memorials,
+    });
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
