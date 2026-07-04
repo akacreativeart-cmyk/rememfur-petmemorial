@@ -186,7 +186,7 @@ export type Database = {
           hero_image_url: string | null
           id: string
           is_public: boolean
-          owner_id: string
+          owner_id: string | null
           passing_date: string | null
           pet_name: string
           slug: string
@@ -203,7 +203,7 @@ export type Database = {
           hero_image_url?: string | null
           id?: string
           is_public?: boolean
-          owner_id: string
+          owner_id?: string | null
           passing_date?: string | null
           pet_name: string
           slug: string
@@ -220,7 +220,7 @@ export type Database = {
           hero_image_url?: string | null
           id?: string
           is_public?: boolean
-          owner_id?: string
+          owner_id?: string | null
           passing_date?: string | null
           pet_name?: string
           slug?: string
@@ -514,6 +514,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      delete_my_account: {
+        Args: { _purge_memorials?: boolean }
+        Returns: undefined
+      }
       is_admin: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {

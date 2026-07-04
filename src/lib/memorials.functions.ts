@@ -204,3 +204,42 @@ export const deleteMemorial = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { ok: true };
   });
+
+export const listMyMemorialPhotos = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: { memorial_id: string }) =>
+    z.object({ memorial_id: z.string().uuid() }).parse(input),
+  )
+  .handler(async ({ data, context }) => {
+    const { supabase, userId } = context;
+    // Verify ownership first
+    const { data: mem } = await supabase
+      .from("memorials")
+      .select("id")
+      .eq("id", data.memorial_id)
+      .eq("owner_id", userId)
+      .maybeSingle();
+    if (!mem) throw new Error("Not your memorial");
+    const { data: photos, error } = await supabase
+      .from("memorial_photos")
+      .select("id, image_url, caption, created_at")
+      .eq("memorial_id", data.memorial_id)
+      .order("created_at", { ascending: true });
+    if (error) throw new Error(error.message);
+    return photos ?? [];
+  });
+
+export const deleteMemorialPhoto = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: { photo_id: string }) =>
+    z.object({ photo_id: z.string().uuid() }).parse(input),
+  )
+  .handler(async ({ data, context }) => {
+    const { supabase } = context;
+    const { error } = await supabase
+      .from("memorial_photos")
+      .delete()
+      .eq("id", data.photo_id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });

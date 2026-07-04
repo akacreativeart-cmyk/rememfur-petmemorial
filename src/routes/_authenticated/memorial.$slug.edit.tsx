@@ -22,9 +22,15 @@ import {
   getMyMemorialBySlug,
   updateMemorial,
   deleteMemorial,
+  listMyMemorialPhotos,
+  addMemorialPhoto,
+  deleteMemorialPhoto,
 } from "@/lib/memorials.functions";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/use-auth";
 import { toast } from "sonner";
-import { Trash2, ArrowLeft, Save } from "lucide-react";
+import { Trash2, ArrowLeft, Save, Upload, ImagePlus, X } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/memorial/$slug/edit")({
   component: EditMemorialPage,
@@ -41,8 +47,51 @@ export const Route = createFileRoute("/_authenticated/memorial/$slug/edit")({
 function EditMemorialPage() {
   const m = Route.useLoaderData();
   const navigate = useNavigate();
+  const qc = useQueryClient();
+  const { user } = useAuth();
   const fetchUpdate = useServerFn(updateMemorial);
   const fetchDelete = useServerFn(deleteMemorial);
+  const fetchPhotos = useServerFn(listMyMemorialPhotos);
+  const fetchAddPhoto = useServerFn(addMemorialPhoto);
+  const fetchDelPhoto = useServerFn(deleteMemorialPhoto);
+
+  const [uploadingPhoto, setUploadingPhoto] = useState(false);
+  const { data: photos = [] } = useQuery({
+    queryKey: ["mine-photos", m.id],
+    queryFn: () => fetchPhotos({ data: { memorial_id: m.id } }),
+  });
+
+  const handlePhotoUpload = async (file: File) => {
+    if (!user) return;
+    setUploadingPhoto(true);
+    const ext = file.name.split(".").pop() || "jpg";
+    const path = `${user.id}/${m.id}-${Date.now()}.${ext}`;
+    const { error: upErr } = await supabase.storage
+      .from("gallery")
+      .upload(path, file, { contentType: file.type });
+    if (upErr) {
+      setUploadingPhoto(false);
+      return toast.error(upErr.message);
+    }
+    const { data: pub } = supabase.storage.from("gallery").getPublicUrl(path);
+    try {
+      await fetchAddPhoto({ data: { memorial_id: m.id, image_url: pub.publicUrl } });
+      qc.invalidateQueries({ queryKey: ["mine-photos", m.id] });
+      toast.success("Photo added.");
+    } catch (e: any) {
+      toast.error(e.message);
+    }
+    setUploadingPhoto(false);
+  };
+
+  const handlePhotoDelete = async (photoId: string) => {
+    try {
+      await fetchDelPhoto({ data: { photo_id: photoId } });
+      qc.invalidateQueries({ queryKey: ["mine-photos", m.id] });
+    } catch (e: any) {
+      toast.error(e.message);
+    }
+  };
 
   const [petName, setPetName] = useState(m.pet_name);
   const [species, setSpecies] = useState<"dog" | "cat" | "other">(
@@ -147,6 +196,48 @@ function EditMemorialPage() {
           </div>
         </div>
 
+        {/* Gallery management */}
+        <div className="mt-8 border-t border-border/60 pt-6">
+          <div className="flex items-end justify-between">
+            <div>
+              <h2 className="font-display text-2xl text-foreground">Gallery</h2>
+              <p className="mt-1 text-xs text-muted-foreground">Photos that appear on {m.pet_name}'s memorial.</p>
+            </div>
+            <label className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-border bg-background px-3 py-1.5 text-xs text-foreground transition hover:bg-muted">
+              <Upload className="h-3.5 w-3.5" />
+              {uploadingPhoto ? "Uploading…" : "Add photo"}
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => e.target.files?.[0] && handlePhotoUpload(e.target.files[0])}
+              />
+            </label>
+          </div>
+          {photos.length === 0 ? (
+            <div className="mt-4 rounded-2xl border border-dashed border-border bg-cream/40 p-8 text-center text-sm text-muted-foreground">
+              <ImagePlus className="mx-auto h-6 w-6 opacity-70" />
+              <p className="mt-2">No gallery photos yet. Add a favorite moment.</p>
+            </div>
+          ) : (
+            <div className="mt-4 grid grid-cols-3 gap-3 md:grid-cols-4 lg:grid-cols-5">
+              {photos.map((p: any) => (
+                <div key={p.id} className="group relative aspect-square overflow-hidden rounded-2xl bg-muted">
+                  <img src={p.image_url} alt={p.caption ?? ""} className="h-full w-full object-cover" />
+                  <button
+                    onClick={() => handlePhotoDelete(p.id)}
+                    aria-label="Remove photo"
+                    className="absolute right-1.5 top-1.5 rounded-full bg-black/60 p-1.5 text-white opacity-0 transition group-hover:opacity-100 hover:bg-destructive"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+
         <div className="mt-8 flex flex-wrap items-center justify-between gap-3 border-t border-border/60 pt-6">
           <AlertDialog>
             <AlertDialogTrigger asChild>
@@ -160,7 +251,7 @@ function EditMemorialPage() {
                   Let {m.pet_name}'s page go?
                 </AlertDialogTitle>
                 <AlertDialogDescription>
-                  This removes the memorial, all candles, messages, and photos. It cannot be undone — your memories of them remain forever.
+                  This will quietly take down {m.pet_name}'s memorial and its candles. Your private memories of them remain forever.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
