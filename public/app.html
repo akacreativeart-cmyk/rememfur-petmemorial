@@ -835,7 +835,7 @@ function applyPhase(p) {
   else if (p === 'dawn' || p === 'sunset') st.classList.add('dim');
   document.getElementById('moon').classList.toggle('on', ['midnight','night','dusk'].includes(p));
   var sun = document.getElementById('sun');
-  sun.classList.remove('on', 'low'); sun.style.opacity = '1';
+  sun.classList.remove('on', 'low'); sun.style.opacity = '';
   if (p === 'sunrise') { sun.classList.add('on','low'); sun.style.top = '62%'; sun.style.left = '14%'; }
   else if (p === 'day')    { sun.classList.add('on');      sun.style.top = '10%'; sun.style.left = '66%'; }
   else if (p === 'sunset') { sun.classList.add('on','low'); sun.style.top = '64%'; sun.style.left = '74%'; }
