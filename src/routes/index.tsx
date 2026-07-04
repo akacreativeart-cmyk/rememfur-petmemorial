@@ -309,11 +309,11 @@ function CandleStrip({
   );
 }
 
-function StepCard({ title, body }: { title: string; body: string }) {
+function StepCard({ title, body, icon: Icon = Flame }: { title: string; body: string; icon?: LucideIcon }) {
   return (
     <div className="flex flex-col items-center rounded-2xl bg-white/[0.04] p-6 text-center ring-1 ring-white/10 md:p-8">
       <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--gold3)] text-[var(--gold)]">
-        <Flame className="h-4 w-4" strokeWidth={2} />
+        <Icon className="h-4 w-4" strokeWidth={2} />
       </span>
       <h3 className="mt-4 font-display text-[20px] leading-tight text-white md:text-[22px]">
         {title}
@@ -324,3 +324,31 @@ function StepCard({ title, body }: { title: string; body: string }) {
     </div>
   );
 }
+
+function FeatureCard({ title, body, icon: Icon, to }: { title: string; body: string; icon: LucideIcon; to?: string }) {
+  const inner = (
+    <div className="flex h-full flex-col rounded-2xl bg-white/[0.04] p-6 ring-1 ring-white/10 transition hover:bg-white/[0.06] md:p-7">
+      <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--gold3)] text-[var(--gold)]">
+        <Icon className="h-4 w-4" strokeWidth={2} />
+      </span>
+      <h3 className="mt-4 font-display text-[19px] leading-tight text-white md:text-[21px]">{title}</h3>
+      <p className="mt-2 text-[14px] leading-relaxed text-white/60">{body}</p>
+      {to && <span className="mt-4 text-[13px] font-medium text-amber-200/85">Visit →</span>}
+    </div>
+  );
+  if (to) return <Link to={to}>{inner}</Link>;
+  return inner;
+}
+
+function FaqItem({ q, a }: { q: string; a: string }) {
+  return (
+    <details className="group rounded-2xl bg-white/[0.04] p-5 ring-1 ring-white/10 open:bg-white/[0.06] md:p-6">
+      <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-display text-[17px] text-white md:text-[18px]">
+        {q}
+        <span className="text-amber-200/70 transition group-open:rotate-45">+</span>
+      </summary>
+      <p className="mt-3 text-[14px] leading-relaxed text-white/65">{a}</p>
+    </details>
+  );
+}
+
