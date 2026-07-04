@@ -22,9 +22,15 @@ import {
   getMyMemorialBySlug,
   updateMemorial,
   deleteMemorial,
+  listMyMemorialPhotos,
+  addMemorialPhoto,
+  deleteMemorialPhoto,
 } from "@/lib/memorials.functions";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/use-auth";
 import { toast } from "sonner";
-import { Trash2, ArrowLeft, Save } from "lucide-react";
+import { Trash2, ArrowLeft, Save, Upload, ImagePlus, X } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/memorial/$slug/edit")({
   component: EditMemorialPage,
