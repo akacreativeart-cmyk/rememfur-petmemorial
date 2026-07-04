@@ -251,7 +251,7 @@ function EditMemorialPage() {
                   Let {m.pet_name}'s page go?
                 </AlertDialogTitle>
                 <AlertDialogDescription>
-                  This removes the memorial, all candles, messages, and photos. It cannot be undone — your memories of them remain forever.
+                  This will quietly take down {m.pet_name}'s memorial and its candles. Your private memories of them remain forever.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
