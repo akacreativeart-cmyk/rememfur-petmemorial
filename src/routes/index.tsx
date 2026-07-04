@@ -151,6 +151,84 @@ function HomePage() {
         </div>
       </section>
 
+      {/* What lives here */}
+      <section className="relative bg-gradient-to-b from-[#05070f] to-[#0a0e1f] px-5 py-16 md:px-8 md:py-24">
+        <div className="mx-auto max-w-md md:max-w-[1200px]">
+          <div className="text-center">
+            <p className="text-[11px] uppercase tracking-[0.28em] text-amber-200/70">What lives here</p>
+            <h2 className="mt-3 font-display text-[28px] leading-[1.1] tracking-tight text-white md:text-4xl lg:text-5xl">
+              Small rooms for a big kind of love.
+            </h2>
+          </div>
+          <div className="mt-10 grid gap-5 md:mt-14 md:grid-cols-2 lg:grid-cols-3 md:gap-6">
+            <FeatureCard
+              icon={ImageIcon}
+              title="Memorials"
+              body="A page that stays — photos, their story, the details only you know. Share it, or keep it just for you."
+            />
+            <FeatureCard
+              icon={Flame}
+              title="Candles"
+              body="Anyone can light one, no account needed. Each candle burns on the Wall of Light for 24 hours; the count stays forever."
+            />
+            <FeatureCard
+              icon={Flower2}
+              title="The Garden"
+              body="Walk quietly among everyone's companions. Light a candle for a stranger's pet — they might light one for yours."
+              to="/garden"
+            />
+            <FeatureCard
+              icon={BookOpen}
+              title="The Journal"
+              body="A private place for the words you're not ready to share. Only you can see what you write here."
+            />
+            <FeatureCard
+              icon={Users}
+              title="The Feed"
+              body="Memories shared by people who understand. Photos, small stories, the good days and the hard ones."
+              to="/community"
+            />
+            <FeatureCard
+              icon={Sparkles}
+              title="Grief Support"
+              body="Gentle resources for the first night, for children, for anyone who just needs to hear that this grief is real."
+              to="/grief-support"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Why we built this — quiet full-width */}
+      <section className="relative bg-[#05070f] px-5 py-16 text-center md:px-8 md:py-24">
+        <div className="mx-auto max-w-md md:max-w-2xl">
+          <p className="text-[11px] uppercase tracking-[0.28em] text-amber-200/70">Why we built this</p>
+          <p className="mt-6 text-[16px] leading-relaxed text-white/70 md:text-xl">
+            Pet grief is real grief. When they go, the house gets quiet in a way nothing else can fix — and the world often expects you to be fine by Monday.
+          </p>
+          <p className="mt-4 text-[16px] leading-relaxed text-white/70 md:text-xl">
+            We made RememFur because a life that mattered deserves a place that stays. Somewhere the love can go, whenever you need it.
+          </p>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="relative bg-gradient-to-b from-[#05070f] to-[#0a0e1f] px-5 py-16 md:px-8 md:py-24">
+        <div className="mx-auto max-w-md md:max-w-3xl">
+          <h2 className="text-center font-display text-[28px] leading-[1.1] tracking-tight text-white md:text-4xl">
+            Gentle answers
+          </h2>
+          <div className="mt-8 grid gap-3 md:mt-10">
+            <FaqItem q="Is it free?" a="Yes. Creating a memorial, lighting a candle, and visiting the garden are all free." />
+            <FaqItem q="Do I need an account to light a candle?" a="No. You can light a candle for any pet without signing up. An account is only needed if you want to create your own memorial or keep a journal." />
+            <FaqItem q="Can I keep a memorial private?" a="Yes. You can keep a memorial just for you, share it only with a link, or let it live in the garden — your choice, and you can change it anytime." />
+            <FaqItem q="Can I add more photos later?" a="Yes. You can return anytime to add photos, edit their story, or update anything about their memorial." />
+            <FaqItem q="What happens to candles after 24 hours?" a="The flame rests, but the count remains. Every candle ever lit is remembered — and anyone can light a new one, any day." />
+            <FaqItem q="Can I take a memorial down?" a="Yes. You control your memorials completely, and you can quietly take one down whenever you need to." />
+          </div>
+        </div>
+      </section>
+
+
       {/* The sky — live candle strip with social proof */}
       <CandleStrip
         candles={recent.data ?? []}
