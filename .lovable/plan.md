@@ -1,102 +1,65 @@
-## Direction
 
-Reframe the landing page from "storybook of a pet" to **a grief sanctuary and community for pet loss**. The storybook craft (warm paper, Fraunces serif, Caveat handwriting, polaroids, tape) stays — it's the right emotional register — but the *story* the page tells changes:
+## Reality check
 
-> Your grief deserves a place. Your memory deserves a wall. Your companion deserves to be remembered — and you don't have to carry it alone.
+Your ask is 10 substantial areas — realistically 2–5 days of focused work, with multiple DB migrations, a WebGL shader, new routes, and cross-cutting sweeps. If I try to do it all in one turn I will half-ship several and break others. I'd like to agree on batches before starting.
 
-Core actions promoted on the page:
-1. **Post an obituary / tribute** (primary CTA)
-2. **Pin a memory to the wall** (secondary)
-3. **Join the community** (tertiary)
+## Audit — what already exists vs. what's missing
 
-## Page structure (top → bottom)
+**1. Account & Settings** — partial
+- ✅ Edit display name + avatar upload, sign out
+- ❌ Change password, account deletion (with "preserve vs delete memorials" choice)
 
-```text
-┌─────────────────────────────────────────────────┐
-│ 1. HERO — The Wall of Memory                    │
-│    Full-bleed corkboard / paper wall            │
-│    8–12 polaroids scattered at varying          │
-│    rotations, taped, with handwritten notes,    │
-│    pet names, dates, one-line tributes.         │
-│    Center overlay:                              │
-│       eyebrow: "a sanctuary for pet grief"      │
-│       H1:     "Your memory deserves a wall."    │
-│       sub:    1–2 lines on what this is         │
-│       CTAs:   [Pin their memory]  [Read the wall]│
-└─────────────────────────────────────────────────┘
-┌─────────────────────────────────────────────────┐
-│ 2. EMOTIONAL PROMISE strip                      │
-│    3 short lines, handwriting + serif mix:      │
-│    "Your grief is welcome here."                │
-│    "Your companion will be recognized."         │
-│    "You are not alone in this."                 │
-└─────────────────────────────────────────────────┘
-┌─────────────────────────────────────────────────┐
-│ 3. HOW IT WORKS — "Let it out, gently"          │
-│    4 numbered steps in a soft book-card grid:   │
-│      1. Share a photo & a name                  │
-│      2. Write what you need to say              │
-│      3. Pin it to the wall                      │
-│      4. Receive love from the community         │
-└─────────────────────────────────────────────────┘
-┌─────────────────────────────────────────────────┐
-│ 4. POST AN OBITUARY — primary feature spotlight │
-│    Split layout: mock obituary card on the      │
-│    left (photo + name + dates + tribute), copy  │
-│    on the right explaining the obituary post    │
-│    and how it goes to the wall + community feed.│
-│    CTA: [Write their obituary]                  │
-└─────────────────────────────────────────────────┘
-┌─────────────────────────────────────────────────┐
-│ 5. COMMUNITY — "A circle that understands"      │
-│    Faux feed preview: 2–3 tribute posts with    │
-│    candle counts, soft replies ("sending love"),│
-│    quiet stats (X candles lit this week).       │
-│    CTA: [Visit the community]                   │
-└─────────────────────────────────────────────────┘
-┌─────────────────────────────────────────────────┐
-│ 6. PULL QUOTE                                   │
-│    "Grief is love with nowhere to go.           │
-│     Here, it has somewhere to go."              │
-└─────────────────────────────────────────────────┘
-┌─────────────────────────────────────────────────┐
-│ 7. CLOSING CTA                                  │
-│    "Their name belongs here."                   │
-│    [Pin their memory]   "Free, always."         │
-└─────────────────────────────────────────────────┘
-```
+**2. Memorial Management** — mostly there
+- ✅ Edit route exists, share button
+- ❌ Verify gallery add/remove UI, public/private toggle, soft-delete flow, confirm og meta on `/memorial/$slug` uses loader data
 
-The existing "chapters of a pet's life" section and "library shelf" are removed from the landing page — they distract from the grief/community core. The polaroid + paper aesthetic from those sections is repurposed into the hero wall and the community preview.
+**3. Notifications Center** — bell popover exists
+- ❌ Full `/notifications` page, empty state polish, verify badge decrement
 
-## Copy direction (replacing pet-story tone)
+**4. Journal** — basic create/list/delete
+- ❌ Edit entry, prompt suggestions, richer empty state
 
-- Eyebrow: `a sanctuary for pet loss`
-- H1: `Your memory deserves a wall.`
-- Sub: `A gentle place to grieve, remember, and be held by people who understand. Pin a photo. Write what you need to say. Light a candle for someone you loved.`
-- Strip lines: `Your grief is welcome here. · Your companion will be recognized. · You are not alone in this.`
-- Obituary section H2: `Write their obituary. Let the grief out.`
-- Community H2: `A circle that understands.`
-- Final H2: `Their name belongs here.`
+**5. Feed** — compose/post/like/comment likely exist
+- ❌ Audit delete-own for posts + comments, guest CTA, count integrity
 
-## Technical scope
+**6. Follows** — table exists, toggleFollow exists on user profile
+- ❌ Follow button on memorial page, "Following" section in dashboard/garden, 10th-candle milestone notification (needs SQL trigger update)
 
-Files touched:
+**7. Garden** — grid + search exist
+- ❌ Sort dropdown (recent / most candles)
 
-- `src/routes/index.tsx` — full rewrite of the landing composition described above. Reuses existing image assets, `Button`, `SiteHeader`, `SiteFooter`, `PawIcon`, `book-card`, `polaroid`, `tape`, `paper-bg`, `paper-grain`, `chapter-rule`, `candle-glow` utilities. Routes (`/signup`, `/garden`, `/community`) already exist — links wired to those.
-- `src/styles.css` — small additive changes only (no palette/font changes):
-  - `.memory-wall` — corkboard / paper wall backdrop (subtle warm grid + vignette) for the hero.
-  - `.note-card` — small handwritten note variant (Caveat font, soft tinted paper, no photo) used among the polaroids.
-  - `.polaroid` already exists; add `--rot` CSS var pattern so we can scatter rotations inline cleanly.
-- Page `head()` meta updated: title and description to reflect grief support / community positioning.
+**8. Candle flame WebGL** — net-new
+- Shader canvas component + CSS fallback, wired into memorial page + candle strip. Non-trivial (~half day alone to look good).
 
-No backend, schema, route, or auth changes. UI/presentation only.
+**9. Pet silhouette SVG** — net-new asset + placeholder swap sitewide
 
-## Imagery
+**10. No dead ends sweep** — 404 page, loading/error states audit, console+typecheck clean
 
-Reuse the existing Unsplash pet images (`pet1–pet4`, `heroImg`, `candleImg`) for the wall polaroids. The hero wall mixes ~6 polaroids (pets) + ~3 handwritten note cards (pure text, no photo) for emotional density and visual rhythm. All set in a sepia-warm filter to match the paper aesthetic.
+Out of scope confirmed: email, marketplace checkout.
 
-## Out of scope (this turn)
+## Proposed batching (pick what to ship first)
 
-- Building an actual obituary editor or community feed (those routes/features already exist — landing just promotes and links to them).
-- Changing typography, palette, or `Button` component.
-- Any other route.
+**Batch A — Account & content control (1 turn)**
+Items 1, 2, 3 — settings completion (password, delete-account), memorial management gaps (gallery, private toggle, soft delete), full notifications page. One migration (soft-delete column, deletion RPC).
+
+**Batch B — Social loops (1 turn)**
+Items 4, 5, 6, 7 — journal edit + prompts, feed audit + guest CTA, follows on memorial + Following list, garden sort, 10th-candle trigger migration.
+
+**Batch C — Craft & polish (1 turn)**
+Items 8, 9, 10 — WebGL flame + fallback, universal silhouette SVG + swap-in, 404 route, loading/error state sweep, typecheck clean.
+
+Each batch is independently shippable and verifiable. Doing all three in one response would produce sloppy work in every area.
+
+## Assumptions I'll make unless you say otherwise
+
+- Account deletion: preserve memorials by default (owner_id nulled, marked "in loving memory of a friend of Rememfur"), checkbox to delete-all-cascade.
+- Soft delete: `deleted_at` column on `memorials`; excluded from all public queries; owner sees "Restore" for 30 days in Dashboard.
+- Milestone notification: trigger fires only when `candle_count % 10 == 0`, notifies all followers of the memorial.
+- WebGL flame: ~64×96 canvas per candle, single shared context if possible; fallback = current CSS flame.
+- 404: styled with existing navy celestial + "This page has drifted off…" copy.
+
+## What I need from you
+
+Reply with either:
+- **"Go A"** (or B, or C, or "all in order") — I start the first batch now, one per turn.
+- **Adjust** — change scope, assumptions, or order.
