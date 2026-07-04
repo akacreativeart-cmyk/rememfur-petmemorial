@@ -196,6 +196,48 @@ function EditMemorialPage() {
           </div>
         </div>
 
+        {/* Gallery management */}
+        <div className="mt-8 border-t border-border/60 pt-6">
+          <div className="flex items-end justify-between">
+            <div>
+              <h2 className="font-display text-2xl text-foreground">Gallery</h2>
+              <p className="mt-1 text-xs text-muted-foreground">Photos that appear on {m.pet_name}'s memorial.</p>
+            </div>
+            <label className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-border bg-background px-3 py-1.5 text-xs text-foreground transition hover:bg-muted">
+              <Upload className="h-3.5 w-3.5" />
+              {uploadingPhoto ? "Uploading…" : "Add photo"}
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => e.target.files?.[0] && handlePhotoUpload(e.target.files[0])}
+              />
+            </label>
+          </div>
+          {photos.length === 0 ? (
+            <div className="mt-4 rounded-2xl border border-dashed border-border bg-cream/40 p-8 text-center text-sm text-muted-foreground">
+              <ImagePlus className="mx-auto h-6 w-6 opacity-70" />
+              <p className="mt-2">No gallery photos yet. Add a favorite moment.</p>
+            </div>
+          ) : (
+            <div className="mt-4 grid grid-cols-3 gap-3 md:grid-cols-4 lg:grid-cols-5">
+              {photos.map((p: any) => (
+                <div key={p.id} className="group relative aspect-square overflow-hidden rounded-2xl bg-muted">
+                  <img src={p.image_url} alt={p.caption ?? ""} className="h-full w-full object-cover" />
+                  <button
+                    onClick={() => handlePhotoDelete(p.id)}
+                    aria-label="Remove photo"
+                    className="absolute right-1.5 top-1.5 rounded-full bg-black/60 p-1.5 text-white opacity-0 transition group-hover:opacity-100 hover:bg-destructive"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+
         <div className="mt-8 flex flex-wrap items-center justify-between gap-3 border-t border-border/60 pt-6">
           <AlertDialog>
             <AlertDialogTrigger asChild>
