@@ -35,7 +35,7 @@ function GriefSupport() {
         <ul className="space-y-3">
           {lines.map(({ name, detail, href, icon: Icon }) => (
             <li key={name}>
-              <a href={href} className="flex items-center gap-4 rounded-2xl border border-border/60 bg-card p-5 soft-shadow hover:bg-cream/40">
+              <a href={href} className="flex items-center gap-4 rounded-2xl border border-border/60 bg-card p-5 soft-shadow hover:bg-white/[0.03]">
                 <span className="flex h-11 w-11 items-center justify-center rounded-full bg-[color-mix(in_oklab,var(--cta)_12%,transparent)] text-[var(--cta)]">
                   <Icon className="h-5 w-5" />
                 </span>
@@ -48,8 +48,8 @@ function GriefSupport() {
           ))}
         </ul>
 
-        <section className="mt-10 rounded-3xl bg-cream/60 p-7">
-          <Heart className="h-5 w-5 text-[var(--terracotta)]" />
+        <section className="mt-10 rounded-3xl bg-white/[0.04] p-7">
+          <Heart className="h-5 w-5 text-amber-300" />
           <p className="mt-3 font-hand text-xl text-[var(--ink)]">
             "Grief is love with nowhere to go. Here, it has somewhere to go."
           </p>

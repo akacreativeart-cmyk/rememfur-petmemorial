@@ -127,22 +127,22 @@ function MemorialPage() {
             ) : (
               <div className="flex h-[400px] items-center justify-center bg-muted text-6xl">🐾</div>
             )}
-            <div className="absolute inset-0 bg-gradient-to-t from-cream via-cream/30 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#05070f] via-[#05070f]/40 to-transparent" />
             <div className="absolute bottom-0 left-0 right-0 flex flex-wrap items-end justify-between gap-3 p-8">
               <div>
-                <h1 className="font-display text-5xl text-ink md:text-6xl">{m.pet_name}</h1>
-                <div className="mt-1 text-sm text-ink/70">{years || "Forever loved"}</div>
-                {m.epitaph && <p className="mt-3 max-w-xl font-display text-xl italic text-ink/80">"{m.epitaph}"</p>}
+                <h1 className="font-display text-5xl text-white md:text-6xl">{m.pet_name}</h1>
+                <div className="mt-1 text-sm text-white/70">{years || "Forever loved"}</div>
+                {m.epitaph && <p className="mt-3 max-w-xl font-display text-xl italic text-white/80">"{m.epitaph}"</p>}
               </div>
-              <div className="flex items-center gap-4 text-sm text-ink/80">
-                <div className="flex items-center gap-1"><Flame className="h-4 w-4 text-terracotta" /> {current.candles.length} candles</div>
-                <div className="flex items-center gap-1"><MessageCircle className="h-4 w-4 text-sage-deep" /> {current.messages.length} messages</div>
-                <Button variant="outline" size="sm" onClick={share} className="rounded-full border-ink/15 bg-cream/80">
+              <div className="flex items-center gap-4 text-sm text-white/80">
+                <div className="flex items-center gap-1"><Flame className="h-4 w-4 text-amber-300" /> {current.candles.length} candles</div>
+                <div className="flex items-center gap-1"><MessageCircle className="h-4 w-4 text-amber-200" /> {current.messages.length} messages</div>
+                <Button variant="outline" size="sm" onClick={share} className="rounded-full border-white/15 bg-white/10">
                   <Share2 className="mr-1.5 h-3.5 w-3.5" /> Share
                 </Button>
                 {user?.id === m.owner_id && (
                   <Link to="/memorial/$slug/edit" params={{ slug: m.slug }}>
-                    <Button variant="outline" size="sm" className="rounded-full border-ink/15 bg-cream/80">
+                    <Button variant="outline" size="sm" className="rounded-full border-white/15 bg-white/10">
                       <Pencil className="mr-1.5 h-3.5 w-3.5" /> Edit
                     </Button>
                   </Link>
@@ -155,8 +155,8 @@ function MemorialPage() {
         {/* Light a candle — prominent, just below the photo */}
         <div className="mt-6 flex flex-col items-center justify-between gap-4 rounded-3xl border border-border/60 bg-card p-5 soft-shadow sm:flex-row sm:p-6">
           <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-terracotta/15">
-              <Flame className="h-6 w-6 text-terracotta" />
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-amber-400/15">
+              <Flame className="h-6 w-6 text-amber-300" />
             </div>
             <div>
               <div className="font-display text-xl text-foreground">
@@ -169,7 +169,7 @@ function MemorialPage() {
             target={{ kind: "memorial", memorial_id: m.id, pet_name: m.pet_name }}
             onLit={() => qc.invalidateQueries({ queryKey: ["memorial", m.slug] })}
             trigger={
-              <Button size="lg" className="w-full rounded-full bg-terracotta text-accent-foreground hover:bg-terracotta/90 sm:w-auto">
+              <Button size="lg" className="w-full rounded-full bg-amber-400 text-accent-foreground hover:bg-amber-300 sm:w-auto">
                 <Flame className="mr-2 h-4 w-4" /> Light a candle
               </Button>
             }
@@ -198,24 +198,24 @@ function MemorialPage() {
 
             <section className="rounded-3xl border border-border/60 bg-card p-7 soft-shadow">
               <h2 className="flex items-center gap-2 font-display text-2xl text-foreground">
-                <MessageCircle className="h-5 w-5 text-sage-deep" /> Messages
+                <MessageCircle className="h-5 w-5 text-amber-200" /> Messages
               </h2>
               {user ? (
                 <div className="mt-4 space-y-2">
                   <Textarea value={body} onChange={(e) => setBody(e.target.value)} placeholder={`Share a memory of ${m.pet_name}…`} rows={3} />
                   <div className="flex justify-end">
-                    <Button onClick={() => body.trim() && msgMut.mutate({ body: body.trim() })} disabled={msgMut.isPending || !body.trim()} className="rounded-full bg-sage-deep text-primary-foreground hover:bg-sage-deep/90">
+                    <Button onClick={() => body.trim() && msgMut.mutate({ body: body.trim() })} disabled={msgMut.isPending || !body.trim()} className="rounded-full bg-amber-400 text-primary-foreground hover:bg-amber-300">
                       Share message
                     </Button>
                   </div>
                 </div>
               ) : (
-                <p className="mt-4 text-sm text-muted-foreground"><Link to="/login" className="text-sage-deep hover:underline">Sign in</Link> to leave a message.</p>
+                <p className="mt-4 text-sm text-muted-foreground"><Link to="/login" className="text-amber-200 hover:underline">Sign in</Link> to leave a message.</p>
               )}
               <ul className="mt-6 space-y-4">
                 {current.messages.length === 0 && <li className="text-sm italic text-muted-foreground">Be the first to leave a kind word.</li>}
                 {current.messages.map((msg: any) => (
-                  <li key={msg.id} className="rounded-2xl bg-cream/60 p-4">
+                  <li key={msg.id} className="rounded-2xl bg-white/[0.04] p-4">
                     <div className="flex items-start justify-between gap-2">
                       <div className="text-xs text-muted-foreground">{msg.author_name} · {format(new Date(msg.created_at), "MMM d, yyyy")}</div>
                       <ReportButton contentType="message" contentId={msg.id} label="Report message" />
@@ -230,15 +230,15 @@ function MemorialPage() {
           {/* Sidebar */}
           <aside className="space-y-6 lg:sticky lg:top-24 lg:self-start">
             <div className="rounded-3xl border border-border/60 bg-card p-6 text-center soft-shadow">
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-terracotta/15">
-                <Flame className="h-7 w-7 text-terracotta" />
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-amber-400/15">
+                <Flame className="h-7 w-7 text-amber-300" />
               </div>
               <h3 className="mt-4 font-display text-xl text-foreground">Light a candle</h3>
               <p className="mt-1 text-xs text-muted-foreground">Keep their memory shining bright.</p>
               {user ? (
                 <div className="mt-4 space-y-2 text-left">
                   <Textarea value={candleMsg} onChange={(e) => setCandleMsg(e.target.value)} placeholder="A few words (optional)" rows={2} />
-                  <Button onClick={() => candleMut.mutate({ message: candleMsg.trim() || undefined })} disabled={candleMut.isPending} className="w-full rounded-full bg-terracotta text-accent-foreground hover:bg-terracotta/90">
+                  <Button onClick={() => candleMut.mutate({ message: candleMsg.trim() || undefined })} disabled={candleMut.isPending} className="w-full rounded-full bg-amber-400 text-accent-foreground hover:bg-amber-300">
                     <Heart className="mr-1.5 h-4 w-4 fill-current" /> Light candle
                   </Button>
                 </div>
@@ -248,7 +248,7 @@ function MemorialPage() {
                     target={{ kind: "memorial", memorial_id: m.id, pet_name: m.pet_name }}
                     onLit={() => qc.invalidateQueries({ queryKey: ["memorial", m.slug] })}
                     trigger={
-                      <Button className="w-full rounded-full bg-terracotta text-accent-foreground hover:bg-terracotta/90">
+                      <Button className="w-full rounded-full bg-amber-400 text-accent-foreground hover:bg-amber-300">
                         <Flame className="mr-1.5 h-4 w-4" /> Light a candle
                       </Button>
                     }
@@ -267,7 +267,7 @@ function MemorialPage() {
                 <ul className="mt-3 space-y-3 text-sm">
                   {current.candles.slice(0, 8).map((c: any) => (
                     <li key={c.id} className="flex gap-2">
-                      <Flame className="mt-0.5 h-3.5 w-3.5 shrink-0 text-terracotta" />
+                      <Flame className="mt-0.5 h-3.5 w-3.5 shrink-0 text-amber-300" />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-start justify-between gap-2">
                           <div className="text-foreground">{c.lit_by_name ?? "Someone"}</div>
@@ -287,7 +287,7 @@ function MemorialPage() {
 
             <div className="rounded-3xl border border-border/60 bg-card p-6 soft-shadow">
               <div className="flex items-center gap-2">
-                <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-terracotta/15 text-terracotta">
+                <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-amber-400/15 text-amber-300">
                   <Gift className="h-4 w-4" />
                 </div>
                 <h3 className="font-display text-lg text-foreground">Memory gifts for {m.pet_name}</h3>
@@ -301,7 +301,7 @@ function MemorialPage() {
                 <li>· Replica plush</li>
                 <li>· Digital candle card</li>
               </ul>
-              <Link to="/marketplace" className="mt-4 inline-flex w-full items-center justify-center rounded-full bg-terracotta px-4 py-2 text-sm text-accent-foreground hover:bg-terracotta/90">
+              <Link to="/marketplace" className="mt-4 inline-flex w-full items-center justify-center rounded-full bg-amber-400 px-4 py-2 text-sm text-accent-foreground hover:bg-amber-300">
                 Browse memory gifts
               </Link>
             </div>

@@ -41,12 +41,12 @@ function Resources() {
 
         <section>
           <h2 className="flex items-center gap-2 font-display text-2xl text-foreground">
-            <Phone className="h-5 w-5 text-terracotta" /> Helplines & support
+            <Phone className="h-5 w-5 text-amber-300" /> Helplines & support
           </h2>
           <ul className="mt-5 grid gap-3 md:grid-cols-2">
             {helplines.map((h) => (
               <li key={h.name} className="rounded-2xl border border-border/60 bg-card p-5 soft-shadow">
-                <a href={h.href} target="_blank" rel="noreferrer" className="font-display text-lg text-foreground hover:text-sage-deep">{h.name}</a>
+                <a href={h.href} target="_blank" rel="noreferrer" className="font-display text-lg text-foreground hover:text-amber-200">{h.name}</a>
                 <p className="mt-1 text-sm text-muted-foreground">{h.detail}</p>
               </li>
             ))}
@@ -55,7 +55,7 @@ function Resources() {
 
         <section className="mt-14">
           <h2 className="flex items-center gap-2 font-display text-2xl text-foreground">
-            <BookOpen className="h-5 w-5 text-terracotta" /> Gentle reading
+            <BookOpen className="h-5 w-5 text-amber-300" /> Gentle reading
           </h2>
           <ul className="mt-5 grid gap-3 md:grid-cols-2">
             {articles.map((a) => (
@@ -67,13 +67,13 @@ function Resources() {
           </ul>
         </section>
 
-        <section className="mt-14 rounded-3xl bg-cream/60 p-8 text-center">
-          <Users className="mx-auto h-6 w-6 text-sage-deep" />
+        <section className="mt-14 rounded-3xl bg-white/[0.04] p-8 text-center">
+          <Users className="mx-auto h-6 w-6 text-amber-200" />
           <h2 className="mt-3 font-display text-2xl text-foreground">Join the Memorial Garden</h2>
           <p className="mt-2 text-sm text-muted-foreground">
             See how others are honoring their pets. Light a candle. Leave a kind word.
           </p>
-          <a href="/garden" className="mt-5 inline-flex items-center gap-2 rounded-full bg-sage-deep px-5 py-2.5 text-sm text-primary-foreground hover:bg-sage-deep/90">
+          <a href="/garden" className="mt-5 inline-flex items-center gap-2 rounded-full bg-amber-400 px-5 py-2.5 text-sm text-primary-foreground hover:bg-amber-300">
             <Heart className="h-4 w-4 fill-current" /> Visit the garden
           </a>
         </section>
