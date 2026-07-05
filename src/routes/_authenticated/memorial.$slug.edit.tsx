@@ -127,7 +127,7 @@ function EditMemorialPage() {
   const remove = useMutation({
     mutationFn: () => fetchDelete({ data: { id: m.id } }),
     onSuccess: () => {
-      toast.success("Memorial removed gently.");
+      toast.success(`${m.pet_name}'s memorial has been quietly taken down.`);
       navigate({ to: "/dashboard" });
     },
     onError: (e: Error) => toast.error(e.message),
