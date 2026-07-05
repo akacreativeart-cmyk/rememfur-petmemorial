@@ -282,7 +282,25 @@ function MemorialPage() {
                 </div>
               )}
 
+              {canShowFollow && (
+                <div className="mt-4 border-t border-white/10 pt-4">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => followMut.mutate()}
+                    disabled={followMut.isPending || followQ.isLoading}
+                    className="w-full rounded-full border-white/15 bg-white/5 text-white hover:bg-white/10"
+                  >
+                    {followQ.data?.following ? (
+                      <><UserCheck className="mr-1.5 h-3.5 w-3.5" /> Following</>
+                    ) : (
+                      <><UserPlus className="mr-1.5 h-3.5 w-3.5" /> Follow {m.pet_name}'s family</>
+                    )}
+                  </Button>
+                </div>
+              )}
             </div>
+
 
             {current.candles.length > 0 && (
               <div className="rounded-3xl border border-border/60 bg-card p-6 soft-shadow">
