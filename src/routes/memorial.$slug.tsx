@@ -84,6 +84,24 @@ function MemorialPage() {
   const [candleMsg, setCandleMsg] = useState("");
   const [body, setBody] = useState("");
 
+  // Follow the memorial's owner (self hidden). Table `follows` is user→user.
+  const canShowFollow = !!user && !!m.owner_id && user.id !== m.owner_id;
+  const fetchIsFollowing = useServerFn(isFollowingUser);
+  const fetchToggleFollow = useServerFn(toggleFollow);
+  const followQ = useQuery({
+    queryKey: ["is-following", m.owner_id, user?.id],
+    queryFn: () => fetchIsFollowing({ data: { user_id: m.owner_id as string } }),
+    enabled: canShowFollow,
+  });
+  const followMut = useMutation({
+    mutationFn: () => fetchToggleFollow({ data: { user_id: m.owner_id as string } }),
+    onSuccess: (res) => {
+      toast.success(res.following ? `Following ${m.pet_name}'s family.` : "Unfollowed.");
+      qc.invalidateQueries({ queryKey: ["is-following", m.owner_id, user?.id] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
   const hero = m.transformed_image_url ?? m.hero_image_url;
   const years = [m.birth_date?.slice(0, 4), m.passing_date?.slice(0, 4)].filter(Boolean).join(" – ");
 
