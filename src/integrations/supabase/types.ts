@@ -182,6 +182,7 @@ export type Database = {
         Row: {
           birth_date: string | null
           created_at: string
+          deleted_at: string | null
           epitaph: string | null
           hero_image_url: string | null
           id: string
@@ -199,6 +200,7 @@ export type Database = {
         Insert: {
           birth_date?: string | null
           created_at?: string
+          deleted_at?: string | null
           epitaph?: string | null
           hero_image_url?: string | null
           id?: string
@@ -216,6 +218,7 @@ export type Database = {
         Update: {
           birth_date?: string | null
           created_at?: string
+          deleted_at?: string | null
           epitaph?: string | null
           hero_image_url?: string | null
           id?: string
