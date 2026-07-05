@@ -261,6 +261,21 @@ export const toggleFollow = createServerFn({ method: "POST" })
     return { following: true };
   });
 
+export const isFollowingUser = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: { user_id: string }) => z.object({ user_id: z.string().uuid() }).parse(input))
+  .handler(async ({ data, context }) => {
+    const { supabase, userId } = context;
+    if (data.user_id === userId) return { following: false, self: true };
+    const { data: row } = await supabase
+      .from("follows")
+      .select("follower_id")
+      .eq("follower_id", userId)
+      .eq("following_id", data.user_id)
+      .maybeSingle();
+    return { following: !!row, self: false };
+  });
+
 export const listComments = createServerFn({ method: "GET" })
   .inputValidator((input: { post_id: string }) => z.object({ post_id: z.string().uuid() }).parse(input))
   .handler(async ({ data }) => {

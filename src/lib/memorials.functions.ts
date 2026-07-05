@@ -77,6 +77,7 @@ export const listGardenMemorials = createServerFn({ method: "GET" })
       .from("memorials")
       .select("id, slug, pet_name, species, birth_date, passing_date, epitaph, hero_image_url, transformed_image_url, created_at")
       .eq("is_public", true)
+      .is("deleted_at", null)
       .order("created_at", { ascending: false })
       .limit(60);
     if (data.species && data.species !== "all") q = q.eq("species", data.species);
@@ -108,6 +109,7 @@ export const getMemorialBySlug = createServerFn({ method: "GET" })
       .select("*")
       .eq("slug", data.slug)
       .eq("is_public", true)
+      .is("deleted_at", null)
       .maybeSingle();
     if (error) throw new Error(error.message);
     if (!memorial) return null;
@@ -141,9 +143,26 @@ export const listMyMemorials = createServerFn({ method: "GET" })
     const { data, error } = await supabase
       .from("memorials")
       .select("id, slug, pet_name, species, passing_date, hero_image_url, transformed_image_url, created_at")
+      .is("deleted_at", null)
       .order("created_at", { ascending: false });
     if (error) throw new Error(error.message);
     return data ?? [];
+  });
+
+export const softDeleteMemorial = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: { id: string }) =>
+    z.object({ id: z.string().uuid() }).parse(input),
+  )
+  .handler(async ({ data, context }) => {
+    const { supabase, userId } = context;
+    const { error } = await supabase
+      .from("memorials")
+      .update({ deleted_at: new Date().toISOString() })
+      .eq("id", data.id)
+      .eq("owner_id", userId);
+    if (error) throw new Error(error.message);
+    return { ok: true };
   });
 
 const updateSchema = z.object({

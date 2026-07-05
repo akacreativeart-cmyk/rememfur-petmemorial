@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <g fill="#e6e1d6" fill-opacity="0.85">
+    <!-- Body -->
+    <ellipse cx="100" cy="140" rx="58" ry="42" />
+    <!-- Chest tuft merging body to head -->
+    <path d="M60 118 C 70 96, 130 96, 140 118 Z" />
+    <!-- Head -->
+    <ellipse cx="100" cy="82" rx="38" ry="36" />
+    <!-- Left ear -->
+    <path d="M66 62 C 58 30, 78 26, 86 52 C 86 60, 76 68, 66 62 Z" />
+    <!-- Right ear -->
+    <path d="M134 62 C 142 30, 122 26, 114 52 C 114 60, 124 68, 134 62 Z" />
+    <!-- Tail curl -->
+    <path d="M154 132 C 176 118, 178 96, 162 88 C 154 84, 148 92, 152 100 C 156 108, 150 118, 144 122 Z" />
+  </g>
+</svg>
