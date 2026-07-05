@@ -50,7 +50,7 @@ function EditMemorialPage() {
   const qc = useQueryClient();
   const { user } = useAuth();
   const fetchUpdate = useServerFn(updateMemorial);
-  const fetchDelete = useServerFn(deleteMemorial);
+  const fetchDelete = useServerFn(softDeleteMemorial);
   const fetchPhotos = useServerFn(listMyMemorialPhotos);
   const fetchAddPhoto = useServerFn(addMemorialPhoto);
   const fetchDelPhoto = useServerFn(deleteMemorialPhoto);
