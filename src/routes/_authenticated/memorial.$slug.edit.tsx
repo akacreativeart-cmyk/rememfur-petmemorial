@@ -21,7 +21,7 @@ import {
 import {
   getMyMemorialBySlug,
   updateMemorial,
-  deleteMemorial,
+  softDeleteMemorial,
   listMyMemorialPhotos,
   addMemorialPhoto,
   deleteMemorialPhoto,
