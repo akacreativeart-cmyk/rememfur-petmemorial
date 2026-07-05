@@ -242,16 +242,16 @@ function EditMemorialPage() {
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button variant="outline" className="rounded-full text-destructive hover:text-destructive">
-                <Trash2 className="mr-1.5 h-4 w-4" /> Delete memorial
+                <Trash2 className="mr-1.5 h-4 w-4" /> Take down this memorial
               </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
                 <AlertDialogTitle className="font-display text-2xl">
-                  Let {m.pet_name}'s page go?
+                  Take down {m.pet_name}'s memorial?
                 </AlertDialogTitle>
                 <AlertDialogDescription>
-                  This will quietly take down {m.pet_name}'s memorial and its candles. Your private memories of them remain forever.
+                  This will quietly take down {m.pet_name}'s memorial and its candles. This can be undone by contacting support.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
@@ -261,7 +261,7 @@ function EditMemorialPage() {
                   disabled={remove.isPending}
                   className="rounded-full bg-destructive text-destructive-foreground hover:bg-destructive/90"
                 >
-                  {remove.isPending ? "Removing…" : "Yes, remove gently"}
+                  {remove.isPending ? "Taking down…" : "Take it down gently"}
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
