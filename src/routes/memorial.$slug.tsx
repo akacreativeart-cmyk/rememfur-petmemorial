@@ -160,8 +160,8 @@ function MemorialPage() {
         {/* Light a candle — prominent, just below the photo */}
         <div className="mt-6 flex flex-col items-center justify-between gap-4 rounded-3xl border border-border/60 bg-card p-5 soft-shadow sm:flex-row sm:p-6">
           <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-amber-400/15">
-              <Flame className="h-6 w-6 text-amber-300" />
+            <div className="flex h-14 w-10 shrink-0 items-center justify-center">
+              <CandleFlame width={40} height={56} />
             </div>
             <div>
               <div className="font-display text-xl text-foreground">
@@ -235,8 +235,8 @@ function MemorialPage() {
           {/* Sidebar */}
           <aside className="space-y-6 lg:sticky lg:top-24 lg:self-start">
             <div className="rounded-3xl border border-border/60 bg-card p-6 text-center soft-shadow">
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-amber-400/15">
-                <Flame className="h-7 w-7 text-amber-300" />
+              <div className="mx-auto flex h-16 w-12 items-center justify-center">
+                <CandleFlame width={48} height={64} />
               </div>
               <h3 className="mt-4 font-display text-xl text-foreground">Light a candle</h3>
               <p className="mt-1 text-xs text-muted-foreground">Keep their memory shining bright.</p>
@@ -272,7 +272,7 @@ function MemorialPage() {
                 <ul className="mt-3 space-y-3 text-sm">
                   {current.candles.slice(0, 8).map((c: any) => (
                     <li key={c.id} className="flex gap-2">
-                      <Flame className="mt-0.5 h-3.5 w-3.5 shrink-0 text-amber-300" />
+                      <div className="mt-0.5 shrink-0"><CandleFlame width={14} height={20} /></div>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-start justify-between gap-2">
                           <div className="text-foreground">{c.lit_by_name ?? "Someone"}</div>
