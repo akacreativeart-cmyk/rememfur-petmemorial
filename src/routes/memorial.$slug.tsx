@@ -6,14 +6,17 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
+import { CandleFlame } from "@/components/site/CandleFlame";
+import petSilhouette from "@/assets/pet-silhouette.svg";
 import { getMemorialBySlug } from "@/lib/memorials.functions";
 import { lightCandle, postMessage } from "@/lib/tributes.functions";
+import { toggleFollow, isFollowingUser } from "@/lib/feed.functions";
 import { CandleDialog } from "@/components/site/CandleDialog";
 import { CandleCountdown } from "@/components/site/CandleCountdown";
 import { ReportButton } from "@/components/site/ReportButton";
 
 import { useAuth } from "@/hooks/use-auth";
-import { Flame, Heart, MessageCircle, Share2, Pencil, Gift } from "lucide-react";
+import { Flame, Heart, MessageCircle, Share2, Pencil, Gift, UserPlus, UserCheck } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
 
@@ -125,7 +128,9 @@ function MemorialPage() {
             {hero ? (
               <img src={hero} alt={m.pet_name} className="h-[420px] w-full object-cover md:h-[520px]" />
             ) : (
-              <div className="flex h-[400px] items-center justify-center bg-muted text-6xl">🐾</div>
+              <div className="flex h-[420px] w-full items-center justify-center bg-[#0a0e1f] md:h-[520px]">
+                <img src={petSilhouette} alt="" aria-hidden className="h-56 w-56 opacity-80" />
+              </div>
             )}
             <div className="absolute inset-0 bg-gradient-to-t from-[#05070f] via-[#05070f]/40 to-transparent" />
             <div className="absolute bottom-0 left-0 right-0 flex flex-wrap items-end justify-between gap-3 p-8">
@@ -135,7 +140,7 @@ function MemorialPage() {
                 {m.epitaph && <p className="mt-3 max-w-xl font-display text-xl italic text-white/80">"{m.epitaph}"</p>}
               </div>
               <div className="flex items-center gap-4 text-sm text-white/80">
-                <div className="flex items-center gap-1"><Flame className="h-4 w-4 text-amber-300" /> {current.candles.length} candles</div>
+                <div className="flex items-center gap-1.5"><CandleFlame width={16} height={22} /> {current.candles.length} candles</div>
                 <div className="flex items-center gap-1"><MessageCircle className="h-4 w-4 text-amber-200" /> {current.messages.length} messages</div>
                 <Button variant="outline" size="sm" onClick={share} className="rounded-full border-white/15 bg-white/10">
                   <Share2 className="mr-1.5 h-3.5 w-3.5" /> Share
