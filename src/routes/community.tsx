@@ -84,7 +84,7 @@ function CommunityPage() {
             <p className="text-sm text-muted-foreground">Sign in to share memories and join the conversation.</p>
             <div className="mt-3 flex justify-center gap-2">
               <Link to="/login"><Button variant="outline" size="sm">Log in</Button></Link>
-              <Link to="/signup"><Button size="sm" className="bg-sage-deep text-primary-foreground hover:bg-sage-deep/90">Join</Button></Link>
+              <Link to="/signup"><Button size="sm" className="bg-amber-400 text-primary-foreground hover:bg-amber-300">Join</Button></Link>
             </div>
           </div>
         )}
@@ -93,13 +93,13 @@ function CommunityPage() {
           <div className="mb-6 flex gap-2 rounded-full border border-border/60 bg-card p-1 text-sm">
             <button
               onClick={() => setScope("all")}
-              className={`flex-1 rounded-full px-4 py-1.5 transition ${scope === "all" ? "bg-sage/20 text-sage-deep" : "text-muted-foreground"}`}
+              className={`flex-1 rounded-full px-4 py-1.5 transition ${scope === "all" ? "bg-white/10 text-amber-200" : "text-muted-foreground"}`}
             >
               For you
             </button>
             <button
               onClick={() => setScope("following")}
-              className={`flex-1 rounded-full px-4 py-1.5 transition ${scope === "following" ? "bg-sage/20 text-sage-deep" : "text-muted-foreground"}`}
+              className={`flex-1 rounded-full px-4 py-1.5 transition ${scope === "following" ? "bg-white/10 text-amber-200" : "text-muted-foreground"}`}
             >
               Following
             </button>

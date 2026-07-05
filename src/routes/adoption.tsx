@@ -52,7 +52,7 @@ function Adoption() {
           ))}
         </div>
 
-        <section className="mt-10 rounded-3xl bg-cream/60 p-7 text-center">
+        <section className="mt-10 rounded-3xl bg-white/[0.04] p-7 text-center">
           <HandHeart className="mx-auto h-6 w-6 text-[var(--cta)]" />
           <h2 className="mt-2 font-display text-2xl">Partner shelters near you</h2>
           <p className="mt-1 text-sm text-muted-foreground">We work with verified rescues across the country.</p>
