@@ -590,3 +590,9 @@
     animation: ray-spin 8s linear infinite, ray-fade 1600ms ease-out forwards;
   }
 }
+
+@keyframes flame-fallback-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.85; filter: drop-shadow(0 0 6px rgba(240,168,104,0.55)); }
+  50%      { transform: scale(1.08); opacity: 1;   filter: drop-shadow(0 0 12px rgba(240,168,104,0.85)); }
+}
+.flame-fallback-pulse { animation: flame-fallback-pulse 1.6s ease-in-out infinite; transform-origin: 50% 60%; }
