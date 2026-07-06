@@ -116,6 +116,46 @@ function HomePage() {
         </div>
       </section>
 
+      {/* Quiet passage — the size of the love */}
+      <section className="relative bg-gradient-to-b from-[#05070f] to-[#0a0e1f] px-5 py-20 text-center md:px-8 md:py-28">
+        <div className="mx-auto max-w-3xl">
+          <p className="font-display italic text-[26px] leading-[1.25] text-[#f5e6c8]/90 md:text-[42px] lg:text-[48px]">
+            The size of the love decides the size of the loss.
+          </p>
+        </div>
+      </section>
+
+      {/* Grief support — moved up, right after the passage */}
+      <section className="relative bg-gradient-to-b from-[#0a0e1f] via-[#0a0e1f] to-[#05070f] px-5 py-16 text-center md:px-8 md:py-24">
+        <div className="mx-auto max-w-md md:max-w-2xl">
+          <h2 className="font-display text-[28px] leading-[1.1] tracking-tight text-white md:text-4xl">
+            You don't have to carry this alone.
+          </h2>
+          <p className="mt-4 text-[15px] leading-relaxed text-white/65 md:text-lg">
+            Losing them hurts in ways people don't always understand. We've gathered gentle resources — for the first night, for explaining it to children, for elderly owners saying goodbye to a lifelong companion, and for anyone who just needs to hear that this grief is real.
+          </p>
+          <Link
+            to="/grief-support"
+            className="mt-6 inline-flex items-center text-[15px] font-medium text-amber-200 hover:text-amber-100"
+          >
+            Grief support →
+          </Link>
+          <p className="mt-8 text-[12px] text-white/40">
+            Free pet-loss support lines:{" "}
+            <a href="tel:+18774743310" className="text-white/60 hover:text-white">ASPCA 877-474-3310</a>
+            {" "}·{" "}
+            <a href="tel:+18559335683" className="text-white/60 hover:text-white">Lap of Love 855-933-5683</a>
+          </p>
+        </div>
+      </section>
+
+      {/* Live candle strip — now flows after grief support */}
+      <CandleStrip
+        candles={recent.data ?? []}
+        weekCount={weekly.data?.count ?? 0}
+        loading={recent.isLoading}
+      />
+
       {/* Empathy beat */}
       <section className="relative bg-gradient-to-b from-[#05070f] to-[#0a0e1f] px-5 py-16 text-center md:px-8 md:py-24">
         <div className="mx-auto max-w-md md:max-w-2xl">
@@ -124,6 +164,7 @@ function HomePage() {
           </p>
         </div>
       </section>
+
 
 
       {/* How it works */}
