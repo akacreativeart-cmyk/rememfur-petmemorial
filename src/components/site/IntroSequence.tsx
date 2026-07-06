@@ -104,7 +104,7 @@ export function IntroSequence() {
         )}
 
         {showFinal && (
-          <div className="intro-fade flex flex-col items-center">
+          <div className="intro-in flex flex-col items-center">
             <p className="font-display italic text-[32px] leading-[1.25] text-[#f5e6c8] md:text-[52px]">
               {FINAL}
             </p>
