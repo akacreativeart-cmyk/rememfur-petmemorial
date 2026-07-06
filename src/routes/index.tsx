@@ -77,7 +77,9 @@ function HomePage() {
 
   return (
     <div className="min-h-screen bg-[#05070f] text-white">
+      <IntroSequence />
       <SiteHeader />
+
 
       {/* Hero — the candle sky scene. */}
       <div
