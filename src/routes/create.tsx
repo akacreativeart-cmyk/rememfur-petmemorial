@@ -224,10 +224,21 @@ function CreatePage() {
     }
   };
 
-  const finish = async () => {
-    if (!petName) return toast.error("Please add their name.");
+  const doFinish = async (activeUserId: string) => {
     setSubmitting(true);
     try {
+      // If a guest picked a file before signing in, upload it now.
+      let finalHeroUrl = heroUrl;
+      if (pendingFile) {
+        const url = await uploadFileForUser(pendingFile, activeUserId);
+        finalHeroUrl = url;
+        setHeroUrl(url);
+        setPendingFile(null);
+      } else if (heroUrl && heroUrl.startsWith("blob:")) {
+        // Stale blob URL with no file — clear it (photo was lost on redirect).
+        finalHeroUrl = null;
+        setHeroUrl(null);
+      }
       const fullStory = [story.trim(), tags.length ? `\n\nThey were ${tags.join(", ")}.` : ""].join("");
       const res = await createFn({
         data: {
@@ -237,7 +248,7 @@ function CreatePage() {
           passing_date: passingDate || null,
           epitaph: epitaph || null,
           story: fullStory || null,
-          hero_image_url: heroUrl,
+          hero_image_url: finalHeroUrl,
           transformed_image_url: transformedUrl,
           transform_style: transformedUrl ? style : null,
           is_public: true,
@@ -249,12 +260,45 @@ function CreatePage() {
       toast.success("Memorial created with love.");
       setPublishedSlug(res.slug);
       setStep(5);
+      clearDraft();
     } catch (e: any) {
       toast.error(e.message ?? "Could not create memorial");
     } finally {
       setSubmitting(false);
     }
   };
+
+  const finish = async () => {
+    if (!petName) return toast.error("Please add their name.");
+    if (!user) {
+      // Guest: preserve draft and prompt sign-in.
+      saveDraft();
+      finishOnAuthRef.current = true;
+      setAuthOpen(true);
+      return;
+    }
+    await doFinish(user.id);
+  };
+
+  // If a guest signs in via password inside the dialog, auto-continue the save.
+  useEffect(() => {
+    if (user && finishOnAuthRef.current && petName) {
+      finishOnAuthRef.current = false;
+      void doFinish(user.id);
+    }
+    // Also handle post-OAuth-redirect return.
+    if (user && !finishOnAuthRef.current && petName) {
+      try {
+        if (localStorage.getItem(FINISH_FLAG) === "1") {
+          localStorage.removeItem(FINISH_FLAG);
+          if (pendingFile || !needsPhotoReattach) {
+            void doFinish(user.id);
+          }
+        }
+      } catch { /* ignore */ }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   const { welcome } = Route.useSearch();
 
