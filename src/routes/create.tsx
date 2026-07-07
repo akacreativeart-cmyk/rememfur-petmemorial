@@ -1,5 +1,6 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { AuthGateDialog } from "@/components/site/AuthGateDialog";
 import { useServerFn } from "@tanstack/react-start";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -44,7 +45,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
-export const Route = createFileRoute("/_authenticated/create")({
+export const Route = createFileRoute("/create")({
   component: CreatePage,
   validateSearch: (search: Record<string, unknown>) => ({
     welcome: search.welcome === 1 || search.welcome === "1" ? 1 : undefined,
@@ -78,6 +79,9 @@ function CreatePage() {
   const [heroUrl, setHeroUrl] = useState<string | null>(null);
   const [heroKind, setHeroKind] = useState<"image" | "video" | "audio" | "file">("image");
   const [uploading, setUploading] = useState(false);
+  // For guests: keep the actual File in memory (blob URL for preview).
+  const [pendingFile, setPendingFile] = useState<File | null>(null);
+  const [needsPhotoReattach, setNeedsPhotoReattach] = useState(false);
 
   const [style, setStyle] = useState<StyleKey>("painting");
   const [transformedUrl, setTransformedUrl] = useState<string | null>(null);
@@ -100,33 +104,99 @@ function CreatePage() {
   const [submitting, setSubmitting] = useState(false);
   const [cancelling, setCancelling] = useState(false);
   const [publishedSlug, setPublishedSlug] = useState<string | null>(null);
+  const [authOpen, setAuthOpen] = useState(false);
+  const finishOnAuthRef = useRef(false);
+
+  const DRAFT_KEY = "rememfur.create.draft.v1";
+  const FINISH_FLAG = "rememfur.create.finishAfterAuth.v1";
+
+  const saveDraft = () => {
+    try {
+      localStorage.setItem(
+        DRAFT_KEY,
+        JSON.stringify({ petName, species, birthDate, passingDate, epitaph, story, tags, candleMsg, style, step }),
+      );
+    } catch { /* ignore */ }
+  };
+
+  const clearDraft = () => {
+    try { localStorage.removeItem(DRAFT_KEY); localStorage.removeItem(FINISH_FLAG); } catch { /* ignore */ }
+  };
+
+  // On mount: restore any pending draft (fields survive, photo file does not).
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(DRAFT_KEY);
+      if (!raw) return;
+      const d = JSON.parse(raw);
+      if (d.petName && !petName) setPetName(d.petName);
+      if (d.species) setSpecies(d.species);
+      if (d.birthDate) setBirthDate(d.birthDate);
+      if (d.passingDate) setPassingDate(d.passingDate);
+      if (d.epitaph) setEpitaph(d.epitaph);
+      if (d.story) setStory(d.story);
+      if (Array.isArray(d.tags)) setTags(d.tags);
+      if (d.candleMsg) setCandleMsg(d.candleMsg);
+      if (d.style) setStyle(d.style);
+      if (d.step && typeof d.step === "number") setStep(Math.min(d.step, 4));
+      if (localStorage.getItem(FINISH_FLAG) === "1") setNeedsPhotoReattach(true);
+    } catch { /* ignore */ }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const hasProgress =
     !!heroUrl || !!transformedUrl || !!petName || !!epitaph || !!story || !!candleMsg;
 
   const handleCancel = () => {
     setCancelling(true);
-    window.setTimeout(() => navigate({ to: "/dashboard" }), 360);
+    clearDraft();
+    window.setTimeout(() => navigate({ to: user ? "/dashboard" : "/" }), 360);
+  };
+
+  const uploadFileForUser = async (file: File, userId: string): Promise<string> => {
+    const ext = file.name.split(".").pop() || "bin";
+    const path = `${userId}/${Date.now()}.${ext}`;
+    const { error } = await supabase.storage.from("pet-photos").upload(path, file, { contentType: file.type });
+    if (error) throw new Error(error.message);
+    const { data } = supabase.storage.from("pet-photos").getPublicUrl(path);
+    return data.publicUrl;
   };
 
   const handleUpload = async (file: File) => {
-    if (!user) return;
-    setUploading(true);
-    const ext = file.name.split(".").pop() || "bin";
-    const path = `${user.id}/${Date.now()}.${ext}`;
-    const { error } = await supabase.storage.from("pet-photos").upload(path, file, { contentType: file.type });
-    setUploading(false);
-    if (error) return toast.error(error.message);
-    const { data } = supabase.storage.from("pet-photos").getPublicUrl(path);
-    setHeroUrl(data.publicUrl);
     const t = file.type;
-    setHeroKind(t.startsWith("video/") ? "video" : t.startsWith("audio/") ? "audio" : t.startsWith("image/") ? "image" : "file");
-    toast.success("Memory uploaded.");
+    const kind: typeof heroKind = t.startsWith("video/") ? "video" : t.startsWith("audio/") ? "audio" : t.startsWith("image/") ? "image" : "file";
+    setHeroKind(kind);
+    setNeedsPhotoReattach(false);
+    if (!user) {
+      // Guest: hold onto the file in memory, preview via blob URL.
+      setPendingFile(file);
+      setHeroUrl(URL.createObjectURL(file));
+      toast.success("Photo added — we'll finish saving when you're signed in.");
+      return;
+    }
+    setUploading(true);
+    try {
+      const url = await uploadFileForUser(file, user.id);
+      setHeroUrl(url);
+      setPendingFile(null);
+      toast.success("Memory uploaded.");
+    } catch (e: any) {
+      toast.error(e?.message ?? "Upload failed");
+    } finally {
+      setUploading(false);
+    }
   };
 
 
   const runTransform = async () => {
     if (!heroUrl) return;
+    if (!user || heroUrl.startsWith("blob:")) {
+      // Guests can't paint the portrait yet — the server needs a real URL.
+      saveDraft();
+      finishOnAuthRef.current = false;
+      setAuthOpen(true);
+      return;
+    }
     setTransforming(true);
     try {
       const res = await transformFn({ data: { source_image_url: heroUrl, style } });
@@ -161,10 +231,21 @@ function CreatePage() {
     }
   };
 
-  const finish = async () => {
-    if (!petName) return toast.error("Please add their name.");
+  const doFinish = async (activeUserId: string) => {
     setSubmitting(true);
     try {
+      // If a guest picked a file before signing in, upload it now.
+      let finalHeroUrl = heroUrl;
+      if (pendingFile) {
+        const url = await uploadFileForUser(pendingFile, activeUserId);
+        finalHeroUrl = url;
+        setHeroUrl(url);
+        setPendingFile(null);
+      } else if (heroUrl && heroUrl.startsWith("blob:")) {
+        // Stale blob URL with no file — clear it (photo was lost on redirect).
+        finalHeroUrl = null;
+        setHeroUrl(null);
+      }
       const fullStory = [story.trim(), tags.length ? `\n\nThey were ${tags.join(", ")}.` : ""].join("");
       const res = await createFn({
         data: {
@@ -174,7 +255,7 @@ function CreatePage() {
           passing_date: passingDate || null,
           epitaph: epitaph || null,
           story: fullStory || null,
-          hero_image_url: heroUrl,
+          hero_image_url: finalHeroUrl,
           transformed_image_url: transformedUrl,
           transform_style: transformedUrl ? style : null,
           is_public: true,
@@ -186,12 +267,45 @@ function CreatePage() {
       toast.success("Memorial created with love.");
       setPublishedSlug(res.slug);
       setStep(5);
+      clearDraft();
     } catch (e: any) {
       toast.error(e.message ?? "Could not create memorial");
     } finally {
       setSubmitting(false);
     }
   };
+
+  const finish = async () => {
+    if (!petName) return toast.error("Please add their name.");
+    if (!user) {
+      // Guest: preserve draft and prompt sign-in.
+      saveDraft();
+      finishOnAuthRef.current = true;
+      setAuthOpen(true);
+      return;
+    }
+    await doFinish(user.id);
+  };
+
+  // If a guest signs in via password inside the dialog, auto-continue the save.
+  useEffect(() => {
+    if (user && finishOnAuthRef.current && petName) {
+      finishOnAuthRef.current = false;
+      void doFinish(user.id);
+    }
+    // Also handle post-OAuth-redirect return.
+    if (user && !finishOnAuthRef.current && petName) {
+      try {
+        if (localStorage.getItem(FINISH_FLAG) === "1") {
+          localStorage.removeItem(FINISH_FLAG);
+          if (pendingFile || !needsPhotoReattach) {
+            void doFinish(user.id);
+          }
+        }
+      } catch { /* ignore */ }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   const { welcome } = Route.useSearch();
 
@@ -295,6 +409,12 @@ function CreatePage() {
           Step {step} of 4 · {Math.round((step / 4) * 100)}%
         </p>
       </div>
+      )}
+
+      {needsPhotoReattach && step === 1 && (
+        <div className="mt-6 rounded-2xl border border-amber-400/30 bg-amber-400/5 p-4 text-sm text-foreground">
+          Add their photo back — everything else is safe.
+        </div>
       )}
 
       <div className="mt-8 rounded-3xl border border-border/60 bg-card p-8 soft-shadow">
@@ -683,6 +803,19 @@ function CreatePage() {
           </section>
         )}
       </div>
+
+      <AuthGateDialog
+        open={authOpen}
+        onOpenChange={setAuthOpen}
+        title={petName ? `So ${petName}'s place is always here when you return` : "So their place is always here when you return"}
+        subtitle="A quick sign-in — everything you've written stays exactly as it is."
+        beforeOAuthRedirect={() => {
+          saveDraft();
+          try { localStorage.setItem(FINISH_FLAG, "1"); } catch { /* ignore */ }
+        }}
+        onAuthed={() => { /* auto-finish handled by user effect */ }}
+        oauthRedirectPath="/create"
+      />
     </div>
   );
 }

@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { Flame, Share2, Copy, Twitter, Facebook, MessageCircle, Lock } from "lucide-react";
+import { Flame, Share2, Copy, Twitter, Facebook, MessageCircle, Lock, Heart } from "lucide-react";
 import { toast } from "sonner";
 import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { lightCandleGuest, lightCandleGuestOnPost } from "@/lib/candle-guest.functions";
+import { listMyMemorials } from "@/lib/memorials.functions";
 import { useAuth } from "@/hooks/use-auth";
 
 type Props = {
@@ -32,6 +33,22 @@ export function CandleDialog({ target, trigger, onLit }: Props) {
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
   const [lit, setLit] = useState(false);
+  const [showBridge, setShowBridge] = useState(false);
+
+  const myMemorialsFn = useServerFn(listMyMemorials);
+  const myMemorialsQ = useQuery({
+    queryKey: ["my-memorials-count-bridge"],
+    queryFn: () => myMemorialsFn(),
+    enabled: !!user && open,
+    staleTime: 60_000,
+  });
+  const shouldShowBridge = !user || (myMemorialsQ.data?.length ?? 0) === 0;
+
+  useEffect(() => {
+    if (!lit) { setShowBridge(false); return; }
+    const t = window.setTimeout(() => setShowBridge(true), 400);
+    return () => window.clearTimeout(t);
+  }, [lit]);
 
   const memorialFn = useServerFn(lightCandleGuest);
   const postFn = useServerFn(lightCandleGuestOnPost);
@@ -223,9 +240,38 @@ export function CandleDialog({ target, trigger, onLit }: Props) {
                 <Link to="/signup" className="underline">Create an account</Link> to leave your name on future candles.
               </p>
             )}
-            <Button variant="ghost" onClick={() => resetAndClose(false)} className="w-full rounded-full">
-              Done
-            </Button>
+
+            {shouldShowBridge && showBridge && (
+              <div
+                className="mt-2 border-t border-border/50 pt-5 text-center opacity-0"
+                style={{ animation: "intro-fade 400ms ease forwards" }}
+              >
+                <p className="text-sm text-muted-foreground">Is there someone you're remembering too?</p>
+                <div className="mt-3 flex flex-col items-center gap-2">
+                  <Link
+                    to="/create"
+                    onClick={() => resetAndClose(false)}
+                    className="inline-flex items-center gap-2 rounded-full bg-[color-mix(in_oklab,var(--cta)_14%,transparent)] px-5 py-2 text-sm text-foreground ring-1 ring-[color-mix(in_oklab,var(--cta)_35%,transparent)] transition hover:bg-[color-mix(in_oklab,var(--cta)_22%,transparent)]"
+                  >
+                    <Heart className="h-4 w-4 text-[var(--cta)]" />
+                    Make a place for them
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => resetAndClose(false)}
+                    className="text-[11px] text-muted-foreground/80 hover:text-muted-foreground"
+                  >
+                    Not now
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {!(shouldShowBridge && showBridge) && (
+              <Button variant="ghost" onClick={() => resetAndClose(false)} className="w-full rounded-full">
+                Done
+              </Button>
+            )}
           </div>
         )}
       </DialogContent>

@@ -17,6 +17,7 @@ import { Route as MarketplaceRouteImport } from './routes/marketplace'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as GriefSupportRouteImport } from './routes/grief-support'
 import { Route as GardenRouteImport } from './routes/garden'
+import { Route as CreateRouteImport } from './routes/create'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CommunityRouteImport } from './routes/community'
 import { Route as AdoptionRouteImport } from './routes/adoption'
@@ -30,7 +31,6 @@ import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
 import { Route as AuthenticatedJournalRouteImport } from './routes/_authenticated/journal'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
-import { Route as AuthenticatedCreateRouteImport } from './routes/_authenticated/create'
 import { Route as AuthenticatedMemorialSlugEditRouteImport } from './routes/_authenticated/memorial.$slug.edit'
 
 const SignupRoute = SignupRouteImport.update({
@@ -71,6 +71,11 @@ const GriefSupportRoute = GriefSupportRouteImport.update({
 const GardenRoute = GardenRouteImport.update({
   id: '/garden',
   path: '/garden',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CreateRoute = CreateRouteImport.update({
+  id: '/create',
+  path: '/create',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -138,11 +143,6 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
-const AuthenticatedCreateRoute = AuthenticatedCreateRouteImport.update({
-  id: '/create',
-  path: '/create',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
 const AuthenticatedMemorialSlugEditRoute =
   AuthenticatedMemorialSlugEditRouteImport.update({
     id: '/memorial/$slug/edit',
@@ -157,6 +157,7 @@ export interface FileRoutesByFullPath {
   '/adoption': typeof AdoptionRoute
   '/community': typeof CommunityRoute
   '/contact': typeof ContactRoute
+  '/create': typeof CreateRoute
   '/garden': typeof GardenRoute
   '/grief-support': typeof GriefSupportRoute
   '/login': typeof LoginRoute
@@ -165,7 +166,6 @@ export interface FileRoutesByFullPath {
   '/privacy': typeof PrivacyRoute
   '/resources': typeof ResourcesRoute
   '/signup': typeof SignupRoute
-  '/create': typeof AuthenticatedCreateRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/journal': typeof AuthenticatedJournalRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
@@ -181,6 +181,7 @@ export interface FileRoutesByTo {
   '/adoption': typeof AdoptionRoute
   '/community': typeof CommunityRoute
   '/contact': typeof ContactRoute
+  '/create': typeof CreateRoute
   '/garden': typeof GardenRoute
   '/grief-support': typeof GriefSupportRoute
   '/login': typeof LoginRoute
@@ -189,7 +190,6 @@ export interface FileRoutesByTo {
   '/privacy': typeof PrivacyRoute
   '/resources': typeof ResourcesRoute
   '/signup': typeof SignupRoute
-  '/create': typeof AuthenticatedCreateRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/journal': typeof AuthenticatedJournalRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
@@ -207,6 +207,7 @@ export interface FileRoutesById {
   '/adoption': typeof AdoptionRoute
   '/community': typeof CommunityRoute
   '/contact': typeof ContactRoute
+  '/create': typeof CreateRoute
   '/garden': typeof GardenRoute
   '/grief-support': typeof GriefSupportRoute
   '/login': typeof LoginRoute
@@ -215,7 +216,6 @@ export interface FileRoutesById {
   '/privacy': typeof PrivacyRoute
   '/resources': typeof ResourcesRoute
   '/signup': typeof SignupRoute
-  '/_authenticated/create': typeof AuthenticatedCreateRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/journal': typeof AuthenticatedJournalRoute
   '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
@@ -233,6 +233,7 @@ export interface FileRouteTypes {
     | '/adoption'
     | '/community'
     | '/contact'
+    | '/create'
     | '/garden'
     | '/grief-support'
     | '/login'
@@ -241,7 +242,6 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/resources'
     | '/signup'
-    | '/create'
     | '/dashboard'
     | '/journal'
     | '/notifications'
@@ -257,6 +257,7 @@ export interface FileRouteTypes {
     | '/adoption'
     | '/community'
     | '/contact'
+    | '/create'
     | '/garden'
     | '/grief-support'
     | '/login'
@@ -265,7 +266,6 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/resources'
     | '/signup'
-    | '/create'
     | '/dashboard'
     | '/journal'
     | '/notifications'
@@ -282,6 +282,7 @@ export interface FileRouteTypes {
     | '/adoption'
     | '/community'
     | '/contact'
+    | '/create'
     | '/garden'
     | '/grief-support'
     | '/login'
@@ -290,7 +291,6 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/resources'
     | '/signup'
-    | '/_authenticated/create'
     | '/_authenticated/dashboard'
     | '/_authenticated/journal'
     | '/_authenticated/notifications'
@@ -308,6 +308,7 @@ export interface RootRouteChildren {
   AdoptionRoute: typeof AdoptionRoute
   CommunityRoute: typeof CommunityRoute
   ContactRoute: typeof ContactRoute
+  CreateRoute: typeof CreateRoute
   GardenRoute: typeof GardenRoute
   GriefSupportRoute: typeof GriefSupportRoute
   LoginRoute: typeof LoginRoute
@@ -376,6 +377,13 @@ declare module '@tanstack/react-router' {
       path: '/garden'
       fullPath: '/garden'
       preLoaderRoute: typeof GardenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/create': {
+      id: '/create'
+      path: '/create'
+      fullPath: '/create'
+      preLoaderRoute: typeof CreateRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -469,13 +477,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/create': {
-      id: '/_authenticated/create'
-      path: '/create'
-      fullPath: '/create'
-      preLoaderRoute: typeof AuthenticatedCreateRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
     '/_authenticated/memorial/$slug/edit': {
       id: '/_authenticated/memorial/$slug/edit'
       path: '/memorial/$slug/edit'
@@ -487,7 +488,6 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteChildren {
-  AuthenticatedCreateRoute: typeof AuthenticatedCreateRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedJournalRoute: typeof AuthenticatedJournalRoute
   AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
@@ -496,7 +496,6 @@ interface AuthenticatedRouteChildren {
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
-  AuthenticatedCreateRoute: AuthenticatedCreateRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedJournalRoute: AuthenticatedJournalRoute,
   AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
@@ -516,6 +515,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdoptionRoute: AdoptionRoute,
   CommunityRoute: CommunityRoute,
   ContactRoute: ContactRoute,
+  CreateRoute: CreateRoute,
   GardenRoute: GardenRoute,
   GriefSupportRoute: GriefSupportRoute,
   LoginRoute: LoginRoute,
