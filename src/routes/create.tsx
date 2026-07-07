@@ -790,6 +790,19 @@ function CreatePage() {
           </section>
         )}
       </div>
+
+      <AuthGateDialog
+        open={authOpen}
+        onOpenChange={setAuthOpen}
+        title={petName ? `So ${petName}'s place is always here when you return` : "So their place is always here when you return"}
+        subtitle="A quick sign-in — everything you've written stays exactly as it is."
+        beforeOAuthRedirect={() => {
+          saveDraft();
+          try { localStorage.setItem(FINISH_FLAG, "1"); } catch { /* ignore */ }
+        }}
+        onAuthed={() => { /* auto-finish handled by user effect */ }}
+        oauthRedirectPath="/create"
+      />
     </div>
   );
 }
