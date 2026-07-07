@@ -240,9 +240,38 @@ export function CandleDialog({ target, trigger, onLit }: Props) {
                 <Link to="/signup" className="underline">Create an account</Link> to leave your name on future candles.
               </p>
             )}
-            <Button variant="ghost" onClick={() => resetAndClose(false)} className="w-full rounded-full">
-              Done
-            </Button>
+
+            {shouldShowBridge && showBridge && (
+              <div
+                className="mt-2 border-t border-border/50 pt-5 text-center opacity-0"
+                style={{ animation: "intro-fade 400ms ease forwards" }}
+              >
+                <p className="text-sm text-muted-foreground">Is there someone you're remembering too?</p>
+                <div className="mt-3 flex flex-col items-center gap-2">
+                  <Link
+                    to="/create"
+                    onClick={() => resetAndClose(false)}
+                    className="inline-flex items-center gap-2 rounded-full bg-[color-mix(in_oklab,var(--cta)_14%,transparent)] px-5 py-2 text-sm text-foreground ring-1 ring-[color-mix(in_oklab,var(--cta)_35%,transparent)] transition hover:bg-[color-mix(in_oklab,var(--cta)_22%,transparent)]"
+                  >
+                    <Heart className="h-4 w-4 text-[var(--cta)]" />
+                    Make a place for them
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => resetAndClose(false)}
+                    className="text-[11px] text-muted-foreground/80 hover:text-muted-foreground"
+                  >
+                    Not now
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {!(shouldShowBridge && showBridge) && (
+              <Button variant="ghost" onClick={() => resetAndClose(false)} className="w-full rounded-full">
+                Done
+              </Button>
+            )}
           </div>
         )}
       </DialogContent>
