@@ -190,6 +190,13 @@ function CreatePage() {
 
   const runTransform = async () => {
     if (!heroUrl) return;
+    if (!user || heroUrl.startsWith("blob:")) {
+      // Guests can't paint the portrait yet — the server needs a real URL.
+      saveDraft();
+      finishOnAuthRef.current = false;
+      setAuthOpen(true);
+      return;
+    }
     setTransforming(true);
     try {
       const res = await transformFn({ data: { source_image_url: heroUrl, style } });
