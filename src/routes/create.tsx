@@ -404,6 +404,12 @@ function CreatePage() {
       </div>
       )}
 
+      {needsPhotoReattach && step === 1 && (
+        <div className="mt-6 rounded-2xl border border-amber-400/30 bg-amber-400/5 p-4 text-sm text-foreground">
+          Add their photo back — everything else is safe.
+        </div>
+      )}
+
       <div className="mt-8 rounded-3xl border border-border/60 bg-card p-8 soft-shadow">
         {step === 1 && (
           <section>
