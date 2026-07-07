@@ -79,6 +79,9 @@ function CreatePage() {
   const [heroUrl, setHeroUrl] = useState<string | null>(null);
   const [heroKind, setHeroKind] = useState<"image" | "video" | "audio" | "file">("image");
   const [uploading, setUploading] = useState(false);
+  // For guests: keep the actual File in memory (blob URL for preview).
+  const [pendingFile, setPendingFile] = useState<File | null>(null);
+  const [needsPhotoReattach, setNeedsPhotoReattach] = useState(false);
 
   const [style, setStyle] = useState<StyleKey>("painting");
   const [transformedUrl, setTransformedUrl] = useState<string | null>(null);
@@ -101,28 +104,87 @@ function CreatePage() {
   const [submitting, setSubmitting] = useState(false);
   const [cancelling, setCancelling] = useState(false);
   const [publishedSlug, setPublishedSlug] = useState<string | null>(null);
+  const [authOpen, setAuthOpen] = useState(false);
+  const finishOnAuthRef = useRef(false);
+
+  const DRAFT_KEY = "rememfur.create.draft.v1";
+  const FINISH_FLAG = "rememfur.create.finishAfterAuth.v1";
+
+  const saveDraft = () => {
+    try {
+      localStorage.setItem(
+        DRAFT_KEY,
+        JSON.stringify({ petName, species, birthDate, passingDate, epitaph, story, tags, candleMsg, style, step }),
+      );
+    } catch { /* ignore */ }
+  };
+
+  const clearDraft = () => {
+    try { localStorage.removeItem(DRAFT_KEY); localStorage.removeItem(FINISH_FLAG); } catch { /* ignore */ }
+  };
+
+  // On mount: restore any pending draft (fields survive, photo file does not).
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(DRAFT_KEY);
+      if (!raw) return;
+      const d = JSON.parse(raw);
+      if (d.petName && !petName) setPetName(d.petName);
+      if (d.species) setSpecies(d.species);
+      if (d.birthDate) setBirthDate(d.birthDate);
+      if (d.passingDate) setPassingDate(d.passingDate);
+      if (d.epitaph) setEpitaph(d.epitaph);
+      if (d.story) setStory(d.story);
+      if (Array.isArray(d.tags)) setTags(d.tags);
+      if (d.candleMsg) setCandleMsg(d.candleMsg);
+      if (d.style) setStyle(d.style);
+      if (d.step && typeof d.step === "number") setStep(Math.min(d.step, 4));
+      if (localStorage.getItem(FINISH_FLAG) === "1") setNeedsPhotoReattach(true);
+    } catch { /* ignore */ }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const hasProgress =
     !!heroUrl || !!transformedUrl || !!petName || !!epitaph || !!story || !!candleMsg;
 
   const handleCancel = () => {
     setCancelling(true);
-    window.setTimeout(() => navigate({ to: "/dashboard" }), 360);
+    clearDraft();
+    window.setTimeout(() => navigate({ to: user ? "/dashboard" : "/" }), 360);
+  };
+
+  const uploadFileForUser = async (file: File, userId: string): Promise<string> => {
+    const ext = file.name.split(".").pop() || "bin";
+    const path = `${userId}/${Date.now()}.${ext}`;
+    const { error } = await supabase.storage.from("pet-photos").upload(path, file, { contentType: file.type });
+    if (error) throw new Error(error.message);
+    const { data } = supabase.storage.from("pet-photos").getPublicUrl(path);
+    return data.publicUrl;
   };
 
   const handleUpload = async (file: File) => {
-    if (!user) return;
-    setUploading(true);
-    const ext = file.name.split(".").pop() || "bin";
-    const path = `${user.id}/${Date.now()}.${ext}`;
-    const { error } = await supabase.storage.from("pet-photos").upload(path, file, { contentType: file.type });
-    setUploading(false);
-    if (error) return toast.error(error.message);
-    const { data } = supabase.storage.from("pet-photos").getPublicUrl(path);
-    setHeroUrl(data.publicUrl);
     const t = file.type;
-    setHeroKind(t.startsWith("video/") ? "video" : t.startsWith("audio/") ? "audio" : t.startsWith("image/") ? "image" : "file");
-    toast.success("Memory uploaded.");
+    const kind: typeof heroKind = t.startsWith("video/") ? "video" : t.startsWith("audio/") ? "audio" : t.startsWith("image/") ? "image" : "file";
+    setHeroKind(kind);
+    setNeedsPhotoReattach(false);
+    if (!user) {
+      // Guest: hold onto the file in memory, preview via blob URL.
+      setPendingFile(file);
+      setHeroUrl(URL.createObjectURL(file));
+      toast.success("Photo added — we'll finish saving when you're signed in.");
+      return;
+    }
+    setUploading(true);
+    try {
+      const url = await uploadFileForUser(file, user.id);
+      setHeroUrl(url);
+      setPendingFile(null);
+      toast.success("Memory uploaded.");
+    } catch (e: any) {
+      toast.error(e?.message ?? "Upload failed");
+    } finally {
+      setUploading(false);
+    }
   };
 
 
