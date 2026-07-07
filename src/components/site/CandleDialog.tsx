@@ -33,6 +33,22 @@ export function CandleDialog({ target, trigger, onLit }: Props) {
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
   const [lit, setLit] = useState(false);
+  const [showBridge, setShowBridge] = useState(false);
+
+  const myMemorialsFn = useServerFn(listMyMemorials);
+  const myMemorialsQ = useQuery({
+    queryKey: ["my-memorials-count-bridge"],
+    queryFn: () => myMemorialsFn(),
+    enabled: !!user && open,
+    staleTime: 60_000,
+  });
+  const shouldShowBridge = !user || (myMemorialsQ.data?.length ?? 0) === 0;
+
+  useEffect(() => {
+    if (!lit) { setShowBridge(false); return; }
+    const t = window.setTimeout(() => setShowBridge(true), 400);
+    return () => window.clearTimeout(t);
+  }, [lit]);
 
   const memorialFn = useServerFn(lightCandleGuest);
   const postFn = useServerFn(lightCandleGuestOnPost);
