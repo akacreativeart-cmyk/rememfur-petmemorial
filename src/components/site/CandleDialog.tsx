@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { Flame, Share2, Copy, Twitter, Facebook, MessageCircle, Lock } from "lucide-react";
+import { Flame, Share2, Copy, Twitter, Facebook, MessageCircle, Lock, Heart } from "lucide-react";
 import { toast } from "sonner";
 import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { lightCandleGuest, lightCandleGuestOnPost } from "@/lib/candle-guest.functions";
+import { listMyMemorials } from "@/lib/memorials.functions";
 import { useAuth } from "@/hooks/use-auth";
 
 type Props = {
