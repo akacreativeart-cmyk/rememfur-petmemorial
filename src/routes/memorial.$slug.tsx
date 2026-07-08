@@ -14,6 +14,8 @@ import { toggleFollow, isFollowingUser } from "@/lib/feed.functions";
 import { CandleDialog } from "@/components/site/CandleDialog";
 import { CandleCountdown } from "@/components/site/CandleCountdown";
 import { ReportButton } from "@/components/site/ReportButton";
+import { TheirSky } from "@/components/site/TheirSky";
+
 
 import { useAuth } from "@/hooks/use-auth";
 import { Flame, Heart, MessageCircle, Share2, Pencil, Gift, UserPlus, UserCheck } from "lucide-react";
@@ -207,6 +209,15 @@ function MemorialPage() {
                 <p className="mt-3 whitespace-pre-line leading-relaxed text-foreground/90">{m.story}</p>
               </section>
             )}
+
+            <TheirSky
+              petName={m.pet_name}
+              passingDate={m.passing_date ?? null}
+              location={(m as any).location ?? null}
+              memorialUrl={typeof window !== "undefined" ? window.location.href : `https://rememfur.com/memorial/${m.slug}`}
+              species={m.species as any}
+            />
+
 
             {photos.length > 0 && (
               <section className="rounded-3xl border border-border/60 bg-card p-7 soft-shadow">

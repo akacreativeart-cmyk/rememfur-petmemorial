@@ -8,6 +8,8 @@ import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { CandleDialog } from "@/components/site/CandleDialog";
 import { IntroSequence } from "@/components/site/IntroSequence";
+import { VigilScene } from "@/components/site/VigilScene";
+
 
 import {
   pickFeaturedMemorial,
@@ -178,6 +180,9 @@ function HomePage() {
       {/* 7. CLOSING */}
       <section className="relative bg-[#05070f] px-5 py-16 text-center md:px-8 md:py-24">
         <Reveal className="mx-auto max-w-md md:max-w-2xl">
+          <div className="pointer-events-none mx-auto mb-8 h-48 w-full max-w-lg md:h-64">
+            <VigilScene showConstellation variant="compact" />
+          </div>
           <h2 className="font-display text-[28px] leading-[1.1] tracking-tight text-white md:text-4xl">
             They mattered. They still do.
           </h2>
@@ -190,6 +195,7 @@ function HomePage() {
           </p>
         </Reveal>
       </section>
+
 
       <div className="bg-[#05070f] pb-[calc(72px+env(safe-area-inset-bottom))] md:pb-6">
         <SiteFooter />
@@ -217,12 +223,11 @@ function HeroScene({ primaryCandle }: { primaryCandle: ReactNode }) {
       <div className="stars3" aria-hidden />
       <div className="hero-glow" aria-hidden />
 
-      {/* Candle */}
-      <div className="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-[14%] md:bottom-[12%]">
-        <span className="hero-candle" aria-hidden>
-          <span className="flame" />
-        </span>
+      {/* The Vigil — dog silhouette watching Sirius */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[62%] md:h-[68%]">
+        <VigilScene />
       </div>
+
 
       {/* Story + CTAs */}
       <div className="relative z-10 mx-auto flex w-full max-w-md flex-col items-center px-5 pb-[26%] pt-24 text-center md:max-w-2xl md:pb-[22%] md:pt-32">
