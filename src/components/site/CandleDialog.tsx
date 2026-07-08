@@ -69,6 +69,7 @@ export function CandleDialog({ target, trigger, onLit }: Props) {
       });
     },
     onSuccess: () => {
+      softHaptic(20);
       toast.success("Candle lit 🕯️");
       setLit(true);
       onLit?.();
