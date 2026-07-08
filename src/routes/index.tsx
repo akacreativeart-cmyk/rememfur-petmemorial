@@ -180,6 +180,9 @@ function HomePage() {
       {/* 7. CLOSING */}
       <section className="relative bg-[#05070f] px-5 py-16 text-center md:px-8 md:py-24">
         <Reveal className="mx-auto max-w-md md:max-w-2xl">
+          <div className="pointer-events-none mx-auto mb-8 h-48 w-full max-w-lg md:h-64">
+            <VigilScene showConstellation variant="compact" />
+          </div>
           <h2 className="font-display text-[28px] leading-[1.1] tracking-tight text-white md:text-4xl">
             They mattered. They still do.
           </h2>
@@ -192,6 +195,7 @@ function HomePage() {
           </p>
         </Reveal>
       </section>
+
 
       <div className="bg-[#05070f] pb-[calc(72px+env(safe-area-inset-bottom))] md:pb-6">
         <SiteFooter />
