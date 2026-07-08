@@ -709,3 +709,99 @@
   .reveal { opacity: 1 !important; transform: none !important; }
 }
 
+/* ────────────────────────────────────────────
+ * The Vigil — dog + Sirius + hill scene
+ * ──────────────────────────────────────────── */
+.vigil-sirius {
+  animation: vigil-sirius-twinkle 3s ease-in-out infinite;
+}
+@keyframes vigil-sirius-twinkle {
+  0%, 100% { transform: scale(1); opacity: 0.95; }
+  50%      { transform: scale(1.25); opacity: 1; }
+}
+
+.vigil-dog-torso { animation: vigil-breath 4.6s ease-in-out infinite; }
+@keyframes vigil-breath {
+  0%, 100% { transform: scaleY(1); }
+  50%      { transform: scaleY(1.013); }
+}
+
+.vigil-dog-head { animation: vigil-head-tilt 25s ease-in-out infinite; }
+@keyframes vigil-head-tilt {
+  0%, 88%, 100% { transform: rotate(0deg); }
+  92%           { transform: rotate(-2.5deg); }
+  96%           { transform: rotate(2deg); }
+}
+
+.vigil-dog-ear { animation: vigil-ear-flick 20s ease-in-out infinite; }
+@keyframes vigil-ear-flick {
+  0%, 94%, 100% { transform: rotate(0deg); }
+  95%           { transform: rotate(-14deg); }
+  96%           { transform: rotate(6deg); }
+  97%           { transform: rotate(0deg); }
+}
+
+.vigil-beam { opacity: 0.85; }
+
+.vigil-line { transition: none; }
+.vigil-with-constellation.vigil-in-view .vigil-line {
+  animation: vigil-line-draw 900ms ease-out forwards;
+  animation-delay: var(--delay, 0ms);
+}
+@keyframes vigil-line-draw { to { stroke-dashoffset: 0; } }
+
+.vigil-star { opacity: 0; transform: scale(0.4); transform-box: fill-box; transform-origin: center; }
+.vigil-with-constellation.vigil-in-view .vigil-star {
+  animation: vigil-star-pop 500ms ease-out forwards;
+  animation-delay: var(--delay, 0ms);
+}
+@keyframes vigil-star-pop { to { opacity: 1; transform: scale(1); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .vigil-sirius,
+  .vigil-dog-torso,
+  .vigil-dog-head,
+  .vigil-dog-ear { animation: none !important; }
+  .vigil-line { stroke-dashoffset: 0 !important; animation: none !important; }
+  .vigil-star { opacity: 1 !important; transform: none !important; animation: none !important; }
+}
+
+/* ────────────────────────────────────────────
+ * Their Sky — memorial constellation panel
+ * ──────────────────────────────────────────── */
+.ts-line { transition: none; }
+.their-sky-svg.sky-in-view .ts-line {
+  animation: ts-line-draw 700ms ease-out forwards;
+  animation-delay: var(--delay, 0ms);
+}
+@keyframes ts-line-draw { to { stroke-dashoffset: 0; } }
+
+.ts-star { opacity: 0; transform: scale(0.3); transform-box: fill-box; }
+.their-sky-svg.sky-in-view .ts-star {
+  animation: ts-star-in 400ms ease-out forwards;
+  animation-delay: var(--delay, 0ms);
+}
+.their-sky-svg.sky-in-view .ts-star-sirius {
+  animation: ts-sirius-in 700ms ease-out forwards, vigil-sirius-twinkle 3.2s ease-in-out 1.4s infinite;
+}
+@keyframes ts-star-in { to { opacity: 1; transform: scale(1); } }
+@keyframes ts-sirius-in {
+  0%   { opacity: 0; transform: scale(0.2); }
+  70%  { opacity: 1; transform: scale(1.15); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.their-sky-svg.sky-pulse { animation: ts-pulse 620ms ease-out; transform-origin: center; }
+@keyframes ts-pulse {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ts-line { stroke-dashoffset: 0 !important; animation: none !important; }
+  .ts-star, .ts-star-sirius { opacity: 1 !important; transform: none !important; animation: none !important; }
+  .their-sky-svg.sky-pulse { animation: none !important; }
+}
+
+
