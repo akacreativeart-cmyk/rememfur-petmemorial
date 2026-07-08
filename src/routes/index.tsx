@@ -224,26 +224,20 @@ function HeroScene({ primaryCandle }: { primaryCandle: ReactNode }) {
       {/* Story + CTAs */}
       <div className="relative z-10 mx-auto flex w-full max-w-md flex-col items-center px-5 pb-[26%] pt-24 text-center md:max-w-2xl md:pb-[22%] md:pt-32">
         <p className="rise-in font-display text-[18px] leading-[1.4] text-white/75 md:text-[22px]" style={{ animationDelay: "0.2s" }}>
-          The house is quieter now.
-        </p>
-        <p className="rise-in mt-3 font-display text-[18px] leading-[1.4] text-white/75 md:text-[22px]" style={{ animationDelay: "1.4s" }}>
-          The bowl is still by the door.
-        </p>
-        <p className="rise-in mt-3 font-display text-[18px] leading-[1.4] text-[#f5e6c8]/90 md:text-[22px]" style={{ animationDelay: "2.6s" }}>
-          The love — the love is still everywhere.
+          Light a candle for the pet you loved. Say their name. Keep them close.
         </p>
 
-        <h1 className="rise-in mt-8 font-display text-[30px] leading-[1.05] tracking-tight text-white md:text-5xl lg:text-6xl" style={{ animationDelay: "4.0s" }}>
+        <h1 className="rise-in mt-8 font-display text-[30px] leading-[1.05] tracking-tight text-white md:text-5xl lg:text-6xl" style={{ animationDelay: "1.4s" }}>
           Grief is just love with nowhere to go.
         </h1>
-        <p className="rise-in mt-2 font-display italic text-[24px] leading-[1.1] text-[var(--gold)] md:text-4xl lg:text-5xl" style={{ animationDelay: "4.8s" }}>
+        <p className="rise-in mt-2 font-display italic text-[24px] leading-[1.1] text-[var(--gold)] md:text-4xl lg:text-5xl" style={{ animationDelay: "2.2s" }}>
           Now it has somewhere.
         </p>
 
-        <div className="rise-in mt-8 flex flex-col items-center gap-3" style={{ animationDelay: "5.8s" }}>
+        <div className="rise-in mt-8 flex flex-col items-center gap-3" style={{ animationDelay: "3.0s" }}>
           {primaryCandle}
           <Link to="/create" className="text-[13px] text-white/60 underline-offset-4 hover:text-white/90 hover:underline">
-            Create their memorial
+            Say their name
           </Link>
         </div>
       </div>
