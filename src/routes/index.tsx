@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { ChevronDown, Flame, Share2, Image as ImageIcon, Flower2, BookOpen, Users, Sparkles } from "lucide-react";
+import { ChevronDown, Flame, Image as ImageIcon, Flower2, BookOpen, Users, Sparkles } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -139,9 +139,9 @@ function HomePage() {
             </h2>
           </Reveal>
           <div className="mt-10 grid gap-6 md:mt-14 md:grid-cols-3 md:gap-8">
-            <Reveal><StepCard icon={ImageIcon} title="Create their memorial." body="A name, a photo, a few words about who they were. It takes about a minute." /></Reveal>
-            <Reveal><StepCard icon={Share2} title="Share it with people who loved them." body="Send the link to family and friends. They can visit, leave a candle, add a memory." /></Reveal>
-            <Reveal><StepCard icon={Flame} title="Candles keep their flame alive." body="Anyone — you, strangers, people who understand — can light a candle. Their light stays." /></Reveal>
+            <Reveal><StepCard title="Say their name." body="Tell us who they were — a name, a photo, a few words. Or just a name. That's enough." /></Reveal>
+            <Reveal><StepCard title="Light their candle." body="One flame, burning in a sky beside thousands of others. Theirs." /></Reveal>
+            <Reveal><StepCard title="Return anytime." body="Their light stays. Come back on the hard days — the birthdays, the anniversaries, the quiet Tuesdays." /></Reveal>
           </div>
           <p className="mt-10 text-center text-[12px] uppercase tracking-[0.25em] text-white/45">
             No account needed. It takes about a minute.
@@ -181,6 +181,9 @@ function HomePage() {
           <h2 className="font-display text-[28px] leading-[1.1] tracking-tight text-white md:text-4xl">
             They mattered. They still do.
           </h2>
+          <p className="mt-4 text-[16px] leading-relaxed text-white/70 md:text-lg">
+            Give the love somewhere to go.
+          </p>
           <div className="mt-8">{primaryCandle}</div>
           <p className="mt-6 text-[14px] leading-relaxed text-white/60 md:text-base">
             It takes a minute. It stays forever.
@@ -224,26 +227,20 @@ function HeroScene({ primaryCandle }: { primaryCandle: ReactNode }) {
       {/* Story + CTAs */}
       <div className="relative z-10 mx-auto flex w-full max-w-md flex-col items-center px-5 pb-[26%] pt-24 text-center md:max-w-2xl md:pb-[22%] md:pt-32">
         <p className="rise-in font-display text-[18px] leading-[1.4] text-white/75 md:text-[22px]" style={{ animationDelay: "0.2s" }}>
-          The house is quieter now.
-        </p>
-        <p className="rise-in mt-3 font-display text-[18px] leading-[1.4] text-white/75 md:text-[22px]" style={{ animationDelay: "1.4s" }}>
-          The bowl is still by the door.
-        </p>
-        <p className="rise-in mt-3 font-display text-[18px] leading-[1.4] text-[#f5e6c8]/90 md:text-[22px]" style={{ animationDelay: "2.6s" }}>
-          The love — the love is still everywhere.
+          Light a candle for the pet you loved. Say their name. Keep them close.
         </p>
 
-        <h1 className="rise-in mt-8 font-display text-[30px] leading-[1.05] tracking-tight text-white md:text-5xl lg:text-6xl" style={{ animationDelay: "4.0s" }}>
+        <h1 className="rise-in mt-8 font-display text-[30px] leading-[1.05] tracking-tight text-white md:text-5xl lg:text-6xl" style={{ animationDelay: "1.4s" }}>
           Grief is just love with nowhere to go.
         </h1>
-        <p className="rise-in mt-2 font-display italic text-[24px] leading-[1.1] text-[var(--gold)] md:text-4xl lg:text-5xl" style={{ animationDelay: "4.8s" }}>
+        <p className="rise-in mt-2 font-display italic text-[24px] leading-[1.1] text-[var(--gold)] md:text-4xl lg:text-5xl" style={{ animationDelay: "2.2s" }}>
           Now it has somewhere.
         </p>
 
-        <div className="rise-in mt-8 flex flex-col items-center gap-3" style={{ animationDelay: "5.8s" }}>
+        <div className="rise-in mt-8 flex flex-col items-center gap-3" style={{ animationDelay: "3.0s" }}>
           {primaryCandle}
           <Link to="/create" className="text-[13px] text-white/60 underline-offset-4 hover:text-white/90 hover:underline">
-            Create their memorial
+            Say their name
           </Link>
         </div>
       </div>
