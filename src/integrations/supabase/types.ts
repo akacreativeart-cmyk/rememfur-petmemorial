@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      beta_feedback: {
+        Row: {
+          created_at: string
+          email: string | null
+          id: string
+          message: string
+          page_path: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          message: string
+          page_path?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          message?: string
+          page_path?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       candles: {
         Row: {
           created_at: string
