@@ -139,9 +139,9 @@ function HomePage() {
             </h2>
           </Reveal>
           <div className="mt-10 grid gap-6 md:mt-14 md:grid-cols-3 md:gap-8">
-            <Reveal><StepCard icon={ImageIcon} title="Create their memorial." body="A name, a photo, a few words about who they were. It takes about a minute." /></Reveal>
-            <Reveal><StepCard icon={Share2} title="Share it with people who loved them." body="Send the link to family and friends. They can visit, leave a candle, add a memory." /></Reveal>
-            <Reveal><StepCard icon={Flame} title="Candles keep their flame alive." body="Anyone — you, strangers, people who understand — can light a candle. Their light stays." /></Reveal>
+            <Reveal><StepCard title="Say their name." body="Tell us who they were — a name, a photo, a few words. Or just a name. That's enough." /></Reveal>
+            <Reveal><StepCard title="Light their candle." body="One flame, burning in a sky beside thousands of others. Theirs." /></Reveal>
+            <Reveal><StepCard title="Return anytime." body="Their light stays. Come back on the hard days — the birthdays, the anniversaries, the quiet Tuesdays." /></Reveal>
           </div>
           <p className="mt-10 text-center text-[12px] uppercase tracking-[0.25em] text-white/45">
             No account needed. It takes about a minute.
