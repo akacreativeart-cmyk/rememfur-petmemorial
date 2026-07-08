@@ -13,6 +13,9 @@ import { AuthProvider } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 import { MobileTabBar } from "@/components/site/MobileTabBar";
 import { SkyBackground } from "@/components/site/SkyBackground";
+import { InstallToastGuardian } from "@/components/site/InstallToastGuardian";
+import { InstallAppDialog } from "@/components/site/InstallAppDialog";
+import { registerServiceWorker } from "@/lib/pwa/register-sw";
 
 import appCss from "../styles.css?url";
 
@@ -61,10 +64,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   head: () => ({
     meta: [
       { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
       { title: "Rememfur — A gentle pet memorial for the love that stays" },
       { name: "description", content: "Honor, remember, and celebrate your pet with a beautiful AI-illustrated memorial, a candle wall, and a community that understands." },
-      { name: "theme-color", content: "#090d1a" },
+      { name: "theme-color", content: "#05070f" },
+      { name: "apple-mobile-web-app-capable", content: "yes" },
+      { name: "mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
+      { name: "apple-mobile-web-app-title", content: "Rememfur" },
       { property: "og:title", content: "Rememfur — A gentle pet memorial for the love that stays" },
       { property: "og:description", content: "Honor, remember, and celebrate your pet with a beautiful AI-illustrated memorial, a candle wall, and a community that understands." },
       { property: "og:type", content: "website" },
@@ -76,6 +83,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     links: [
       { rel: "stylesheet", href: appCss },
+      { rel: "manifest", href: "/manifest.webmanifest" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
+      { rel: "icon", type: "image/png", sizes: "192x192", href: "/icon-192.png" },
+      { rel: "icon", type: "image/png", sizes: "512x512", href: "/icon-512.png" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
@@ -121,10 +132,13 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const { pathname } = useRouter().state.location;
   const standalone = pathname === "/";
+  useEffect(() => { void registerServiceWorker(); }, []);
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <AuthInvalidator />
+        <InstallToastGuardian />
+        <InstallAppDialog />
         {standalone ? (
           <>
             <Outlet />

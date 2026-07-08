@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { softHaptic } from "@/lib/haptic";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { Flame, Share2, Copy, Twitter, Facebook, MessageCircle, Lock, Heart } from "lucide-react";
@@ -68,6 +69,7 @@ export function CandleDialog({ target, trigger, onLit }: Props) {
       });
     },
     onSuccess: () => {
+      softHaptic(20);
       toast.success("Candle lit 🕯️");
       setLit(true);
       onLit?.();

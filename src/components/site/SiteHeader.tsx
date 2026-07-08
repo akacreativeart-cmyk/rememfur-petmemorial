@@ -1,10 +1,12 @@
 import { Link, useRouter, useLocation } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { useIsAdmin } from "@/hooks/use-admin";
-import { ChevronLeft, LogOut, ShoppingBag, Menu, Home, Flower2, Users, BookOpen, PlusCircle, User as UserIcon, Settings, HeartHandshake, Info, HandHeart, Stethoscope, LifeBuoy, ShieldCheck } from "lucide-react";
+import { ChevronLeft, LogOut, ShoppingBag, Menu, Home, Flower2, Users, BookOpen, PlusCircle, User as UserIcon, Settings, HeartHandshake, Info, HandHeart, Stethoscope, LifeBuoy, ShieldCheck, Download, MessageSquare } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { NotificationBell } from "@/components/site/NotificationBell";
+import { FeedbackDialog } from "@/components/site/FeedbackDialog";
+import { InstallAppDialog } from "@/components/site/InstallAppDialog";
 import {
   Sheet,
   SheetContent,
@@ -77,6 +79,7 @@ export function SiteHeader() {
             <img src={logo} alt="" width={24} height={24} className="h-6 w-6 opacity-90" />
           )}
           <Link to="/" className="brand-wordmark">rememfur</Link>
+          <span className="hidden text-[9px] font-semibold uppercase tracking-[0.18em] text-white/40 xs:inline sm:inline">BETA</span>
         </div>
         <div className="flex items-center gap-1">
           <Link
@@ -170,6 +173,29 @@ export function SiteHeader() {
                 </>
               )}
 
+              <div className="my-4 h-px bg-border/60" />
+              <div className="space-y-1">
+                <button
+                  type="button"
+                  onClick={() => { setOpen(false); window.dispatchEvent(new CustomEvent("rememfur:open-install")); }}
+                  className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-base text-foreground hover:bg-cream/70"
+                >
+                  <Download className="h-5 w-5 text-[var(--terracotta)]" />
+                  Add Rememfur to your home screen
+                </button>
+                <FeedbackDialog
+                  trigger={
+                    <button
+                      type="button"
+                      className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-base text-foreground hover:bg-cream/70"
+                    >
+                      <MessageSquare className="h-5 w-5 text-[var(--terracotta)]" />
+                      Share feedback
+                    </button>
+                  }
+                />
+              </div>
+
               {!user && (
                 <div className="mt-4 grid gap-2">
                   <Link
@@ -204,6 +230,7 @@ export function SiteHeader() {
         <Link to="/" className="flex items-center gap-2">
           <img src={logo} alt="" width={28} height={28} className="h-7 w-7 opacity-90" />
           <span className="brand-wordmark text-xl">rememfur</span>
+          <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/40">BETA</span>
         </Link>
 
         <nav className="flex items-center gap-1">
@@ -310,6 +337,25 @@ export function SiteHeader() {
                   </nav>
                 </>
               )}
+              <div className="my-4 h-px bg-border/60" />
+              <div className="space-y-1">
+                <button
+                  type="button"
+                  onClick={() => { setOpen(false); window.dispatchEvent(new CustomEvent("rememfur:open-install")); }}
+                  className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-base text-foreground hover:bg-cream/70"
+                >
+                  <Download className="h-5 w-5 text-[var(--terracotta)]" />
+                  Add Rememfur to your home screen
+                </button>
+                <FeedbackDialog
+                  trigger={
+                    <button type="button" className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-base text-foreground hover:bg-cream/70">
+                      <MessageSquare className="h-5 w-5 text-[var(--terracotta)]" />
+                      Share feedback
+                    </button>
+                  }
+                />
+              </div>
             </SheetContent>
           </Sheet>
         </div>
