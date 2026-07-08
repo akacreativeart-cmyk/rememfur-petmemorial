@@ -8,6 +8,8 @@ import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { CandleDialog } from "@/components/site/CandleDialog";
 import { IntroSequence } from "@/components/site/IntroSequence";
+import { VigilScene } from "@/components/site/VigilScene";
+
 
 import {
   pickFeaturedMemorial,
