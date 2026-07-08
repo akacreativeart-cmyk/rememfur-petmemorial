@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { ChevronDown, Flame, Share2, Image as ImageIcon, Flower2, BookOpen, Users, Sparkles } from "lucide-react";
+import { ChevronDown, Flame, Image as ImageIcon, Flower2, BookOpen, Users, Sparkles } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
