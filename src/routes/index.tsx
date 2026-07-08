@@ -181,6 +181,9 @@ function HomePage() {
           <h2 className="font-display text-[28px] leading-[1.1] tracking-tight text-white md:text-4xl">
             They mattered. They still do.
           </h2>
+          <p className="mt-4 text-[16px] leading-relaxed text-white/70 md:text-lg">
+            Give the love somewhere to go.
+          </p>
           <div className="mt-8">{primaryCandle}</div>
           <p className="mt-6 text-[14px] leading-relaxed text-white/60 md:text-base">
             It takes a minute. It stays forever.
