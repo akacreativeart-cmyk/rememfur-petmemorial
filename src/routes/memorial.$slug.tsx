@@ -14,6 +14,8 @@ import { toggleFollow, isFollowingUser } from "@/lib/feed.functions";
 import { CandleDialog } from "@/components/site/CandleDialog";
 import { CandleCountdown } from "@/components/site/CandleCountdown";
 import { ReportButton } from "@/components/site/ReportButton";
+import { TheirSky } from "@/components/site/TheirSky";
+
 
 import { useAuth } from "@/hooks/use-auth";
 import { Flame, Heart, MessageCircle, Share2, Pencil, Gift, UserPlus, UserCheck } from "lucide-react";
