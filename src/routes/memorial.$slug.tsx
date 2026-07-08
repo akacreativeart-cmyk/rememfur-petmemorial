@@ -210,6 +210,15 @@ function MemorialPage() {
               </section>
             )}
 
+            <TheirSky
+              petName={m.pet_name}
+              passingDate={m.passing_date ?? null}
+              location={(m as any).location ?? null}
+              memorialUrl={typeof window !== "undefined" ? window.location.href : `https://rememfur.com/memorial/${m.slug}`}
+              species={m.species as any}
+            />
+
+
             {photos.length > 0 && (
               <section className="rounded-3xl border border-border/60 bg-card p-7 soft-shadow">
                 <h2 className="font-display text-2xl text-foreground">Gallery</h2>
