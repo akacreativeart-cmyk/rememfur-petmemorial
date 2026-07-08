@@ -79,6 +79,7 @@ export function SiteHeader() {
             <img src={logo} alt="" width={24} height={24} className="h-6 w-6 opacity-90" />
           )}
           <Link to="/" className="brand-wordmark">rememfur</Link>
+          <span className="hidden text-[9px] font-semibold uppercase tracking-[0.18em] text-white/40 xs:inline sm:inline">BETA</span>
         </div>
         <div className="flex items-center gap-1">
           <Link
