@@ -337,6 +337,25 @@ export function SiteHeader() {
                   </nav>
                 </>
               )}
+              <div className="my-4 h-px bg-border/60" />
+              <div className="space-y-1">
+                <button
+                  type="button"
+                  onClick={() => { setOpen(false); window.dispatchEvent(new CustomEvent("rememfur:open-install")); }}
+                  className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-base text-foreground hover:bg-cream/70"
+                >
+                  <Download className="h-5 w-5 text-[var(--terracotta)]" />
+                  Add Rememfur to your home screen
+                </button>
+                <FeedbackDialog
+                  trigger={
+                    <button type="button" className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-base text-foreground hover:bg-cream/70">
+                      <MessageSquare className="h-5 w-5 text-[var(--terracotta)]" />
+                      Share feedback
+                    </button>
+                  }
+                />
+              </div>
             </SheetContent>
           </Sheet>
         </div>
