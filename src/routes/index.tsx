@@ -219,12 +219,11 @@ function HeroScene({ primaryCandle }: { primaryCandle: ReactNode }) {
       <div className="stars3" aria-hidden />
       <div className="hero-glow" aria-hidden />
 
-      {/* Candle */}
-      <div className="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-[14%] md:bottom-[12%]">
-        <span className="hero-candle" aria-hidden>
-          <span className="flame" />
-        </span>
+      {/* The Vigil — dog silhouette watching Sirius */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[62%] md:h-[68%]">
+        <VigilScene />
       </div>
+
 
       {/* Story + CTAs */}
       <div className="relative z-10 mx-auto flex w-full max-w-md flex-col items-center px-5 pb-[26%] pt-24 text-center md:max-w-2xl md:pb-[22%] md:pt-32">
