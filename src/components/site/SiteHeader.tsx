@@ -207,6 +207,7 @@ export function SiteHeader() {
         <Link to="/" className="flex items-center gap-2">
           <img src={logo} alt="" width={28} height={28} className="h-7 w-7 opacity-90" />
           <span className="brand-wordmark text-xl">rememfur</span>
+          <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/40">BETA</span>
         </Link>
 
         <nav className="flex items-center gap-1">
