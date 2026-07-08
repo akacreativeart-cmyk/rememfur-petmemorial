@@ -1,14 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Flame, Share2, Sparkles, Image as ImageIcon, Flower2, BookOpen, Users } from "lucide-react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { ChevronDown, Flame, Share2, Image as ImageIcon, Flower2, BookOpen, Users, Sparkles } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { useAuth } from "@/hooks/use-auth";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { CandleDialog } from "@/components/site/CandleDialog";
 import { IntroSequence } from "@/components/site/IntroSequence";
-
 
 import {
   pickFeaturedMemorial,
@@ -26,9 +25,42 @@ export const Route = createFileRoute("/")({
   }),
 });
 
-function HomePage() {
-  const { user } = useAuth();
+function useReveal<T extends HTMLElement>() {
+  const ref = useRef<T | null>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (typeof IntersectionObserver === "undefined") {
+      el.classList.add("in-view");
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            e.target.classList.add("in-view");
+            io.unobserve(e.target);
+          }
+        }
+      },
+      { rootMargin: "0px 0px -10% 0px", threshold: 0.12 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  return ref;
+}
 
+function Reveal({ children, className = "" }: { children: ReactNode; className?: string }) {
+  const ref = useReveal<HTMLDivElement>();
+  return (
+    <div ref={ref} className={`reveal ${className}`}>
+      {children}
+    </div>
+  );
+}
+
+function HomePage() {
   const featuredFn = useServerFn(pickFeaturedMemorial);
   const recentFn = useServerFn(listRecentCandles);
   const countFn = useServerFn(countCandlesThisWeek);
@@ -69,7 +101,7 @@ function HomePage() {
   ) : (
     <Link
       to="/garden"
-      className="ios-tappable inline-flex items-center justify-center rounded-full bg-white px-7 py-3.5 text-[15px] font-semibold text-neutral-900 hover:bg-white/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-200 focus-visible:ring-offset-2 focus-visible:ring-offset-[#05070f]"
+      className="ios-tappable inline-flex items-center justify-center rounded-full bg-white px-7 py-3.5 text-[15px] font-semibold text-neutral-900 hover:bg-white/90"
     >
       Light a candle 🕯️
     </Link>
@@ -80,115 +112,36 @@ function HomePage() {
       <IntroSequence />
       <SiteHeader />
 
+      {/* 1. OPENING SCENE — native CSS */}
+      <HeroScene primaryCandle={primaryCandle} />
 
-      {/* Hero — the candle sky scene. */}
-      <div
-        className="relative w-full overflow-hidden bg-[#090d1a] md:h-[75vh] lg:h-[80vh]"
-        style={{ height: "calc(100dvh - 54px - 72px - env(safe-area-inset-top) - env(safe-area-inset-bottom))" }}
-      >
-        <iframe
-          src="/app.html?embed=1"
-          title="rememfur"
-          className="h-full w-full border-0"
-          style={{ background: "#090d1a" }}
-        />
-      </div>
-
-      {/* Hero copy — placed just below the sky so the candle stays first. */}
-      <section className="relative bg-[#05070f] px-5 pt-10 pb-12 text-center md:px-8 md:pt-14 md:pb-16">
-        <div className="mx-auto max-w-md md:max-w-2xl">
-          <h1 className="font-display text-[32px] leading-[1.05] tracking-tight text-white md:text-5xl lg:text-6xl">
-            <span className="block">Grief is just love with nowhere to go.</span>
-            <span className="mt-1 block text-[var(--gold)] italic">Now it has somewhere.</span>
-          </h1>
-          <p className="mt-5 text-[15px] leading-relaxed text-white/70 md:text-lg">
-            Light a candle for the pet you loved. Say their name. Keep them close.
-          </p>
-          <div className="mt-7 flex flex-col items-center gap-3">
-            {primaryCandle}
-            <Link
-              to="/garden"
-              className="text-[13px] text-white/55 underline-offset-4 hover:text-white/80 hover:underline"
-            >
-              Visit the sky — see who's being remembered
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Quiet passage — the size of the love */}
+      {/* 2. STORY BEAT */}
       <section className="relative bg-gradient-to-b from-[#05070f] to-[#0a0e1f] px-5 py-20 text-center md:px-8 md:py-28">
-        <div className="mx-auto max-w-3xl">
-          <p className="font-display italic text-[26px] leading-[1.25] text-[#f5e6c8]/90 md:text-[42px] lg:text-[48px]">
-            The size of the love decides the size of the loss.
+        <Reveal className="mx-auto max-w-3xl">
+          <p className="font-display italic text-[22px] leading-[1.35] text-[#f5e6c8]/90 md:text-[32px] lg:text-[36px]">
+            They were not <span className="not-italic">"just a dog."</span> Not <span className="not-italic">"just a cat."</span> They were seventeen years of coming home to someone.
           </p>
-        </div>
+          <p className="mt-6 font-display text-[20px] leading-[1.4] text-white/70 md:text-[28px]">
+            All that love doesn't disappear. It just needs a place.
+          </p>
+        </Reveal>
       </section>
 
-      {/* Grief support — moved up, right after the passage */}
-      <section className="relative bg-gradient-to-b from-[#0a0e1f] via-[#0a0e1f] to-[#05070f] px-5 py-16 text-center md:px-8 md:py-24">
-        <div className="mx-auto max-w-md md:max-w-2xl">
-          <h2 className="font-display text-[28px] leading-[1.1] tracking-tight text-white md:text-4xl">
-            You don't have to carry this alone.
-          </h2>
-          <p className="mt-4 text-[15px] leading-relaxed text-white/65 md:text-lg">
-            Losing them hurts in ways people don't always understand. We've gathered gentle resources — for the first night, for explaining it to children, for elderly owners saying goodbye to a lifelong companion, and for anyone who just needs to hear that this grief is real.
-          </p>
-          <Link
-            to="/grief-support"
-            className="mt-6 inline-flex items-center text-[15px] font-medium text-amber-200 hover:text-amber-100"
-          >
-            Grief support →
-          </Link>
-          <p className="mt-8 text-[12px] text-white/40">
-            Free pet-loss support lines:{" "}
-            <a href="tel:+18774743310" className="text-white/60 hover:text-white">ASPCA 877-474-3310</a>
-            {" "}·{" "}
-            <a href="tel:+18559335683" className="text-white/60 hover:text-white">Lap of Love 855-933-5683</a>
-          </p>
-        </div>
-      </section>
+      {/* 3. FEATURE CHAPTERS */}
+      <FeatureChapters />
 
-      {/* Live candle strip — now flows after grief support */}
-      <CandleStrip
-        candles={recent.data ?? []}
-        weekCount={weekly.data?.count ?? 0}
-        loading={recent.isLoading}
-      />
-
-      {/* Empathy beat */}
-      <section className="relative bg-gradient-to-b from-[#05070f] to-[#0a0e1f] px-5 py-16 text-center md:px-8 md:py-24">
-        <div className="mx-auto max-w-md md:max-w-2xl">
-          <p className="text-[15px] leading-relaxed text-white/70 md:text-xl">
-            When a pet dies, the world expects you to move on quickly. But you know what they were. Not "just a dog." Not "just a cat." Seventeen years of coming home to someone. — All that love doesn't disappear. It just needs a place.
-          </p>
-        </div>
-      </section>
-
-
-
-      {/* How it works */}
+      {/* 4. HOW IT WORKS */}
       <section className="relative bg-gradient-to-b from-[#0a0e1f] to-[#05070f] px-5 py-16 md:px-8 md:py-24">
         <div className="mx-auto max-w-md md:max-w-[1200px]">
-          <h2 className="text-center font-display text-[28px] leading-[1.1] tracking-tight text-white md:text-4xl lg:text-5xl">
-            How it works
-          </h2>
+          <Reveal>
+            <h2 className="text-center font-display text-[28px] leading-[1.1] tracking-tight text-white md:text-4xl lg:text-5xl">
+              How it works
+            </h2>
+          </Reveal>
           <div className="mt-10 grid gap-6 md:mt-14 md:grid-cols-3 md:gap-8">
-            <StepCard
-              icon={ImageIcon}
-              title="Create their memorial."
-              body="A name, a photo, a few words about who they were. It takes about a minute."
-            />
-            <StepCard
-              icon={Share2}
-              title="Share it with people who loved them."
-              body="Send the link to family and friends. They can visit, leave a candle, add a memory."
-            />
-            <StepCard
-              icon={Flame}
-              title="Candles keep their flame alive."
-              body="Anyone — you, strangers, people who understand — can light a candle. Their light stays."
-            />
+            <Reveal><StepCard icon={ImageIcon} title="Create their memorial." body="A name, a photo, a few words about who they were. It takes about a minute." /></Reveal>
+            <Reveal><StepCard icon={Share2} title="Share it with people who loved them." body="Send the link to family and friends. They can visit, leave a candle, add a memory." /></Reveal>
+            <Reveal><StepCard icon={Flame} title="Candles keep their flame alive." body="Anyone — you, strangers, people who understand — can light a candle. Their light stays." /></Reveal>
           </div>
           <p className="mt-10 text-center text-[12px] uppercase tracking-[0.25em] text-white/45">
             No account needed. It takes about a minute.
@@ -196,72 +149,21 @@ function HomePage() {
         </div>
       </section>
 
-      {/* What lives here */}
-      <section className="relative bg-gradient-to-b from-[#05070f] to-[#0a0e1f] px-5 py-16 md:px-8 md:py-24">
-        <div className="mx-auto max-w-md md:max-w-[1200px]">
-          <div className="text-center">
-            <p className="text-[11px] uppercase tracking-[0.28em] text-amber-200/70">What lives here</p>
-            <h2 className="mt-3 font-display text-[28px] leading-[1.1] tracking-tight text-white md:text-4xl lg:text-5xl">
-              Small rooms for a big kind of love.
-            </h2>
-          </div>
-          <div className="mt-10 grid gap-5 md:mt-14 md:grid-cols-2 lg:grid-cols-3 md:gap-6">
-            <FeatureCard
-              icon={ImageIcon}
-              title="Memorials"
-              body="A page that stays — photos, their story, the details only you know. Share it, or keep it just for you."
-            />
-            <FeatureCard
-              icon={Flame}
-              title="Candles"
-              body="Anyone can light one, no account needed. Each candle burns on the Wall of Light for 24 hours; the count stays forever."
-            />
-            <FeatureCard
-              icon={Flower2}
-              title="The Garden"
-              body="Walk quietly among everyone's companions. Light a candle for a stranger's pet — they might light one for yours."
-              to="/garden"
-            />
-            <FeatureCard
-              icon={BookOpen}
-              title="The Journal"
-              body="A private place for the words you're not ready to share. Only you can see what you write here."
-            />
-            <FeatureCard
-              icon={Users}
-              title="The Feed"
-              body="Memories shared by people who understand. Photos, small stories, the good days and the hard ones."
-              to="/community"
-            />
-            <FeatureCard
-              icon={Sparkles}
-              title="Grief Support"
-              body="Gentle resources for the first night, for children, for anyone who just needs to hear that this grief is real."
-              to="/grief-support"
-            />
-          </div>
-        </div>
-      </section>
+      {/* 5. LIVE PROOF — real data only */}
+      <CandleStrip
+        candles={recent.data ?? []}
+        weekCount={weekly.data?.count ?? 0}
+        loading={recent.isLoading}
+      />
 
-      {/* Why we built this — quiet full-width */}
-      <section className="relative bg-[#05070f] px-5 py-16 text-center md:px-8 md:py-24">
-        <div className="mx-auto max-w-md md:max-w-2xl">
-          <p className="text-[11px] uppercase tracking-[0.28em] text-amber-200/70">Why we built this</p>
-          <p className="mt-6 text-[16px] leading-relaxed text-white/70 md:text-xl">
-            Pet grief is real grief. When they go, the house gets quiet in a way nothing else can fix — and the world often expects you to be fine by Monday.
-          </p>
-          <p className="mt-4 text-[16px] leading-relaxed text-white/70 md:text-xl">
-            We made RememFur because a life that mattered deserves a place that stays. Somewhere the love can go, whenever you need it.
-          </p>
-        </div>
-      </section>
-
-      {/* FAQ */}
+      {/* 6. FAQ */}
       <section className="relative bg-gradient-to-b from-[#05070f] to-[#0a0e1f] px-5 py-16 md:px-8 md:py-24">
         <div className="mx-auto max-w-md md:max-w-3xl">
-          <h2 className="text-center font-display text-[28px] leading-[1.1] tracking-tight text-white md:text-4xl">
-            Gentle answers
-          </h2>
+          <Reveal>
+            <h2 className="text-center font-display text-[28px] leading-[1.1] tracking-tight text-white md:text-4xl">
+              Gentle answers
+            </h2>
+          </Reveal>
           <div className="mt-8 grid gap-3 md:mt-10">
             <FaqItem q="Is it free?" a="Yes. Creating a memorial, lighting a candle, and visiting the garden are all free." />
             <FaqItem q="Do I need an account to light a candle?" a="No. You can light a candle for any pet without signing up. An account is only needed if you want to create your own memorial or keep a journal." />
@@ -273,24 +175,17 @@ function HomePage() {
         </div>
       </section>
 
-
-
-
-      {/* Closing */}
-      <section
-        className="relative bg-[#05070f] px-5 py-16 text-center md:px-8 md:py-24"
-      >
-        <div className="mx-auto max-w-md md:max-w-2xl">
+      {/* 7. CLOSING */}
+      <section className="relative bg-[#05070f] px-5 py-16 text-center md:px-8 md:py-24">
+        <Reveal className="mx-auto max-w-md md:max-w-2xl">
           <h2 className="font-display text-[28px] leading-[1.1] tracking-tight text-white md:text-4xl">
             They mattered. They still do.
           </h2>
-          <p className="mt-4 text-[15px] leading-relaxed text-white/65 md:text-lg">
-            Give the love somewhere to go. It takes a minute. It stays forever.
+          <div className="mt-8">{primaryCandle}</div>
+          <p className="mt-6 text-[14px] leading-relaxed text-white/60 md:text-base">
+            It takes a minute. It stays forever.
           </p>
-          <div className="mt-8">
-            {primaryCandle}
-          </div>
-        </div>
+        </Reveal>
       </section>
 
       <div className="bg-[#05070f] pb-[calc(72px+env(safe-area-inset-bottom))] md:pb-6">
@@ -300,6 +195,288 @@ function HomePage() {
   );
 }
 
+function HeroScene({ primaryCandle }: { primaryCandle: ReactNode }) {
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  return (
+    <section
+      className="home-hero relative flex w-full items-end justify-center"
+      style={{ minHeight: "calc(100dvh - 54px - env(safe-area-inset-top))" }}
+      aria-label="A candle beneath a quiet sky"
+    >
+      <div className="stars" aria-hidden />
+      <div className="stars2" aria-hidden />
+      <div className="stars3" aria-hidden />
+      <div className="hero-glow" aria-hidden />
+
+      {/* Candle */}
+      <div className="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-[14%] md:bottom-[12%]">
+        <span className="hero-candle" aria-hidden>
+          <span className="flame" />
+        </span>
+      </div>
+
+      {/* Story + CTAs */}
+      <div className="relative z-10 mx-auto flex w-full max-w-md flex-col items-center px-5 pb-[26%] pt-24 text-center md:max-w-2xl md:pb-[22%] md:pt-32">
+        <p className="rise-in font-display text-[18px] leading-[1.4] text-white/75 md:text-[22px]" style={{ animationDelay: "0.2s" }}>
+          The house is quieter now.
+        </p>
+        <p className="rise-in mt-3 font-display text-[18px] leading-[1.4] text-white/75 md:text-[22px]" style={{ animationDelay: "1.4s" }}>
+          The bowl is still by the door.
+        </p>
+        <p className="rise-in mt-3 font-display text-[18px] leading-[1.4] text-[#f5e6c8]/90 md:text-[22px]" style={{ animationDelay: "2.6s" }}>
+          The love — the love is still everywhere.
+        </p>
+
+        <h1 className="rise-in mt-8 font-display text-[30px] leading-[1.05] tracking-tight text-white md:text-5xl lg:text-6xl" style={{ animationDelay: "4.0s" }}>
+          Grief is just love with nowhere to go.
+        </h1>
+        <p className="rise-in mt-2 font-display italic text-[24px] leading-[1.1] text-[var(--gold)] md:text-4xl lg:text-5xl" style={{ animationDelay: "4.8s" }}>
+          Now it has somewhere.
+        </p>
+
+        <div className="rise-in mt-8 flex flex-col items-center gap-3" style={{ animationDelay: "5.8s" }}>
+          {primaryCandle}
+          <Link to="/create" className="text-[13px] text-white/60 underline-offset-4 hover:text-white/90 hover:underline">
+            Create their memorial
+          </Link>
+        </div>
+      </div>
+
+      {/* Scroll cue */}
+      <div
+        aria-hidden
+        className={`pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2 transition-opacity duration-500 ${scrolled ? "opacity-0" : "opacity-100"}`}
+      >
+        <ChevronDown className="scroll-cue h-5 w-5 text-white/60" />
+      </div>
+    </section>
+  );
+}
+
+function FeatureChapters() {
+  const chapters: Array<{
+    eyebrow: string;
+    title: string;
+    body: ReactNode;
+    cta?: { to: string; label: string };
+    visual: ReactNode;
+    icon: LucideIcon;
+  }> = [
+    {
+      eyebrow: "Their memorial",
+      title: "A page that stays.",
+      body: "Photos, their story, the details only you knew — a place their name can live.",
+      cta: { to: "/create", label: "Begin their memorial" },
+      visual: <VignetteMemorial />,
+      icon: ImageIcon,
+    },
+    {
+      eyebrow: "Candles",
+      title: "Anyone can light one. No account. No noise.",
+      body: "Each burns on the Wall of Light for 24 hours. The count stays forever.",
+      visual: <VignetteCandles />,
+      icon: Flame,
+    },
+    {
+      eyebrow: "The Garden",
+      title: "Walk among everyone's companions.",
+      body: "Light a candle for a stranger's pet. Someone may light one for yours.",
+      cta: { to: "/garden", label: "Visit the garden" },
+      visual: <VignetteGarden />,
+      icon: Flower2,
+    },
+    {
+      eyebrow: "The Journal",
+      title: "For the words you're not ready to say out loud.",
+      body: "Private. Only yours. Written when the house is at its quietest.",
+      visual: <VignetteJournal />,
+      icon: BookOpen,
+    },
+    {
+      eyebrow: "The Feed",
+      title: "People who understand.",
+      body: "Memories shared by others who know this exact ache.",
+      cta: { to: "/community", label: "See the feed" },
+      visual: <VignetteFeed />,
+      icon: Users,
+    },
+    {
+      eyebrow: "Grief support",
+      title: "This grief is real. You're not overreacting.",
+      body: (
+        <>
+          Resources for the first night, for children, for anyone. Free pet-loss support lines:{" "}
+          <a href="tel:+18774743310" className="text-white/80 hover:text-white">ASPCA 877-474-3310</a>
+          {" · "}
+          <a href="tel:+18559335683" className="text-white/80 hover:text-white">Lap of Love 855-933-5683</a>.
+        </>
+      ),
+      cta: { to: "/grief-support", label: "Grief support" },
+      visual: <VignetteSupport />,
+      icon: Sparkles,
+    },
+  ];
+
+  return (
+    <section className="relative bg-gradient-to-b from-[#0a0e1f] via-[#05070f] to-[#0a0e1f] px-5 py-16 md:px-8 md:py-24">
+      <div className="mx-auto max-w-md md:max-w-[1100px] space-y-20 md:space-y-28">
+        {chapters.map((c, i) => (
+          <Reveal key={c.eyebrow}>
+            <div className={`grid items-center gap-8 md:grid-cols-2 md:gap-16 ${i % 2 === 1 ? "md:[&>*:first-child]:order-2" : ""}`}>
+              <div>
+                <p className="flex items-center gap-2 text-[11px] uppercase tracking-[0.28em] text-amber-200/70">
+                  <c.icon className="h-3.5 w-3.5" strokeWidth={2} />
+                  {c.eyebrow}
+                </p>
+                <h3 className="mt-3 font-display text-[26px] leading-[1.1] tracking-tight text-white md:text-4xl">
+                  {c.title}
+                </h3>
+                <p className="mt-4 text-[15px] leading-relaxed text-white/65 md:text-lg">
+                  {c.body}
+                </p>
+                {c.cta && (
+                  <Link
+                    to={c.cta.to}
+                    className="mt-6 inline-flex items-center text-[15px] font-medium text-amber-200 hover:text-amber-100"
+                  >
+                    {c.cta.label} →
+                  </Link>
+                )}
+              </div>
+              <div className="flex justify-center">{c.visual}</div>
+            </div>
+          </Reveal>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* ---------- CSS vignettes (no images) ---------- */
+
+function VignetteFrame({ children }: { children: ReactNode }) {
+  return (
+    <div className="relative aspect-[4/5] w-full max-w-[320px] overflow-hidden rounded-3xl bg-gradient-to-b from-[#0f1428] to-[#070a15] ring-1 ring-white/10 shadow-[0_30px_80px_-40px_rgba(0,0,0,0.9)]">
+      {children}
+    </div>
+  );
+}
+
+function VignetteMemorial() {
+  return (
+    <VignetteFrame>
+      <div className="absolute inset-0 flex flex-col items-center justify-end p-6">
+        <div className="absolute inset-x-8 top-8 aspect-square rounded-2xl bg-gradient-to-br from-[#1d243d] to-[#0a0e1f] ring-1 ring-white/10" />
+        <div className="relative mt-auto w-full text-center">
+          <p className="font-display text-[20px] text-white">Their Name</p>
+          <p className="mt-1 text-[12px] text-white/50">2008 — 2025</p>
+          <p className="mt-3 text-[12px] italic text-white/60">"Always at the door."</p>
+        </div>
+      </div>
+    </VignetteFrame>
+  );
+}
+
+function VignetteCandles() {
+  return (
+    <VignetteFrame>
+      <div className="absolute inset-0 flex items-end justify-center gap-6 pb-14">
+        {[0, 1, 2].map((i) => (
+          <span key={i} className="hero-candle scale-[0.7]" style={{ transform: `scale(0.7) translateY(${i === 1 ? -8 : 0}px)` }} aria-hidden>
+            <span className="flame" style={{ animationDelay: `${i * 0.35}s`, animationDuration: `${1.1 + i * 0.15}s` }} />
+          </span>
+        ))}
+        <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/60 to-transparent" />
+      </div>
+    </VignetteFrame>
+  );
+}
+
+function VignetteGarden() {
+  return (
+    <VignetteFrame>
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 opacity-70"
+          style={{
+            backgroundImage:
+              "radial-gradient(1.5px 1.5px at 20% 30%, rgba(255,240,210,0.9), transparent 60%), radial-gradient(1.5px 1.5px at 60% 55%, rgba(255,240,210,0.85), transparent 60%), radial-gradient(1.5px 1.5px at 80% 25%, rgba(255,240,210,0.85), transparent 60%), radial-gradient(1.5px 1.5px at 35% 75%, rgba(255,240,210,0.9), transparent 60%), radial-gradient(1.5px 1.5px at 75% 80%, rgba(255,240,210,0.8), transparent 60%)",
+          }}
+        />
+        <div className="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-[#070a15] to-transparent" />
+        <p className="absolute inset-x-0 bottom-5 text-center font-display text-[13px] italic text-white/65">
+          Every light is a life that was loved.
+        </p>
+      </div>
+    </VignetteFrame>
+  );
+}
+
+function VignetteJournal() {
+  return (
+    <VignetteFrame>
+      <div className="absolute inset-0 p-6">
+        <div className="h-full rounded-2xl bg-[#0b1024] p-5 ring-1 ring-white/10">
+          <p className="font-display text-[13px] text-white/75">Tuesday, 2:14 am</p>
+          <div className="mt-3 space-y-2">
+            <div className="h-2 w-11/12 rounded-full bg-white/10" />
+            <div className="h-2 w-9/12 rounded-full bg-white/10" />
+            <div className="h-2 w-10/12 rounded-full bg-white/10" />
+            <div className="h-2 w-6/12 rounded-full bg-white/10" />
+          </div>
+          <p className="mt-6 text-[11px] uppercase tracking-[0.24em] text-amber-200/60">Only you</p>
+        </div>
+      </div>
+    </VignetteFrame>
+  );
+}
+
+function VignetteFeed() {
+  return (
+    <VignetteFrame>
+      <div className="absolute inset-0 space-y-3 p-5">
+        {[0, 1, 2].map((i) => (
+          <div key={i} className="rounded-2xl bg-white/[0.05] p-3 ring-1 ring-white/10">
+            <div className="flex items-center gap-2">
+              <span className="h-6 w-6 rounded-full bg-gradient-to-br from-amber-200/60 to-amber-500/30" />
+              <div className="h-2 w-24 rounded-full bg-white/15" />
+            </div>
+            <div className="mt-2 space-y-1.5">
+              <div className="h-2 w-11/12 rounded-full bg-white/10" />
+              <div className="h-2 w-8/12 rounded-full bg-white/10" />
+            </div>
+          </div>
+        ))}
+      </div>
+    </VignetteFrame>
+  );
+}
+
+function VignetteSupport() {
+  return (
+    <VignetteFrame>
+      <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 p-6 text-center">
+        <span className="flame-flicker">
+          <Flame className="h-8 w-8" />
+        </span>
+        <p className="font-display text-[16px] leading-snug text-white/85">
+          You don't have to carry this alone.
+        </p>
+        <div className="grid w-full gap-2 text-[12px] text-white/70">
+          <div className="rounded-xl bg-white/[0.04] px-3 py-2 ring-1 ring-white/10">ASPCA · 877-474-3310</div>
+          <div className="rounded-xl bg-white/[0.04] px-3 py-2 ring-1 ring-white/10">Lap of Love · 855-933-5683</div>
+        </div>
+      </div>
+    </VignetteFrame>
+  );
+}
+
+/* ---------- Live candle strip ---------- */
 
 function CandleStrip({
   candles,
@@ -323,28 +500,32 @@ function CandleStrip({
       className="relative bg-gradient-to-b from-[#05070f] to-[#05070f] px-0 pt-16 md:pt-24"
     >
       <div className="mx-auto max-w-md px-5 md:max-w-[1200px] md:px-8">
-        <h2 className="text-center font-display text-[28px] leading-[1.1] tracking-tight text-white md:text-4xl">
-          Strangers light candles for pets they never met.
-        </h2>
-        <p className="mt-4 text-center text-[15px] leading-relaxed text-white/65 md:text-lg">
-          Every flame in this sky is a pet who was deeply loved — and behind each one, people who understand exactly how you feel. Light a candle for someone else's companion, and someone may light one for yours.
-        </p>
-        <div className="mt-6 text-center">
-          <Link
-            to="/garden"
-            className="ios-tappable inline-flex items-center justify-center rounded-full bg-white/10 px-6 py-2.5 text-[14px] font-medium text-white ring-1 ring-white/15 hover:bg-white/15"
-          >
-            See the sky
-          </Link>
-        </div>
+        <Reveal>
+          <h2 className="text-center font-display text-[28px] leading-[1.1] tracking-tight text-white md:text-4xl">
+            Strangers light candles for pets they never met.
+          </h2>
+          <p className="mt-4 text-center text-[15px] leading-relaxed text-white/65 md:text-lg">
+            Every flame is a pet who was deeply loved. Light one for someone else's companion, and someone may light one for yours.
+          </p>
+          <div className="mt-6 text-center">
+            <Link
+              to="/garden"
+              className="ios-tappable inline-flex items-center justify-center rounded-full bg-white/10 px-6 py-2.5 text-[14px] font-medium text-white ring-1 ring-white/15 hover:bg-white/15"
+            >
+              See the sky
+            </Link>
+          </div>
+        </Reveal>
 
         <div className="mt-10 flex items-baseline justify-between">
           <p className="text-[11px] uppercase tracking-[0.28em] text-amber-200/70">
             Candles burning
           </p>
-          <p className="text-[11px] text-white/50">
-            {loading ? "…" : `${weekCount} candles lit this week`}
-          </p>
+          {!loading && weekCount > 0 && (
+            <p className="text-[11px] text-white/50">
+              {weekCount} candles lit this week
+            </p>
+          )}
         </div>
       </div>
 
@@ -409,29 +590,10 @@ function StepCard({ title, body, icon: Icon = Flame }: { title: string; body: st
       <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--gold3)] text-[var(--gold)]">
         <Icon className="h-4 w-4" strokeWidth={2} />
       </span>
-      <h3 className="mt-4 font-display text-[20px] leading-tight text-white md:text-[22px]">
-        {title}
-      </h3>
-      <p className="mt-2 text-[14px] leading-relaxed text-white/60">
-        {body}
-      </p>
-    </div>
-  );
-}
-
-function FeatureCard({ title, body, icon: Icon, to }: { title: string; body: string; icon: LucideIcon; to?: string }) {
-  const inner = (
-    <div className="flex h-full flex-col rounded-2xl bg-white/[0.04] p-6 ring-1 ring-white/10 transition hover:bg-white/[0.06] md:p-7">
-      <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--gold3)] text-[var(--gold)]">
-        <Icon className="h-4 w-4" strokeWidth={2} />
-      </span>
-      <h3 className="mt-4 font-display text-[19px] leading-tight text-white md:text-[21px]">{title}</h3>
+      <h3 className="mt-4 font-display text-[20px] leading-tight text-white md:text-[22px]">{title}</h3>
       <p className="mt-2 text-[14px] leading-relaxed text-white/60">{body}</p>
-      {to && <span className="mt-4 text-[13px] font-medium text-amber-200/85">Visit →</span>}
     </div>
   );
-  if (to) return <Link to={to}>{inner}</Link>;
-  return inner;
 }
 
 function FaqItem({ q, a }: { q: string; a: string }) {
@@ -445,4 +607,3 @@ function FaqItem({ q, a }: { q: string; a: string }) {
     </details>
   );
 }
-
