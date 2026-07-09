@@ -182,43 +182,31 @@ export function VigilScene({ showConstellation = false, variant = "hero", classN
       />
 
       {/* Dog silhouette on the hill — sitting, facing up/right toward Sirius */}
-      <g className="vigil-dog" style={{ transformOrigin: "360px 460px" }}>
-        <g className="vigil-dog-torso" style={{ transformOrigin: "360px 455px" }}>
-          {/* haunch + body */}
-          <path
-            d="M 300 455
-               C 300 425, 320 405, 350 405
-               C 385 405, 410 425, 415 455
-               C 415 460, 415 465, 415 468
-               L 295 468
-               C 295 465, 295 460, 300 455 Z"
-            fill="#04060D"
-          />
-          {/* tail curling up behind */}
-          <path
-            d="M 300 445 C 285 435, 280 415, 295 405 C 300 402, 305 410, 300 418 C 297 428, 302 438, 308 442 Z"
-            fill="#04060D"
-          />
-          {/* front legs / chest */}
-          <path
-            d="M 372 435 C 372 452, 372 462, 372 468 L 382 468 C 382 462, 382 452, 382 435 Z"
-            fill="#04060D"
-          />
+      <g className="vigil-dog">
+        <g className="vigil-dog-torso" style={{ transformOrigin: "352px 452px" }}>
+          {/* haunch */}
+          <ellipse cx="345" cy="452" rx="17" ry="16.5" fill="#04060D" />
+          {/* chest */}
+          <ellipse cx="363" cy="437" rx="14.5" ry="17" fill="#04060D" />
+          {/* front leg */}
+          <rect x="364" y="435" width="8" height="33" rx="3.5" fill="#04060D" />
+          {/* rear paw */}
+          <rect x="336" y="461" width="20" height="7" rx="3.5" fill="#04060D" />
+          {/* tail, curling out from the haunch */}
+          <path d="M331 461 c-8-4-10-13-3-18 l3.4 3.4 c-4 3.2-3 8.4 1.6 11 z" fill="#04060D" />
         </g>
 
         {/* Head group — very slow tilt every ~25s */}
-        <g className="vigil-dog-head" style={{ transformOrigin: "372px 400px" }}>
-          {/* neck */}
-          <path d="M 358 420 C 358 405, 370 395, 380 395 L 390 415 Z" fill="#04060D" />
+        <g className="vigil-dog-head" style={{ transformOrigin: "363px 420px" }}>
+          {/* neck, rising from the chest to the head */}
+          <path d="M358 415 h20 l-5 20 h-13 z" fill="#04060D" />
           {/* head */}
-          <ellipse cx="378" cy="388" rx="17" ry="15" fill="#04060D" />
-          {/* muzzle */}
-          <path d="M 388 388 C 396 385, 398 393, 392 395 C 388 396, 384 393, 388 388 Z" fill="#04060D" />
-          {/* left ear (still) */}
-          <path d="M 366 375 C 361 362, 370 358, 374 372 Z" fill="#04060D" />
-          {/* right ear — flicks */}
-          <g className="vigil-dog-ear" style={{ transformOrigin: "384px 376px" }}>
-            <path d="M 380 375 C 385 361, 393 361, 392 375 Z" fill="#04060D" />
+          <ellipse cx="370" cy="410" rx="13.5" ry="12.5" fill="#04060D" />
+          {/* snout */}
+          <rect x="378" y="407" width="14" height="8.5" rx="4.2" fill="#04060D" />
+          {/* ear — flicks */}
+          <g className="vigil-dog-ear" style={{ transformOrigin: "365px 405px" }}>
+            <path d="M361 393 l7 14 -14 4 z" fill="#04060D" />
           </g>
         </g>
       </g>
