@@ -358,33 +358,14 @@ function Hero({ primaryCandle }: { primaryCandle: ReactNode }) {
         <MoonBadge />
       </div>
 
-      {/* Centered story sequence */}
+      {/* Centered story sequence — kept intentionally sparse so the vigil scene breathes */}
       <div className="relative z-10 mx-auto flex w-full max-w-md flex-col items-center px-5 pb-[30%] pt-24 text-center md:max-w-2xl md:pb-[24%] md:pt-32">
-        <p className="rise-in font-display italic text-[18px] leading-[1.4] text-white/70 md:text-[22px]" style={{ animationDelay: "0.2s" }}>
-          The house is quieter now.
-        </p>
-        <p className="rise-in font-display italic text-[18px] leading-[1.4] text-white/75 md:text-[22px]" style={{ animationDelay: "1.4s" }}>
-          The bowl is still by the door.
-        </p>
-        <p className="rise-in font-display italic text-[18px] leading-[1.4] text-white/85 md:text-[22px]" style={{ animationDelay: "2.6s" }}>
-          The love — the love is still everywhere.
-        </p>
-
-        <h1 className="rise-in mt-8 font-display text-[32px] leading-[1.05] tracking-tight text-white md:text-6xl lg:text-7xl" style={{ animationDelay: "4.0s" }}>
+        <h1 className="rise-in font-display text-[32px] leading-[1.05] tracking-tight text-white md:text-6xl lg:text-7xl" style={{ animationDelay: "0.3s" }}>
           Grief is just love
           <br className="hidden sm:inline" /> with nowhere to go.
         </h1>
-        <p className="rise-in mt-3 font-display italic text-[26px] leading-[1.1] md:text-5xl lg:text-6xl" style={{
-          animationDelay: "5.0s",
-          background: "linear-gradient(180deg, #f7dfa8 0%, #d4b378 60%, #b28840 100%)",
-          WebkitBackgroundClip: "text",
-          WebkitTextFillColor: "transparent",
-          backgroundClip: "text",
-        }}>
-          Now it has somewhere.
-        </p>
 
-        <div className="rise-in mt-10 flex flex-col items-center gap-3" style={{ animationDelay: "6.0s" }}>
+        <div className="rise-in mt-10 flex flex-col items-center gap-3" style={{ animationDelay: "1.1s" }}>
           {primaryCandle}
           <Link to="/create" className="text-[13px] text-white/60 underline-offset-4 hover:text-white/90 hover:underline">
             Create their memorial
