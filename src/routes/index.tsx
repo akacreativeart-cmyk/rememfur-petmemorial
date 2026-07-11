@@ -728,7 +728,7 @@ function CandleStrip({ candles, weekCount, loading }: {
                     </div>
                     <span className="truncate font-display text-[14px] text-white">{c.pet_name ?? "A friend"}</span>
                   </div>
-                  <p className="mt-2 line-clamp-2 text-[12px] leading-snug text-white/70">{c.message?.trim() || "🕯️"}</p>
+                  <p className="mt-2 line-clamp-2 text-[12px] leading-snug text-white/70">{c.message?.trim() || "✨"}</p>
                   <p className="mt-2 text-[10.5px] uppercase tracking-[0.18em] text-amber-200/70">{c.lit_by_name ?? "A friend"}</p>
                 </div>
               );

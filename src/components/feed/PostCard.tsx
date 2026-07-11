@@ -279,7 +279,7 @@ export function PostCard({ post }: { post: FeedPost }) {
             <ul className="space-y-2">
               {candleData.candles.map((c) => (
                 <li key={c.id} className="group flex gap-2 text-sm">
-                  <span aria-hidden className="mt-0.5 text-base leading-none">🕯️</span>
+                  <span aria-hidden className="mt-0.5 text-base leading-none">✨</span>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-2">
                       <div className="text-xs font-medium text-foreground">{c.lit_by_name ?? "A friend"}</div>

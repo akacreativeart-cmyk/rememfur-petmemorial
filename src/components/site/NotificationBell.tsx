@@ -25,7 +25,7 @@ const ICONS: Record<string, any> = {
 };
 
 const VERBS: Record<string, string> = {
-  candle: "lit a candle",
+  candle: "released a star",
   paw: "left a paw",
   comment: "commented",
   message: "wrote on the memorial",

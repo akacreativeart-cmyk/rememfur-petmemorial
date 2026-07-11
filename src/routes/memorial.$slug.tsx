@@ -66,7 +66,7 @@ function MemorialPage() {
     mutationFn: (vars: { message?: string }) =>
       fetchLightCandle({ data: { memorial_id: m.id, message: vars.message ?? null } }),
     onSuccess: () => {
-      toast.success("Candle lit. Their light glows on.");
+      toast.success("Star released. Their light glows on.");
       setCandleMsg("");
       qc.invalidateQueries({ queryKey: ["memorial", m.slug] });
     },
