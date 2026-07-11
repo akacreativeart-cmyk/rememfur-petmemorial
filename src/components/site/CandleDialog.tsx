@@ -90,8 +90,8 @@ export function CandleDialog({ target, trigger, onLit }: Props) {
       : "";
   const petName = target.kind === "memorial" ? target.pet_name : null;
   const shareText = petName
-    ? `I just lit a candle for ${petName} on Rememfur 🕯️ — light one too?`
-    : `I just lit a candle on Rememfur 🕯️ — light one too?`;
+    ? `I just released a star for ${petName} on Rememfur ✨ — release one too?`
+    : `I just released a star on Rememfur ✨ — release one too?`;
 
   async function nativeShare() {
     try {
