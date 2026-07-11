@@ -51,8 +51,6 @@ export function SiteHeader() {
     { to: "/garden", label: "Garden" },
     { to: "/community", label: "Feed" },
     { to: "/marketplace", label: "Shop" },
-    { to: "/grief-support", label: "Support" },
-    { to: "/adoption", label: "Adoption" },
   ];
 
   const isActive = (to: string) =>
