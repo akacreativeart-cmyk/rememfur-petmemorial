@@ -318,11 +318,11 @@ function HomePage() {
             </h2>
           </Reveal>
           <div className="mt-8 grid gap-3 md:mt-10">
-            <FaqItem q="Is it free?" a="Yes. Creating a memorial, lighting a candle, and visiting the garden are all free." />
-            <FaqItem q="Do I need an account to light a candle?" a="No. You can light a candle for any pet without signing up. An account is only needed if you want to create your own memorial or keep a journal." />
+            <FaqItem q="Is it free?" a="Yes. Creating a memorial, releasing a star, and visiting the garden are all free." />
+            <FaqItem q="Do I need an account to release a star?" a="No. You can release a star for any pet without signing up. An account is only needed if you want to create your own memorial or keep a journal." />
             <FaqItem q="Can I keep a memorial private?" a="Yes. You can keep a memorial just for you, share it only with a link, or let it live in the garden — your choice, and you can change it anytime." />
             <FaqItem q="Can I add more photos later?" a="Yes. You can return anytime to add photos, edit their story, or update anything about their memorial." />
-            <FaqItem q="What happens to candles after 24 hours?" a="The flame rests, but the count remains. Every candle ever lit is remembered — and anyone can light a new one, any day." />
+            <FaqItem q="What happens to a star after 24 hours?" a="The bright glow softens, but the star remains. Every star ever released is remembered — and anyone can release a new one, any day." />
             <FaqItem q="Can I take a memorial down?" a="Yes. You control your memorials completely, and you can quietly take one down whenever you need to." />
           </div>
         </div>
