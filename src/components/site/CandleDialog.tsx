@@ -121,17 +121,17 @@ export function CandleDialog({ target, trigger, onLit }: Props) {
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 font-display text-2xl">
             <Flame className="h-5 w-5 text-[var(--cta)]" />
-            {lit ? "Candle lit 🕯️" : "Light a candle"}
+            {lit ? "Star released ✨" : "Release a star"}
             {!lit && target.kind === "memorial" && target.pet_name ? (
               <span className="text-base font-normal text-muted-foreground">for {target.pet_name}</span>
             ) : null}
           </DialogTitle>
           <DialogDescription>
             {lit
-              ? "Thank you. Their light is a little brighter because of you."
+              ? "Thank you. Their sky is a little brighter because of you."
               : user
-                ? "Leave up to two short lines — they'll glow softly beside the flame."
-                : "Anyone can light a candle right now — no account needed."}
+                ? "Leave up to two short lines — they'll glow softly beside their star."
+                : "Anyone can release a star right now — no account needed."}
           </DialogDescription>
         </DialogHeader>
 
