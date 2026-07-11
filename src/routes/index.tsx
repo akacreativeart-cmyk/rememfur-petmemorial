@@ -437,7 +437,7 @@ function Chapters({ primaryCandle }: { primaryCandle: ReactNode }) {
     },
     {
       roman: "II", eyebrow: "Stars", title: "Anyone can release one. No account. No noise.",
-      body: "Each burns on the wall of light. The count stays forever.",
+      body: "Each drifts up into the night sky. The count stays forever.",
       cta: primaryCandle,
       plaque: <PlaqueCandles />,
     },
