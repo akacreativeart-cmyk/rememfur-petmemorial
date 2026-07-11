@@ -175,7 +175,7 @@ export function CandleDialog({ target, trigger, onLit }: Props) {
                   <Link to="/signup" className="font-medium text-[var(--cta)] underline-offset-2 hover:underline">Create a free account</Link>{" "}
                   or{" "}
                   <Link to="/login" className="font-medium text-[var(--cta)] underline-offset-2 hover:underline">sign in</Link>{" "}
-                  — it takes a moment. Your candle will still be lit if you'd rather not.
+                  — it takes a moment. Their star will still be released if you'd rather not.
                 </p>
               </div>
             )}
