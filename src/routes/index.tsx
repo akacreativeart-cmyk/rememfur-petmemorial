@@ -17,8 +17,8 @@ export const Route = createFileRoute("/")({
   component: HomePage,
   head: () => ({
     meta: [
-      { title: "Rememfur — Light a candle for the pet you loved." },
-      { name: "description", content: "A quiet place to remember them. Say their name, light their candle, keep them close. No account needed." },
+      { title: "Rememfur — Release a star for the pet you loved." },
+      { name: "description", content: "A quiet place to remember them. Say their name, release their star into the sky, keep them close. No account needed." },
     ],
   }),
 });
