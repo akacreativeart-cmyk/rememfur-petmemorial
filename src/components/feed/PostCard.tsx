@@ -225,7 +225,7 @@ export function PostCard({ post }: { post: FeedPost }) {
                     style={{ ["--bx" as string]: `${b.bx}%`, ["--by" as string]: `${b.by}px` }}
                     aria-hidden
                   >
-                    🕯️
+                    ✨
                   </span>
                 ))}
               </button>
