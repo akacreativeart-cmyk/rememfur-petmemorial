@@ -349,81 +349,108 @@ function Hero({ primaryCandle }: { primaryCandle: ReactNode }) {
   }, []);
   return (
     <section
-      className="relative flex w-full flex-col items-center justify-end overflow-hidden"
+      className="relative flex w-full flex-col overflow-hidden"
       style={{ minHeight: "100svh" }}
       aria-label="A quiet vigil beneath the night sky"
     >
-      {/* Moon top-right */}
-      <div className="pointer-events-none absolute right-5 top-5 md:right-10 md:top-10">
+      {/* Moon top-right — clear of mobile header */}
+      <div className="pointer-events-none absolute right-5 top-16 z-20 md:right-10 md:top-8">
         <MoonBadge />
       </div>
 
-      {/* Centered story sequence — kept intentionally sparse so the vigil scene breathes */}
-      <div className="relative z-10 mx-auto flex w-full max-w-md flex-col items-center px-5 pb-[30%] pt-24 text-center md:max-w-2xl md:pb-[24%] md:pt-32">
-        <h1 className="rise-in font-display text-[32px] leading-[1.05] tracking-tight text-white md:text-6xl lg:text-7xl" style={{ animationDelay: "0.3s" }}>
-          Grief is just love
-          <br className="hidden sm:inline" /> with nowhere to go.
-        </h1>
+      {/* TOP: story + CTA in normal flow, centered vertically in remaining space */}
+      <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-5 pb-8 pt-20 text-center md:pt-24">
+        <div className="mx-auto flex w-full max-w-md flex-col items-center md:max-w-2xl">
+          <h1 className="rise-in font-display text-[32px] leading-[1.05] tracking-tight text-white md:text-6xl lg:text-7xl" style={{ animationDelay: "0.3s" }}>
+            Grief is just love
+            <br className="hidden sm:inline" /> with nowhere to go.
+          </h1>
 
-        <div className="rise-in mt-10 flex flex-col items-center gap-3" style={{ animationDelay: "1.1s" }}>
-          {primaryCandle}
-          <Link to="/create" className="text-[13px] text-white/60 underline-offset-4 hover:text-white/90 hover:underline">
-            Create their memorial
-          </Link>
+          <div className="rise-in mt-10 flex flex-col items-center gap-3" style={{ animationDelay: "1.1s" }}>
+            {primaryCandle}
+            <Link to="/create" className="text-[13px] text-white/60 underline-offset-4 hover:text-white/90 hover:underline">
+              Create their memorial
+            </Link>
+          </div>
         </div>
       </div>
 
-      {/* The Vigil — hill + dog + Sirius */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[46%]">
-        <svg viewBox="0 0 800 400" preserveAspectRatio="xMidYMax slice" className="h-full w-full" aria-hidden>
-          <defs>
-            <radialGradient id="hero-sirius-glow" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor="#fff2cc" stopOpacity="0.55" />
-              <stop offset="100%" stopColor="#d4b378" stopOpacity="0" />
-            </radialGradient>
-            <linearGradient id="hero-beam" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#ffe9b0" stopOpacity="0.22" />
-              <stop offset="100%" stopColor="#ffe9b0" stopOpacity="0" />
-            </linearGradient>
-            <linearGradient id="hero-flareV" x1="50%" y1="0%" x2="50%" y2="100%">
-              <stop offset="0%" stopColor="#fff2cc" stopOpacity="0" />
-              <stop offset="50%" stopColor="#fffbe6" stopOpacity="0.9" />
-              <stop offset="100%" stopColor="#fff2cc" stopOpacity="0" />
-            </linearGradient>
-            <linearGradient id="hero-flareH" x1="0%" y1="50%" x2="100%" y2="50%">
-              <stop offset="0%" stopColor="#fff2cc" stopOpacity="0" />
-              <stop offset="50%" stopColor="#fffbe6" stopOpacity="0.9" />
-              <stop offset="100%" stopColor="#fff2cc" stopOpacity="0" />
-            </linearGradient>
-          </defs>
-          {/* light beam */}
-          <polygon points="540,60 590,60 380,340 310,340" fill="url(#hero-beam)" />
-          {/* Sirius */}
-          <g className="vigil-sirius" style={{ transformOrigin: "560px 60px" }}>
-            <circle cx="560" cy="60" r="42" fill="url(#hero-sirius-glow)" />
-            <rect x="558" y="28" width="4" height="64" rx="2" fill="url(#hero-flareV)" />
-            <rect x="528" y="58" width="64" height="4" rx="2" fill="url(#hero-flareH)" />
-            <circle cx="560" cy="60" r="6" fill="#fffbe6" />
-          </g>
-          {/* Hill */}
-          <path d="M 0 340 C 140 300, 260 292, 380 315 C 500 340, 620 305, 740 320 C 770 324, 790 328, 800 332 L 800 400 L 0 400 Z" fill="#04060D" />
+      {/* BOTTOM: Vigil scene as normal-flow block — content above can never overlap */}
+      <div className="relative w-full h-[260px] md:h-[340px] overflow-hidden">
+        {/* Beam — behind hill and dog */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute z-0"
+          style={{
+            right: "18%",
+            top: "-10px",
+            width: "220px",
+            height: "100%",
+            background: "linear-gradient(155deg, rgba(255,233,176,0.22) 0%, rgba(255,233,176,0) 70%)",
+            filter: "blur(14px)",
+            clipPath: "polygon(45% 0, 60% 0, 20% 100%, 0 100%)",
+          }}
+        />
+
+        {/* Sirius — its own absolutely-positioned element, always visible */}
+        <div
+          aria-hidden
+          className="vigil-sirius pointer-events-none absolute z-[2]"
+          style={{ right: "16%", top: "-30px", width: "80px", height: "80px" }}
+        >
+          {/* glow */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background: "radial-gradient(circle, rgba(255,242,204,0.55) 0%, rgba(212,179,120,0) 70%)",
+            }}
+          />
+          {/* vertical flare */}
+          <div
+            className="absolute left-1/2 top-1/2 h-16 w-[3px] -translate-x-1/2 -translate-y-1/2"
+            style={{ background: "linear-gradient(to bottom, rgba(255,242,204,0) 0%, rgba(255,251,230,0.9) 50%, rgba(255,242,204,0) 100%)" }}
+          />
+          {/* horizontal flare */}
+          <div
+            className="absolute left-1/2 top-1/2 h-[3px] w-16 -translate-x-1/2 -translate-y-1/2"
+            style={{ background: "linear-gradient(to right, rgba(255,242,204,0) 0%, rgba(255,251,230,0.9) 50%, rgba(255,242,204,0) 100%)" }}
+          />
+          {/* core */}
+          <div className="absolute left-1/2 top-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#fffbe6]" />
+        </div>
+
+        {/* Hill — full-width, always spans viewport */}
+        <svg
+          aria-hidden
+          className="absolute inset-x-0 bottom-0 z-[1] h-[45%] w-full"
+          viewBox="0 0 800 60"
+          preserveAspectRatio="none"
+        >
+          <path d="M 0 20 C 140 0, 260 -4, 380 8 C 500 20, 620 2, 740 10 C 770 12, 790 14, 800 16 L 800 60 L 0 60 Z" fill="#04060D" />
         </svg>
-        {/* Dog perched on hill */}
-        <div className="absolute left-1/2 bottom-[18%] -translate-x-1/2 vigil-dog-torso" style={{ transformOrigin: "bottom center" }}>
-          <VigilDog size={150} />
-        </div>
-      </div>
 
-      {/* Scroll cue */}
-      <div
-        aria-hidden
-        className={`pointer-events-none absolute bottom-4 left-1/2 z-10 -translate-x-1/2 transition-opacity duration-500 ${scrolled ? "opacity-0" : "opacity-100"}`}
-      >
-        <ChevronDown className="scroll-cue h-5 w-5 text-white/60" />
+        {/* Dog perched on hill crest */}
+        <div
+          className="pointer-events-none absolute left-1/2 z-[3] -translate-x-1/2 vigil-dog-torso"
+          style={{ bottom: "24%", transformOrigin: "bottom center" }}
+        >
+          <div className="w-[130px] md:w-[150px]">
+            <VigilDog size={150} className="h-auto w-full" />
+          </div>
+        </div>
+
+        {/* Scroll cue */}
+        <div
+          aria-hidden
+          className={`pointer-events-none absolute bottom-2 left-1/2 z-10 -translate-x-1/2 transition-opacity duration-500 ${scrolled ? "opacity-0" : "opacity-100"}`}
+        >
+          <ChevronDown className="scroll-cue h-5 w-5 text-white/60" />
+        </div>
       </div>
     </section>
   );
 }
+
 
 /* ────────── SIX CHAPTERS ────────── */
 
