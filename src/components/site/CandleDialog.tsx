@@ -70,7 +70,7 @@ export function CandleDialog({ target, trigger, onLit }: Props) {
     },
     onSuccess: () => {
       softHaptic(20);
-      toast.success("Candle lit 🕯️");
+      toast.success("Star released ✨");
       setLit(true);
       onLit?.();
     },
