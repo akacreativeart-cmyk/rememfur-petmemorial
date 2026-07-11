@@ -436,7 +436,7 @@ function Chapters({ primaryCandle }: { primaryCandle: ReactNode }) {
       plaque: <PlaqueMedallion />,
     },
     {
-      roman: "II", eyebrow: "Candles", title: "Anyone can light one. No account. No noise.",
+      roman: "II", eyebrow: "Stars", title: "Anyone can release one. No account. No noise.",
       body: "Each burns on the wall of light. The count stays forever.",
       cta: primaryCandle,
       plaque: <PlaqueCandles />,
