@@ -248,7 +248,21 @@ function HomePage() {
       <SiteHeader />
 
       {/* A · HERO */}
-      <Hero primaryCandle={primaryCandle("Light a candle")} />
+      <Hero primaryCandle={primaryCandle("Release a star")} />
+
+      {/* A2 · CONSTELLATION INTRO — explain the sky concept before anything else */}
+      <section className="relative px-5 py-16 text-center md:px-8 md:py-20">
+        <Reveal className="mx-auto max-w-2xl">
+          <p className="text-[11px] uppercase tracking-[0.32em] text-amber-200/70">The sky above</p>
+          <h2 className="mt-3 font-display text-[24px] leading-[1.25] text-[#f5e6c8]/95 md:text-[32px]">
+            That bright one is <span className="italic">Sirius</span> — the eye of <span className="italic">Canis Major</span>, the Great Dog.
+          </h2>
+          <p className="mt-5 text-[15px] leading-relaxed text-white/70 md:text-[17px]">
+            The ancients put a dog in the stars so it would never be forgotten. On Rememfur, every pet who is loved becomes a star of their own — released gently into the same night sky, burning quietly beside all the others.
+          </p>
+        </Reveal>
+        <Divider />
+      </section>
 
       {/* B · PASSAGE */}
       <section className="relative px-5 py-20 text-center md:px-8 md:py-28">
@@ -257,14 +271,14 @@ function HomePage() {
             They were not <span className="not-italic">"just a dog."</span> Not <span className="not-italic">"just a cat."</span> They were seventeen years of coming home to someone.
           </h2>
           <p className="mt-6 font-display text-[18px] leading-[1.5] text-white/70 md:text-[22px]">
-            All that love doesn't disappear. It just needs somewhere to go — a candle, a page that stays, a sky that remembers.
+            All that love doesn't disappear. It just needs somewhere to go — a star, a page that stays, a sky that remembers.
           </p>
         </Reveal>
         <Divider />
       </section>
 
       {/* C · SIX CHAPTERS */}
-      <Chapters primaryCandle={primaryCandle("Light one now")} />
+      <Chapters primaryCandle={primaryCandle("Release theirs now")} />
 
       {/* D · LIVE CANDLES */}
       <Divider />
