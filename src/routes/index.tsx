@@ -299,8 +299,8 @@ function HomePage() {
           </Reveal>
           <div className="mt-10 grid gap-6 md:mt-14 md:grid-cols-3 md:gap-8">
             <Reveal><Step n="I" title="Say their name." body="Tell us who they were — a name, a photo, a few words. Or just a name. That's enough." /></Reveal>
-            <Reveal><Step n="II" title="Light their candle." body="One flame, burning in a sky beside thousands of others. Theirs." /></Reveal>
-            <Reveal><Step n="III" title="Return anytime." body="Their light stays. Come back on the hard days — the birthdays, the anniversaries, the quiet Tuesdays." /></Reveal>
+            <Reveal><Step n="II" title="Release their star." body="One star, drifting up into a sky beside thousands of others. Theirs." /></Reveal>
+            <Reveal><Step n="III" title="Return anytime." body="Their star stays. Come back on the hard days — the birthdays, the anniversaries, the quiet Tuesdays." /></Reveal>
           </div>
           <p className="mt-10 text-center text-[11px] uppercase tracking-[0.28em] text-white/45">
             No account needed. It takes about a minute.
