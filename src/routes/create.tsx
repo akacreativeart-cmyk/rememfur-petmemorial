@@ -837,7 +837,7 @@ function ShareMemorialCard({
   const shareTitle = petName ? `${petName}'s memorial` : "A memorial on Rememfur";
   const shareText = epitaph
     ? `${shareTitle} — "${epitaph}"`
-    : `${shareTitle} — light a candle and leave a memory.`;
+    : `${shareTitle} — release a star and leave a memory.`;
 
   const encodedUrl = encodeURIComponent(url);
   const encodedText = encodeURIComponent(shareText);
@@ -895,7 +895,7 @@ function ShareMemorialCard({
         <h3 className="font-display text-lg text-foreground">Share their memorial</h3>
       </div>
       <p className="mt-1 text-xs text-muted-foreground">
-        Send this gentle link to family and friends so they can light a candle too.
+        Send this gentle link to family and friends so they can release a star too.
       </p>
 
       <label htmlFor="memorial-url" className="sr-only">

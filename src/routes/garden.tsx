@@ -14,7 +14,7 @@ export const Route = createFileRoute("/garden")({
   head: () => ({
     meta: [
       { title: "Memorial Garden — Rememfur" },
-      { name: "description", content: "Browse memorials lovingly created for the pets we miss. Light a candle, leave a word." },
+      { name: "description", content: "Browse memorials lovingly created for the pets we miss. Release a star, leave a word." },
     ],
   }),
 });
@@ -41,7 +41,7 @@ function GardenPage() {
       <main className="mx-auto max-w-6xl px-5 py-14">
         <div className="rounded-[2rem] bg-navy/95 p-8 text-cream md:p-12">
           <h1 className="font-display text-4xl md:text-5xl">Memorial Garden</h1>
-          <p className="mt-2 max-w-xl text-cream/75">A place where love lives on. Wander, remember, light a candle.</p>
+          <p className="mt-2 max-w-xl text-cream/75">A place where love lives on. Wander, remember, release a star.</p>
 
           <div className="mt-7 flex flex-wrap items-center gap-2">
             {filters.map((f) => (
