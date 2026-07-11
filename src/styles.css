@@ -152,14 +152,14 @@
   .font-serif   { font-family: var(--font-serif); }
   .small-caps   { font-variant: small-caps; letter-spacing: 0.15em; }
   .brand-wordmark {
-    font-family: "Cormorant Garamond", ui-serif, Georgia, serif;
+    font-family: var(--font-sans);
     text-transform: lowercase;
-    font-variant: normal;
-    font-feature-settings: normal;
-    font-size: clamp(18px, 5vw, 22px);
+    font-variant: small-caps;
+    font-feature-settings: "smcp";
+    font-size: clamp(20px, 5vw, 24px);
     font-weight: 500;
-    font-style: italic;
-    letter-spacing: 0.01em;
+    font-style: normal;
+    letter-spacing: 0.3em;
     line-height: 1;
     color: var(--cr);
     white-space: nowrap;
