@@ -186,7 +186,7 @@ export function CandleDialog({ target, trigger, onLit }: Props) {
               className="w-full rounded-full bg-[var(--cta)] text-[var(--cta-foreground,white)] hover:opacity-90"
             >
               <Flame className="mr-2 h-4 w-4" />
-              {mut.isPending ? "Lighting…" : user ? "Light the candle" : "Light a candle anonymously"}
+              {mut.isPending ? "Releasing…" : user ? "Release the star" : "Release a star anonymously"}
             </Button>
           </div>
         ) : (
