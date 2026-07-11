@@ -17,8 +17,8 @@ export const Route = createFileRoute("/")({
   component: HomePage,
   head: () => ({
     meta: [
-      { title: "Rememfur — Light a candle for the pet you loved." },
-      { name: "description", content: "A quiet place to remember them. Say their name, light their candle, keep them close. No account needed." },
+      { title: "Rememfur — Release a star for the pet you loved." },
+      { name: "description", content: "A quiet place to remember them. Say their name, release their star into the sky, keep them close. No account needed." },
     ],
   }),
 });
@@ -213,7 +213,7 @@ function HomePage() {
     staleTime: 60_000,
   });
 
-  const primaryCandle = (label: string = "Light a candle") =>
+  const primaryCandle = (label: string = "Release a star") =>
     featured.data ? (
       <CandleDialog
         target={{
@@ -227,7 +227,7 @@ function HomePage() {
             type="button"
             className="ios-tappable inline-flex items-center justify-center rounded-full bg-gradient-to-b from-amber-200 to-amber-400 px-7 py-3.5 text-[15px] font-semibold text-[#1a1200] shadow-[0_0_28px_-6px_rgba(251,191,36,0.55)] hover:from-amber-100 hover:to-amber-300"
           >
-            {label} 🕯️
+            {label} ✨
           </button>
         }
       />
@@ -236,7 +236,7 @@ function HomePage() {
         to="/garden"
         className="ios-tappable inline-flex items-center justify-center rounded-full bg-gradient-to-b from-amber-200 to-amber-400 px-7 py-3.5 text-[15px] font-semibold text-[#1a1200] shadow-[0_0_28px_-6px_rgba(251,191,36,0.55)] hover:from-amber-100 hover:to-amber-300"
       >
-        {label} 🕯️
+        {label} ✨
       </Link>
     );
 
@@ -248,7 +248,21 @@ function HomePage() {
       <SiteHeader />
 
       {/* A · HERO */}
-      <Hero primaryCandle={primaryCandle("Light a candle")} />
+      <Hero primaryCandle={primaryCandle("Release a star")} />
+
+      {/* A2 · CONSTELLATION INTRO — explain the sky concept before anything else */}
+      <section className="relative px-5 py-16 text-center md:px-8 md:py-20">
+        <Reveal className="mx-auto max-w-2xl">
+          <p className="text-[11px] uppercase tracking-[0.32em] text-amber-200/70">The sky above</p>
+          <h2 className="mt-3 font-display text-[24px] leading-[1.25] text-[#f5e6c8]/95 md:text-[32px]">
+            That bright one is <span className="italic">Sirius</span> — the eye of <span className="italic">Canis Major</span>, the Great Dog.
+          </h2>
+          <p className="mt-5 text-[15px] leading-relaxed text-white/70 md:text-[17px]">
+            The ancients put a dog in the stars so it would never be forgotten. On Rememfur, every pet who is loved becomes a star of their own — released gently into the same night sky, burning quietly beside all the others.
+          </p>
+        </Reveal>
+        <Divider />
+      </section>
 
       {/* B · PASSAGE */}
       <section className="relative px-5 py-20 text-center md:px-8 md:py-28">
@@ -257,14 +271,14 @@ function HomePage() {
             They were not <span className="not-italic">"just a dog."</span> Not <span className="not-italic">"just a cat."</span> They were seventeen years of coming home to someone.
           </h2>
           <p className="mt-6 font-display text-[18px] leading-[1.5] text-white/70 md:text-[22px]">
-            All that love doesn't disappear. It just needs somewhere to go — a candle, a page that stays, a sky that remembers.
+            All that love doesn't disappear. It just needs somewhere to go — a star, a page that stays, a sky that remembers.
           </p>
         </Reveal>
         <Divider />
       </section>
 
       {/* C · SIX CHAPTERS */}
-      <Chapters primaryCandle={primaryCandle("Light one now")} />
+      <Chapters primaryCandle={primaryCandle("Release theirs now")} />
 
       {/* D · LIVE CANDLES */}
       <Divider />
@@ -285,8 +299,8 @@ function HomePage() {
           </Reveal>
           <div className="mt-10 grid gap-6 md:mt-14 md:grid-cols-3 md:gap-8">
             <Reveal><Step n="I" title="Say their name." body="Tell us who they were — a name, a photo, a few words. Or just a name. That's enough." /></Reveal>
-            <Reveal><Step n="II" title="Light their candle." body="One flame, burning in a sky beside thousands of others. Theirs." /></Reveal>
-            <Reveal><Step n="III" title="Return anytime." body="Their light stays. Come back on the hard days — the birthdays, the anniversaries, the quiet Tuesdays." /></Reveal>
+            <Reveal><Step n="II" title="Release their star." body="One star, drifting up into a sky beside thousands of others. Theirs." /></Reveal>
+            <Reveal><Step n="III" title="Return anytime." body="Their star stays. Come back on the hard days — the birthdays, the anniversaries, the quiet Tuesdays." /></Reveal>
           </div>
           <p className="mt-10 text-center text-[11px] uppercase tracking-[0.28em] text-white/45">
             No account needed. It takes about a minute.
@@ -304,18 +318,18 @@ function HomePage() {
             </h2>
           </Reveal>
           <div className="mt-8 grid gap-3 md:mt-10">
-            <FaqItem q="Is it free?" a="Yes. Creating a memorial, lighting a candle, and visiting the garden are all free." />
-            <FaqItem q="Do I need an account to light a candle?" a="No. You can light a candle for any pet without signing up. An account is only needed if you want to create your own memorial or keep a journal." />
+            <FaqItem q="Is it free?" a="Yes. Creating a memorial, releasing a star, and visiting the garden are all free." />
+            <FaqItem q="Do I need an account to release a star?" a="No. You can release a star for any pet without signing up. An account is only needed if you want to create your own memorial or keep a journal." />
             <FaqItem q="Can I keep a memorial private?" a="Yes. You can keep a memorial just for you, share it only with a link, or let it live in the garden — your choice, and you can change it anytime." />
             <FaqItem q="Can I add more photos later?" a="Yes. You can return anytime to add photos, edit their story, or update anything about their memorial." />
-            <FaqItem q="What happens to candles after 24 hours?" a="The flame rests, but the count remains. Every candle ever lit is remembered — and anyone can light a new one, any day." />
+            <FaqItem q="What happens to a star after 24 hours?" a="The bright glow softens, but the star remains. Every star ever released is remembered — and anyone can release a new one, any day." />
             <FaqItem q="Can I take a memorial down?" a="Yes. You control your memorials completely, and you can quietly take one down whenever you need to." />
           </div>
         </div>
       </section>
 
       {/* G · CLOSING */}
-      <ClosingScene primaryCandle={primaryCandle("Light a candle")} />
+      <ClosingScene primaryCandle={primaryCandle("Release a star")} />
 
       <div className="pb-[calc(72px+env(safe-area-inset-bottom))] md:pb-6">
         <SiteFooter />
@@ -344,33 +358,14 @@ function Hero({ primaryCandle }: { primaryCandle: ReactNode }) {
         <MoonBadge />
       </div>
 
-      {/* Centered story sequence */}
+      {/* Centered story sequence — kept intentionally sparse so the vigil scene breathes */}
       <div className="relative z-10 mx-auto flex w-full max-w-md flex-col items-center px-5 pb-[30%] pt-24 text-center md:max-w-2xl md:pb-[24%] md:pt-32">
-        <p className="rise-in font-display italic text-[18px] leading-[1.4] text-white/70 md:text-[22px]" style={{ animationDelay: "0.2s" }}>
-          The house is quieter now.
-        </p>
-        <p className="rise-in font-display italic text-[18px] leading-[1.4] text-white/75 md:text-[22px]" style={{ animationDelay: "1.4s" }}>
-          The bowl is still by the door.
-        </p>
-        <p className="rise-in font-display italic text-[18px] leading-[1.4] text-white/85 md:text-[22px]" style={{ animationDelay: "2.6s" }}>
-          The love — the love is still everywhere.
-        </p>
-
-        <h1 className="rise-in mt-8 font-display text-[32px] leading-[1.05] tracking-tight text-white md:text-6xl lg:text-7xl" style={{ animationDelay: "4.0s" }}>
+        <h1 className="rise-in font-display text-[32px] leading-[1.05] tracking-tight text-white md:text-6xl lg:text-7xl" style={{ animationDelay: "0.3s" }}>
           Grief is just love
           <br className="hidden sm:inline" /> with nowhere to go.
         </h1>
-        <p className="rise-in mt-3 font-display italic text-[26px] leading-[1.1] md:text-5xl lg:text-6xl" style={{
-          animationDelay: "5.0s",
-          background: "linear-gradient(180deg, #f7dfa8 0%, #d4b378 60%, #b28840 100%)",
-          WebkitBackgroundClip: "text",
-          WebkitTextFillColor: "transparent",
-          backgroundClip: "text",
-        }}>
-          Now it has somewhere.
-        </p>
 
-        <div className="rise-in mt-10 flex flex-col items-center gap-3" style={{ animationDelay: "6.0s" }}>
+        <div className="rise-in mt-10 flex flex-col items-center gap-3" style={{ animationDelay: "1.1s" }}>
           {primaryCandle}
           <Link to="/create" className="text-[13px] text-white/60 underline-offset-4 hover:text-white/90 hover:underline">
             Create their memorial
@@ -441,8 +436,8 @@ function Chapters({ primaryCandle }: { primaryCandle: ReactNode }) {
       plaque: <PlaqueMedallion />,
     },
     {
-      roman: "II", eyebrow: "Candles", title: "Anyone can light one. No account. No noise.",
-      body: "Each burns on the wall of light. The count stays forever.",
+      roman: "II", eyebrow: "Stars", title: "Anyone can release one. No account. No noise.",
+      body: "Each drifts up into the night sky. The count stays forever.",
       cta: primaryCandle,
       plaque: <PlaqueCandles />,
     },
@@ -706,16 +701,16 @@ function CandleStrip({ candles, weekCount, loading }: {
       <div className="mx-auto max-w-md px-5 md:max-w-[1200px] md:px-8">
         <Reveal>
           <h2 className="text-center font-display text-[28px] leading-[1.1] tracking-tight text-white md:text-5xl">
-            Strangers light candles for pets they never met.
+            Strangers release stars for pets they never met.
           </h2>
           <p className="mt-4 text-center text-[15px] leading-relaxed text-white/65 md:text-lg">
-            Every flame is a pet who was deeply loved.
+            Every star is a pet who was deeply loved.
           </p>
         </Reveal>
         <div className="mt-10 flex items-baseline justify-between">
-          <p className="text-[11px] uppercase tracking-[0.28em] text-amber-200/70">Candles burning</p>
+          <p className="text-[11px] uppercase tracking-[0.28em] text-amber-200/70">Stars in the sky</p>
           {!loading && weekCount > 0 && (
-            <p className="text-[11px] text-white/50">{weekCount} candles lit this week</p>
+            <p className="text-[11px] text-white/50">{weekCount} released this week</p>
           )}
         </div>
       </div>
@@ -733,7 +728,7 @@ function CandleStrip({ candles, weekCount, loading }: {
                     </div>
                     <span className="truncate font-display text-[14px] text-white">{c.pet_name ?? "A friend"}</span>
                   </div>
-                  <p className="mt-2 line-clamp-2 text-[12px] leading-snug text-white/70">{c.message?.trim() || "🕯️"}</p>
+                  <p className="mt-2 line-clamp-2 text-[12px] leading-snug text-white/70">{c.message?.trim() || "✨"}</p>
                   <p className="mt-2 text-[10.5px] uppercase tracking-[0.18em] text-amber-200/70">{c.lit_by_name ?? "A friend"}</p>
                 </div>
               );
@@ -753,7 +748,7 @@ function CandleStrip({ candles, weekCount, loading }: {
             <div className="oc-candle" style={{ height: 46, width: 20 }}>
               <span className="oc-flame"><span className="l1" /><span className="l2" /><span className="l3" /></span>
             </div>
-            <p className="mt-4 font-display text-[17px] text-white">The sky is just beginning. Light one of the first candles.</p>
+            <p className="mt-4 font-display text-[17px] text-white">The sky is just beginning. Release one of the first stars.</p>
             <p className="mt-1 text-[13px] text-white/55">No account needed.</p>
           </div>
         </div>

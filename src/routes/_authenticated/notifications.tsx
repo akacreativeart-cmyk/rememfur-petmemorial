@@ -23,7 +23,7 @@ const ICONS: Record<string, any> = {
 };
 
 const VERBS: Record<string, string> = {
-  candle: "lit a candle",
+  candle: "released a star",
   paw: "left a paw",
   comment: "commented",
   message: "wrote on the memorial",
@@ -90,7 +90,7 @@ function NotificationsPage() {
             </div>
             <p className="mt-4 font-display text-2xl text-foreground">Quiet for now</p>
             <p className="mx-auto mt-2 max-w-sm text-sm text-muted-foreground">
-              When friends light a candle, leave a message, or follow you, their kindness will land here.
+              When friends release a star, leave a message, or follow you, their kindness will land here.
             </p>
           </div>
         ) : (

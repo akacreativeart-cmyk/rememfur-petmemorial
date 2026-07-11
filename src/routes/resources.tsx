@@ -71,7 +71,7 @@ function Resources() {
           <Users className="mx-auto h-6 w-6 text-amber-200" />
           <h2 className="mt-3 font-display text-2xl text-foreground">Join the Memorial Garden</h2>
           <p className="mt-2 text-sm text-muted-foreground">
-            See how others are honoring their pets. Light a candle. Leave a kind word.
+            See how others are honoring their pets. Release a star. Leave a kind word.
           </p>
           <a href="/garden" className="mt-5 inline-flex items-center gap-2 rounded-full bg-amber-400 px-5 py-2.5 text-sm text-primary-foreground hover:bg-amber-300">
             <Heart className="h-4 w-4 fill-current" /> Visit the garden

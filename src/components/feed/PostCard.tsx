@@ -64,7 +64,7 @@ export function PostCard({ post }: { post: FeedPost }) {
       return { prev };
     },
     onSuccess: () => {
-      toast.success("Candle lit 🕯️ — they would have felt it.");
+      toast.success("Star released ✨ — they would have felt it.");
       qc.invalidateQueries({ queryKey: ["post-candles", post.id] });
       qc.invalidateQueries({ queryKey: ["candles-this-week"] });
     },
@@ -209,7 +209,7 @@ export function PostCard({ post }: { post: FeedPost }) {
               <button
                 onClick={quickLight}
                 disabled={candle.isPending}
-                aria-label="Light a candle"
+                aria-label="Release a star"
                 className="candle-pulse relative flex items-center gap-1.5 rounded-full bg-[color-mix(in_oklab,var(--cta)_14%,transparent)] px-3 py-1.5 text-sm font-medium text-[var(--cta)] transition hover:bg-[color-mix(in_oklab,var(--cta)_24%,transparent)] active:scale-95"
               >
                 <Flame className="h-4 w-4 flame-flicker" />
@@ -225,7 +225,7 @@ export function PostCard({ post }: { post: FeedPost }) {
                     style={{ ["--bx" as string]: `${b.bx}%`, ["--by" as string]: `${b.by}px` }}
                     aria-hidden
                   >
-                    🕯️
+                    ✨
                   </span>
                 ))}
               </button>
@@ -238,7 +238,7 @@ export function PostCard({ post }: { post: FeedPost }) {
                 }}
                 trigger={
                   <button
-                    aria-label="Light a candle with a note"
+                    aria-label="Release a star with a note"
                     className="ml-1 rounded-full px-2 py-1.5 text-xs text-[var(--cta)] hover:bg-[color-mix(in_oklab,var(--cta)_12%,transparent)]"
                   >
                     + note
@@ -279,7 +279,7 @@ export function PostCard({ post }: { post: FeedPost }) {
             <ul className="space-y-2">
               {candleData.candles.map((c) => (
                 <li key={c.id} className="group flex gap-2 text-sm">
-                  <span aria-hidden className="mt-0.5 text-base leading-none">🕯️</span>
+                  <span aria-hidden className="mt-0.5 text-base leading-none">✨</span>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-2">
                       <div className="text-xs font-medium text-foreground">{c.lit_by_name ?? "A friend"}</div>

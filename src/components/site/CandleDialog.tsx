@@ -70,7 +70,7 @@ export function CandleDialog({ target, trigger, onLit }: Props) {
     },
     onSuccess: () => {
       softHaptic(20);
-      toast.success("Candle lit 🕯️");
+      toast.success("Star released ✨");
       setLit(true);
       onLit?.();
     },
@@ -90,8 +90,8 @@ export function CandleDialog({ target, trigger, onLit }: Props) {
       : "";
   const petName = target.kind === "memorial" ? target.pet_name : null;
   const shareText = petName
-    ? `I just lit a candle for ${petName} on Rememfur 🕯️ — light one too?`
-    : `I just lit a candle on Rememfur 🕯️ — light one too?`;
+    ? `I just released a star for ${petName} on Rememfur ✨ — release one too?`
+    : `I just released a star on Rememfur ✨ — release one too?`;
 
   async function nativeShare() {
     try {
@@ -121,17 +121,17 @@ export function CandleDialog({ target, trigger, onLit }: Props) {
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 font-display text-2xl">
             <Flame className="h-5 w-5 text-[var(--cta)]" />
-            {lit ? "Candle lit 🕯️" : "Light a candle"}
+            {lit ? "Star released ✨" : "Release a star"}
             {!lit && target.kind === "memorial" && target.pet_name ? (
               <span className="text-base font-normal text-muted-foreground">for {target.pet_name}</span>
             ) : null}
           </DialogTitle>
           <DialogDescription>
             {lit
-              ? "Thank you. Their light is a little brighter because of you."
+              ? "Thank you. Their sky is a little brighter because of you."
               : user
-                ? "Leave up to two short lines — they'll glow softly beside the flame."
-                : "Anyone can light a candle right now — no account needed."}
+                ? "Leave up to two short lines — they'll glow softly beside their star."
+                : "Anyone can release a star right now — no account needed."}
           </DialogDescription>
         </DialogHeader>
 
@@ -175,7 +175,7 @@ export function CandleDialog({ target, trigger, onLit }: Props) {
                   <Link to="/signup" className="font-medium text-[var(--cta)] underline-offset-2 hover:underline">Create a free account</Link>{" "}
                   or{" "}
                   <Link to="/login" className="font-medium text-[var(--cta)] underline-offset-2 hover:underline">sign in</Link>{" "}
-                  — it takes a moment. Your candle will still be lit if you'd rather not.
+                  — it takes a moment. Their star will still be released if you'd rather not.
                 </p>
               </div>
             )}
@@ -186,7 +186,7 @@ export function CandleDialog({ target, trigger, onLit }: Props) {
               className="w-full rounded-full bg-[var(--cta)] text-[var(--cta-foreground,white)] hover:opacity-90"
             >
               <Flame className="mr-2 h-4 w-4" />
-              {mut.isPending ? "Lighting…" : user ? "Light the candle" : "Light a candle anonymously"}
+              {mut.isPending ? "Releasing…" : user ? "Release the star" : "Release a star anonymously"}
             </Button>
           </div>
         ) : (
