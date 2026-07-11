@@ -748,7 +748,7 @@ function CandleStrip({ candles, weekCount, loading }: {
             <div className="oc-candle" style={{ height: 46, width: 20 }}>
               <span className="oc-flame"><span className="l1" /><span className="l2" /><span className="l3" /></span>
             </div>
-            <p className="mt-4 font-display text-[17px] text-white">The sky is just beginning. Light one of the first candles.</p>
+            <p className="mt-4 font-display text-[17px] text-white">The sky is just beginning. Release one of the first stars.</p>
             <p className="mt-1 text-[13px] text-white/55">No account needed.</p>
           </div>
         </div>
