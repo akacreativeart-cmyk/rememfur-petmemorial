@@ -701,16 +701,16 @@ function CandleStrip({ candles, weekCount, loading }: {
       <div className="mx-auto max-w-md px-5 md:max-w-[1200px] md:px-8">
         <Reveal>
           <h2 className="text-center font-display text-[28px] leading-[1.1] tracking-tight text-white md:text-5xl">
-            Strangers light candles for pets they never met.
+            Strangers release stars for pets they never met.
           </h2>
           <p className="mt-4 text-center text-[15px] leading-relaxed text-white/65 md:text-lg">
-            Every flame is a pet who was deeply loved.
+            Every star is a pet who was deeply loved.
           </p>
         </Reveal>
         <div className="mt-10 flex items-baseline justify-between">
-          <p className="text-[11px] uppercase tracking-[0.28em] text-amber-200/70">Candles burning</p>
+          <p className="text-[11px] uppercase tracking-[0.28em] text-amber-200/70">Stars in the sky</p>
           {!loading && weekCount > 0 && (
-            <p className="text-[11px] text-white/50">{weekCount} candles lit this week</p>
+            <p className="text-[11px] text-white/50">{weekCount} released this week</p>
           )}
         </div>
       </div>
