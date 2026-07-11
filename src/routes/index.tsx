@@ -329,7 +329,7 @@ function HomePage() {
       </section>
 
       {/* G · CLOSING */}
-      <ClosingScene primaryCandle={primaryCandle("Light a candle")} />
+      <ClosingScene primaryCandle={primaryCandle("Release a star")} />
 
       <div className="pb-[calc(72px+env(safe-area-inset-bottom))] md:pb-6">
         <SiteFooter />
