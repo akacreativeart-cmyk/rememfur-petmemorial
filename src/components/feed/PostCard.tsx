@@ -346,6 +346,8 @@ export function PostCard({ post }: { post: FeedPost }) {
           </div>
         )}
       </div>
+        </div>
+      </div>
     </article>
   );
 }
