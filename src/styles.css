@@ -79,6 +79,17 @@
   --mauve:     #a87ca8;
   --navy:      #0e1424;
 
+  /* ── Uploaded RememFur palette aliases ── */
+  --void:      #050810;
+  --deep:      #0B1122;
+  --upload-ink:#101A33;
+  --upload-gold:#E8B96D;
+  --ember:     #F0A868;
+  --ivory:     #F2ECDD;
+  --parchment: #EFE6D0;
+  --faint:     rgba(242,236,221,.55);
+  --hair:      rgba(232,185,109,.22);
+
   /* CTA stays purple (user preference). Secondary warm accent = terracotta. */
   --cta:            oklch(0.62 0.22 295);
   --cta-deep:       oklch(0.48 0.24 290);
