@@ -34,6 +34,7 @@ import { Route as AuthenticatedPetsRouteImport } from './routes/_authenticated/p
 import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
 import { Route as AuthenticatedJournalRouteImport } from './routes/_authenticated/journal'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedPetsPetIdRouteImport } from './routes/_authenticated/pets.$petId'
 import { Route as AuthenticatedMemorialSlugEditRouteImport } from './routes/_authenticated/memorial.$slug.edit'
 
 const SignupRoute = SignupRouteImport.update({
@@ -161,6 +162,11 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedPetsPetIdRoute = AuthenticatedPetsPetIdRouteImport.update({
+  id: '/$petId',
+  path: '/$petId',
+  getParentRoute: () => AuthenticatedPetsRoute,
+} as any)
 const AuthenticatedMemorialSlugEditRoute =
   AuthenticatedMemorialSlugEditRouteImport.update({
     id: '/memorial/$slug/edit',
@@ -186,13 +192,14 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/journal': typeof AuthenticatedJournalRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
-  '/pets': typeof AuthenticatedPetsRoute
+  '/pets': typeof AuthenticatedPetsRouteWithChildren
   '/settings': typeof AuthenticatedSettingsRoute
   '/create/memorial': typeof CreateMemorialRoute
   '/create/post': typeof CreatePostRoute
   '/memorial/$slug': typeof MemorialSlugRoute
   '/u/$userId': typeof UUserIdRoute
   '/create/': typeof CreateIndexRoute
+  '/pets/$petId': typeof AuthenticatedPetsPetIdRoute
   '/memorial/$slug/edit': typeof AuthenticatedMemorialSlugEditRoute
 }
 export interface FileRoutesByTo {
@@ -213,13 +220,14 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/journal': typeof AuthenticatedJournalRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
-  '/pets': typeof AuthenticatedPetsRoute
+  '/pets': typeof AuthenticatedPetsRouteWithChildren
   '/settings': typeof AuthenticatedSettingsRoute
   '/create/memorial': typeof CreateMemorialRoute
   '/create/post': typeof CreatePostRoute
   '/memorial/$slug': typeof MemorialSlugRoute
   '/u/$userId': typeof UUserIdRoute
   '/create': typeof CreateIndexRoute
+  '/pets/$petId': typeof AuthenticatedPetsPetIdRoute
   '/memorial/$slug/edit': typeof AuthenticatedMemorialSlugEditRoute
 }
 export interface FileRoutesById {
@@ -242,13 +250,14 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/journal': typeof AuthenticatedJournalRoute
   '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
-  '/_authenticated/pets': typeof AuthenticatedPetsRoute
+  '/_authenticated/pets': typeof AuthenticatedPetsRouteWithChildren
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/create/memorial': typeof CreateMemorialRoute
   '/create/post': typeof CreatePostRoute
   '/memorial/$slug': typeof MemorialSlugRoute
   '/u/$userId': typeof UUserIdRoute
   '/create/': typeof CreateIndexRoute
+  '/_authenticated/pets/$petId': typeof AuthenticatedPetsPetIdRoute
   '/_authenticated/memorial/$slug/edit': typeof AuthenticatedMemorialSlugEditRoute
 }
 export interface FileRouteTypes {
@@ -278,6 +287,7 @@ export interface FileRouteTypes {
     | '/memorial/$slug'
     | '/u/$userId'
     | '/create/'
+    | '/pets/$petId'
     | '/memorial/$slug/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -305,6 +315,7 @@ export interface FileRouteTypes {
     | '/memorial/$slug'
     | '/u/$userId'
     | '/create'
+    | '/pets/$petId'
     | '/memorial/$slug/edit'
   id:
     | '__root__'
@@ -333,6 +344,7 @@ export interface FileRouteTypes {
     | '/memorial/$slug'
     | '/u/$userId'
     | '/create/'
+    | '/_authenticated/pets/$petId'
     | '/_authenticated/memorial/$slug/edit'
   fileRoutesById: FileRoutesById
 }
@@ -536,6 +548,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/pets/$petId': {
+      id: '/_authenticated/pets/$petId'
+      path: '/$petId'
+      fullPath: '/pets/$petId'
+      preLoaderRoute: typeof AuthenticatedPetsPetIdRouteImport
+      parentRoute: typeof AuthenticatedPetsRoute
+    }
     '/_authenticated/memorial/$slug/edit': {
       id: '/_authenticated/memorial/$slug/edit'
       path: '/memorial/$slug/edit'
@@ -546,11 +565,22 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthenticatedPetsRouteChildren {
+  AuthenticatedPetsPetIdRoute: typeof AuthenticatedPetsPetIdRoute
+}
+
+const AuthenticatedPetsRouteChildren: AuthenticatedPetsRouteChildren = {
+  AuthenticatedPetsPetIdRoute: AuthenticatedPetsPetIdRoute,
+}
+
+const AuthenticatedPetsRouteWithChildren =
+  AuthenticatedPetsRoute._addFileChildren(AuthenticatedPetsRouteChildren)
+
 interface AuthenticatedRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedJournalRoute: typeof AuthenticatedJournalRoute
   AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
-  AuthenticatedPetsRoute: typeof AuthenticatedPetsRoute
+  AuthenticatedPetsRoute: typeof AuthenticatedPetsRouteWithChildren
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedMemorialSlugEditRoute: typeof AuthenticatedMemorialSlugEditRoute
 }
@@ -559,7 +589,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedJournalRoute: AuthenticatedJournalRoute,
   AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
-  AuthenticatedPetsRoute: AuthenticatedPetsRoute,
+  AuthenticatedPetsRoute: AuthenticatedPetsRouteWithChildren,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedMemorialSlugEditRoute: AuthenticatedMemorialSlugEditRoute,
 }

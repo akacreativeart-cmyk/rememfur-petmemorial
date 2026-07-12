@@ -1,12 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, ShoppingBag, Utensils, Shirt, Stethoscope, Shield, Sparkles, PawPrint, HandHeart, MapPin, Skull, Cake, HeartHandshake } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { CandleDialog } from "@/components/site/CandleDialog";
 import { IntroSequence } from "@/components/site/IntroSequence";
+import { WaitlistDialog } from "@/components/site/WaitlistDialog";
 import {
   pickFeaturedMemorial,
   listRecentCandles,
@@ -17,8 +18,10 @@ export const Route = createFileRoute("/")({
   component: HomePage,
   head: () => ({
     meta: [
-      { title: "Rememfur — Release a star for the pet you loved." },
-      { name: "description", content: "A quiet place to remember them. Say their name, release their star into the sky, keep them close. No account needed." },
+      { title: "Rememfur — A gentle place for the pet you loved." },
+      { name: "description", content: "Write their memorial, light a paw lamp in their name, and hold your grief with people who understand. A quiet home for the love that has nowhere to go." },
+      { property: "og:title", content: "Rememfur — A gentle place for the pet you loved." },
+      { property: "og:description", content: "Write their memorial, light a paw lamp, share your grief with a community that gets it." },
     ],
   }),
 });
