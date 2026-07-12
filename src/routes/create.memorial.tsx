@@ -45,7 +45,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
-export const Route = createFileRoute("/create")({
+export const Route = createFileRoute("/create/memorial")({
   component: CreatePage,
   validateSearch: (search: Record<string, unknown>) => ({
     welcome: search.welcome === 1 || search.welcome === "1" ? 1 : undefined,
@@ -837,7 +837,7 @@ function ShareMemorialCard({
   const shareTitle = petName ? `${petName}'s memorial` : "A memorial on Rememfur";
   const shareText = epitaph
     ? `${shareTitle} — "${epitaph}"`
-    : `${shareTitle} — release a star and leave a memory.`;
+    : `${shareTitle} — light a paw lamp and leave a memory.`;
 
   const encodedUrl = encodeURIComponent(url);
   const encodedText = encodeURIComponent(shareText);
@@ -895,7 +895,7 @@ function ShareMemorialCard({
         <h3 className="font-display text-lg text-foreground">Share their memorial</h3>
       </div>
       <p className="mt-1 text-xs text-muted-foreground">
-        Send this gentle link to family and friends so they can release a star too.
+        Send this gentle link to family and friends so they can light a paw lamp too.
       </p>
 
       <label htmlFor="memorial-url" className="sr-only">

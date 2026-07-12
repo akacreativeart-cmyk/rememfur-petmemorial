@@ -64,7 +64,7 @@ export function PostCard({ post }: { post: FeedPost }) {
       return { prev };
     },
     onSuccess: () => {
-      toast.success("Star released ✨ — they would have felt it.");
+      toast.success("Paw lamp lit ✨ — they would have felt it.");
       qc.invalidateQueries({ queryKey: ["post-candles", post.id] });
       qc.invalidateQueries({ queryKey: ["candles-this-week"] });
     },
@@ -141,38 +141,45 @@ export function PostCard({ post }: { post: FeedPost }) {
   const initials = (post.author_name || "?").split(/\s+/).map((s) => s[0]).slice(0, 2).join("").toUpperCase();
 
   return (
-    <article className="overflow-hidden rounded-2xl border border-border/60 bg-card soft-shadow">
-      <header className="flex items-center justify-between px-4 py-3">
-        <Link to="/u/$userId" params={{ userId: post.author_id }} className="flex items-center gap-3">
+    <article className="border-b border-border/60 bg-card px-4 py-4 transition hover:bg-card/80">
+      <div className="flex gap-3">
+        <Link to="/u/$userId" params={{ userId: post.author_id }} className="shrink-0">
           <Avatar className="h-10 w-10">
             {post.author_avatar && <AvatarImage src={post.author_avatar} alt="" />}
-            <AvatarFallback className="bg-sage/20 text-sage-deep text-sm">{initials}</AvatarFallback>
+            <AvatarFallback className="bg-sage/20 text-sm text-sage-deep">{initials}</AvatarFallback>
           </Avatar>
-          <div>
-            <div className="font-medium text-foreground text-sm">{post.author_name}</div>
-            <div className="text-xs text-muted-foreground">
+        </Link>
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center gap-1.5">
+            <Link to="/u/$userId" params={{ userId: post.author_id }} className="truncate font-medium text-foreground hover:underline">
+              {post.author_name}
+            </Link>
+            <span className="text-xs text-muted-foreground">·</span>
+            <span className="text-xs text-muted-foreground">
               {formatDistanceToNow(new Date(post.created_at), { addSuffix: true })}
+            </span>
+            <div className="ml-auto flex items-center gap-1">
+              {!isOwner && <ReportButton contentType="post" contentId={post.id} label="Report post" />}
+              {isOwner && (
+                <Button variant="ghost" size="icon" onClick={() => del.mutate()} aria-label="Delete" className="h-7 w-7">
+                  <Trash2 className="h-3.5 w-3.5 text-muted-foreground" />
+                </Button>
+              )}
             </div>
           </div>
-        </Link>
-        <div className="flex items-center gap-1">
-          {!isOwner && <ReportButton contentType="post" contentId={post.id} label="Report post" />}
-          {isOwner && (
-            <Button variant="ghost" size="icon" onClick={() => del.mutate()} aria-label="Delete">
-              <Trash2 className="h-4 w-4 text-muted-foreground" />
-            </Button>
+
+          {post.caption && (
+            <p className="mt-1 whitespace-pre-wrap text-[15px] leading-relaxed text-foreground">{post.caption}</p>
           )}
-        </div>
-      </header>
 
-      {post.image_url && (
-        <div className="aspect-square w-full bg-muted">
-          <img src={post.image_url} alt="" className="h-full w-full object-cover" loading="lazy" />
-        </div>
-      )}
+          {post.image_url && (
+            <div className="mt-3 overflow-hidden rounded-2xl border border-border/60 bg-muted">
+              <img src={post.image_url} alt="" className="max-h-[420px] w-full object-cover" loading="lazy" />
+            </div>
+          )}
 
-      <div className="space-y-3 px-4 py-3">
-        {post.caption && <p className="whitespace-pre-wrap text-sm leading-relaxed text-foreground">{post.caption}</p>}
+      <div className="space-y-3 pt-3">
+        {/* legacy wrapper removed — content moved above */}
 
         {post.memorial_slug && (
           <Link
@@ -209,7 +216,7 @@ export function PostCard({ post }: { post: FeedPost }) {
               <button
                 onClick={quickLight}
                 disabled={candle.isPending}
-                aria-label="Release a star"
+                aria-label="Light a paw lamp"
                 className="candle-pulse relative flex items-center gap-1.5 rounded-full bg-[color-mix(in_oklab,var(--cta)_14%,transparent)] px-3 py-1.5 text-sm font-medium text-[var(--cta)] transition hover:bg-[color-mix(in_oklab,var(--cta)_24%,transparent)] active:scale-95"
               >
                 <Flame className="h-4 w-4 flame-flicker" />
@@ -238,7 +245,7 @@ export function PostCard({ post }: { post: FeedPost }) {
                 }}
                 trigger={
                   <button
-                    aria-label="Release a star with a note"
+                    aria-label="Light a paw lamp with a note"
                     className="ml-1 rounded-full px-2 py-1.5 text-xs text-[var(--cta)] hover:bg-[color-mix(in_oklab,var(--cta)_12%,transparent)]"
                   >
                     + note
@@ -338,6 +345,8 @@ export function PostCard({ post }: { post: FeedPost }) {
             )}
           </div>
         )}
+      </div>
+        </div>
       </div>
     </article>
   );

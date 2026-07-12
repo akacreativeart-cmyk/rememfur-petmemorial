@@ -17,7 +17,6 @@ import { Route as MarketplaceRouteImport } from './routes/marketplace'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as GriefSupportRouteImport } from './routes/grief-support'
 import { Route as GardenRouteImport } from './routes/garden'
-import { Route as CreateRouteImport } from './routes/create'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CommunityRouteImport } from './routes/community'
 import { Route as AdoptionRouteImport } from './routes/adoption'
@@ -25,12 +24,17 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CreateIndexRouteImport } from './routes/create.index'
 import { Route as UUserIdRouteImport } from './routes/u.$userId'
 import { Route as MemorialSlugRouteImport } from './routes/memorial.$slug'
+import { Route as CreatePostRouteImport } from './routes/create.post'
+import { Route as CreateMemorialRouteImport } from './routes/create.memorial'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
+import { Route as AuthenticatedPetsRouteImport } from './routes/_authenticated/pets'
 import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
 import { Route as AuthenticatedJournalRouteImport } from './routes/_authenticated/journal'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedPetsPetIdRouteImport } from './routes/_authenticated/pets.$petId'
 import { Route as AuthenticatedMemorialSlugEditRouteImport } from './routes/_authenticated/memorial.$slug.edit'
 
 const SignupRoute = SignupRouteImport.update({
@@ -73,11 +77,6 @@ const GardenRoute = GardenRouteImport.update({
   path: '/garden',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CreateRoute = CreateRouteImport.update({
-  id: '/create',
-  path: '/create',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
@@ -112,6 +111,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CreateIndexRoute = CreateIndexRouteImport.update({
+  id: '/create/',
+  path: '/create/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const UUserIdRoute = UUserIdRouteImport.update({
   id: '/u/$userId',
   path: '/u/$userId',
@@ -122,9 +126,24 @@ const MemorialSlugRoute = MemorialSlugRouteImport.update({
   path: '/memorial/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CreatePostRoute = CreatePostRouteImport.update({
+  id: '/create/post',
+  path: '/create/post',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CreateMemorialRoute = CreateMemorialRouteImport.update({
+  id: '/create/memorial',
+  path: '/create/memorial',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedPetsRoute = AuthenticatedPetsRouteImport.update({
+  id: '/pets',
+  path: '/pets',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedNotificationsRoute =
@@ -143,6 +162,11 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedPetsPetIdRoute = AuthenticatedPetsPetIdRouteImport.update({
+  id: '/$petId',
+  path: '/$petId',
+  getParentRoute: () => AuthenticatedPetsRoute,
+} as any)
 const AuthenticatedMemorialSlugEditRoute =
   AuthenticatedMemorialSlugEditRouteImport.update({
     id: '/memorial/$slug/edit',
@@ -157,7 +181,6 @@ export interface FileRoutesByFullPath {
   '/adoption': typeof AdoptionRoute
   '/community': typeof CommunityRoute
   '/contact': typeof ContactRoute
-  '/create': typeof CreateRoute
   '/garden': typeof GardenRoute
   '/grief-support': typeof GriefSupportRoute
   '/login': typeof LoginRoute
@@ -169,9 +192,14 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/journal': typeof AuthenticatedJournalRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
+  '/pets': typeof AuthenticatedPetsRouteWithChildren
   '/settings': typeof AuthenticatedSettingsRoute
+  '/create/memorial': typeof CreateMemorialRoute
+  '/create/post': typeof CreatePostRoute
   '/memorial/$slug': typeof MemorialSlugRoute
   '/u/$userId': typeof UUserIdRoute
+  '/create/': typeof CreateIndexRoute
+  '/pets/$petId': typeof AuthenticatedPetsPetIdRoute
   '/memorial/$slug/edit': typeof AuthenticatedMemorialSlugEditRoute
 }
 export interface FileRoutesByTo {
@@ -181,7 +209,6 @@ export interface FileRoutesByTo {
   '/adoption': typeof AdoptionRoute
   '/community': typeof CommunityRoute
   '/contact': typeof ContactRoute
-  '/create': typeof CreateRoute
   '/garden': typeof GardenRoute
   '/grief-support': typeof GriefSupportRoute
   '/login': typeof LoginRoute
@@ -193,9 +220,14 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/journal': typeof AuthenticatedJournalRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
+  '/pets': typeof AuthenticatedPetsRouteWithChildren
   '/settings': typeof AuthenticatedSettingsRoute
+  '/create/memorial': typeof CreateMemorialRoute
+  '/create/post': typeof CreatePostRoute
   '/memorial/$slug': typeof MemorialSlugRoute
   '/u/$userId': typeof UUserIdRoute
+  '/create': typeof CreateIndexRoute
+  '/pets/$petId': typeof AuthenticatedPetsPetIdRoute
   '/memorial/$slug/edit': typeof AuthenticatedMemorialSlugEditRoute
 }
 export interface FileRoutesById {
@@ -207,7 +239,6 @@ export interface FileRoutesById {
   '/adoption': typeof AdoptionRoute
   '/community': typeof CommunityRoute
   '/contact': typeof ContactRoute
-  '/create': typeof CreateRoute
   '/garden': typeof GardenRoute
   '/grief-support': typeof GriefSupportRoute
   '/login': typeof LoginRoute
@@ -219,9 +250,14 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/journal': typeof AuthenticatedJournalRoute
   '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
+  '/_authenticated/pets': typeof AuthenticatedPetsRouteWithChildren
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
+  '/create/memorial': typeof CreateMemorialRoute
+  '/create/post': typeof CreatePostRoute
   '/memorial/$slug': typeof MemorialSlugRoute
   '/u/$userId': typeof UUserIdRoute
+  '/create/': typeof CreateIndexRoute
+  '/_authenticated/pets/$petId': typeof AuthenticatedPetsPetIdRoute
   '/_authenticated/memorial/$slug/edit': typeof AuthenticatedMemorialSlugEditRoute
 }
 export interface FileRouteTypes {
@@ -233,7 +269,6 @@ export interface FileRouteTypes {
     | '/adoption'
     | '/community'
     | '/contact'
-    | '/create'
     | '/garden'
     | '/grief-support'
     | '/login'
@@ -245,9 +280,14 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/journal'
     | '/notifications'
+    | '/pets'
     | '/settings'
+    | '/create/memorial'
+    | '/create/post'
     | '/memorial/$slug'
     | '/u/$userId'
+    | '/create/'
+    | '/pets/$petId'
     | '/memorial/$slug/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -257,7 +297,6 @@ export interface FileRouteTypes {
     | '/adoption'
     | '/community'
     | '/contact'
-    | '/create'
     | '/garden'
     | '/grief-support'
     | '/login'
@@ -269,9 +308,14 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/journal'
     | '/notifications'
+    | '/pets'
     | '/settings'
+    | '/create/memorial'
+    | '/create/post'
     | '/memorial/$slug'
     | '/u/$userId'
+    | '/create'
+    | '/pets/$petId'
     | '/memorial/$slug/edit'
   id:
     | '__root__'
@@ -282,7 +326,6 @@ export interface FileRouteTypes {
     | '/adoption'
     | '/community'
     | '/contact'
-    | '/create'
     | '/garden'
     | '/grief-support'
     | '/login'
@@ -294,9 +337,14 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/journal'
     | '/_authenticated/notifications'
+    | '/_authenticated/pets'
     | '/_authenticated/settings'
+    | '/create/memorial'
+    | '/create/post'
     | '/memorial/$slug'
     | '/u/$userId'
+    | '/create/'
+    | '/_authenticated/pets/$petId'
     | '/_authenticated/memorial/$slug/edit'
   fileRoutesById: FileRoutesById
 }
@@ -308,7 +356,6 @@ export interface RootRouteChildren {
   AdoptionRoute: typeof AdoptionRoute
   CommunityRoute: typeof CommunityRoute
   ContactRoute: typeof ContactRoute
-  CreateRoute: typeof CreateRoute
   GardenRoute: typeof GardenRoute
   GriefSupportRoute: typeof GriefSupportRoute
   LoginRoute: typeof LoginRoute
@@ -317,8 +364,11 @@ export interface RootRouteChildren {
   PrivacyRoute: typeof PrivacyRoute
   ResourcesRoute: typeof ResourcesRoute
   SignupRoute: typeof SignupRoute
+  CreateMemorialRoute: typeof CreateMemorialRoute
+  CreatePostRoute: typeof CreatePostRoute
   MemorialSlugRoute: typeof MemorialSlugRoute
   UUserIdRoute: typeof UUserIdRoute
+  CreateIndexRoute: typeof CreateIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -379,13 +429,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GardenRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/create': {
-      id: '/create'
-      path: '/create'
-      fullPath: '/create'
-      preLoaderRoute: typeof CreateRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/contact': {
       id: '/contact'
       path: '/contact'
@@ -435,6 +478,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/create/': {
+      id: '/create/'
+      path: '/create'
+      fullPath: '/create/'
+      preLoaderRoute: typeof CreateIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/u/$userId': {
       id: '/u/$userId'
       path: '/u/$userId'
@@ -449,11 +499,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MemorialSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/create/post': {
+      id: '/create/post'
+      path: '/create/post'
+      fullPath: '/create/post'
+      preLoaderRoute: typeof CreatePostRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/create/memorial': {
+      id: '/create/memorial'
+      path: '/create/memorial'
+      fullPath: '/create/memorial'
+      preLoaderRoute: typeof CreateMemorialRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/settings': {
       id: '/_authenticated/settings'
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof AuthenticatedSettingsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/pets': {
+      id: '/_authenticated/pets'
+      path: '/pets'
+      fullPath: '/pets'
+      preLoaderRoute: typeof AuthenticatedPetsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/notifications': {
@@ -477,6 +548,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/pets/$petId': {
+      id: '/_authenticated/pets/$petId'
+      path: '/$petId'
+      fullPath: '/pets/$petId'
+      preLoaderRoute: typeof AuthenticatedPetsPetIdRouteImport
+      parentRoute: typeof AuthenticatedPetsRoute
+    }
     '/_authenticated/memorial/$slug/edit': {
       id: '/_authenticated/memorial/$slug/edit'
       path: '/memorial/$slug/edit'
@@ -487,10 +565,22 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthenticatedPetsRouteChildren {
+  AuthenticatedPetsPetIdRoute: typeof AuthenticatedPetsPetIdRoute
+}
+
+const AuthenticatedPetsRouteChildren: AuthenticatedPetsRouteChildren = {
+  AuthenticatedPetsPetIdRoute: AuthenticatedPetsPetIdRoute,
+}
+
+const AuthenticatedPetsRouteWithChildren =
+  AuthenticatedPetsRoute._addFileChildren(AuthenticatedPetsRouteChildren)
+
 interface AuthenticatedRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedJournalRoute: typeof AuthenticatedJournalRoute
   AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
+  AuthenticatedPetsRoute: typeof AuthenticatedPetsRouteWithChildren
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedMemorialSlugEditRoute: typeof AuthenticatedMemorialSlugEditRoute
 }
@@ -499,6 +589,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedJournalRoute: AuthenticatedJournalRoute,
   AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
+  AuthenticatedPetsRoute: AuthenticatedPetsRouteWithChildren,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedMemorialSlugEditRoute: AuthenticatedMemorialSlugEditRoute,
 }
@@ -515,7 +606,6 @@ const rootRouteChildren: RootRouteChildren = {
   AdoptionRoute: AdoptionRoute,
   CommunityRoute: CommunityRoute,
   ContactRoute: ContactRoute,
-  CreateRoute: CreateRoute,
   GardenRoute: GardenRoute,
   GriefSupportRoute: GriefSupportRoute,
   LoginRoute: LoginRoute,
@@ -524,19 +614,12 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacyRoute: PrivacyRoute,
   ResourcesRoute: ResourcesRoute,
   SignupRoute: SignupRoute,
+  CreateMemorialRoute: CreateMemorialRoute,
+  CreatePostRoute: CreatePostRoute,
   MemorialSlugRoute: MemorialSlugRoute,
   UUserIdRoute: UUserIdRoute,
+  CreateIndexRoute: CreateIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

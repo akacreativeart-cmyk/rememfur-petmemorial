@@ -359,6 +359,95 @@ export type Database = {
           },
         ]
       }
+      pet_records: {
+        Row: {
+          attachment_url: string | null
+          created_at: string
+          date: string
+          id: string
+          kind: string
+          next_due_date: string | null
+          notes: string | null
+          pet_id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          attachment_url?: string | null
+          created_at?: string
+          date?: string
+          id?: string
+          kind: string
+          next_due_date?: string | null
+          notes?: string | null
+          pet_id: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          attachment_url?: string | null
+          created_at?: string
+          date?: string
+          id?: string
+          kind?: string
+          next_due_date?: string | null
+          notes?: string | null
+          pet_id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pet_records_pet_id_fkey"
+            columns: ["pet_id"]
+            isOneToOne: false
+            referencedRelation: "pets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pets: {
+        Row: {
+          adoption_date: string | null
+          avatar_url: string | null
+          birthdate: string | null
+          breed: string | null
+          created_at: string
+          id: string
+          name: string
+          notes: string | null
+          owner_id: string
+          species: string
+          updated_at: string
+        }
+        Insert: {
+          adoption_date?: string | null
+          avatar_url?: string | null
+          birthdate?: string | null
+          breed?: string | null
+          created_at?: string
+          id?: string
+          name: string
+          notes?: string | null
+          owner_id: string
+          species?: string
+          updated_at?: string
+        }
+        Update: {
+          adoption_date?: string | null
+          avatar_url?: string | null
+          birthdate?: string | null
+          breed?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          notes?: string | null
+          owner_id?: string
+          species?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       post_comments: {
         Row: {
           author_id: string

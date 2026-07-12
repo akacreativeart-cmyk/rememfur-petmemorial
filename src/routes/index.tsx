@@ -1,12 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, ShoppingBag, Utensils, Shirt, Stethoscope, Shield, Sparkles, PawPrint, HandHeart, MapPin, Skull, Cake, HeartHandshake } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { CandleDialog } from "@/components/site/CandleDialog";
 import { IntroSequence } from "@/components/site/IntroSequence";
+import { WaitlistDialog } from "@/components/site/WaitlistDialog";
 import {
   pickFeaturedMemorial,
   listRecentCandles,
@@ -17,8 +18,10 @@ export const Route = createFileRoute("/")({
   component: HomePage,
   head: () => ({
     meta: [
-      { title: "Rememfur — Release a star for the pet you loved." },
-      { name: "description", content: "A quiet place to remember them. Say their name, release their star into the sky, keep them close. No account needed." },
+      { title: "Rememfur — A gentle place for the pet you loved." },
+      { name: "description", content: "Write their memorial, light a paw lamp in their name, and hold your grief with people who understand. A quiet home for the love that has nowhere to go." },
+      { property: "og:title", content: "Rememfur — A gentle place for the pet you loved." },
+      { property: "og:description", content: "Write their memorial, light a paw lamp, share your grief with a community that gets it." },
     ],
   }),
 });
@@ -213,7 +216,7 @@ function HomePage() {
     staleTime: 60_000,
   });
 
-  const primaryCandle = (label: string = "Release a star") =>
+  const primaryCandle = (label: string = "Light a paw lamp") =>
     featured.data ? (
       <CandleDialog
         target={{
@@ -227,7 +230,7 @@ function HomePage() {
             type="button"
             className="ios-tappable inline-flex items-center justify-center rounded-full bg-gradient-to-b from-amber-200 to-amber-400 px-7 py-3.5 text-[15px] font-semibold text-[#1a1200] shadow-[0_0_28px_-6px_rgba(251,191,36,0.55)] hover:from-amber-100 hover:to-amber-300"
           >
-            {label} ✨
+            {label} 🐾
           </button>
         }
       />
@@ -236,7 +239,7 @@ function HomePage() {
         to="/garden"
         className="ios-tappable inline-flex items-center justify-center rounded-full bg-gradient-to-b from-amber-200 to-amber-400 px-7 py-3.5 text-[15px] font-semibold text-[#1a1200] shadow-[0_0_28px_-6px_rgba(251,191,36,0.55)] hover:from-amber-100 hover:to-amber-300"
       >
-        {label} ✨
+        {label} 🐾
       </Link>
     );
 
@@ -247,22 +250,28 @@ function HomePage() {
       <IntroSequence />
       <SiteHeader />
 
-      {/* A · HERO */}
-      <Hero primaryCandle={primaryCandle("Release a star")} />
+      {/* A · HERO — grief-first CTA */}
+      <Hero />
 
-      {/* A2 · CONSTELLATION INTRO — explain the sky concept before anything else */}
+      {/* A2 · STARS INTRO */}
       <section className="relative px-5 py-16 text-center md:px-8 md:py-20">
         <Reveal className="mx-auto max-w-2xl">
-          <p className="text-[11px] uppercase tracking-[0.32em] text-amber-200/70">The sky above</p>
-          <h2 className="mt-3 font-display text-[24px] leading-[1.25] text-[#f5e6c8]/95 md:text-[32px]">
-            That bright one is <span className="italic">Sirius</span> — the eye of <span className="italic">Canis Major</span>, the Great Dog.
+          <p className="text-[11px] uppercase tracking-[0.32em] text-amber-200/70">They are the stars now</p>
+          <h2 className="mt-3 font-display text-[26px] leading-[1.2] text-[#f5e6c8]/95 md:text-[34px]">
+            Our beloved pets are the stars in the sky, watching over us.
           </h2>
           <p className="mt-5 text-[15px] leading-relaxed text-white/70 md:text-[17px]">
-            The ancients put a dog in the stars so it would never be forgotten. On Rememfur, every pet who is loved becomes a star of their own — released gently into the same night sky, burning quietly beside all the others.
+            The ancients put a dog in the stars — <span className="italic">Canis Major</span>, with <span className="italic">Sirius</span> as its bright eye — so it would never be forgotten. Every pet who is loved here becomes a small light in the same sky, burning gently beside all the others.
           </p>
         </Reveal>
         <Divider />
       </section>
+
+      {/* A3 · GRIEF THAT HAS NOWHERE TO GO */}
+      <GriefSection />
+
+      {/* A4 · ECOSYSTEM CARDS */}
+      <EcosystemSection />
 
       {/* B · PASSAGE */}
       <section className="relative px-5 py-20 text-center md:px-8 md:py-28">
@@ -271,14 +280,14 @@ function HomePage() {
             They were not <span className="not-italic">"just a dog."</span> Not <span className="not-italic">"just a cat."</span> They were seventeen years of coming home to someone.
           </h2>
           <p className="mt-6 font-display text-[18px] leading-[1.5] text-white/70 md:text-[22px]">
-            All that love doesn't disappear. It just needs somewhere to go — a star, a page that stays, a sky that remembers.
+            All that love doesn't disappear. It just needs somewhere to go — a paw lamp, a page that stays, a sky that remembers.
           </p>
         </Reveal>
         <Divider />
       </section>
 
       {/* C · SIX CHAPTERS */}
-      <Chapters primaryCandle={primaryCandle("Release theirs now")} />
+      <Chapters primaryCandle={primaryCandle("Light theirs now")} />
 
       {/* D · LIVE CANDLES */}
       <Divider />
@@ -299,8 +308,8 @@ function HomePage() {
           </Reveal>
           <div className="mt-10 grid gap-6 md:mt-14 md:grid-cols-3 md:gap-8">
             <Reveal><Step n="I" title="Say their name." body="Tell us who they were — a name, a photo, a few words. Or just a name. That's enough." /></Reveal>
-            <Reveal><Step n="II" title="Release their star." body="One star, drifting up into a sky beside thousands of others. Theirs." /></Reveal>
-            <Reveal><Step n="III" title="Return anytime." body="Their star stays. Come back on the hard days — the birthdays, the anniversaries, the quiet Tuesdays." /></Reveal>
+            <Reveal><Step n="II" title="Light their paw lamp." body="A small warm light burning in their name. Yours forever, and lit by anyone who visits." /></Reveal>
+            <Reveal><Step n="III" title="Return anytime." body="Their page stays. Come back on the hard days — birthdays, anniversaries, quiet Tuesdays." /></Reveal>
           </div>
           <p className="mt-10 text-center text-[11px] uppercase tracking-[0.28em] text-white/45">
             No account needed. It takes about a minute.
@@ -318,18 +327,18 @@ function HomePage() {
             </h2>
           </Reveal>
           <div className="mt-8 grid gap-3 md:mt-10">
-            <FaqItem q="Is it free?" a="Yes. Creating a memorial, releasing a star, and visiting the garden are all free." />
-            <FaqItem q="Do I need an account to release a star?" a="No. You can release a star for any pet without signing up. An account is only needed if you want to create your own memorial or keep a journal." />
+            <FaqItem q="Is it free?" a="Yes. Creating a memorial, lighting a paw lamp, and visiting the garden are all free." />
+            <FaqItem q="Do I need an account to light a paw lamp?" a="No. You can light a paw lamp for any pet without signing up. An account is only needed if you want to create your own memorial, keep a journal, or track your pets' records." />
             <FaqItem q="Can I keep a memorial private?" a="Yes. You can keep a memorial just for you, share it only with a link, or let it live in the garden — your choice, and you can change it anytime." />
             <FaqItem q="Can I add more photos later?" a="Yes. You can return anytime to add photos, edit their story, or update anything about their memorial." />
-            <FaqItem q="What happens to a star after 24 hours?" a="The bright glow softens, but the star remains. Every star ever released is remembered — and anyone can release a new one, any day." />
+            <FaqItem q="What about the marketplace, vets, or funeral services?" a="Those are on the way — join the notify list on any card above and we'll let you know as each part opens." />
             <FaqItem q="Can I take a memorial down?" a="Yes. You control your memorials completely, and you can quietly take one down whenever you need to." />
           </div>
         </div>
       </section>
 
       {/* G · CLOSING */}
-      <ClosingScene primaryCandle={primaryCandle("Release a star")} />
+      <ClosingScene primaryCandle={primaryCandle("Light a paw lamp")} />
 
       <div className="pb-[calc(72px+env(safe-area-inset-bottom))] md:pb-6">
         <SiteFooter />
@@ -340,7 +349,7 @@ function HomePage() {
 
 /* ────────── HERO ────────── */
 
-function Hero({ primaryCandle }: { primaryCandle: ReactNode }) {
+function Hero() {
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -367,9 +376,14 @@ function Hero({ primaryCandle }: { primaryCandle: ReactNode }) {
           </h1>
 
           <div className="rise-in mt-10 flex flex-col items-center gap-3" style={{ animationDelay: "1.1s" }}>
-            {primaryCandle}
-            <Link to="/create" className="text-[13px] text-white/60 underline-offset-4 hover:text-white/90 hover:underline">
-              Create their memorial
+            <Link
+              to="/create/memorial"
+              className="ios-tappable inline-flex items-center justify-center rounded-full bg-gradient-to-b from-amber-200 to-amber-400 px-7 py-3.5 text-[15px] font-semibold text-[#1a1200] shadow-[0_0_28px_-6px_rgba(251,191,36,0.55)] hover:from-amber-100 hover:to-amber-300"
+            >
+              Write a memorial
+            </Link>
+            <Link to="/community" className="text-[13px] text-white/60 underline-offset-4 hover:text-white/90 hover:underline">
+              Or express your grief with the community
             </Link>
           </div>
         </div>
@@ -884,3 +898,161 @@ function FaqItem({ q, a }: { q: string; a: string }) {
     </details>
   );
 }
+
+/* ────────── Grief section ────────── */
+
+function GriefSection() {
+  return (
+    <section className="relative px-5 py-16 md:px-8 md:py-24">
+      <Reveal className="mx-auto max-w-3xl text-center">
+        <p className="text-[11px] uppercase tracking-[0.32em] text-amber-200/70">Grief with nowhere to go</p>
+        <h2 className="mt-3 font-display text-[30px] leading-[1.1] tracking-tight text-white md:text-5xl">
+          Pet grief is real. And it's often invisible.
+        </h2>
+        <div className="mx-auto mt-6 max-w-2xl space-y-4 text-left text-[15px] leading-relaxed text-white/70 md:text-[17px]">
+          <p>
+            The world doesn't always know how to hold it. There's no funeral leave, no casserole, sometimes not even a nod. So the grief sits inside, quietly, and finds nowhere to go.
+          </p>
+          <p>
+            You loved them daily — the small rituals, the shared shadows, the weight against your leg. Losing that isn't small. It's a real ending, and it deserves a real place to be spoken.
+          </p>
+          <p>
+            This is that place. Write it down, share it if you want, or simply read what others have written and know you're not alone. There are no time limits on this kind of love.
+          </p>
+        </div>
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+          <Link
+            to="/create/memorial"
+            className="inline-flex items-center rounded-full bg-gradient-to-b from-amber-200 to-amber-400 px-6 py-3 text-[14px] font-semibold text-[#1a1200] shadow-[0_0_28px_-6px_rgba(251,191,36,0.55)] hover:from-amber-100 hover:to-amber-300"
+          >
+            Write a memorial
+          </Link>
+          <Link
+            to="/community"
+            className="inline-flex items-center rounded-full border border-white/20 px-6 py-3 text-[14px] font-medium text-white/85 hover:border-white/40 hover:bg-white/5"
+          >
+            Join the community
+          </Link>
+          <Link
+            to="/grief-support"
+            className="text-[13px] text-white/60 underline-offset-4 hover:text-white/90 hover:underline"
+          >
+            or find grief support →
+          </Link>
+        </div>
+      </Reveal>
+      <Divider />
+    </section>
+  );
+}
+
+/* ────────── Ecosystem section ────────── */
+
+type Service = {
+  key: string;
+  title: string;
+  desc: string;
+  Icon: typeof ShoppingBag;
+  nonCommercial?: boolean;
+  previewTo?: string;
+};
+
+const SERVICES: Service[] = [
+  { key: "donation", title: "Donation", desc: "For shelters and people caring for pets in need.", Icon: HandHeart, nonCommercial: true },
+  { key: "strays", title: "Tag your strays", desc: "Mark and watch over neighbourhood strays.", Icon: MapPin, nonCommercial: true },
+  { key: "adoption", title: "Adoption", desc: "Find your next companion — no puppy mills, ever.", Icon: HeartHandshake, nonCommercial: true, previewTo: "/adoption" },
+  { key: "birthdays", title: "Birthdays", desc: "Celebrate the days they came into the world.", Icon: Cake, nonCommercial: true },
+  { key: "marketplace", title: "Memorabilia marketplace", desc: "Handmade paw prints, portraits, keepsakes.", Icon: ShoppingBag, previewTo: "/marketplace" },
+  { key: "food", title: "Healthy pet food", desc: "Only super healthy, non-commercial food. No fillers.", Icon: Utensils },
+  { key: "apparel", title: "Apparel", desc: "Small-batch clothing and accessories for both of you.", Icon: Shirt },
+  { key: "vets", title: "Vets", desc: "Vetted local vets, second opinions, gentle care.", Icon: Stethoscope },
+  { key: "insurance", title: "Insurance", desc: "Honest, jargon-free pet insurance.", Icon: Shield },
+  { key: "whisperer", title: "Pet whisperer", desc: "Behaviour help, training, and communication.", Icon: Sparkles },
+  { key: "funeral", title: "Funeral services", desc: "Cremation, home burial, and after-care.", Icon: Skull },
+];
+
+function EcosystemSection() {
+  return (
+    <section className="relative px-0 py-16 md:py-24">
+      <div className="mx-auto max-w-md px-5 md:max-w-[1200px] md:px-8">
+        <Reveal className="text-center">
+          <p className="text-[11px] uppercase tracking-[0.32em] text-amber-200/70">An ecosystem for the ones we love</p>
+          <h2 className="mt-3 font-display text-[30px] leading-[1.1] tracking-tight text-white md:text-5xl">
+            More than a memorial.
+          </h2>
+          <p className="mx-auto mt-4 max-w-xl text-[15px] leading-relaxed text-white/70 md:text-[17px]">
+            A home for every part of their life — from the food they eat to the way they're remembered. Non-commercial and community pieces come first.
+          </p>
+        </Reveal>
+      </div>
+
+      <div className="mx-auto mt-10 max-w-[1400px] overflow-x-auto px-5 pb-3 md:px-8 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+        <ul className="flex snap-x snap-mandatory gap-4">
+          {SERVICES.map((s) => (
+            <li key={s.key} className="snap-start">
+              <ServiceCard service={s} />
+            </li>
+          ))}
+        </ul>
+      </div>
+      <p className="mt-4 text-center text-[11px] uppercase tracking-[0.24em] text-white/40">
+        Scroll →&nbsp;&nbsp; tap any card to be notified when it opens
+      </p>
+    </section>
+  );
+}
+
+function ServiceCard({ service }: { service: Service }) {
+  const { title, desc, Icon, nonCommercial, previewTo } = service;
+  const highlight = nonCommercial;
+  return (
+    <div
+      className={`flex h-full w-[260px] shrink-0 flex-col rounded-2xl p-5 ring-1 transition ${
+        highlight
+          ? "bg-gradient-to-br from-amber-400/12 via-amber-400/[0.04] to-transparent ring-amber-400/40"
+          : "bg-white/[0.04] ring-white/10"
+      }`}
+    >
+      <div className="flex items-center justify-between">
+        <div
+          className={`flex h-10 w-10 items-center justify-center rounded-xl ${
+            highlight ? "bg-amber-400/20 text-amber-200" : "bg-white/10 text-white/85"
+          }`}
+        >
+          <Icon className="h-5 w-5" />
+        </div>
+        {highlight && (
+          <span className="rounded-full bg-amber-400/20 px-2 py-0.5 text-[9px] font-medium uppercase tracking-wider text-amber-200">
+            Non-commercial
+          </span>
+        )}
+      </div>
+      <h3 className="mt-4 font-display text-[18px] leading-tight text-white">{title}</h3>
+      <p className="mt-1.5 flex-1 text-[13px] leading-relaxed text-white/60">{desc}</p>
+      <div className="mt-4 flex items-center justify-between">
+        <WaitlistDialog
+          itemName={title}
+          section="landing-ecosystem"
+          trigger={
+            <button
+              type="button"
+              className={`rounded-full px-3.5 py-1.5 text-[12px] font-medium transition ${
+                highlight
+                  ? "bg-amber-400/25 text-amber-100 hover:bg-amber-400/40"
+                  : "bg-white/10 text-white/85 hover:bg-white/20"
+              }`}
+            >
+              Notify me
+            </button>
+          }
+        />
+        {previewTo && (
+          <Link to={previewTo} className="text-[11px] text-white/50 underline-offset-2 hover:text-white/80 hover:underline">
+            Preview →
+          </Link>
+        )}
+      </div>
+    </div>
+  );
+}
+

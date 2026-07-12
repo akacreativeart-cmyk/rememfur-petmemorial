@@ -123,7 +123,7 @@ function SettingsPage() {
     <div className="animate-fade-in">
       <h1 className="font-display text-4xl text-foreground">Settings</h1>
       <p className="mt-1 text-sm text-muted-foreground">
-        How you appear when you release a star or leave a kind word.
+        How you appear when you light a paw lamp or leave a kind word.
       </p>
 
       <div className="mt-8 space-y-6">
