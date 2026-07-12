@@ -24,6 +24,7 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CreateIndexRouteImport } from './routes/create.index'
 import { Route as UUserIdRouteImport } from './routes/u.$userId'
 import { Route as MemorialSlugRouteImport } from './routes/memorial.$slug'
 import { Route as CreateMemorialRouteImport } from './routes/create.memorial'
@@ -107,6 +108,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CreateIndexRoute = CreateIndexRouteImport.update({
+  id: '/create/',
+  path: '/create/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const UUserIdRoute = UUserIdRouteImport.update({
   id: '/u/$userId',
   path: '/u/$userId',
@@ -172,6 +178,7 @@ export interface FileRoutesByFullPath {
   '/create/memorial': typeof CreateMemorialRoute
   '/memorial/$slug': typeof MemorialSlugRoute
   '/u/$userId': typeof UUserIdRoute
+  '/create/': typeof CreateIndexRoute
   '/memorial/$slug/edit': typeof AuthenticatedMemorialSlugEditRoute
 }
 export interface FileRoutesByTo {
@@ -196,6 +203,7 @@ export interface FileRoutesByTo {
   '/create/memorial': typeof CreateMemorialRoute
   '/memorial/$slug': typeof MemorialSlugRoute
   '/u/$userId': typeof UUserIdRoute
+  '/create': typeof CreateIndexRoute
   '/memorial/$slug/edit': typeof AuthenticatedMemorialSlugEditRoute
 }
 export interface FileRoutesById {
@@ -222,6 +230,7 @@ export interface FileRoutesById {
   '/create/memorial': typeof CreateMemorialRoute
   '/memorial/$slug': typeof MemorialSlugRoute
   '/u/$userId': typeof UUserIdRoute
+  '/create/': typeof CreateIndexRoute
   '/_authenticated/memorial/$slug/edit': typeof AuthenticatedMemorialSlugEditRoute
 }
 export interface FileRouteTypes {
@@ -248,6 +257,7 @@ export interface FileRouteTypes {
     | '/create/memorial'
     | '/memorial/$slug'
     | '/u/$userId'
+    | '/create/'
     | '/memorial/$slug/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -272,6 +282,7 @@ export interface FileRouteTypes {
     | '/create/memorial'
     | '/memorial/$slug'
     | '/u/$userId'
+    | '/create'
     | '/memorial/$slug/edit'
   id:
     | '__root__'
@@ -297,6 +308,7 @@ export interface FileRouteTypes {
     | '/create/memorial'
     | '/memorial/$slug'
     | '/u/$userId'
+    | '/create/'
     | '/_authenticated/memorial/$slug/edit'
   fileRoutesById: FileRoutesById
 }
@@ -319,6 +331,7 @@ export interface RootRouteChildren {
   CreateMemorialRoute: typeof CreateMemorialRoute
   MemorialSlugRoute: typeof MemorialSlugRoute
   UUserIdRoute: typeof UUserIdRoute
+  CreateIndexRoute: typeof CreateIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -428,6 +441,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/create/': {
+      id: '/create/'
+      path: '/create'
+      fullPath: '/create/'
+      preLoaderRoute: typeof CreateIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/u/$userId': {
       id: '/u/$userId'
       path: '/u/$userId'
@@ -526,6 +546,7 @@ const rootRouteChildren: RootRouteChildren = {
   CreateMemorialRoute: CreateMemorialRoute,
   MemorialSlugRoute: MemorialSlugRoute,
   UUserIdRoute: UUserIdRoute,
+  CreateIndexRoute: CreateIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
