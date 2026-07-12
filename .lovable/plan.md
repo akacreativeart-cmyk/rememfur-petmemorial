@@ -1,65 +1,109 @@
 
-## Reality check
+# Full-scope build plan
 
-Your ask is 10 substantial areas — realistically 2–5 days of focused work, with multiple DB migrations, a WebGL shader, new routes, and cross-cutting sweeps. If I try to do it all in one turn I will half-ship several and break others. I'd like to agree on batches before starting.
+Grouped into 5 slices. Everything ships in one pass; Slice 5a is a DB migration that lands first so the generated types are available for Slice 5b.
 
-## Audit — what already exists vs. what's missing
+---
 
-**1. Account & Settings** — partial
-- ✅ Edit display name + avatar upload, sign out
-- ❌ Change password, account deletion (with "preserve vs delete memorials" choice)
+## Slice 1 — Landing page rewrite (`src/routes/index.tsx`)
 
-**2. Memorial Management** — mostly there
-- ✅ Edit route exists, share button
-- ❌ Verify gallery add/remove UI, public/private toggle, soft-delete flow, confirm og meta on `/memorial/$slug` uses loader data
+Reflect the new voice: grief expression first, "our pets are the stars watching over us", then the service ecosystem.
 
-**3. Notifications Center** — bell popover exists
-- ❌ Full `/notifications` page, empty state polish, verify badge decrement
+**Hero**
+- Keep the Vigil dog scene and the H1 "Grief is just love with nowhere to go."
+- Primary CTA becomes **"Write a memorial"** → `/create?type=memorial`.
+- Secondary link becomes **"Or express your grief with the community"** → `/community`.
+- Remove the "Release a star" CTA from hero (ritual rename in Slice 2 handles other surfaces).
 
-**4. Journal** — basic create/list/delete
-- ❌ Edit entry, prompt suggestions, richer empty state
+**New section: "They are the stars now"** (between hero and existing Passage)
+- h2 + 2 short paragraphs: our beloved pets are the stars in the sky watching over us; Sirius/Canis Major reference kept.
 
-**5. Feed** — compose/post/like/comment likely exist
-- ❌ Audit delete-own for posts + comments, guest CTA, count integrity
+**New section: "Grief that has nowhere to go"**
+- h2 + 2–3 short paragraphs on unacknowledged (disenfranchised) pet grief; why expressing it in a like-minded community matters; guidelines to hold it.
+- CTA row: "Write a memorial" + "Join the community".
 
-**6. Follows** — table exists, toggleFollow exists on user profile
-- ❌ Follow button on memorial page, "Following" section in dashboard/garden, 10th-candle milestone notification (needs SQL trigger update)
+**New section: "An ecosystem for the ones we love"** — horizontal scrollable cards
+- Row: `overflow-x-auto snap-x snap-mandatory` with icon + title + one-line description + "Notify me" pill on each card.
+- Non-commercial cards get a warmer highlighted treatment (gold ring + "Non-commercial" badge): **Donation for shelters & carers**, **Tag your strays**, **Adoption**, **Birthday celebrations**.
+- Standard cards: **Memorabilia marketplace**, **Healthy, non-commercial pet food**, **Apparel**, **Vets**, **Insurance**, **Pet whisperer**, **Funeral services**.
+- Every card opens the existing `WaitlistDialog` (`src/components/site/WaitlistDialog.tsx`) with the service name pre-filled. Where a real page already exists (`/adoption`, `/marketplace`, `/garden` for donation), a small secondary "Preview" link sits under the pill.
 
-**7. Garden** — grid + search exist
-- ❌ Sort dropdown (recent / most candles)
+**Existing sections kept**: Passage, Chapters, FAQ, Closing constellation — copy tweaked to the new voice where it currently says "release a star".
 
-**8. Candle flame WebGL** — net-new
-- Shader canvas component + CSS fallback, wired into memorial page + candle strip. Non-trivial (~half day alone to look good).
+**Heading hierarchy**: exactly one h1 (hero), all section titles h2.
 
-**9. Pet silhouette SVG** — net-new asset + placeholder swap sitewide
+---
 
-**10. No dead ends sweep** — 404 page, loading/error states audit, console+typecheck clean
+## Slice 2 — Ritual rename: "Release a star" → "Light a paw lamp" (copy only)
 
-Out of scope confirmed: email, marketplace checkout.
+Site-wide find/replace. No visual change to the flame/star SVG.
 
-## Proposed batching (pick what to ship first)
+Files touched (copy only):
+- `src/components/site/CandleDialog.tsx` — dialog title, button labels, toasts.
+- `src/components/feed/PostCard.tsx`
+- `src/components/site/NotificationBell.tsx`
+- `src/routes/_authenticated/notifications.tsx`
+- `src/routes/_authenticated/settings.tsx`
+- `src/routes/community.tsx`, `garden.tsx`, `resources.tsx`, `create.tsx`, `memorial.$slug.tsx`, `index.tsx`
+- ✨ emojis in ritual copy → 🐾.
 
-**Batch A — Account & content control (1 turn)**
-Items 1, 2, 3 — settings completion (password, delete-account), memorial management gaps (gallery, private toggle, soft delete), full notifications page. One migration (soft-delete column, deletion RPC).
+---
 
-**Batch B — Social loops (1 turn)**
-Items 4, 5, 6, 7 — journal edit + prompts, feed audit + guest CTA, follows on memorial + Following list, garden sort, 10th-candle trigger migration.
+## Slice 3 — Create flow: Memorial or Post
 
-**Batch C — Craft & polish (1 turn)**
-Items 8, 9, 10 — WebGL flame + fallback, universal silhouette SVG + swap-in, 404 route, loading/error state sweep, typecheck clean.
+- Current `src/routes/create.tsx` (memorial form) moves to `src/routes/create.memorial.tsx`.
+- New `src/routes/create.tsx` becomes a chooser page: two large cards — **"Write a memorial"** → `/create/memorial`, **"Post to the community"** → `/create/post`.
+- New `src/routes/create.post.tsx` — a full-page compose UI (uses existing `ComposePost` logic inline).
+- `?type=memorial` / `?type=post` query params auto-redirect to the right child, so all existing "Write a memorial" CTAs still land directly.
+- `MobileTabBar` "+" button lands on `/create`.
 
-Each batch is independently shippable and verifiable. Doing all three in one response would produce sloppy work in every area.
+---
 
-## Assumptions I'll make unless you say otherwise
+## Slice 4 — Feed UI restyle (Reddit/Twitter-like, current data model)
 
-- Account deletion: preserve memorials by default (owner_id nulled, marked "in loving memory of a friend of Rememfur"), checkbox to delete-all-cascade.
-- Soft delete: `deleted_at` column on `memorials`; excluded from all public queries; owner sees "Restore" for 30 days in Dashboard.
-- Milestone notification: trigger fires only when `candle_count % 10 == 0`, notifies all followers of the memorial.
-- WebGL flame: ~64×96 canvas per candle, single shared context if possible; fallback = current CSS flame.
-- 404: styled with existing navy celestial + "This page has drifted off…" copy.
+No schema change. Uses existing `posts`, `post_likes`, `post_comments`.
 
-## What I need from you
+- `src/components/feed/PostCard.tsx`: text-first card — avatar + display name + "· 2h" timestamp on top row, caption large and prominent, optional image below caption at capped height (≤420px), thin action row (Like ♡, Comment 💬, Paw lamp 🐾, Share ↗). Remove the current image-first Instagram treatment.
+- Threaded comments: if `post_comments.parent_id` exists, render one-level-deep nested replies with an indented left border and a "Reply" button per comment. If the column is missing, keep flat comments (no scope creep, noted in response).
+- `src/routes/community.tsx`: tighter timeline density (thin dividers between posts instead of large card gaps), sticky compose bar for signed-in users, visual-only tag chips row (no tag data yet).
+- `src/components/feed/ComposePost.tsx`: restyle to a Twitter-like single Textarea with a small image attach button and memorial tag dropdown collapsed under "Add details".
 
-Reply with either:
-- **"Go A"** (or B, or C, or "all in order") — I start the first batch now, one per turn.
-- **Adjust** — change scope, assumptions, or order.
+---
+
+## Slice 5 — Multi-pet records on user profile
+
+**Slice 5a — Migration** (approval-gated, ships first):
+- `pets` (owner_id → auth.users, name, species, breed, birthdate, adoption_date, notes, avatar_url).
+- `pet_records` (pet_id → pets, kind: `health | vaccination | grooming | insurance | birthday | other`, title, notes, date, next_due_date nullable, attachment_url nullable).
+- Full `GRANT` + RLS (owner-only via `auth.uid() = owner_id`; `pet_records` scoped via `EXISTS (SELECT 1 FROM pets …)`).
+- `updated_at` trigger on both.
+
+**Slice 5b — UI + server functions** (after types regenerate):
+- New `src/routes/_authenticated/pets.tsx` — grid of pets + "Add pet" dialog.
+- New `src/routes/_authenticated/pets.$petId.tsx` — pet detail: profile fields, timeline of records grouped by kind, add-record dialog, "Next due" reminders list, upcoming-birthday callout.
+- Entry points: **"My pets"** link on `src/routes/u.$userId.tsx` (owner-only) and in Settings.
+- `src/lib/pets.functions.ts` — list/get/create/update/delete pet; list/create/update/delete record — all `requireSupabaseAuth`, RLS enforced.
+
+---
+
+## Order of operations (build mode)
+
+1. Slice 5a migration (approval gate).
+2. Slices 1, 2, 3, 4 in parallel edits.
+3. Slice 5b UI + server functions after types regenerate.
+4. Typecheck + fix.
+
+## Technical notes
+
+- No new npm packages.
+- No changes to auth, header, footer, or mobile tab bar structure — only labels/links.
+- All animations pure CSS; `prefers-reduced-motion` respected.
+- Waitlist cards reuse `WaitlistDialog` — no new tables for that flow.
+- Existing security findings (`profiles.is_admin` self-escalation, soft-delete RLS gap, permissive policy warnings) are NOT touched here — call them out separately after this pass rather than folding into scope.
+
+## Out of scope
+
+- Upvote/downvote or Hot/New/Top sorting (user chose "Text + optional image" only).
+- Paw-lamp SVG redesign (user chose "Rename only").
+- Real vendor listings for marketplace/vets/insurance/etc. — waitlist only.
+- Payments / real donation processing.
