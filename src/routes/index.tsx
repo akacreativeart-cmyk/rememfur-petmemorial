@@ -898,3 +898,161 @@ function FaqItem({ q, a }: { q: string; a: string }) {
     </details>
   );
 }
+
+/* ────────── Grief section ────────── */
+
+function GriefSection() {
+  return (
+    <section className="relative px-5 py-16 md:px-8 md:py-24">
+      <Reveal className="mx-auto max-w-3xl text-center">
+        <p className="text-[11px] uppercase tracking-[0.32em] text-amber-200/70">Grief with nowhere to go</p>
+        <h2 className="mt-3 font-display text-[30px] leading-[1.1] tracking-tight text-white md:text-5xl">
+          Pet grief is real. And it's often invisible.
+        </h2>
+        <div className="mx-auto mt-6 max-w-2xl space-y-4 text-left text-[15px] leading-relaxed text-white/70 md:text-[17px]">
+          <p>
+            The world doesn't always know how to hold it. There's no funeral leave, no casserole, sometimes not even a nod. So the grief sits inside, quietly, and finds nowhere to go.
+          </p>
+          <p>
+            You loved them daily — the small rituals, the shared shadows, the weight against your leg. Losing that isn't small. It's a real ending, and it deserves a real place to be spoken.
+          </p>
+          <p>
+            This is that place. Write it down, share it if you want, or simply read what others have written and know you're not alone. There are no time limits on this kind of love.
+          </p>
+        </div>
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+          <Link
+            to="/create/memorial"
+            className="inline-flex items-center rounded-full bg-gradient-to-b from-amber-200 to-amber-400 px-6 py-3 text-[14px] font-semibold text-[#1a1200] shadow-[0_0_28px_-6px_rgba(251,191,36,0.55)] hover:from-amber-100 hover:to-amber-300"
+          >
+            Write a memorial
+          </Link>
+          <Link
+            to="/community"
+            className="inline-flex items-center rounded-full border border-white/20 px-6 py-3 text-[14px] font-medium text-white/85 hover:border-white/40 hover:bg-white/5"
+          >
+            Join the community
+          </Link>
+          <Link
+            to="/grief-support"
+            className="text-[13px] text-white/60 underline-offset-4 hover:text-white/90 hover:underline"
+          >
+            or find grief support →
+          </Link>
+        </div>
+      </Reveal>
+      <Divider />
+    </section>
+  );
+}
+
+/* ────────── Ecosystem section ────────── */
+
+type Service = {
+  key: string;
+  title: string;
+  desc: string;
+  Icon: typeof ShoppingBag;
+  nonCommercial?: boolean;
+  previewTo?: string;
+};
+
+const SERVICES: Service[] = [
+  { key: "donation", title: "Donation", desc: "For shelters and people caring for pets in need.", Icon: HandHeart, nonCommercial: true },
+  { key: "strays", title: "Tag your strays", desc: "Mark and watch over neighbourhood strays.", Icon: MapPin, nonCommercial: true },
+  { key: "adoption", title: "Adoption", desc: "Find your next companion — no puppy mills, ever.", Icon: HeartHandshake, nonCommercial: true, previewTo: "/adoption" },
+  { key: "birthdays", title: "Birthdays", desc: "Celebrate the days they came into the world.", Icon: Cake, nonCommercial: true },
+  { key: "marketplace", title: "Memorabilia marketplace", desc: "Handmade paw prints, portraits, keepsakes.", Icon: ShoppingBag, previewTo: "/marketplace" },
+  { key: "food", title: "Healthy pet food", desc: "Only super healthy, non-commercial food. No fillers.", Icon: Utensils },
+  { key: "apparel", title: "Apparel", desc: "Small-batch clothing and accessories for both of you.", Icon: Shirt },
+  { key: "vets", title: "Vets", desc: "Vetted local vets, second opinions, gentle care.", Icon: Stethoscope },
+  { key: "insurance", title: "Insurance", desc: "Honest, jargon-free pet insurance.", Icon: Shield },
+  { key: "whisperer", title: "Pet whisperer", desc: "Behaviour help, training, and communication.", Icon: Sparkles },
+  { key: "funeral", title: "Funeral services", desc: "Cremation, home burial, and after-care.", Icon: Skull },
+];
+
+function EcosystemSection() {
+  return (
+    <section className="relative px-0 py-16 md:py-24">
+      <div className="mx-auto max-w-md px-5 md:max-w-[1200px] md:px-8">
+        <Reveal className="text-center">
+          <p className="text-[11px] uppercase tracking-[0.32em] text-amber-200/70">An ecosystem for the ones we love</p>
+          <h2 className="mt-3 font-display text-[30px] leading-[1.1] tracking-tight text-white md:text-5xl">
+            More than a memorial.
+          </h2>
+          <p className="mx-auto mt-4 max-w-xl text-[15px] leading-relaxed text-white/70 md:text-[17px]">
+            A home for every part of their life — from the food they eat to the way they're remembered. Non-commercial and community pieces come first.
+          </p>
+        </Reveal>
+      </div>
+
+      <div className="mx-auto mt-10 max-w-[1400px] overflow-x-auto px-5 pb-3 md:px-8 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+        <ul className="flex snap-x snap-mandatory gap-4">
+          {SERVICES.map((s) => (
+            <li key={s.key} className="snap-start">
+              <ServiceCard service={s} />
+            </li>
+          ))}
+        </ul>
+      </div>
+      <p className="mt-4 text-center text-[11px] uppercase tracking-[0.24em] text-white/40">
+        Scroll →&nbsp;&nbsp; tap any card to be notified when it opens
+      </p>
+    </section>
+  );
+}
+
+function ServiceCard({ service }: { service: Service }) {
+  const { title, desc, Icon, nonCommercial, previewTo } = service;
+  const highlight = nonCommercial;
+  return (
+    <div
+      className={`flex h-full w-[260px] shrink-0 flex-col rounded-2xl p-5 ring-1 transition ${
+        highlight
+          ? "bg-gradient-to-br from-amber-400/12 via-amber-400/[0.04] to-transparent ring-amber-400/40"
+          : "bg-white/[0.04] ring-white/10"
+      }`}
+    >
+      <div className="flex items-center justify-between">
+        <div
+          className={`flex h-10 w-10 items-center justify-center rounded-xl ${
+            highlight ? "bg-amber-400/20 text-amber-200" : "bg-white/10 text-white/85"
+          }`}
+        >
+          <Icon className="h-5 w-5" />
+        </div>
+        {highlight && (
+          <span className="rounded-full bg-amber-400/20 px-2 py-0.5 text-[9px] font-medium uppercase tracking-wider text-amber-200">
+            Non-commercial
+          </span>
+        )}
+      </div>
+      <h3 className="mt-4 font-display text-[18px] leading-tight text-white">{title}</h3>
+      <p className="mt-1.5 flex-1 text-[13px] leading-relaxed text-white/60">{desc}</p>
+      <div className="mt-4 flex items-center justify-between">
+        <WaitlistDialog
+          itemName={title}
+          section="landing-ecosystem"
+          trigger={
+            <button
+              type="button"
+              className={`rounded-full px-3.5 py-1.5 text-[12px] font-medium transition ${
+                highlight
+                  ? "bg-amber-400/25 text-amber-100 hover:bg-amber-400/40"
+                  : "bg-white/10 text-white/85 hover:bg-white/20"
+              }`}
+            >
+              Notify me
+            </button>
+          }
+        />
+        {previewTo && (
+          <Link to={previewTo} className="text-[11px] text-white/50 underline-offset-2 hover:text-white/80 hover:underline">
+            Preview →
+          </Link>
+        )}
+      </div>
+    </div>
+  );
+}
+
