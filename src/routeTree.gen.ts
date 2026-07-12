@@ -30,6 +30,7 @@ import { Route as MemorialSlugRouteImport } from './routes/memorial.$slug'
 import { Route as CreatePostRouteImport } from './routes/create.post'
 import { Route as CreateMemorialRouteImport } from './routes/create.memorial'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
+import { Route as AuthenticatedPetsRouteImport } from './routes/_authenticated/pets'
 import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
 import { Route as AuthenticatedJournalRouteImport } from './routes/_authenticated/journal'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
@@ -139,6 +140,11 @@ const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedPetsRoute = AuthenticatedPetsRouteImport.update({
+  id: '/pets',
+  path: '/pets',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedNotificationsRoute =
   AuthenticatedNotificationsRouteImport.update({
     id: '/notifications',
@@ -180,6 +186,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/journal': typeof AuthenticatedJournalRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
+  '/pets': typeof AuthenticatedPetsRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/create/memorial': typeof CreateMemorialRoute
   '/create/post': typeof CreatePostRoute
@@ -206,6 +213,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/journal': typeof AuthenticatedJournalRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
+  '/pets': typeof AuthenticatedPetsRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/create/memorial': typeof CreateMemorialRoute
   '/create/post': typeof CreatePostRoute
@@ -234,6 +242,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/journal': typeof AuthenticatedJournalRoute
   '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
+  '/_authenticated/pets': typeof AuthenticatedPetsRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/create/memorial': typeof CreateMemorialRoute
   '/create/post': typeof CreatePostRoute
@@ -262,6 +271,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/journal'
     | '/notifications'
+    | '/pets'
     | '/settings'
     | '/create/memorial'
     | '/create/post'
@@ -288,6 +298,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/journal'
     | '/notifications'
+    | '/pets'
     | '/settings'
     | '/create/memorial'
     | '/create/post'
@@ -315,6 +326,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/journal'
     | '/_authenticated/notifications'
+    | '/_authenticated/pets'
     | '/_authenticated/settings'
     | '/create/memorial'
     | '/create/post'
@@ -496,6 +508,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSettingsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/pets': {
+      id: '/_authenticated/pets'
+      path: '/pets'
+      fullPath: '/pets'
+      preLoaderRoute: typeof AuthenticatedPetsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/notifications': {
       id: '/_authenticated/notifications'
       path: '/notifications'
@@ -531,6 +550,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedJournalRoute: typeof AuthenticatedJournalRoute
   AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
+  AuthenticatedPetsRoute: typeof AuthenticatedPetsRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedMemorialSlugEditRoute: typeof AuthenticatedMemorialSlugEditRoute
 }
@@ -539,6 +559,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedJournalRoute: AuthenticatedJournalRoute,
   AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
+  AuthenticatedPetsRoute: AuthenticatedPetsRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedMemorialSlugEditRoute: AuthenticatedMemorialSlugEditRoute,
 }
