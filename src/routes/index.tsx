@@ -216,7 +216,7 @@ function HomePage() {
     staleTime: 60_000,
   });
 
-  const primaryCandle = (label: string = "Release a star") =>
+  const primaryCandle = (label: string = "Light a paw lamp") =>
     featured.data ? (
       <CandleDialog
         target={{
@@ -230,7 +230,7 @@ function HomePage() {
             type="button"
             className="ios-tappable inline-flex items-center justify-center rounded-full bg-gradient-to-b from-amber-200 to-amber-400 px-7 py-3.5 text-[15px] font-semibold text-[#1a1200] shadow-[0_0_28px_-6px_rgba(251,191,36,0.55)] hover:from-amber-100 hover:to-amber-300"
           >
-            {label} ✨
+            {label} 🐾
           </button>
         }
       />
@@ -239,7 +239,7 @@ function HomePage() {
         to="/garden"
         className="ios-tappable inline-flex items-center justify-center rounded-full bg-gradient-to-b from-amber-200 to-amber-400 px-7 py-3.5 text-[15px] font-semibold text-[#1a1200] shadow-[0_0_28px_-6px_rgba(251,191,36,0.55)] hover:from-amber-100 hover:to-amber-300"
       >
-        {label} ✨
+        {label} 🐾
       </Link>
     );
 
