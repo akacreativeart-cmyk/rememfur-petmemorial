@@ -250,22 +250,28 @@ function HomePage() {
       <IntroSequence />
       <SiteHeader />
 
-      {/* A · HERO */}
-      <Hero primaryCandle={primaryCandle("Release a star")} />
+      {/* A · HERO — grief-first CTA */}
+      <Hero />
 
-      {/* A2 · CONSTELLATION INTRO — explain the sky concept before anything else */}
+      {/* A2 · STARS INTRO */}
       <section className="relative px-5 py-16 text-center md:px-8 md:py-20">
         <Reveal className="mx-auto max-w-2xl">
-          <p className="text-[11px] uppercase tracking-[0.32em] text-amber-200/70">The sky above</p>
-          <h2 className="mt-3 font-display text-[24px] leading-[1.25] text-[#f5e6c8]/95 md:text-[32px]">
-            That bright one is <span className="italic">Sirius</span> — the eye of <span className="italic">Canis Major</span>, the Great Dog.
+          <p className="text-[11px] uppercase tracking-[0.32em] text-amber-200/70">They are the stars now</p>
+          <h2 className="mt-3 font-display text-[26px] leading-[1.2] text-[#f5e6c8]/95 md:text-[34px]">
+            Our beloved pets are the stars in the sky, watching over us.
           </h2>
           <p className="mt-5 text-[15px] leading-relaxed text-white/70 md:text-[17px]">
-            The ancients put a dog in the stars so it would never be forgotten. On Rememfur, every pet who is loved becomes a star of their own — released gently into the same night sky, burning quietly beside all the others.
+            The ancients put a dog in the stars — <span className="italic">Canis Major</span>, with <span className="italic">Sirius</span> as its bright eye — so it would never be forgotten. Every pet who is loved here becomes a small light in the same sky, burning gently beside all the others.
           </p>
         </Reveal>
         <Divider />
       </section>
+
+      {/* A3 · GRIEF THAT HAS NOWHERE TO GO */}
+      <GriefSection />
+
+      {/* A4 · ECOSYSTEM CARDS */}
+      <EcosystemSection />
 
       {/* B · PASSAGE */}
       <section className="relative px-5 py-20 text-center md:px-8 md:py-28">
@@ -274,14 +280,14 @@ function HomePage() {
             They were not <span className="not-italic">"just a dog."</span> Not <span className="not-italic">"just a cat."</span> They were seventeen years of coming home to someone.
           </h2>
           <p className="mt-6 font-display text-[18px] leading-[1.5] text-white/70 md:text-[22px]">
-            All that love doesn't disappear. It just needs somewhere to go — a star, a page that stays, a sky that remembers.
+            All that love doesn't disappear. It just needs somewhere to go — a paw lamp, a page that stays, a sky that remembers.
           </p>
         </Reveal>
         <Divider />
       </section>
 
       {/* C · SIX CHAPTERS */}
-      <Chapters primaryCandle={primaryCandle("Release theirs now")} />
+      <Chapters primaryCandle={primaryCandle("Light theirs now")} />
 
       {/* D · LIVE CANDLES */}
       <Divider />
@@ -302,8 +308,8 @@ function HomePage() {
           </Reveal>
           <div className="mt-10 grid gap-6 md:mt-14 md:grid-cols-3 md:gap-8">
             <Reveal><Step n="I" title="Say their name." body="Tell us who they were — a name, a photo, a few words. Or just a name. That's enough." /></Reveal>
-            <Reveal><Step n="II" title="Release their star." body="One star, drifting up into a sky beside thousands of others. Theirs." /></Reveal>
-            <Reveal><Step n="III" title="Return anytime." body="Their star stays. Come back on the hard days — the birthdays, the anniversaries, the quiet Tuesdays." /></Reveal>
+            <Reveal><Step n="II" title="Light their paw lamp." body="A small warm light burning in their name. Yours forever, and lit by anyone who visits." /></Reveal>
+            <Reveal><Step n="III" title="Return anytime." body="Their page stays. Come back on the hard days — birthdays, anniversaries, quiet Tuesdays." /></Reveal>
           </div>
           <p className="mt-10 text-center text-[11px] uppercase tracking-[0.28em] text-white/45">
             No account needed. It takes about a minute.
@@ -321,18 +327,18 @@ function HomePage() {
             </h2>
           </Reveal>
           <div className="mt-8 grid gap-3 md:mt-10">
-            <FaqItem q="Is it free?" a="Yes. Creating a memorial, releasing a star, and visiting the garden are all free." />
-            <FaqItem q="Do I need an account to release a star?" a="No. You can release a star for any pet without signing up. An account is only needed if you want to create your own memorial or keep a journal." />
+            <FaqItem q="Is it free?" a="Yes. Creating a memorial, lighting a paw lamp, and visiting the garden are all free." />
+            <FaqItem q="Do I need an account to light a paw lamp?" a="No. You can light a paw lamp for any pet without signing up. An account is only needed if you want to create your own memorial, keep a journal, or track your pets' records." />
             <FaqItem q="Can I keep a memorial private?" a="Yes. You can keep a memorial just for you, share it only with a link, or let it live in the garden — your choice, and you can change it anytime." />
             <FaqItem q="Can I add more photos later?" a="Yes. You can return anytime to add photos, edit their story, or update anything about their memorial." />
-            <FaqItem q="What happens to a star after 24 hours?" a="The bright glow softens, but the star remains. Every star ever released is remembered — and anyone can release a new one, any day." />
+            <FaqItem q="What about the marketplace, vets, or funeral services?" a="Those are on the way — join the notify list on any card above and we'll let you know as each part opens." />
             <FaqItem q="Can I take a memorial down?" a="Yes. You control your memorials completely, and you can quietly take one down whenever you need to." />
           </div>
         </div>
       </section>
 
       {/* G · CLOSING */}
-      <ClosingScene primaryCandle={primaryCandle("Release a star")} />
+      <ClosingScene primaryCandle={primaryCandle("Light a paw lamp")} />
 
       <div className="pb-[calc(72px+env(safe-area-inset-bottom))] md:pb-6">
         <SiteFooter />
