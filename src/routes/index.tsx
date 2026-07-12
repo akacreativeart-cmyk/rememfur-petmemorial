@@ -349,7 +349,7 @@ function HomePage() {
 
 /* ────────── HERO ────────── */
 
-function Hero({ primaryCandle }: { primaryCandle: ReactNode }) {
+function Hero() {
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -376,9 +376,14 @@ function Hero({ primaryCandle }: { primaryCandle: ReactNode }) {
           </h1>
 
           <div className="rise-in mt-10 flex flex-col items-center gap-3" style={{ animationDelay: "1.1s" }}>
-            {primaryCandle}
-            <Link to="/create" className="text-[13px] text-white/60 underline-offset-4 hover:text-white/90 hover:underline">
-              Create their memorial
+            <Link
+              to="/create/memorial"
+              className="ios-tappable inline-flex items-center justify-center rounded-full bg-gradient-to-b from-amber-200 to-amber-400 px-7 py-3.5 text-[15px] font-semibold text-[#1a1200] shadow-[0_0_28px_-6px_rgba(251,191,36,0.55)] hover:from-amber-100 hover:to-amber-300"
+            >
+              Write a memorial
+            </Link>
+            <Link to="/community" className="text-[13px] text-white/60 underline-offset-4 hover:text-white/90 hover:underline">
+              Or express your grief with the community
             </Link>
           </div>
         </div>
