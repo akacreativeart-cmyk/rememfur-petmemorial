@@ -17,7 +17,6 @@ import { Route as MarketplaceRouteImport } from './routes/marketplace'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as GriefSupportRouteImport } from './routes/grief-support'
 import { Route as GardenRouteImport } from './routes/garden'
-import { Route as CreateRouteImport } from './routes/create'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CommunityRouteImport } from './routes/community'
 import { Route as AdoptionRouteImport } from './routes/adoption'
@@ -27,6 +26,7 @@ import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as UUserIdRouteImport } from './routes/u.$userId'
 import { Route as MemorialSlugRouteImport } from './routes/memorial.$slug'
+import { Route as CreateMemorialRouteImport } from './routes/create.memorial'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
 import { Route as AuthenticatedJournalRouteImport } from './routes/_authenticated/journal'
@@ -73,11 +73,6 @@ const GardenRoute = GardenRouteImport.update({
   path: '/garden',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CreateRoute = CreateRouteImport.update({
-  id: '/create',
-  path: '/create',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
@@ -122,6 +117,11 @@ const MemorialSlugRoute = MemorialSlugRouteImport.update({
   path: '/memorial/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CreateMemorialRoute = CreateMemorialRouteImport.update({
+  id: '/create/memorial',
+  path: '/create/memorial',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -157,7 +157,6 @@ export interface FileRoutesByFullPath {
   '/adoption': typeof AdoptionRoute
   '/community': typeof CommunityRoute
   '/contact': typeof ContactRoute
-  '/create': typeof CreateRoute
   '/garden': typeof GardenRoute
   '/grief-support': typeof GriefSupportRoute
   '/login': typeof LoginRoute
@@ -170,6 +169,7 @@ export interface FileRoutesByFullPath {
   '/journal': typeof AuthenticatedJournalRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/settings': typeof AuthenticatedSettingsRoute
+  '/create/memorial': typeof CreateMemorialRoute
   '/memorial/$slug': typeof MemorialSlugRoute
   '/u/$userId': typeof UUserIdRoute
   '/memorial/$slug/edit': typeof AuthenticatedMemorialSlugEditRoute
@@ -181,7 +181,6 @@ export interface FileRoutesByTo {
   '/adoption': typeof AdoptionRoute
   '/community': typeof CommunityRoute
   '/contact': typeof ContactRoute
-  '/create': typeof CreateRoute
   '/garden': typeof GardenRoute
   '/grief-support': typeof GriefSupportRoute
   '/login': typeof LoginRoute
@@ -194,6 +193,7 @@ export interface FileRoutesByTo {
   '/journal': typeof AuthenticatedJournalRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/settings': typeof AuthenticatedSettingsRoute
+  '/create/memorial': typeof CreateMemorialRoute
   '/memorial/$slug': typeof MemorialSlugRoute
   '/u/$userId': typeof UUserIdRoute
   '/memorial/$slug/edit': typeof AuthenticatedMemorialSlugEditRoute
@@ -207,7 +207,6 @@ export interface FileRoutesById {
   '/adoption': typeof AdoptionRoute
   '/community': typeof CommunityRoute
   '/contact': typeof ContactRoute
-  '/create': typeof CreateRoute
   '/garden': typeof GardenRoute
   '/grief-support': typeof GriefSupportRoute
   '/login': typeof LoginRoute
@@ -220,6 +219,7 @@ export interface FileRoutesById {
   '/_authenticated/journal': typeof AuthenticatedJournalRoute
   '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
+  '/create/memorial': typeof CreateMemorialRoute
   '/memorial/$slug': typeof MemorialSlugRoute
   '/u/$userId': typeof UUserIdRoute
   '/_authenticated/memorial/$slug/edit': typeof AuthenticatedMemorialSlugEditRoute
@@ -233,7 +233,6 @@ export interface FileRouteTypes {
     | '/adoption'
     | '/community'
     | '/contact'
-    | '/create'
     | '/garden'
     | '/grief-support'
     | '/login'
@@ -246,6 +245,7 @@ export interface FileRouteTypes {
     | '/journal'
     | '/notifications'
     | '/settings'
+    | '/create/memorial'
     | '/memorial/$slug'
     | '/u/$userId'
     | '/memorial/$slug/edit'
@@ -257,7 +257,6 @@ export interface FileRouteTypes {
     | '/adoption'
     | '/community'
     | '/contact'
-    | '/create'
     | '/garden'
     | '/grief-support'
     | '/login'
@@ -270,6 +269,7 @@ export interface FileRouteTypes {
     | '/journal'
     | '/notifications'
     | '/settings'
+    | '/create/memorial'
     | '/memorial/$slug'
     | '/u/$userId'
     | '/memorial/$slug/edit'
@@ -282,7 +282,6 @@ export interface FileRouteTypes {
     | '/adoption'
     | '/community'
     | '/contact'
-    | '/create'
     | '/garden'
     | '/grief-support'
     | '/login'
@@ -295,6 +294,7 @@ export interface FileRouteTypes {
     | '/_authenticated/journal'
     | '/_authenticated/notifications'
     | '/_authenticated/settings'
+    | '/create/memorial'
     | '/memorial/$slug'
     | '/u/$userId'
     | '/_authenticated/memorial/$slug/edit'
@@ -308,7 +308,6 @@ export interface RootRouteChildren {
   AdoptionRoute: typeof AdoptionRoute
   CommunityRoute: typeof CommunityRoute
   ContactRoute: typeof ContactRoute
-  CreateRoute: typeof CreateRoute
   GardenRoute: typeof GardenRoute
   GriefSupportRoute: typeof GriefSupportRoute
   LoginRoute: typeof LoginRoute
@@ -317,6 +316,7 @@ export interface RootRouteChildren {
   PrivacyRoute: typeof PrivacyRoute
   ResourcesRoute: typeof ResourcesRoute
   SignupRoute: typeof SignupRoute
+  CreateMemorialRoute: typeof CreateMemorialRoute
   MemorialSlugRoute: typeof MemorialSlugRoute
   UUserIdRoute: typeof UUserIdRoute
 }
@@ -377,13 +377,6 @@ declare module '@tanstack/react-router' {
       path: '/garden'
       fullPath: '/garden'
       preLoaderRoute: typeof GardenRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/create': {
-      id: '/create'
-      path: '/create'
-      fullPath: '/create'
-      preLoaderRoute: typeof CreateRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -447,6 +440,13 @@ declare module '@tanstack/react-router' {
       path: '/memorial/$slug'
       fullPath: '/memorial/$slug'
       preLoaderRoute: typeof MemorialSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/create/memorial': {
+      id: '/create/memorial'
+      path: '/create/memorial'
+      fullPath: '/create/memorial'
+      preLoaderRoute: typeof CreateMemorialRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/settings': {
@@ -515,7 +515,6 @@ const rootRouteChildren: RootRouteChildren = {
   AdoptionRoute: AdoptionRoute,
   CommunityRoute: CommunityRoute,
   ContactRoute: ContactRoute,
-  CreateRoute: CreateRoute,
   GardenRoute: GardenRoute,
   GriefSupportRoute: GriefSupportRoute,
   LoginRoute: LoginRoute,
@@ -524,6 +523,7 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacyRoute: PrivacyRoute,
   ResourcesRoute: ResourcesRoute,
   SignupRoute: SignupRoute,
+  CreateMemorialRoute: CreateMemorialRoute,
   MemorialSlugRoute: MemorialSlugRoute,
   UUserIdRoute: UUserIdRoute,
 }

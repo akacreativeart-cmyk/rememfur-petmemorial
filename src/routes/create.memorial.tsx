@@ -45,7 +45,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
-export const Route = createFileRoute("/create")({
+export const Route = createFileRoute("/create/memorial")({
   component: CreatePage,
   validateSearch: (search: Record<string, unknown>) => ({
     welcome: search.welcome === 1 || search.welcome === "1" ? 1 : undefined,
