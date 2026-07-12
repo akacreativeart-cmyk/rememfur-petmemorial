@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import { ChevronDown, ShoppingBag, Utensils, Shirt, Stethoscope, Shield, Sparkles, PawPrint, HandHeart, MapPin, Skull, Cake, HeartHandshake } from "lucide-react";
+import { ChevronDown, ShoppingBag, Utensils, Shirt, Stethoscope, Shield, Sparkles, Flame, PawPrint, HandHeart, MapPin, Skull, Cake, HeartHandshake } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { SiteHeader } from "@/components/site/SiteHeader";
@@ -93,9 +93,36 @@ function VigilDog({ size = 150, className = "" }: { size?: number; className?: s
 /* ────────── Cosmos background with shooting stars ────────── */
 
 function CosmosBg() {
-  const [streaks, setStreaks] = useState<{ id: number; sx: string; sy: string }[]>([]);
+  const [stars, setStars] = useState<{ className: string; style: React.CSSProperties }[]>([]);
+  const [streaks, setStreaks] = useState<{ id: number; top: string; left: string; ang: string }[]>([]);
+  const [reduced, setReduced] = useState(false);
+
   useEffect(() => {
-    const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    const mq = window.matchMedia?.("(prefers-reduced-motion: reduce)");
+    setReduced(mq?.matches ?? false);
+    if (mq?.matches) return;
+
+    const generated = Array.from({ length: 130 }, () => {
+      const r = Math.random();
+      const kind = r < 0.18 ? " warm" : r < 0.3 ? " blue" : "";
+      const size = Math.random() < 0.85 ? 1.4 : 2.2;
+      return {
+        className: `star${kind}`,
+        style: {
+          left: `${Math.random() * 100}%`,
+          top: `${Math.random() * 100}%`,
+          width: `${size}px`,
+          height: `${size}px`,
+          ["--o" as string]: 0.22 + Math.random() * 0.6,
+          ["--d" as string]: `${2.6 + Math.random() * 4.5}s`,
+          ["--dl" as string]: `${Math.random() * 5}s`,
+        },
+      };
+    });
+    setStars(generated);
+  }, []);
+
+  useEffect(() => {
     if (reduced) return;
     let id = 0;
     let alive = true;
@@ -103,25 +130,39 @@ function CosmosBg() {
       if (!alive) return;
       const item = {
         id: ++id,
-        sx: `${Math.random() * 60}%`,
-        sy: `${5 + Math.random() * 55}%`,
+        top: `${4 + Math.random() * 60}%`,
+        left: `${Math.random() * 55}%`,
+        ang: `${-20 - Math.random() * 18}deg`,
       };
       setStreaks((prev) => [...prev, item]);
       window.setTimeout(() => setStreaks((prev) => prev.filter((s) => s.id !== item.id)), 1500);
-      const next = 4000 + Math.random() * 2000;
+      const next = 3600 + Math.random() * 3600;
       window.setTimeout(spawn, next);
     };
-    const t = window.setTimeout(spawn, 3000);
+    const t = window.setTimeout(spawn, 2000);
     return () => { alive = false; window.clearTimeout(t); };
-  }, []);
+  }, [reduced]);
+
   return (
     <div className="cosmos-bg" aria-hidden>
-      <div className="cosmos-stars" />
+      <div className="base" />
+      <div className="nebula">
+        <div className="n n1" />
+        <div className="n n2" />
+        <div className="n n3" />
+      </div>
       <div className="milkyway" />
-      <div className="nebula a" />
-      <div className="nebula b" />
+      <div className="sky">
+        {stars.map((s, i) => (
+          <span key={i} className={s.className} style={s.style} />
+        ))}
+      </div>
       {streaks.map((s) => (
-        <span key={s.id} className="shoot" style={{ ["--sx" as string]: s.sx, ["--sy" as string]: s.sy } as React.CSSProperties} />
+        <span
+          key={s.id}
+          className="shooter"
+          style={{ top: s.top, left: s.left, ["--ang" as string]: s.ang } as React.CSSProperties}
+        />
       ))}
       <div className="grain" />
     </div>
