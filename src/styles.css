@@ -993,3 +993,43 @@ html, body { overflow-x: hidden; }
   height: 2px; background: linear-gradient(90deg, rgba(230,225,214,0.35), rgba(230,225,214,0.05));
   border-radius: 2px;
 }
+
+/* ── Uploaded RememFur CTA utilities ── */
+@utility btn-gold {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--void);
+  background: linear-gradient(120deg, #F6D9A0, var(--upload-gold) 45%, var(--ember));
+  padding: 17px 34px;
+  border-radius: 999px;
+  box-shadow: 0 0 0 1px rgba(246,217,160,0.35), 0 8px 40px -8px rgba(232,185,109,0.5);
+  transition: transform 0.35s, box-shadow 0.35s;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 0 1px rgba(246,217,160,0.5), 0 14px 52px -8px rgba(232,185,109,0.65);
+  }
+
+  &:active {
+    transform: translateY(-1px);
+  }
+}
+
+@utility link-gold {
+  color: var(--faint);
+  text-decoration: none;
+  font-size: 12px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  border-bottom: 1px solid transparent;
+  transition: 0.3s;
+
+  &:hover {
+    color: var(--parchment);
+    border-bottom-color: var(--hair);
+  }
+}
