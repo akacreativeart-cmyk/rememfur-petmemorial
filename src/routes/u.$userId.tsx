@@ -87,6 +87,16 @@ function UserProfilePage() {
                 {profile.followed_by_me ? "Following" : "Follow"}
               </Button>
             )}
+            {isMe && (
+              <div className="mt-3 flex flex-wrap gap-2">
+                <Link to="/pets">
+                  <Button size="sm" variant="outline" className="rounded-full">🐾 My pets</Button>
+                </Link>
+                <Link to="/dashboard">
+                  <Button size="sm" variant="outline" className="rounded-full">My memorials</Button>
+                </Link>
+              </div>
+            )}
           </div>
         </header>
 
