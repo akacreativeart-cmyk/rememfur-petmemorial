@@ -391,6 +391,33 @@ function Hero() {
 
       {/* BOTTOM: Vigil scene as normal-flow block — content above can never overlap */}
       <div className="relative w-full h-[260px] md:h-[340px] overflow-hidden">
+        {/* Sirius — its own absolutely-positioned element, always visible */}
+        <div
+          aria-hidden
+          className="vigil-sirius pointer-events-none absolute z-[2]"
+          style={{ right: "16%", top: "-30px", width: "80px", height: "80px" }}
+        >
+          {/* glow */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background: "radial-gradient(circle, rgba(255,242,204,0.55) 0%, rgba(212,179,120,0) 70%)",
+            }}
+          />
+          {/* vertical flare */}
+          <div
+            className="absolute left-1/2 top-1/2 h-16 w-[3px] -translate-x-1/2 -translate-y-1/2"
+            style={{ background: "linear-gradient(to bottom, rgba(255,242,204,0) 0%, rgba(255,251,230,0.9) 50%, rgba(255,242,204,0) 100%)" }}
+          />
+          {/* horizontal flare */}
+          <div
+            className="absolute left-1/2 top-1/2 h-[3px] w-16 -translate-x-1/2 -translate-y-1/2"
+            style={{ background: "linear-gradient(to right, rgba(255,242,204,0) 0%, rgba(255,251,230,0.9) 50%, rgba(255,242,204,0) 100%)" }}
+          />
+          {/* core */}
+          <div className="absolute left-1/2 top-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#fffbe6]" />
+        </div>
+
         {/* Hill — full-width, always spans viewport */}
         <svg
           aria-hidden
