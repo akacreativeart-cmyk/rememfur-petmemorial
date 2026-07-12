@@ -64,7 +64,7 @@ export function PostCard({ post }: { post: FeedPost }) {
       return { prev };
     },
     onSuccess: () => {
-      toast.success("Star released ✨ — they would have felt it.");
+      toast.success("Paw lamp lit ✨ — they would have felt it.");
       qc.invalidateQueries({ queryKey: ["post-candles", post.id] });
       qc.invalidateQueries({ queryKey: ["candles-this-week"] });
     },
@@ -209,7 +209,7 @@ export function PostCard({ post }: { post: FeedPost }) {
               <button
                 onClick={quickLight}
                 disabled={candle.isPending}
-                aria-label="Release a star"
+                aria-label="Light a paw lamp"
                 className="candle-pulse relative flex items-center gap-1.5 rounded-full bg-[color-mix(in_oklab,var(--cta)_14%,transparent)] px-3 py-1.5 text-sm font-medium text-[var(--cta)] transition hover:bg-[color-mix(in_oklab,var(--cta)_24%,transparent)] active:scale-95"
               >
                 <Flame className="h-4 w-4 flame-flicker" />
@@ -238,7 +238,7 @@ export function PostCard({ post }: { post: FeedPost }) {
                 }}
                 trigger={
                   <button
-                    aria-label="Release a star with a note"
+                    aria-label="Light a paw lamp with a note"
                     className="ml-1 rounded-full px-2 py-1.5 text-xs text-[var(--cta)] hover:bg-[color-mix(in_oklab,var(--cta)_12%,transparent)]"
                   >
                     + note

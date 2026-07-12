@@ -66,7 +66,7 @@ function MemorialPage() {
     mutationFn: (vars: { message?: string }) =>
       fetchLightCandle({ data: { memorial_id: m.id, message: vars.message ?? null } }),
     onSuccess: () => {
-      toast.success("Star released. Their light glows on.");
+      toast.success("Paw lamp lit. Their light glows on.");
       setCandleMsg("");
       qc.invalidateQueries({ queryKey: ["memorial", m.slug] });
     },
@@ -177,7 +177,7 @@ function MemorialPage() {
           </div>
         </div>
 
-        {/* Release a star — prominent, just below the photo */}
+        {/* Light a paw lamp — prominent, just below the photo */}
         <div className="mt-6 flex flex-col items-center justify-between gap-4 rounded-3xl border border-border/60 bg-card p-5 soft-shadow sm:flex-row sm:p-6">
           <div className="flex items-center gap-3">
             <div className="flex h-14 w-10 shrink-0 items-center justify-center">
@@ -195,7 +195,7 @@ function MemorialPage() {
             onLit={() => qc.invalidateQueries({ queryKey: ["memorial", m.slug] })}
             trigger={
               <Button size="lg" className="w-full rounded-full bg-amber-400 text-accent-foreground hover:bg-amber-300 sm:w-auto">
-                <Flame className="mr-2 h-4 w-4" /> Release a star
+                <Flame className="mr-2 h-4 w-4" /> Light a paw lamp
               </Button>
             }
           />
@@ -267,7 +267,7 @@ function MemorialPage() {
               <div className="mx-auto flex h-16 w-12 items-center justify-center">
                 <CandleFlame width={48} height={64} />
               </div>
-              <h3 className="mt-4 font-display text-xl text-foreground">Release a star</h3>
+              <h3 className="mt-4 font-display text-xl text-foreground">Light a paw lamp</h3>
               <p className="mt-1 text-xs text-muted-foreground">Keep their memory shining bright.</p>
               {user ? (
                 <div className="mt-4 space-y-2 text-left">
@@ -283,7 +283,7 @@ function MemorialPage() {
                     onLit={() => qc.invalidateQueries({ queryKey: ["memorial", m.slug] })}
                     trigger={
                       <Button className="w-full rounded-full bg-amber-400 text-accent-foreground hover:bg-amber-300">
-                        <Flame className="mr-1.5 h-4 w-4" /> Release a star
+                        <Flame className="mr-1.5 h-4 w-4" /> Light a paw lamp
                       </Button>
                     }
                   />
