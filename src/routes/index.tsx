@@ -266,23 +266,25 @@ function HomePage() {
           pet_name: featured.data.pet_name,
           slug: featured.data.slug,
         }}
-        trigger={
-          <button
-            type="button"
-            className="ios-tappable inline-flex items-center justify-center rounded-full bg-gradient-to-b from-amber-200 to-amber-400 px-7 py-3.5 text-[15px] font-semibold text-[#1a1200] shadow-[0_0_28px_-6px_rgba(251,191,36,0.55)] hover:from-amber-100 hover:to-amber-300"
-          >
-            {label} 🐾
-          </button>
-        }
-      />
-    ) : (
-      <Link
-        to="/garden"
-        className="ios-tappable inline-flex items-center justify-center rounded-full bg-gradient-to-b from-amber-200 to-amber-400 px-7 py-3.5 text-[15px] font-semibold text-[#1a1200] shadow-[0_0_28px_-6px_rgba(251,191,36,0.55)] hover:from-amber-100 hover:to-amber-300"
-      >
-        {label} 🐾
-      </Link>
-    );
+          trigger={
+            <button
+              type="button"
+              className="btn-gold ios-tappable"
+            >
+              <Flame className="h-4 w-4" strokeWidth={2} />
+              {label}
+            </button>
+          }
+        />
+      ) : (
+        <Link
+          to="/garden"
+          className="btn-gold ios-tappable"
+        >
+          <Flame className="h-4 w-4" strokeWidth={2} />
+          {label}
+        </Link>
+      );
 
   return (
     <div className="relative min-h-screen text-white">
