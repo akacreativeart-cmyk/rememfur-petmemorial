@@ -3,6 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Bell, Flame, MessageCircle, PawPrint, UserPlus, Mail } from "lucide-react";
+import { PawLamp } from "@/components/site/PawLamp";
 import {
   Popover,
   PopoverContent,
