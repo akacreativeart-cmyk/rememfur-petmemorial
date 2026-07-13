@@ -1000,6 +1000,7 @@ function CareRail() {
   return (
     <RailSection
       title="Care, honour & good karma"
+      subtitle="Not everything here is for sale. Some things are just kind — and they come first."
       kicker={
         <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/40 bg-emerald-500/10 px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider text-emerald-200">
           <HandHeart className="h-3 w-3" /> Non-commercial first
@@ -1015,6 +1016,7 @@ function MarketplaceRail() {
   return (
     <RailSection
       title="For the life you share"
+      subtitle="One day, everything they need — chosen with the same care you'd choose it."
       kicker={
         <span className="inline-flex items-center rounded-full border border-white/15 bg-white/[0.04] px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider text-white/70">
           Marketplace
@@ -1028,11 +1030,13 @@ function MarketplaceRail() {
 
 function RailSection({
   title,
+  subtitle,
   kicker,
   cards,
   section,
 }: {
   title: string;
+  subtitle?: string;
   kicker: ReactNode;
   cards: RailCard[];
   section: string;
@@ -1047,13 +1051,18 @@ function RailSection({
             </h2>
             {kicker}
           </div>
+          {subtitle && (
+            <p className="mt-2 max-w-[60ch] text-[13.5px] leading-relaxed text-white/55">
+              {subtitle}
+            </p>
+          )}
         </Reveal>
       </div>
 
       <div
         className="mx-auto mt-5 max-w-[1400px] overflow-x-auto px-5 py-4 md:px-8 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
       >
-        <ul className="flex snap-x snap-mandatory gap-3 pr-5 md:pr-8">
+        <ul className="flex snap-x snap-mandatory gap-4 pr-5 md:pr-8">
           {cards.map((c) => (
             <li key={c.key} className="snap-start">
               <RailCardView card={c} section={section} />
@@ -1067,53 +1076,103 @@ function RailSection({
 
 function RailCardView({ card, section }: { card: RailCard; section: string }) {
   const { title, desc, Icon, highlight } = card;
+
+  const outerBg = highlight
+    ? "linear-gradient(160deg, rgba(143,199,158,.4), rgba(143,199,158,.05) 42%, transparent)"
+    : "linear-gradient(160deg, rgba(255,255,255,.14), rgba(255,255,255,.02) 40%, transparent)";
+  const innerBg = highlight
+    ? "linear-gradient(165deg,#152a20,#0e1c16 62%,#0b1611)"
+    : "linear-gradient(165deg,#151f36,#0b1024 62%,#0a0f20)";
+  const iconBg = highlight
+    ? "radial-gradient(circle at 40% 35%, rgba(143,199,158,.28), rgba(143,199,158,.06))"
+    : "radial-gradient(circle at 40% 35%, rgba(232,185,109,.22), rgba(232,185,109,.05))";
+  const iconShadow = highlight
+    ? "inset 0 0 0 1px rgba(143,199,158,.4), 0 0 22px -8px rgba(143,199,158,.55)"
+    : "inset 0 0 0 1px rgba(232,185,109,.28), 0 0 22px -8px rgba(232,185,109,.5)";
+  const iconStroke = highlight ? "#8FC79E" : "#E8B96D";
+
   return (
     <div
-      className={`relative flex h-full w-[210px] shrink-0 flex-col rounded-2xl p-4 ring-1 transition ${
-        highlight
-          ? "ring-emerald-400/40"
-          : "bg-white/[0.04] ring-white/10"
-      }`}
-      style={
-        highlight
-          ? {
-              backgroundColor: "rgba(24,44,34,0.9)",
-              boxShadow: "inset 0 1px 0 rgba(120,220,160,0.18)",
-            }
-          : undefined
-      }
+      className="w-[248px] shrink-0 rounded-[20px] p-px transition duration-[400ms] hover:-translate-y-1"
+      style={{ background: outerBg }}
     >
       <div
-        className={`flex h-9 w-9 items-center justify-center rounded-xl ${
-          highlight
-            ? "bg-emerald-500/15 text-emerald-300"
-            : "bg-white/[0.06] text-[var(--gold)]"
-        }`}
+        className="relative flex h-full flex-col overflow-hidden rounded-[19px] px-[22px] pb-[22px] pt-6"
+        style={{ background: innerBg }}
       >
-        <Icon className="h-[18px] w-[18px]" strokeWidth={1.5} />
-      </div>
-      <h3 className="mt-3 font-display text-[16px] leading-tight text-white">{title}</h3>
-      <p className="mt-1 flex-1 text-[12.5px] leading-relaxed text-white/60">{desc}</p>
-      <div className="mt-3">
-        <WaitlistDialog
-          itemName={title}
-          section={section}
-          trigger={
-            <button
-              type="button"
-              className={`w-full rounded-full px-3 py-1.5 text-[12px] font-medium transition ${
-                highlight
-                  ? "bg-emerald-500/20 text-emerald-100 hover:bg-emerald-500/30"
-                  : "bg-white/10 text-white/85 hover:bg-white/20"
-              }`}
-            >
-              Notify me
-            </button>
-          }
-        />
+        {/* faint cosmic stars */}
+        <span className="pointer-events-none absolute right-4 top-3 h-[2px] w-[2px] rounded-full bg-white/40" />
+        <span className="pointer-events-none absolute right-9 top-6 h-[2px] w-[2px] rounded-full bg-white/40" />
+        <span className="pointer-events-none absolute right-6 top-10 h-[2px] w-[2px] rounded-full bg-white/40" />
+
+        {highlight && (
+          <span
+            className="pointer-events-none absolute z-10 font-medium uppercase"
+            style={{
+              top: 14,
+              right: -30,
+              padding: "3px 34px",
+              background: "rgba(143,199,158,.9)",
+              color: "#0b1611",
+              transform: "rotate(45deg)",
+              fontSize: 8,
+              letterSpacing: "0.16em",
+            }}
+          >
+            Kind
+          </span>
+        )}
+
+        <div
+          className="mb-5 flex h-[52px] w-[52px] items-center justify-center rounded-[14px]"
+          style={{ background: iconBg, boxShadow: iconShadow }}
+        >
+          <Icon width={24} height={24} strokeWidth={1.5} style={{ stroke: iconStroke }} />
+        </div>
+
+        <h3 className="font-display text-[22px] leading-tight text-white">{title}</h3>
+        <p
+          className="mt-2 flex-1 text-[13px] text-white/55"
+          style={{ lineHeight: 1.62, minHeight: 62 }}
+        >
+          {desc}
+        </p>
+
+        <div className="mt-5">
+          <WaitlistDialog
+            itemName={title}
+            section={section}
+            trigger={
+              <button
+                type="button"
+                className="notify-btn flex w-full items-center justify-center gap-2 rounded-[12px] px-3 py-3 text-[11px] font-medium uppercase transition"
+                style={
+                  highlight
+                    ? {
+                        border: "1px solid rgba(143,199,158,.5)",
+                        background: "rgba(143,199,158,.1)",
+                        color: "#BEE3C8",
+                        letterSpacing: "0.22em",
+                      }
+                    : {
+                        border: "1px solid rgba(232,185,109,.2)",
+                        background: "rgba(232,185,109,.06)",
+                        color: "#E8B96D",
+                        letterSpacing: "0.22em",
+                      }
+                }
+              >
+                <Bell size={18} strokeWidth={1.5} />
+                Notify me
+              </button>
+            }
+          />
+        </div>
       </div>
     </div>
   );
 }
+
+
 
 
