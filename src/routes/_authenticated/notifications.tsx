@@ -57,7 +57,7 @@ function NotificationsPage() {
         <div>
           <h1 className="font-display text-4xl text-foreground">Notifications</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Every candle lit, every kind word left — quietly gathered here.
+            Every paw lamp lit, every kind word left — quietly gathered here.
           </p>
         </div>
         {unreadCount > 0 && (

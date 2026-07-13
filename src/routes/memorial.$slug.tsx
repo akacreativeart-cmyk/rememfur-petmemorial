@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { CandleFlame } from "@/components/site/CandleFlame";
+import { PawLamp } from "@/components/site/PawLamp";
 import petSilhouette from "@/assets/pet-silhouette.svg";
 import { getMemorialBySlug } from "@/lib/memorials.functions";
 import { lightCandle, postMessage } from "@/lib/tributes.functions";
@@ -160,7 +161,7 @@ function MemorialPage() {
                 {m.epitaph && <p className="mt-3 max-w-xl font-display text-xl italic text-white/80">"{m.epitaph}"</p>}
               </div>
               <div className="flex items-center gap-4 text-sm text-white/80">
-                <div className="flex items-center gap-1.5"><CandleFlame width={16} height={22} /> {current.candles.length} candles</div>
+                <div className="flex items-center gap-1.5"><PawLamp size={16} /> {current.candles.length} paw lamps</div>
                 <div className="flex items-center gap-1"><MessageCircle className="h-4 w-4 text-amber-200" /> {current.messages.length} messages</div>
                 <Button variant="outline" size="sm" onClick={share} className="rounded-full border-white/15 bg-white/10">
                   <Share2 className="mr-1.5 h-3.5 w-3.5" /> Share
@@ -181,11 +182,11 @@ function MemorialPage() {
         <div className="mt-6 flex flex-col items-center justify-between gap-4 rounded-3xl border border-border/60 bg-card p-5 soft-shadow sm:flex-row sm:p-6">
           <div className="flex items-center gap-3">
             <div className="flex h-14 w-10 shrink-0 items-center justify-center">
-              <CandleFlame width={40} height={56} />
+              <PawLamp size={40} />
             </div>
             <div>
               <div className="font-display text-xl text-foreground">
-                {current.candles.length} {current.candles.length === 1 ? "candle" : "candles"} lit for {m.pet_name}
+                {current.candles.length} {current.candles.length === 1 ? "paw lamp" : "paw lamps"} lit for {m.pet_name}
               </div>
               <div className="text-sm text-muted-foreground">Keep their memory shining bright.</div>
             </div>
@@ -195,7 +196,7 @@ function MemorialPage() {
             onLit={() => qc.invalidateQueries({ queryKey: ["memorial", m.slug] })}
             trigger={
               <Button size="lg" className="w-full rounded-full bg-amber-400 text-accent-foreground hover:bg-amber-300 sm:w-auto">
-                <Flame className="mr-2 h-4 w-4" /> Light a paw lamp
+                <span className="mr-2 inline-flex"><PawLamp size={16} glow={false} /></span> Light a paw lamp
               </Button>
             }
           />
@@ -265,7 +266,7 @@ function MemorialPage() {
           <aside className="space-y-6 lg:sticky lg:top-24 lg:self-start">
             <div className="rounded-3xl border border-border/60 bg-card p-6 text-center soft-shadow">
               <div className="mx-auto flex h-16 w-12 items-center justify-center">
-                <CandleFlame width={48} height={64} />
+                <PawLamp size={48} />
               </div>
               <h3 className="mt-4 font-display text-xl text-foreground">Light a paw lamp</h3>
               <p className="mt-1 text-xs text-muted-foreground">Keep their memory shining bright.</p>
@@ -273,7 +274,7 @@ function MemorialPage() {
                 <div className="mt-4 space-y-2 text-left">
                   <Textarea value={candleMsg} onChange={(e) => setCandleMsg(e.target.value)} placeholder="A few words (optional)" rows={2} />
                   <Button onClick={() => candleMut.mutate({ message: candleMsg.trim() || undefined })} disabled={candleMut.isPending} className="w-full rounded-full bg-amber-400 text-accent-foreground hover:bg-amber-300">
-                    <Heart className="mr-1.5 h-4 w-4 fill-current" /> Light candle
+                    <Heart className="mr-1.5 h-4 w-4 fill-current" /> Light paw lamp
                   </Button>
                 </div>
               ) : (
@@ -283,7 +284,7 @@ function MemorialPage() {
                     onLit={() => qc.invalidateQueries({ queryKey: ["memorial", m.slug] })}
                     trigger={
                       <Button className="w-full rounded-full bg-amber-400 text-accent-foreground hover:bg-amber-300">
-                        <Flame className="mr-1.5 h-4 w-4" /> Light a paw lamp
+                        <span className="mr-1.5 inline-flex"><PawLamp size={16} glow={false} /></span> Light a paw lamp
                       </Button>
                     }
                   />
@@ -315,11 +316,11 @@ function MemorialPage() {
 
             {current.candles.length > 0 && (
               <div className="rounded-3xl border border-border/60 bg-card p-6 soft-shadow">
-                <h3 className="font-display text-lg text-foreground">Recent candles</h3>
+                <h3 className="font-display text-lg text-foreground">Recent paw lamps</h3>
                 <ul className="mt-3 space-y-3 text-sm">
                   {current.candles.slice(0, 8).map((c: any) => (
                     <li key={c.id} className="flex gap-2">
-                      <div className="mt-0.5 shrink-0"><CandleFlame width={14} height={20} /></div>
+                      <div className="mt-0.5 shrink-0"><PawLamp size={14} /></div>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-start justify-between gap-2">
                           <div className="text-foreground">{c.lit_by_name ?? "Someone"}</div>
@@ -351,7 +352,7 @@ function MemorialPage() {
                 <li>· Engraved name tag</li>
                 <li>· Framed portrait print</li>
                 <li>· Replica plush</li>
-                <li>· Digital candle card</li>
+                <li>· Digital paw lamp card</li>
               </ul>
               <Link to="/marketplace" className="mt-4 inline-flex w-full items-center justify-center rounded-full bg-amber-400 px-4 py-2 text-sm text-accent-foreground hover:bg-amber-300">
                 Browse memory gifts
