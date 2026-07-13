@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { Bell, Flame, MessageCircle, PawPrint, UserPlus, Mail, CheckCheck } from "lucide-react";
+import { PawLamp } from "@/components/site/PawLamp";
 import { Button } from "@/components/ui/button";
 import {
   listNotifications,
