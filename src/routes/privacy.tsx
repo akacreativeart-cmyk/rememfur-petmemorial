@@ -43,7 +43,7 @@ function Privacy() {
           <section>
             <h2 className="font-display text-xl text-foreground">Who can see it</h2>
             <p className="mt-2">
-              Memorials are public by default so friends and strangers can light candles. You control the visibility of your memorial in its settings. Candles and messages left by visitors are visible to others.
+              Memorials are public by default so friends and strangers can light paw lamps. You control the visibility of your memorial in its settings. Paw lamps and messages left by visitors are visible to others.
             </p>
           </section>
 
