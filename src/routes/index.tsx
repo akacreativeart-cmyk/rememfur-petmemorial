@@ -422,7 +422,7 @@ function Hero({ primaryCandle }: { primaryCandle: ReactNode }) {
       </div>
 
       {/* BOTTOM: Vigil scene as normal-flow block — content above can never overlap */}
-      <div className="relative w-full h-[260px] md:h-[340px] overflow-hidden">
+      <div className="relative w-full h-[260px] md:h-[340px]">
         {/* Hill — full-width, always spans viewport */}
         <svg
           aria-hidden
@@ -436,9 +436,9 @@ function Hero({ primaryCandle }: { primaryCandle: ReactNode }) {
         {/* Dog perched on hill crest */}
         <div
           className="pointer-events-none absolute left-1/2 z-[3] -translate-x-1/2 vigil-dog-torso"
-          style={{ bottom: "24%", transformOrigin: "bottom center" }}
+          style={{ bottom: "20%", transformOrigin: "bottom center" }}
         >
-          <div className="w-[130px] md:w-[150px]">
+          <div className="w-[104px] md:w-[124px]">
             <VigilDog size={150} className="h-auto w-full" />
           </div>
         </div>
