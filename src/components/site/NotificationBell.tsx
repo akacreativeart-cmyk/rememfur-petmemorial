@@ -18,7 +18,7 @@ import {
 import { formatDistanceToNow } from "date-fns";
 
 const ICONS: Record<string, any> = {
-  candle: Flame,
+  candle: PawLamp,
   paw: PawPrint,
   comment: MessageCircle,
   message: Mail,
