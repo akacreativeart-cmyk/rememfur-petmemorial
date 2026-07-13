@@ -1051,9 +1051,9 @@ function RailSection({
       </div>
 
       <div
-        className="mx-auto mt-5 max-w-[1400px] overflow-x-auto px-5 pb-3 md:px-8 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+        className="mx-auto mt-5 max-w-[1400px] overflow-x-auto px-5 py-4 md:px-8 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
       >
-        <ul className="flex snap-x snap-mandatory gap-3">
+        <ul className="flex snap-x snap-mandatory gap-3 pr-5 md:pr-8">
           {cards.map((c) => (
             <li key={c.key} className="snap-start">
               <RailCardView card={c} section={section} />
