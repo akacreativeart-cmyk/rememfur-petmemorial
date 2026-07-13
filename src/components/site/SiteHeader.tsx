@@ -100,7 +100,7 @@ export function SiteHeader() {
           ) : (
             <Link
               to="/login"
-              className="rounded-full px-3 py-1.5 text-xs font-medium text-sage-deep hover:bg-sage/10"
+              className="rounded-full px-3 py-1.5 text-xs font-medium text-white/80 hover:bg-white/10 hover:text-white"
             >
               Log in
             </Link>
@@ -117,15 +117,16 @@ export function SiteHeader() {
             </SheetTrigger>
             <SheetContent
               side="right"
-              className="flex w-[86vw] max-w-sm flex-col overflow-y-auto overscroll-contain paper-bg paper-grain border-l border-border/60 text-foreground"
+              className="flex w-[86vw] max-w-sm flex-col overflow-y-auto overscroll-contain border-l border-white/10 text-white"
               style={{
                 paddingTop: "calc(env(safe-area-inset-top) + 1.5rem)",
                 paddingBottom: "calc(env(safe-area-inset-bottom) + 6rem)",
+                background: "linear-gradient(180deg,#0B1122,#080d1f)",
               }}
             >
               <SheetHeader className="text-left">
-                <SheetTitle className="brand-wordmark text-2xl">rememfur</SheetTitle>
-                <p className="font-hand text-lg text-[var(--terracotta)]">a sanctuary, always open</p>
+                <SheetTitle className="brand-wordmark text-2xl text-white">rememfur</SheetTitle>
+                <p className="font-hand text-lg text-[#E8B96D]/80">a sanctuary, always open</p>
               </SheetHeader>
 
               <nav className="mt-6 space-y-1">
@@ -134,9 +135,9 @@ export function SiteHeader() {
                     key={to}
                     to={to}
                     onClick={() => setOpen(false)}
-                    className="flex items-center gap-3 rounded-xl px-3 py-3 text-base text-foreground hover:bg-cream/70"
+                    className="flex items-center gap-3 rounded-xl px-3 py-3 text-base text-white/85 hover:bg-white/5"
                   >
-                    <Icon className="h-5 w-5 text-[var(--terracotta)]" />
+                    <Icon className="h-5 w-5 text-[#E8B96D]" />
                     {label}
                   </Link>
                 ))}
@@ -144,16 +145,16 @@ export function SiteHeader() {
 
               {authItems.length > 0 && (
                 <>
-                  <div className="my-4 h-px bg-border/60" />
+                  <div className="my-4 h-px bg-white/10" />
                   <nav className="space-y-1">
                     {authItems.map(({ to, label, icon: Icon }) => (
                       <a
                         key={to}
                         href={to}
                         onClick={() => setOpen(false)}
-                        className="flex items-center gap-3 rounded-xl px-3 py-3 text-base text-foreground hover:bg-cream/70"
+                        className="flex items-center gap-3 rounded-xl px-3 py-3 text-base text-white/85 hover:bg-white/5"
                       >
-                        <Icon className="h-5 w-5 text-sage-deep" />
+                        <Icon className="h-5 w-5 text-[#E8B96D]" />
                         {label}
                       </a>
                     ))}
@@ -161,9 +162,9 @@ export function SiteHeader() {
                       <a
                         href="/admin"
                         onClick={() => setOpen(false)}
-                        className="flex items-center gap-3 rounded-xl px-3 py-3 text-base text-foreground hover:bg-cream/70"
+                        className="flex items-center gap-3 rounded-xl px-3 py-3 text-base text-white/85 hover:bg-white/5"
                       >
-                        <ShieldCheck className="h-5 w-5 text-[var(--terracotta)]" />
+                        <ShieldCheck className="h-5 w-5 text-[#E8B96D]" />
                         Admin · Moderation
                       </a>
                     )}
@@ -171,23 +172,23 @@ export function SiteHeader() {
                 </>
               )}
 
-              <div className="my-4 h-px bg-border/60" />
+              <div className="my-4 h-px bg-white/10" />
               <div className="space-y-1">
                 <button
                   type="button"
                   onClick={() => { setOpen(false); window.dispatchEvent(new CustomEvent("rememfur:open-install")); }}
-                  className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-base text-foreground hover:bg-cream/70"
+                  className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-base text-white/85 hover:bg-white/5"
                 >
-                  <Download className="h-5 w-5 text-[var(--terracotta)]" />
+                  <Download className="h-5 w-5 text-[#E8B96D]" />
                   Add Rememfur to your home screen
                 </button>
                 <FeedbackDialog
                   trigger={
                     <button
                       type="button"
-                      className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-base text-foreground hover:bg-cream/70"
+                      className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-base text-white/85 hover:bg-white/5"
                     >
-                      <MessageSquare className="h-5 w-5 text-[var(--terracotta)]" />
+                      <MessageSquare className="h-5 w-5 text-[#E8B96D]" />
                       Share feedback
                     </button>
                   }
@@ -199,22 +200,22 @@ export function SiteHeader() {
                   <Link
                     to="/login"
                     onClick={() => setOpen(false)}
-                    className="flex items-center justify-center rounded-full border border-ink/15 bg-cream/80 px-4 py-2.5 text-sm font-medium text-foreground hover:bg-cream"
+                    className="flex items-center justify-center rounded-full border border-white/15 bg-white/[0.04] px-4 py-2.5 text-sm font-medium text-white/85 hover:bg-white/10"
                   >
                     Log in
                   </Link>
                   <Link
                     to="/signup"
                     onClick={() => setOpen(false)}
-                    className="flex items-center justify-center rounded-full bg-[var(--cta)] px-4 py-2.5 text-sm font-medium text-primary-foreground hover:opacity-90"
+                    className="flex items-center justify-center rounded-full bg-gradient-to-b from-[#F6D9A0] to-[#E8B96D] px-4 py-2.5 text-sm font-medium text-[#1a1200] hover:brightness-105"
                   >
                     Create a free account
                   </Link>
                 </div>
               )}
 
-              <div className="mt-6 rounded-2xl bg-cream/60 p-4">
-                <p className="font-hand text-lg text-[var(--ink)]">
+              <div className="mt-6 rounded-2xl bg-white/[0.04] p-4 ring-1 ring-white/10">
+                <p className="font-hand text-lg text-white/80">
                   "Grief is love with nowhere to go. Here, it has somewhere to go."
                 </p>
               </div>
@@ -254,7 +255,7 @@ export function SiteHeader() {
           <Link
             to={user ? "/create" : "/signup"}
             search={user ? undefined : ({ redirect: "/create" } as never)}
-            className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-b from-amber-300 to-amber-500 px-4 py-2 text-sm font-semibold text-[#1a1200] shadow-[0_0_20px_-4px_rgba(251,191,36,0.55)] hover:from-amber-200 hover:to-amber-400"
+            className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-b from-[#F6D9A0] to-[#E8B96D] px-4 py-2 text-sm font-semibold text-[#1a1200] shadow-[0_6px_24px_-8px_rgba(232,185,109,0.5)] hover:brightness-105"
           >
             <PlusCircle className="h-4 w-4" strokeWidth={2.25} />
             Create
@@ -287,12 +288,12 @@ export function SiteHeader() {
             </SheetTrigger>
             <SheetContent
               side="right"
-              className="flex w-[380px] max-w-sm flex-col overflow-y-auto overscroll-contain paper-bg paper-grain border-l border-border/60 text-foreground"
-              style={{ paddingTop: "1.5rem", paddingBottom: "2rem" }}
+              className="flex w-[380px] max-w-sm flex-col overflow-y-auto overscroll-contain border-l border-white/10 text-white"
+              style={{ paddingTop: "1.5rem", paddingBottom: "2rem", background: "linear-gradient(180deg,#0B1122,#080d1f)" }}
             >
               <SheetHeader className="text-left">
-                <SheetTitle className="brand-wordmark text-2xl">rememfur</SheetTitle>
-                <p className="font-hand text-lg text-[var(--terracotta)]">a sanctuary, always open</p>
+                <SheetTitle className="brand-wordmark text-2xl text-white">rememfur</SheetTitle>
+                <p className="font-hand text-lg text-[#E8B96D]/80">a sanctuary, always open</p>
               </SheetHeader>
               <nav className="mt-6 space-y-1">
                 {navItems.map(({ to, label, icon: Icon }) => (
@@ -300,25 +301,25 @@ export function SiteHeader() {
                     key={to}
                     to={to}
                     onClick={() => setOpen(false)}
-                    className="flex items-center gap-3 rounded-xl px-3 py-3 text-base text-foreground hover:bg-cream/70"
+                    className="flex items-center gap-3 rounded-xl px-3 py-3 text-base text-white/85 hover:bg-white/5"
                   >
-                    <Icon className="h-5 w-5 text-[var(--terracotta)]" />
+                    <Icon className="h-5 w-5 text-[#E8B96D]" />
                     {label}
                   </Link>
                 ))}
               </nav>
               {authItems.length > 0 && (
                 <>
-                  <div className="my-4 h-px bg-border/60" />
+                  <div className="my-4 h-px bg-white/10" />
                   <nav className="space-y-1">
                     {authItems.map(({ to, label, icon: Icon }) => (
                       <a
                         key={to}
                         href={to}
                         onClick={() => setOpen(false)}
-                        className="flex items-center gap-3 rounded-xl px-3 py-3 text-base text-foreground hover:bg-cream/70"
+                        className="flex items-center gap-3 rounded-xl px-3 py-3 text-base text-white/85 hover:bg-white/5"
                       >
-                        <Icon className="h-5 w-5 text-sage-deep" />
+                        <Icon className="h-5 w-5 text-[#E8B96D]" />
                         {label}
                       </a>
                     ))}
@@ -326,29 +327,29 @@ export function SiteHeader() {
                       <a
                         href="/admin"
                         onClick={() => setOpen(false)}
-                        className="flex items-center gap-3 rounded-xl px-3 py-3 text-base text-foreground hover:bg-cream/70"
+                        className="flex items-center gap-3 rounded-xl px-3 py-3 text-base text-white/85 hover:bg-white/5"
                       >
-                        <ShieldCheck className="h-5 w-5 text-[var(--terracotta)]" />
+                        <ShieldCheck className="h-5 w-5 text-[#E8B96D]" />
                         Admin · Moderation
                       </a>
                     )}
                   </nav>
                 </>
               )}
-              <div className="my-4 h-px bg-border/60" />
+              <div className="my-4 h-px bg-white/10" />
               <div className="space-y-1">
                 <button
                   type="button"
                   onClick={() => { setOpen(false); window.dispatchEvent(new CustomEvent("rememfur:open-install")); }}
-                  className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-base text-foreground hover:bg-cream/70"
+                  className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-base text-white/85 hover:bg-white/5"
                 >
-                  <Download className="h-5 w-5 text-[var(--terracotta)]" />
+                  <Download className="h-5 w-5 text-[#E8B96D]" />
                   Add Rememfur to your home screen
                 </button>
                 <FeedbackDialog
                   trigger={
-                    <button type="button" className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-base text-foreground hover:bg-cream/70">
-                      <MessageSquare className="h-5 w-5 text-[var(--terracotta)]" />
+                    <button type="button" className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-base text-white/85 hover:bg-white/5">
+                      <MessageSquare className="h-5 w-5 text-[#E8B96D]" />
                       Share feedback
                     </button>
                   }
