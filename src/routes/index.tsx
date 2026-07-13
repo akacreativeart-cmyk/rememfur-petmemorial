@@ -842,7 +842,7 @@ function ClosingScene({ primaryCandle }: { primaryCandle: ReactNode }) {
             {/* small hill */}
             <path d="M 0 300 C 200 270, 400 275, 600 285 C 700 290, 780 295, 800 298 L 800 320 L 0 320 Z" fill="#04060D" />
           </svg>
-          <div className="absolute left-1/2 bottom-[6%] -translate-x-1/2 vigil-dog-torso" style={{ transformOrigin: "bottom center" }}>
+          <div className="absolute left-1/2 bottom-[10%] -translate-x-1/2 vigil-dog-torso" style={{ transformOrigin: "bottom center" }}>
             <VigilDog size={90} />
           </div>
         </div>
