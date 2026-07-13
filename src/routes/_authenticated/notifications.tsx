@@ -16,7 +16,7 @@ export const Route = createFileRoute("/_authenticated/notifications")({
 });
 
 const ICONS: Record<string, any> = {
-  candle: Flame,
+  candle: PawLamp,
   paw: PawPrint,
   comment: MessageCircle,
   message: Mail,
