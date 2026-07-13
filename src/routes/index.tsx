@@ -504,8 +504,8 @@ function Chapters({ primaryCandle }: { primaryCandle: ReactNode }) {
         {items.map((c, i) => (
           <Reveal key={c.eyebrow}>
             <div className={`grid items-center gap-8 md:grid-cols-2 md:gap-16 ${i % 2 === 1 ? "md:[&>*:first-child]:order-2" : ""}`}>
-              <div>
-                <p className="flex items-center gap-3 text-[11px] uppercase tracking-[0.3em] text-amber-200/70">
+              <div className="text-center md:text-left">
+                <p className="flex items-center justify-center md:justify-start gap-3 text-[11px] uppercase tracking-[0.3em] text-amber-200/70">
                   <span className="font-display text-[16px] not-italic text-[var(--gold)] tracking-normal">{c.roman}</span>
                   <span className="h-px w-8 bg-[var(--gold)]/40" />
                   {c.eyebrow}
@@ -516,7 +516,7 @@ function Chapters({ primaryCandle }: { primaryCandle: ReactNode }) {
                 <p className="mt-4 text-[15px] leading-relaxed text-white/70 md:text-lg">
                   {c.body}
                 </p>
-                <div>{c.cta}</div>
+                <div className="flex justify-center md:justify-start">{c.cta}</div>
               </div>
               <div className="flex justify-center">{c.plaque}</div>
             </div>
