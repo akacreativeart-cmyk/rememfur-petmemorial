@@ -867,7 +867,7 @@ function ClosingScene({ primaryCandle }: { primaryCandle: ReactNode }) {
         </p>
         <div className="mt-8 flex flex-col items-center gap-3">
           {primaryCandle}
-          <Link to="/create" className="text-[13px] text-white/60 underline-offset-4 hover:text-white/90 hover:underline">
+          <Link to="/create" className="link-gold">
             Create their memorial
           </Link>
         </div>
