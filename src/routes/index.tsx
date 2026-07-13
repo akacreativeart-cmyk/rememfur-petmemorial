@@ -931,7 +931,7 @@ function GriefSection() {
           </Link>
           <Link
             to="/community"
-            className="link-gold"
+            className="inline-flex items-center rounded-full border border-white/20 px-6 py-3 text-[14px] font-medium text-white/85 hover:border-white/40 hover:bg-white/5"
           >
             Join the community
           </Link>
