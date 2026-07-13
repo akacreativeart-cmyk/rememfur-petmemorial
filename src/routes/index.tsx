@@ -925,19 +925,19 @@ function GriefSection() {
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
           <Link
             to="/create/memorial"
-            className="inline-flex items-center rounded-full bg-gradient-to-b from-amber-200 to-amber-400 px-6 py-3 text-[14px] font-semibold text-[#1a1200] shadow-[0_0_28px_-6px_rgba(251,191,36,0.55)] hover:from-amber-100 hover:to-amber-300"
+            className="btn-gold ios-tappable"
           >
             Write a memorial
           </Link>
           <Link
             to="/community"
-            className="inline-flex items-center rounded-full border border-white/20 px-6 py-3 text-[14px] font-medium text-white/85 hover:border-white/40 hover:bg-white/5"
+            className="link-gold"
           >
             Join the community
           </Link>
           <Link
             to="/grief-support"
-            className="text-[13px] text-white/60 underline-offset-4 hover:text-white/90 hover:underline"
+            className="link-gold"
           >
             or find grief support →
           </Link>
