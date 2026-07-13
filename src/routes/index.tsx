@@ -266,23 +266,25 @@ function HomePage() {
           pet_name: featured.data.pet_name,
           slug: featured.data.slug,
         }}
-        trigger={
-          <button
-            type="button"
-            className="ios-tappable inline-flex items-center justify-center rounded-full bg-gradient-to-b from-amber-200 to-amber-400 px-7 py-3.5 text-[15px] font-semibold text-[#1a1200] shadow-[0_0_28px_-6px_rgba(251,191,36,0.55)] hover:from-amber-100 hover:to-amber-300"
-          >
-            {label} 🐾
-          </button>
-        }
-      />
-    ) : (
-      <Link
-        to="/garden"
-        className="ios-tappable inline-flex items-center justify-center rounded-full bg-gradient-to-b from-amber-200 to-amber-400 px-7 py-3.5 text-[15px] font-semibold text-[#1a1200] shadow-[0_0_28px_-6px_rgba(251,191,36,0.55)] hover:from-amber-100 hover:to-amber-300"
-      >
-        {label} 🐾
-      </Link>
-    );
+          trigger={
+            <button
+              type="button"
+              className="btn-gold ios-tappable"
+            >
+              <Flame className="h-4 w-4" strokeWidth={2} />
+              {label}
+            </button>
+          }
+        />
+      ) : (
+        <Link
+          to="/garden"
+          className="btn-gold ios-tappable"
+        >
+          <Flame className="h-4 w-4" strokeWidth={2} />
+          {label}
+        </Link>
+      );
 
   return (
     <div className="relative min-h-screen text-white">
@@ -473,7 +475,7 @@ function Chapters({ primaryCandle }: { primaryCandle: ReactNode }) {
     {
       roman: "I", eyebrow: "Their memorial", title: "A page that stays.",
       body: "Photos, their story, the details only you knew — a place their name can live.",
-      cta: <Link to="/create" className="mt-6 inline-flex items-center text-[15px] font-medium text-amber-200 hover:text-amber-100">Begin their memorial →</Link>,
+      cta: <Link to="/create" className="mt-6 btn-gold ios-tappable">Begin their memorial</Link>,
       plaque: <PlaqueMedallion />,
     },
     {
@@ -485,25 +487,25 @@ function Chapters({ primaryCandle }: { primaryCandle: ReactNode }) {
     {
       roman: "III", eyebrow: "The garden", title: "A sky full of dogs.",
       body: "Above the garden hangs Canis Major — the Great Dog — home of Sirius, the brightest star in Earth's whole night sky. The ancients put a dog there so it would never be forgotten. We understand completely.",
-      cta: <Link to="/garden" className="mt-6 inline-flex items-center text-[15px] font-medium text-amber-200 hover:text-amber-100">Visit the garden →</Link>,
+      cta: <Link to="/garden" className="mt-6 link-gold">Visit the garden →</Link>,
       plaque: <PlaqueCanisMajor />,
     },
     {
       roman: "IV", eyebrow: "Their Sky", title: "The sky remembers the night they left.",
       body: "Every memorial carries the real constellation from the night they passed, paired with a hand-written line. Tap the sky on any memorial to feel it pulse.",
-      cta: <Link to="/garden" className="mt-6 inline-flex items-center text-[15px] font-medium text-amber-200 hover:text-amber-100">See a sky →</Link>,
+      cta: <Link to="/garden" className="mt-6 link-gold">See a sky →</Link>,
       plaque: <PlaqueTheirSky />,
     },
     {
       roman: "V", eyebrow: "The journal", title: "For the words you're not ready to say out loud.",
       body: "Private. Only yours. Written when the house is at its quietest.",
-      cta: <Link to="/journal" className="mt-6 inline-flex items-center text-[15px] font-medium text-amber-200 hover:text-amber-100">Open the journal →</Link>,
+      cta: <Link to="/journal" className="mt-6 link-gold">Open the journal →</Link>,
       plaque: <PlaqueJournal />,
     },
     {
       roman: "VI", eyebrow: "Grief support", title: "This grief is real. You're not overreacting.",
       body: (<>Free pet-loss support lines: <a href="tel:+18774743310" className="text-white/80 hover:text-white">ASPCA · 877-474-3310</a> · <a href="tel:+18559335683" className="text-white/80 hover:text-white">Lap of Love · 855-933-5683</a></>),
-      cta: <Link to="/grief-support" className="mt-6 inline-flex items-center text-[15px] font-medium text-amber-200 hover:text-amber-100">Grief support →</Link>,
+      cta: <Link to="/grief-support" className="mt-6 link-gold">Grief support →</Link>,
       plaque: <PlaqueSupport />,
     },
   ], [primaryCandle]);
@@ -865,7 +867,7 @@ function ClosingScene({ primaryCandle }: { primaryCandle: ReactNode }) {
         </p>
         <div className="mt-8 flex flex-col items-center gap-3">
           {primaryCandle}
-          <Link to="/create" className="text-[13px] text-white/60 underline-offset-4 hover:text-white/90 hover:underline">
+          <Link to="/create" className="link-gold">
             Create their memorial
           </Link>
         </div>
@@ -923,7 +925,7 @@ function GriefSection() {
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
           <Link
             to="/create/memorial"
-            className="inline-flex items-center rounded-full bg-gradient-to-b from-amber-200 to-amber-400 px-6 py-3 text-[14px] font-semibold text-[#1a1200] shadow-[0_0_28px_-6px_rgba(251,191,36,0.55)] hover:from-amber-100 hover:to-amber-300"
+            className="btn-gold ios-tappable"
           >
             Write a memorial
           </Link>
@@ -935,7 +937,7 @@ function GriefSection() {
           </Link>
           <Link
             to="/grief-support"
-            className="text-[13px] text-white/60 underline-offset-4 hover:text-white/90 hover:underline"
+            className="link-gold"
           >
             or find grief support →
           </Link>
