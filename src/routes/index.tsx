@@ -1078,8 +1078,7 @@ function RailCardView({ card, section }: { card: RailCard; section: string }) {
         highlight
           ? {
               backgroundColor: "rgba(24,44,34,0.9)",
-              boxShadow:
-                "inset 0 1px 0 rgba(120,220,160,0.18), 0 0 22px -12px rgba(80,220,140,0.55)",
+              boxShadow: "inset 0 1px 0 rgba(120,220,160,0.18)",
             }
           : undefined
       }
