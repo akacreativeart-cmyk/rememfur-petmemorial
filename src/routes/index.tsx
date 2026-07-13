@@ -422,7 +422,7 @@ function Hero({ primaryCandle }: { primaryCandle: ReactNode }) {
       </div>
 
       {/* BOTTOM: Vigil scene as normal-flow block — content above can never overlap */}
-      <div className="relative w-full h-[260px] md:h-[340px] overflow-hidden">
+      <div className="relative w-full h-[260px] md:h-[340px]">
         {/* Hill — full-width, always spans viewport */}
         <svg
           aria-hidden
@@ -436,9 +436,9 @@ function Hero({ primaryCandle }: { primaryCandle: ReactNode }) {
         {/* Dog perched on hill crest */}
         <div
           className="pointer-events-none absolute left-1/2 z-[3] -translate-x-1/2 vigil-dog-torso"
-          style={{ bottom: "24%", transformOrigin: "bottom center" }}
+          style={{ bottom: "20%", transformOrigin: "bottom center" }}
         >
-          <div className="w-[130px] md:w-[150px]">
+          <div className="w-[104px] md:w-[124px]">
             <VigilDog size={150} className="h-auto w-full" />
           </div>
         </div>
@@ -504,8 +504,8 @@ function Chapters({ primaryCandle }: { primaryCandle: ReactNode }) {
         {items.map((c, i) => (
           <Reveal key={c.eyebrow}>
             <div className={`grid items-center gap-8 md:grid-cols-2 md:gap-16 ${i % 2 === 1 ? "md:[&>*:first-child]:order-2" : ""}`}>
-              <div>
-                <p className="flex items-center gap-3 text-[11px] uppercase tracking-[0.3em] text-amber-200/70">
+              <div className="text-center md:text-left">
+                <p className="flex items-center justify-center md:justify-start gap-3 text-[11px] uppercase tracking-[0.3em] text-amber-200/70">
                   <span className="font-display text-[16px] not-italic text-[var(--gold)] tracking-normal">{c.roman}</span>
                   <span className="h-px w-8 bg-[var(--gold)]/40" />
                   {c.eyebrow}
@@ -516,7 +516,7 @@ function Chapters({ primaryCandle }: { primaryCandle: ReactNode }) {
                 <p className="mt-4 text-[15px] leading-relaxed text-white/70 md:text-lg">
                   {c.body}
                 </p>
-                <div>{c.cta}</div>
+                <div className="flex justify-center md:justify-start">{c.cta}</div>
               </div>
               <div className="flex justify-center">{c.plaque}</div>
             </div>
@@ -842,7 +842,7 @@ function ClosingScene({ primaryCandle }: { primaryCandle: ReactNode }) {
             {/* small hill */}
             <path d="M 0 300 C 200 270, 400 275, 600 285 C 700 290, 780 295, 800 298 L 800 320 L 0 320 Z" fill="#04060D" />
           </svg>
-          <div className="absolute left-1/2 bottom-[6%] -translate-x-1/2 vigil-dog-torso" style={{ transformOrigin: "bottom center" }}>
+          <div className="absolute left-1/2 bottom-[10%] -translate-x-1/2 vigil-dog-torso" style={{ transformOrigin: "bottom center" }}>
             <VigilDog size={90} />
           </div>
         </div>
@@ -1051,9 +1051,9 @@ function RailSection({
       </div>
 
       <div
-        className="mx-auto mt-5 max-w-[1400px] overflow-x-auto px-5 pb-3 md:px-8 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+        className="mx-auto mt-5 max-w-[1400px] overflow-x-auto px-5 py-4 md:px-8 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
       >
-        <ul className="flex snap-x snap-mandatory gap-3">
+        <ul className="flex snap-x snap-mandatory gap-3 pr-5 md:pr-8">
           {cards.map((c) => (
             <li key={c.key} className="snap-start">
               <RailCardView card={c} section={section} />
@@ -1078,8 +1078,7 @@ function RailCardView({ card, section }: { card: RailCard; section: string }) {
         highlight
           ? {
               backgroundColor: "rgba(24,44,34,0.9)",
-              boxShadow:
-                "inset 0 1px 0 rgba(120,220,160,0.18), 0 0 22px -12px rgba(80,220,140,0.55)",
+              boxShadow: "inset 0 1px 0 rgba(120,220,160,0.18)",
             }
           : undefined
       }
