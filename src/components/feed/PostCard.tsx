@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { MessageCircle, Trash2, Flower2, Flame } from "lucide-react";
 import { PawIcon } from "@/components/site/PawIcon";
+import { PawLamp } from "@/components/site/PawLamp";
 import { useAuth } from "@/hooks/use-auth";
 import {
   addComment,
@@ -219,7 +220,7 @@ export function PostCard({ post }: { post: FeedPost }) {
                 aria-label="Light a paw lamp"
                 className="candle-pulse relative flex items-center gap-1.5 rounded-full bg-[color-mix(in_oklab,var(--cta)_14%,transparent)] px-3 py-1.5 text-sm font-medium text-[var(--cta)] transition hover:bg-[color-mix(in_oklab,var(--cta)_24%,transparent)] active:scale-95"
               >
-                <Flame className="h-4 w-4 flame-flicker" />
+                <span className="inline-flex"><PawLamp size={16} glow={false} /></span>
                 <span key={popKey} className="count-pop tabular-nums">
                   {candleData?.count ?? 0}
                 </span>
@@ -255,10 +256,10 @@ export function PostCard({ post }: { post: FeedPost }) {
             </div>
           ) : (
             <span
-              aria-label="Candles burning"
+              aria-label="Paw lamps burning"
               className="flex items-center gap-1.5 rounded-full bg-muted/60 px-3 py-1.5 text-sm text-muted-foreground"
             >
-              <Flame className="h-4 w-4" />
+              <PawLamp size={14} glow={false} />
               0 burning
             </span>
           )}
@@ -280,8 +281,8 @@ export function PostCard({ post }: { post: FeedPost }) {
         {post.memorial_slug && candleData && candleData.candles.length > 0 && (
           <div className="rounded-xl border border-[color-mix(in_oklab,var(--cta)_25%,transparent)] bg-[color-mix(in_oklab,var(--cta)_6%,transparent)] p-3">
             <div className="mb-2 flex items-center gap-1.5 text-xs font-medium uppercase tracking-wider text-[var(--cta)]">
-              <Flame className="h-3.5 w-3.5" />
-              Candles lit {candleData.count > candleData.candles.length ? `(showing ${candleData.candles.length} of ${candleData.count})` : `(${candleData.count})`}
+              <PawLamp size={14} glow={false} />
+              Paw lamps lit {candleData.count > candleData.candles.length ? `(showing ${candleData.candles.length} of ${candleData.count})` : `(${candleData.count})`}
             </div>
             <ul className="space-y-2">
               {candleData.candles.map((c) => (
@@ -290,7 +291,7 @@ export function PostCard({ post }: { post: FeedPost }) {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-2">
                       <div className="text-xs font-medium text-foreground">{c.lit_by_name ?? "A friend"}</div>
-                      <ReportButton contentType="candle" contentId={c.id} label="Report candle" />
+                      <ReportButton contentType="candle" contentId={c.id} label="Report paw lamp" />
                     </div>
                     {c.message && (
                       <div className="whitespace-pre-line text-sm leading-snug text-foreground/85">{c.message}</div>

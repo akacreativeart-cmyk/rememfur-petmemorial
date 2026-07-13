@@ -245,7 +245,7 @@ function SettingsPage() {
               className="mt-0.5"
             />
             <span className="text-foreground/85">
-              Also delete every memorial I've created, along with their candles, messages, and photos.
+              Also delete every memorial I've created, along with their paw lamps, messages, and photos.
               <span className="mt-0.5 block text-xs text-muted-foreground">This cannot be undone.</span>
             </span>
           </label>
@@ -265,7 +265,7 @@ function SettingsPage() {
                 </AlertDialogTitle>
                 <AlertDialogDescription>
                   {purge
-                    ? "This will remove your account and every memorial you created — candles, messages, and photos included."
+                    ? "This will remove your account and every memorial you created — paw lamps, messages, and photos included."
                     : "This will close your account. The memorials you created will stay online in loving memory, but no one will be able to edit them anymore."}
                 </AlertDialogDescription>
               </AlertDialogHeader>

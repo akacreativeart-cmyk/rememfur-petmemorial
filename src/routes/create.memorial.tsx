@@ -331,7 +331,7 @@ function CreatePage() {
         <div>
           <h1 className="font-display text-4xl text-foreground">Create a memorial</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            A gentle ritual: photo, transform, tribute, candle.
+            A gentle ritual: photo, transform, tribute, paw lamp.
           </p>
         </div>
         {step < 5 && (hasProgress ? (
@@ -390,7 +390,7 @@ function CreatePage() {
           />
         </div>
         <ol className="mt-4 flex items-center gap-3 text-xs">
-          {["Photo", "Transform", "Tribute", "Candle"].map((label, i) => {
+          {["Photo", "Transform", "Tribute", "Paw lamp"].map((label, i) => {
             const n = i + 1;
             const active = step === n;
             const done = step > n;
@@ -636,7 +636,7 @@ function CreatePage() {
                 <div>
                   <div className="font-display text-lg text-foreground">Gravestone keepsake</div>
                   <p className="text-xs text-muted-foreground">
-                    A gentle headstone with their name, dates, a small message, fresh flowers and a burning candle.
+                    A gentle headstone with their name, dates, a small message, fresh flowers and a burning paw lamp.
                   </p>
                 </div>
                 <Button
@@ -677,8 +677,8 @@ function CreatePage() {
             <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-[color-mix(in_oklab,var(--cta)_15%,transparent)] candle-glow">
               <Heart className="h-9 w-9 text-[var(--cta)]" />
             </div>
-            <h2 className="mt-5 font-display text-3xl text-foreground">Light their first candle</h2>
-            <p className="mt-2 text-sm text-muted-foreground">A flame to mark the moment.</p>
+            <h2 className="mt-5 font-display text-3xl text-foreground">Light their first paw lamp</h2>
+            <p className="mt-2 text-sm text-muted-foreground">A warm light to mark the moment.</p>
             <div className="mx-auto mt-5 max-w-md text-left">
               <Label htmlFor="cm">A few words (optional)</Label>
               <Textarea id="cm" rows={3} value={candleMsg} onChange={(e) => setCandleMsg(e.target.value)} placeholder="Rest gently, sweet friend." />
@@ -686,7 +686,7 @@ function CreatePage() {
             <div className="mt-7 flex justify-center gap-3">
               <Button variant="ghost" onClick={() => setStep(3)} className="rounded-full">Back</Button>
               <Button disabled={submitting} onClick={finish} size="lg" className="rounded-full bg-[var(--cta)] px-7 text-[var(--cta-foreground)] hover:bg-[var(--cta-deep)]">
-                {submitting ? "Lighting…" : "Light candle & publish"}
+                {submitting ? "Lighting…" : "Light paw lamp & publish"}
               </Button>
             </div>
           </section>

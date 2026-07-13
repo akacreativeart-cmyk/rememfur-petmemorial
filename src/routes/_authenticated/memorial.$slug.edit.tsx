@@ -189,7 +189,7 @@ function EditMemorialPage() {
             <div>
               <div className="text-sm font-medium text-foreground">Public memorial</div>
               <div className="text-xs text-muted-foreground">
-                Visible in the Memorial Garden so others can light candles.
+                Visible in the Memorial Garden so others can light paw lamps.
               </div>
             </div>
             <Switch checked={isPublic} onCheckedChange={setIsPublic} />
@@ -251,7 +251,7 @@ function EditMemorialPage() {
                   Take down {m.pet_name}'s memorial?
                 </AlertDialogTitle>
                 <AlertDialogDescription>
-                  This will quietly take down {m.pet_name}'s memorial and its candles. This can be undone by contacting support.
+                  This will quietly take down {m.pet_name}'s memorial and its paw lamps. This can be undone by contacting support.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>

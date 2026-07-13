@@ -16,8 +16,8 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
 });
 
 const TYPE_LABEL: Record<string, { verb: string; icon: typeof Flame }> = {
-  candle: { verb: "candles were lit", icon: Flame },
-  candle_lit: { verb: "candles were lit", icon: Flame },
+  candle: { verb: "paw lamps were lit", icon: Flame },
+  candle_lit: { verb: "paw lamps were lit", icon: Flame },
   comment: { verb: "new messages", icon: MessageCircle },
   message: { verb: "new messages", icon: MessageCircle },
   like: { verb: "hearts", icon: Heart },
@@ -26,8 +26,8 @@ const TYPE_LABEL: Record<string, { verb: string; icon: typeof Flame }> = {
 
 function phrase(count: number, type: string, petName: string) {
   const meta = TYPE_LABEL[type] ?? { verb: "moments", icon: Flame };
-  if (meta.verb === "candles were lit") {
-    return count === 1 ? `A candle was lit for ${petName} while you were away` : `${count} candles were lit for ${petName} while you were away`;
+  if (meta.verb === "paw lamps were lit") {
+    return count === 1 ? `A paw lamp was lit for ${petName} while you were away` : `${count} paw lamps were lit for ${petName} while you were away`;
   }
   if (meta.verb === "new messages") {
     return count === 1 ? `A new message was left for ${petName}` : `${count} new messages were left for ${petName}`;

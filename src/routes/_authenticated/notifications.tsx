@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { Bell, Flame, MessageCircle, PawPrint, UserPlus, Mail, CheckCheck } from "lucide-react";
+import { PawLamp } from "@/components/site/PawLamp";
 import { Button } from "@/components/ui/button";
 import {
   listNotifications,
@@ -15,7 +16,7 @@ export const Route = createFileRoute("/_authenticated/notifications")({
 });
 
 const ICONS: Record<string, any> = {
-  candle: Flame,
+  candle: PawLamp,
   paw: PawPrint,
   comment: MessageCircle,
   message: Mail,
@@ -57,7 +58,7 @@ function NotificationsPage() {
         <div>
           <h1 className="font-display text-4xl text-foreground">Notifications</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Every candle lit, every kind word left — quietly gathered here.
+            Every paw lamp lit, every kind word left — quietly gathered here.
           </p>
         </div>
         {unreadCount > 0 && (

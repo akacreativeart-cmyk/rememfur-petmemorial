@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import { ChevronDown, ShoppingBag, Utensils, Shirt, Stethoscope, Shield, Sparkles, Flame, PawPrint, HandHeart, MapPin, Skull, Cake, HeartHandshake } from "lucide-react";
+import { useEffect, useMemo, useRef, useState, type ComponentType, type ReactNode, type SVGProps } from "react";
+import { ChevronDown, Utensils, Shirt, Stethoscope, Shield, Sparkles, PawPrint, HandHeart, MapPin, Skull, Cake, HeartHandshake, Home, Heart, Users, BookOpen, Feather, Cross, Gift } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { SiteHeader } from "@/components/site/SiteHeader";
@@ -8,6 +8,7 @@ import { SiteFooter } from "@/components/site/SiteFooter";
 import { CandleDialog } from "@/components/site/CandleDialog";
 import { IntroSequence } from "@/components/site/IntroSequence";
 import { WaitlistDialog } from "@/components/site/WaitlistDialog";
+import { PawLamp } from "@/components/site/PawLamp";
 import {
   pickFeaturedMemorial,
   listRecentCandles,
@@ -271,7 +272,7 @@ function HomePage() {
               type="button"
               className="btn-gold ios-tappable"
             >
-              <Flame className="h-4 w-4" strokeWidth={2} />
+              <PawLamp size={18} />
               {label}
             </button>
           }
@@ -281,7 +282,7 @@ function HomePage() {
           to="/garden"
           className="btn-gold ios-tappable"
         >
-          <Flame className="h-4 w-4" strokeWidth={2} />
+          <PawLamp size={18} />
           {label}
         </Link>
       );
@@ -294,40 +295,27 @@ function HomePage() {
       <SiteHeader />
 
       {/* A · HERO — grief-first CTA */}
-      <Hero />
+      <Hero primaryCandle={primaryCandle("Light a paw lamp")} />
 
-      {/* A2 · STARS INTRO */}
-      <section className="relative px-5 py-16 text-center md:px-8 md:py-20">
-        <Reveal className="mx-auto max-w-2xl">
-          <p className="text-[11px] uppercase tracking-[0.32em] text-amber-200/70">They are the stars now</p>
-          <h2 className="mt-3 font-display text-[26px] leading-[1.2] text-[#f5e6c8]/95 md:text-[34px]">
-            Our beloved pets are the stars in the sky, watching over us.
-          </h2>
-          <p className="mt-5 text-[15px] leading-relaxed text-white/70 md:text-[17px]">
-            The ancients put a dog in the stars — <span className="italic">Canis Major</span>, with <span className="italic">Sirius</span> as its bright eye — so it would never be forgotten. Every pet who is loved here becomes a small light in the same sky, burning gently beside all the others.
-          </p>
-        </Reveal>
-        <Divider />
-      </section>
-
-      {/* A3 · GRIEF THAT HAS NOWHERE TO GO */}
-      <GriefSection />
-
-      {/* A4 · ECOSYSTEM CARDS */}
-      <EcosystemSection />
-
-      {/* B · PASSAGE */}
+      {/* A2 · PASSAGE — they were never "just" a pet */}
       <section className="relative px-5 py-20 text-center md:px-8 md:py-28">
         <Reveal className="mx-auto max-w-3xl">
           <h2 className="font-display italic text-[24px] leading-[1.3] text-[#f5e6c8]/90 md:text-[34px] lg:text-[38px]">
-            They were not <span className="not-italic">"just a dog."</span> Not <span className="not-italic">"just a cat."</span> They were seventeen years of coming home to someone.
+            They were never <span className="not-italic">"just"</span> a pet. They were years of coming home to someone.
           </h2>
           <p className="mt-6 font-display text-[18px] leading-[1.5] text-white/70 md:text-[22px]">
-            All that love doesn't disappear. It just needs somewhere to go — a paw lamp, a page that stays, a sky that remembers.
+            All that love doesn't disappear when they do. It just needs somewhere to go — a paw lamp in the dark, a memorial that stays, a star in a sky that remembers.
           </p>
         </Reveal>
         <Divider />
       </section>
+
+      {/* A3 · GRIEF THAT BELONGS SOMEWHERE */}
+      <GriefBelongingSection />
+
+      {/* A4 · MARKETPLACE / CARE RAILS */}
+      <CareRail />
+      <MarketplaceRail />
 
       {/* C · SIX CHAPTERS */}
       <Chapters primaryCandle={primaryCandle("Light theirs now")} />
@@ -392,7 +380,7 @@ function HomePage() {
 
 /* ────────── HERO ────────── */
 
-function Hero() {
+function Hero({ primaryCandle }: { primaryCandle: ReactNode }) {
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -413,21 +401,21 @@ function Hero() {
       {/* TOP: story + CTA in normal flow, centered vertically in remaining space */}
       <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-5 pb-8 pt-20 text-center md:pt-24">
         <div className="mx-auto flex w-full max-w-md flex-col items-center md:max-w-2xl">
-          <h1 className="rise-in font-display text-[32px] leading-[1.05] tracking-tight text-white md:text-6xl lg:text-7xl" style={{ animationDelay: "0.3s" }}>
-            Grief is just love
-            <br className="hidden sm:inline" /> with nowhere to go.
+          <p className="rise-in text-[11px] uppercase tracking-[0.32em] text-amber-200/75" style={{ animationDelay: "0.1s" }}>
+            In loving memory · and in living joy
+          </p>
+          <h1 className="rise-in mt-4 font-display text-[30px] leading-[1.08] tracking-tight text-white md:text-6xl lg:text-[64px]" style={{ animationDelay: "0.3s" }}>
+            Our beloved companions become the{" "}
+            <span className="italic text-[var(--gold)]">stars that watch over us</span>.
           </h1>
+          <p className="rise-in mt-5 font-display italic text-[17px] leading-[1.55] text-white/75 md:text-[20px]" style={{ animationDelay: "0.7s" }}>
+            Grief this deep needs somewhere to belong. Here, it does.
+          </p>
 
-          <div className="rise-in mt-10 flex flex-col items-center gap-3" style={{ animationDelay: "1.1s" }}>
-            <Link
-              to="/garden"
-              className="btn-gold ios-tappable"
-            >
-              <Flame className="h-4 w-4" strokeWidth={2} />
-              Light a candle
-            </Link>
+          <div className="rise-in mt-8 flex flex-col items-center gap-3" style={{ animationDelay: "1.1s" }}>
+            {primaryCandle}
             <Link to="/create/memorial" className="link-gold">
-              Create their memorial
+              Write a memorial
             </Link>
           </div>
         </div>
@@ -479,8 +467,8 @@ function Chapters({ primaryCandle }: { primaryCandle: ReactNode }) {
       plaque: <PlaqueMedallion />,
     },
     {
-      roman: "II", eyebrow: "Stars", title: "Anyone can release one. No account. No noise.",
-      body: "Each drifts up into the night sky. The count stays forever.",
+      roman: "II", eyebrow: "Paw lamps", title: "A warm light in their name.",
+      body: "Anyone can light a paw lamp — no account, no noise. Each one burns quietly beside the others, and the count stays forever.",
       cta: primaryCandle,
       plaque: <PlaqueCandles />,
     },
@@ -740,20 +728,20 @@ function CandleStrip({ candles, weekCount, loading }: {
 }) {
   const enough = candles.length >= 3;
   return (
-    <section aria-label="Recent candles" className="relative px-0 pt-8 md:pt-12">
+    <section aria-label="Recent paw lamps" className="relative px-0 pt-8 md:pt-12">
       <div className="mx-auto max-w-md px-5 md:max-w-[1200px] md:px-8">
         <Reveal>
           <h2 className="text-center font-display text-[28px] leading-[1.1] tracking-tight text-white md:text-5xl">
-            Strangers release stars for pets they never met.
+            Strangers light paw lamps for pets they never met.
           </h2>
           <p className="mt-4 text-center text-[15px] leading-relaxed text-white/65 md:text-lg">
-            Every star is a pet who was deeply loved.
+            Every small light is a pet who was deeply loved.
           </p>
         </Reveal>
         <div className="mt-10 flex items-baseline justify-between">
-          <p className="text-[11px] uppercase tracking-[0.28em] text-amber-200/70">Stars in the sky</p>
+          <p className="text-[11px] uppercase tracking-[0.28em] text-amber-200/70">Paw lamps burning</p>
           {!loading && weekCount > 0 && (
-            <p className="text-[11px] text-white/50">{weekCount} released this week</p>
+            <p className="text-[11px] text-white/50">{weekCount} lit this week</p>
           )}
         </div>
       </div>
@@ -791,7 +779,7 @@ function CandleStrip({ candles, weekCount, loading }: {
             <div className="oc-candle" style={{ height: 46, width: 20 }}>
               <span className="oc-flame"><span className="l1" /><span className="l2" /><span className="l3" /></span>
             </div>
-            <p className="mt-4 font-display text-[17px] text-white">The sky is just beginning. Release one of the first stars.</p>
+            <p className="mt-4 font-display text-[17px] text-white">The sky is just beginning. Light one of the first paw lamps.</p>
             <p className="mt-1 text-[13px] text-white/55">No account needed.</p>
           </div>
         </div>
@@ -901,146 +889,222 @@ function FaqItem({ q, a }: { q: string; a: string }) {
   );
 }
 
-/* ────────── Grief section ────────── */
+/* ────────── Grief belonging section ────────── */
 
-function GriefSection() {
+function GriefBelongingSection() {
+  const cards = [
+    {
+      Icon: PawLamp as ComponentType<{ size?: number; className?: string }>,
+      title: "Express it",
+      body: "Light a paw lamp, write to them, keep a private journal only you can read.",
+    },
+    {
+      Icon: Users,
+      title: "Belong somewhere",
+      body: "A community who won't say 'it was just a dog' — because for them, it never was.",
+    },
+    {
+      Icon: BookOpen,
+      title: "Be guided",
+      body: "Gentle guidance for the first night, telling children, guilt, and anniversaries.",
+    },
+  ];
   return (
     <section className="relative px-5 py-16 md:px-8 md:py-24">
       <Reveal className="mx-auto max-w-3xl text-center">
-        <p className="text-[11px] uppercase tracking-[0.32em] text-amber-200/70">Grief with nowhere to go</p>
-        <h2 className="mt-3 font-display text-[30px] leading-[1.1] tracking-tight text-white md:text-5xl">
-          Pet grief is real. And it's often invisible.
+        <p className="text-[11px] uppercase tracking-[0.32em] text-amber-200/70">
+          The grief no one prepares you for
+        </p>
+        <h2 className="mt-3 font-display text-[28px] leading-[1.15] tracking-tight text-white md:text-[42px]">
+          This love was real. So the loss is real grief — even if the world calls it small.
         </h2>
         <div className="mx-auto mt-6 max-w-2xl space-y-4 text-left text-[15px] leading-relaxed text-white/70 md:text-[17px]">
           <p>
-            The world doesn't always know how to hold it. There's no funeral leave, no casserole, sometimes not even a nod. So the grief sits inside, quietly, and finds nowhere to go.
+            Grief researchers call this <span className="italic">disenfranchised grief</span> — a loss that is
+            profound to you but unacknowledged by others. People expect you "over it" in a matter of days.
+            You feel like you have to apologise for still crying.
           </p>
           <p>
-            You loved them daily — the small rituals, the shared shadows, the weight against your leg. Losing that isn't small. It's a real ending, and it deserves a real place to be spoken.
+            Grief held alone hardens. Grief spoken aloud to people who understand softens. That's why
+            this place exists — a small ritual to give the love somewhere to go, and a community that
+            already knows what you're carrying.
           </p>
-          <p>
-            This is that place. Write it down, share it if you want, or simply read what others have written and know you're not alone. There are no time limits on this kind of love.
-          </p>
-        </div>
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-          <Link
-            to="/create/memorial"
-            className="btn-gold ios-tappable"
-          >
-            Write a memorial
-          </Link>
-          <Link
-            to="/community"
-            className="inline-flex items-center rounded-full border border-white/20 px-6 py-3 text-[14px] font-medium text-white/85 hover:border-white/40 hover:bg-white/5"
-          >
-            Join the community
-          </Link>
-          <Link
-            to="/grief-support"
-            className="link-gold"
-          >
-            or find grief support →
-          </Link>
         </div>
       </Reveal>
+
+      <div className="mx-auto mt-10 grid max-w-md gap-4 md:mt-14 md:max-w-[1100px] md:grid-cols-3 md:gap-6">
+        {cards.map((c) => (
+          <Reveal key={c.title}>
+            <div className="flex h-full flex-col items-start rounded-2xl bg-white/[0.04] p-6 ring-1 ring-white/10">
+              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/[0.06] text-[var(--gold)]">
+                <c.Icon size={22} className="h-5 w-5" />
+              </div>
+              <h3 className="mt-4 font-display text-[20px] text-white">{c.title}</h3>
+              <p className="mt-2 text-[14px] leading-relaxed text-white/65">{c.body}</p>
+            </div>
+          </Reveal>
+        ))}
+      </div>
+
+      <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
+        <Link to="/create/memorial" className="btn-gold ios-tappable">
+          Write a memorial
+        </Link>
+        <Link
+          to="/community"
+          className="inline-flex items-center rounded-full border border-white/20 px-6 py-3 text-[14px] font-medium text-white/85 hover:border-white/40 hover:bg-white/5"
+        >
+          Join the community
+        </Link>
+        <Link to="/grief-support" className="link-gold">
+          or find grief support →
+        </Link>
+      </div>
       <Divider />
     </section>
   );
 }
 
-/* ────────── Ecosystem section ────────── */
+/* ────────── Marketplace rails ────────── */
 
-type Service = {
+type IconType = ComponentType<SVGProps<SVGSVGElement> & { size?: number | string }>;
+
+type RailCard = {
   key: string;
   title: string;
   desc: string;
-  Icon: typeof ShoppingBag;
-  nonCommercial?: boolean;
-  previewTo?: string;
+  Icon: IconType;
+  highlight?: boolean;
 };
 
-const SERVICES: Service[] = [
-  { key: "donation", title: "Donation", desc: "For shelters and people caring for pets in need.", Icon: HandHeart, nonCommercial: true },
-  { key: "strays", title: "Tag your strays", desc: "Mark and watch over neighbourhood strays.", Icon: MapPin, nonCommercial: true },
-  { key: "adoption", title: "Adoption", desc: "Find your next companion — no puppy mills, ever.", Icon: HeartHandshake, nonCommercial: true, previewTo: "/adoption" },
-  { key: "birthdays", title: "Birthdays", desc: "Celebrate the days they came into the world.", Icon: Cake, nonCommercial: true },
-  { key: "marketplace", title: "Memorabilia marketplace", desc: "Handmade paw prints, portraits, keepsakes.", Icon: ShoppingBag, previewTo: "/marketplace" },
-  { key: "food", title: "Healthy pet food", desc: "Only super healthy, non-commercial food. No fillers.", Icon: Utensils },
-  { key: "apparel", title: "Apparel", desc: "Small-batch clothing and accessories for both of you.", Icon: Shirt },
+const CARE_CARDS: RailCard[] = [
+  { key: "adoption", title: "Adoption", desc: "Give a waiting companion a home. Verified shelters & rescues.", Icon: Home, highlight: true },
+  { key: "donate", title: "Donate to care", desc: "Fund a shelter, or help a person who can't afford care for their pet.", Icon: Heart, highlight: true },
+  { key: "strays", title: "Tag a stray", desc: "Map and tag neighbourhood strays so the community can watch over them.", Icon: MapPin, highlight: true },
   { key: "vets", title: "Vets", desc: "Vetted local vets, second opinions, gentle care.", Icon: Stethoscope },
-  { key: "insurance", title: "Insurance", desc: "Honest, jargon-free pet insurance.", Icon: Shield },
-  { key: "whisperer", title: "Pet whisperer", desc: "Behaviour help, training, and communication.", Icon: Sparkles },
-  { key: "funeral", title: "Funeral services", desc: "Cremation, home burial, and after-care.", Icon: Skull },
+  { key: "whisperer", title: "Pet whisperer", desc: "Behaviour help, training, and quiet communication.", Icon: Feather },
 ];
 
-function EcosystemSection() {
+const MARKET_CARDS: RailCard[] = [
+  { key: "food", title: "Healthy food", desc: "Only genuinely wholesome, non-junk nutrition.", Icon: Utensils },
+  { key: "apparel", title: "Apparel", desc: "Small-batch clothing and accessories for both of you.", Icon: Shirt },
+  { key: "insurance", title: "Insurance", desc: "Honest, jargon-free pet insurance.", Icon: Shield },
+  { key: "funeral", title: "Funeral services", desc: "Cremation, home burial, and after-care.", Icon: Cross },
+  { key: "birthdays", title: "Birthdays", desc: "Celebrate the days they came into the world.", Icon: Cake },
+  { key: "keepsakes", title: "Keepsakes", desc: "Handmade paw prints, portraits, and memorabilia.", Icon: Gift },
+  { key: "training", title: "Enrichment", desc: "Play, puzzles, and gentle brain-work for a full life.", Icon: Sparkles },
+  { key: "wellbeing", title: "Wellbeing", desc: "Supplements, recovery, and everyday care.", Icon: PawPrint },
+];
+
+function CareRail() {
   return (
-    <section className="relative px-0 py-16 md:py-24">
+    <RailSection
+      title="Care, honour & good karma"
+      kicker={
+        <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/40 bg-emerald-500/10 px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider text-emerald-200">
+          <HandHeart className="h-3 w-3" /> Non-commercial first
+        </span>
+      }
+      cards={CARE_CARDS}
+      section="kind"
+    />
+  );
+}
+
+function MarketplaceRail() {
+  return (
+    <RailSection
+      title="For the life you share"
+      kicker={
+        <span className="inline-flex items-center rounded-full border border-white/15 bg-white/[0.04] px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider text-white/70">
+          Marketplace
+        </span>
+      }
+      cards={MARKET_CARDS}
+      section="marketplace"
+    />
+  );
+}
+
+function RailSection({
+  title,
+  kicker,
+  cards,
+  section,
+}: {
+  title: string;
+  kicker: ReactNode;
+  cards: RailCard[];
+  section: string;
+}) {
+  return (
+    <section className="relative px-0 py-10 md:py-14">
       <div className="mx-auto max-w-md px-5 md:max-w-[1200px] md:px-8">
-        <Reveal className="text-center">
-          <p className="text-[11px] uppercase tracking-[0.32em] text-amber-200/70">An ecosystem for the ones we love</p>
-          <h2 className="mt-3 font-display text-[30px] leading-[1.1] tracking-tight text-white md:text-5xl">
-            More than a memorial.
-          </h2>
-          <p className="mx-auto mt-4 max-w-xl text-[15px] leading-relaxed text-white/70 md:text-[17px]">
-            A home for every part of their life — from the food they eat to the way they're remembered. Non-commercial and community pieces come first.
-          </p>
+        <Reveal>
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h2 className="font-display text-[22px] leading-tight tracking-tight text-white md:text-[30px]">
+              {title}
+            </h2>
+            {kicker}
+          </div>
         </Reveal>
       </div>
 
-      <div className="mx-auto mt-10 max-w-[1400px] overflow-x-auto px-5 pb-3 md:px-8 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-        <ul className="flex snap-x snap-mandatory gap-4">
-          {SERVICES.map((s) => (
-            <li key={s.key} className="snap-start">
-              <ServiceCard service={s} />
+      <div
+        className="mx-auto mt-5 max-w-[1400px] overflow-x-auto px-5 pb-3 md:px-8 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+      >
+        <ul className="flex snap-x snap-mandatory gap-3">
+          {cards.map((c) => (
+            <li key={c.key} className="snap-start">
+              <RailCardView card={c} section={section} />
             </li>
           ))}
         </ul>
       </div>
-      <p className="mt-4 text-center text-[11px] uppercase tracking-[0.24em] text-white/40">
-        Scroll →&nbsp;&nbsp; tap any card to be notified when it opens
-      </p>
     </section>
   );
 }
 
-function ServiceCard({ service }: { service: Service }) {
-  const { title, desc, Icon, nonCommercial, previewTo } = service;
-  const highlight = nonCommercial;
+function RailCardView({ card, section }: { card: RailCard; section: string }) {
+  const { title, desc, Icon, highlight } = card;
   return (
     <div
-      className={`flex h-full w-[260px] shrink-0 flex-col rounded-2xl p-5 ring-1 transition ${
+      className={`relative flex h-full w-[210px] shrink-0 flex-col rounded-2xl p-4 ring-1 transition ${
         highlight
-          ? "bg-gradient-to-br from-amber-400/12 via-amber-400/[0.04] to-transparent ring-amber-400/40"
+          ? "ring-emerald-400/40"
           : "bg-white/[0.04] ring-white/10"
       }`}
+      style={
+        highlight
+          ? {
+              backgroundColor: "rgba(24,44,34,0.9)",
+              boxShadow:
+                "inset 0 1px 0 rgba(120,220,160,0.18), 0 0 22px -12px rgba(80,220,140,0.55)",
+            }
+          : undefined
+      }
     >
-      <div className="flex items-center justify-between">
-        <div
-          className={`flex h-10 w-10 items-center justify-center rounded-xl ${
-            highlight ? "bg-amber-400/20 text-amber-200" : "bg-white/10 text-white/85"
-          }`}
-        >
-          <Icon className="h-5 w-5" />
-        </div>
-        {highlight && (
-          <span className="rounded-full bg-amber-400/20 px-2 py-0.5 text-[9px] font-medium uppercase tracking-wider text-amber-200">
-            Non-commercial
-          </span>
-        )}
+      <div
+        className={`flex h-9 w-9 items-center justify-center rounded-xl ${
+          highlight
+            ? "bg-emerald-500/15 text-emerald-300"
+            : "bg-white/[0.06] text-[var(--gold)]"
+        }`}
+      >
+        <Icon className="h-[18px] w-[18px]" strokeWidth={1.5} />
       </div>
-      <h3 className="mt-4 font-display text-[18px] leading-tight text-white">{title}</h3>
-      <p className="mt-1.5 flex-1 text-[13px] leading-relaxed text-white/60">{desc}</p>
-      <div className="mt-4 flex items-center justify-between">
+      <h3 className="mt-3 font-display text-[16px] leading-tight text-white">{title}</h3>
+      <p className="mt-1 flex-1 text-[12.5px] leading-relaxed text-white/60">{desc}</p>
+      <div className="mt-3">
         <WaitlistDialog
           itemName={title}
-          section="landing-ecosystem"
+          section={section}
           trigger={
             <button
               type="button"
-              className={`rounded-full px-3.5 py-1.5 text-[12px] font-medium transition ${
+              className={`w-full rounded-full px-3 py-1.5 text-[12px] font-medium transition ${
                 highlight
-                  ? "bg-amber-400/25 text-amber-100 hover:bg-amber-400/40"
+                  ? "bg-emerald-500/20 text-emerald-100 hover:bg-emerald-500/30"
                   : "bg-white/10 text-white/85 hover:bg-white/20"
               }`}
             >
@@ -1048,13 +1112,9 @@ function ServiceCard({ service }: { service: Service }) {
             </button>
           }
         />
-        {previewTo && (
-          <Link to={previewTo} className="text-[11px] text-white/50 underline-offset-2 hover:text-white/80 hover:underline">
-            Preview →
-          </Link>
-        )}
       </div>
     </div>
   );
 }
+
 
