@@ -26,7 +26,7 @@ export const Route = createFileRoute("/admin")({
 });
 
 const LABELS: Record<AdminReport["content_type"], string> = {
-  candle: "Candle",
+  candle: "Paw lamp",
   message: "Message",
   post: "Post",
   comment: "Comment",
