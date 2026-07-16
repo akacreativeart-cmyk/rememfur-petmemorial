@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useMemo, useRef, useState, type ComponentType, type ReactNode, type SVGProps } from "react";
-import { ChevronDown, Utensils, Shirt, Stethoscope, Shield, Sparkles, PawPrint, HandHeart, MapPin, Skull, Cake, HeartHandshake, Home, Heart, Users, BookOpen, Feather, Cross, Gift, Bell } from "lucide-react";
+import { useEffect, useMemo, useRef, useState, type ComponentType, type CSSProperties, type ReactNode, type SVGProps } from "react";
+import { ChevronDown, Utensils, Shirt, Stethoscope, Shield, Sparkles, PawPrint, HandHeart, MapPin, Skull, Cake, HeartHandshake, Home, Heart, Users, BookOpen, Feather, Cross, Gift, Bell, Mail, Moon, CalendarClock, ShoppingBag, MessagesSquare } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { SiteHeader } from "@/components/site/SiteHeader";
@@ -8,12 +8,15 @@ import { SiteFooter } from "@/components/site/SiteFooter";
 import { CandleDialog } from "@/components/site/CandleDialog";
 import { IntroSequence } from "@/components/site/IntroSequence";
 import { WaitlistDialog } from "@/components/site/WaitlistDialog";
+import { BetaInviteDialog } from "@/components/site/BetaInviteDialog";
 import { PawLamp } from "@/components/site/PawLamp";
 import {
   pickFeaturedMemorial,
   listRecentCandles,
   countCandlesThisWeek,
 } from "@/lib/candle-guest.functions";
+
+type WorldMode = "memory" | "life";
 
 export const Route = createFileRoute("/")({
   component: HomePage,
