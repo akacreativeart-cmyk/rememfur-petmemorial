@@ -543,7 +543,23 @@ function Hero({ primaryCandle, onLastLetter }: { primaryCandle: ReactNode; onLas
 
 /* ────────── SIX CHAPTERS ────────── */
 
-function Chapters({ primaryCandle }: { primaryCandle: ReactNode }) {
+function Chapters({ primaryCandle, onDev }: { primaryCandle: ReactNode; onDev?: (source: string) => void }) {
+  const devPill = (
+    <span className="inline-flex items-center gap-1 rounded-full border border-white/15 px-2 py-[3px] text-[9px] font-medium uppercase tracking-[0.22em] text-white/55">
+      In development
+    </span>
+  );
+  const devCta = (source: string, label: string) => (
+    <button
+      type="button"
+      onClick={() => onDev?.(source)}
+      className="mt-6 inline-flex items-center gap-2 rounded-full border border-[var(--gold)]/40 bg-white/[0.03] px-5 py-2.5 text-[13px] font-medium text-[var(--gold)] hover:bg-white/[0.06]"
+    >
+      <Sparkles className="h-4 w-4" />
+      {label}
+    </button>
+  );
+
   const items = useMemo(() => [
     {
       roman: "I", eyebrow: "Their memorial", title: "A page that stays.",
@@ -581,7 +597,21 @@ function Chapters({ primaryCandle }: { primaryCandle: ReactNode }) {
       cta: <Link to="/grief-support" className="mt-6 link-gold">Grief support →</Link>,
       plaque: <PlaqueSupport />,
     },
-  ], [primaryCandle]);
+    {
+      roman: "VII", eyebrow: "Their last letter", title: "The things left unsaid.",
+      body: "Write it, seal it, send it — wherever they are now.",
+      dev: true, source: "last-letter",
+      cta: devCta("last-letter", "Get early access"),
+      plaque: <PlaqueLastLetter />,
+    },
+    {
+      roman: "VIII", eyebrow: "Pawtrait Tales™", title: "Their whole life, an illustrated storybook.",
+      body: "Their whole life woven into an illustrated storybook, with a gentle hand from AI.",
+      dev: true, source: "pawtrait-tales",
+      cta: devCta("pawtrait-tales", "Get early access"),
+      plaque: <PlaquePawtrait />,
+    },
+  ], [primaryCandle, onDev]);
 
   return (
     <section className="relative px-5 py-8 md:px-8 md:py-12">
@@ -594,6 +624,7 @@ function Chapters({ primaryCandle }: { primaryCandle: ReactNode }) {
                   <span className="font-display text-[16px] not-italic text-[var(--gold)] tracking-normal">{c.roman}</span>
                   <span className="h-px w-8 bg-[var(--gold)]/40" />
                   {c.eyebrow}
+                  {"dev" in c && c.dev && <>{devPill}</>}
                 </p>
                 <h2 className="mt-3 font-display text-[28px] leading-[1.1] tracking-tight text-white md:text-4xl lg:text-5xl">
                   {c.title}
@@ -611,6 +642,7 @@ function Chapters({ primaryCandle }: { primaryCandle: ReactNode }) {
     </section>
   );
 }
+
 
 /* ────────── Plaques ────────── */
 
