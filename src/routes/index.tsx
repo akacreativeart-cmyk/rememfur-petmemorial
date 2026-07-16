@@ -1293,3 +1293,404 @@ function RailCardView({ card, section }: { card: RailCard; section: string }) {
 
 
 
+/* ────────── World Toggle + Panes + Dawn ────────── */
+
+function WorldToggle({ mode, setMode, reduced }: { mode: WorldMode; setMode: (m: WorldMode) => void; reduced: boolean }) {
+  const isLife = mode === "life";
+  return (
+    <div className="relative z-30 mx-auto flex w-full max-w-md flex-col items-center px-5 pt-5 md:max-w-2xl md:pt-6">
+      <div
+        role="tablist"
+        aria-label="Choose a world"
+        className="relative inline-flex rounded-full p-1 shadow-[0_2px_16px_-8px_rgba(0,0,0,0.5)]"
+        style={{
+          background: isLife ? "rgba(255,255,255,0.55)" : "rgba(255,255,255,0.05)",
+          border: `1px solid ${isLife ? "rgba(168,100,28,0.28)" : "rgba(232,185,109,0.28)"}`,
+          backdropFilter: "blur(10px)",
+        }}
+      >
+        {/* Sliding indicator */}
+        <span
+          aria-hidden
+          className="absolute top-1 bottom-1 left-1 w-[calc(50%-4px)] rounded-full"
+          style={{
+            transform: isLife ? "translateX(100%)" : "translateX(0%)",
+            transition: reduced ? "none" : "transform 0.55s cubic-bezier(.4,0,.2,1), background 0.55s ease",
+            background: isLife
+              ? "linear-gradient(180deg,#E7C79A,#C9852F)"
+              : "linear-gradient(180deg,#F6D9A0,#E8B96D)",
+            boxShadow: "0 6px 18px -8px rgba(232,185,109,0.6)",
+          }}
+        />
+        {[
+          { key: "memory" as const, label: "Their memory", Icon: Moon },
+          { key: "life" as const, label: "Their life", Icon: Heart },
+        ].map(({ key, label, Icon }) => {
+          const active = mode === key;
+          return (
+            <button
+              key={key}
+              type="button"
+              role="tab"
+              aria-selected={active}
+              onClick={() => setMode(key)}
+              className="relative z-[1] inline-flex items-center gap-2 rounded-full px-4 py-2 text-[13px] font-medium transition"
+              style={{
+                color: active
+                  ? isLife ? "#1a1200" : "#1a1200"
+                  : isLife ? "rgba(58,44,28,0.7)" : "rgba(242,236,221,0.7)",
+              }}
+            >
+              <Icon className="h-3.5 w-3.5" strokeWidth={2} />
+              {label}
+            </button>
+          );
+        })}
+      </div>
+      <p
+        className="mt-3 text-center font-display italic text-[13px] md:text-[14px]"
+        style={{ color: isLife ? "rgba(58,44,28,0.7)" : "rgba(242,236,221,0.65)" }}
+      >
+        {isLife
+          ? "An ecosystem for the ones still by our side"
+          : "A sanctuary for the ones we've lost"}
+      </p>
+    </div>
+  );
+}
+
+function WorldPane({ active, reduced, children }: { active: boolean; reduced: boolean; children: ReactNode }) {
+  if (reduced) {
+    return active ? <div>{children}</div> : null;
+  }
+  return (
+    <div
+      aria-hidden={!active}
+      style={{
+        display: active ? "block" : "none",
+        opacity: active ? 1 : 0,
+        transform: active ? "translateY(0)" : "translateY(8px)",
+        transition: "opacity 0.8s ease, transform 0.8s ease",
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+
+function DawnBg({ mode, reduced }: { mode: WorldMode; reduced: boolean }) {
+  const active = mode === "life";
+  return (
+    <div
+      className="pointer-events-none fixed inset-0 z-0"
+      aria-hidden
+      style={{
+        opacity: active ? 1 : 0,
+        transition: reduced ? "none" : "opacity 1.1s ease",
+      }}
+    >
+      {/* Warm haze base */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(120% 80% at 50% 0%, rgba(255,220,150,0.55), rgba(244,233,216,0.0) 62%)",
+        }}
+      />
+      {/* Sun glow */}
+      <div
+        className="absolute left-1/2 top-[-160px] h-[520px] w-[520px] -translate-x-1/2 rounded-full blur-3xl"
+        style={{ background: "rgba(255,220,150,0.5)" }}
+      />
+      {/* Soft petal dots */}
+      {!reduced &&
+        Array.from({ length: 10 }).map((_, i) => (
+          <span
+            key={i}
+            className="absolute rounded-full"
+            style={{
+              width: 5, height: 5,
+              left: `${(i * 91) % 100}%`,
+              top: `${(i * 53) % 100}%`,
+              background: "rgba(200,140,80,0.35)",
+              filter: "blur(1px)",
+              animation: `dawnDrift ${18 + i * 2}s linear ${i * -3}s infinite`,
+            }}
+          />
+        ))}
+      <style>{`@keyframes dawnDrift { 0% { transform: translate(0,0);} 50% { transform: translate(20px,-16px);} 100% { transform: translate(0,0);} }`}</style>
+    </div>
+  );
+}
+
+/* ────────── LIFE WORLD ────────── */
+
+type LifeTile = { key: string; title: string; body: string; Icon: IconType; kind?: boolean; source?: string };
+
+const LIFE_TILES: LifeTile[] = [
+  { key: "pet-profiles", title: "Pet profiles", body: "Every companion in one place — their records, milestones, and people.", Icon: PawPrint, source: "life-pet-profiles" },
+  { key: "health", title: "Health & reminders", body: "Vaccinations, vet visits, insurance, grooming — tracked, with gentle nudges so nothing slips.", Icon: CalendarClock, source: "life-health" },
+  { key: "services", title: "Services near you", body: "Trusted vets, groomers, walkers, sitters and boarding — booked without the chaos.", Icon: Stethoscope, source: "life-services" },
+  { key: "food", title: "Food & essentials", body: "Genuinely wholesome nutrition and gear — no junk brands, no clutter.", Icon: ShoppingBag, source: "life-food" },
+  { key: "lifestyle", title: "Lifestyle & celebrations", body: "Birthdays, gotcha-days, playdates and outings — the joy, organised.", Icon: Cake, source: "life-lifestyle" },
+  { key: "community", title: "Community feed", body: "Share the wins and the mess with people who get it. Ask anything.", Icon: MessagesSquare },
+  { key: "adoption", title: "Adoption & shelters", body: "Give a waiting companion a home. Verified rescues — non-commercial, always first.", Icon: Home, kind: true, source: "life-adoption" },
+  { key: "stray", title: "Tag a stray", body: "Map neighbourhood strays so the whole community can watch over them.", Icon: MapPin, kind: true, source: "life-stray" },
+  { key: "donate", title: "Donate to care", body: "Fund a shelter, or help someone who can't afford care for the pet they love.", Icon: HandHeart, kind: true, source: "life-donate" },
+];
+
+function LifeWorld({ onDev }: { onDev: (source: string) => void }) {
+  return (
+    <div style={{ color: "var(--w-ink)" }}>
+      {/* Hero */}
+      <section className="relative px-5 pb-16 pt-10 text-center md:px-8 md:pb-20 md:pt-14">
+        <div className="mx-auto max-w-md md:max-w-2xl">
+          <p className="font-display italic text-[15px] leading-[1.4] md:text-[18px]" style={{ color: "var(--w-accent)" }}>
+            From their first day to long after their last.
+          </p>
+          <p className="mt-3 text-[11px] uppercase tracking-[0.32em]" style={{ color: "var(--w-accent)" }}>
+            In living joy · and in loving memory
+          </p>
+          <h1 className="mt-4 font-display text-[30px] leading-[1.08] tracking-tight md:text-6xl lg:text-[64px]" style={{ color: "var(--w-ink)" }}>
+            Every good day, <span className="italic" style={{ color: "var(--w-accent)" }}>looked after</span>.
+          </h1>
+          <p className="mt-5 font-display italic text-[17px] leading-[1.55] md:text-[20px]" style={{ color: "var(--w-muted)" }}>
+            One home for their whole life with you.
+          </p>
+          <div className="mt-8 flex flex-col items-center gap-3">
+            <Link
+              to="/create"
+              className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-[14px] font-semibold shadow-[0_10px_28px_-12px_rgba(168,100,28,0.6)] hover:brightness-105"
+              style={{ background: "linear-gradient(180deg,#E7C79A,#C9852F)", color: "#231604" }}
+            >
+              <PawPrint className="h-4 w-4" strokeWidth={2} />
+              Add your pet
+            </Link>
+            <Link to="/community" className="text-[14px] font-medium underline-offset-4 hover:underline" style={{ color: "var(--w-accent)" }}>
+              Explore the community →
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Explainer */}
+      <section className="relative px-5 py-14 text-center md:px-8">
+        <div className="mx-auto max-w-[720px]">
+          <p className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.3em]" style={{ color: "var(--w-accent)" }}>
+            <Heart className="h-3.5 w-3.5" /> Their life
+          </p>
+          <p className="mt-4 font-display italic text-[20px] leading-[1.4] md:text-[27px]" style={{ color: "var(--w-ink)" }}>
+            The half of RememFur for right now — the whole living, breathing companionship you share every day.
+          </p>
+          <p className="mt-5 text-[15px] leading-relaxed md:text-[16px]" style={{ color: "var(--w-muted)" }}>
+            Every pet — dog, cat, bird, rabbit, any beloved creature — gets a living profile and a whole ecosystem around it. Health tracked and reminded: vaccinations, vet visits, insurance, grooming. Services you can trust, nearby: vets, groomers, walkers, sitters. A lifestyle worth celebrating: birthdays, gotcha-days, outings, playdates. A community that gets it. And the kind things always first — adoption, shelters, strays, and helping owners in need.
+          </p>
+        </div>
+      </section>
+
+      {/* Tiles */}
+      <section className="relative px-5 py-10 md:px-8 md:py-14">
+        <div className="mx-auto max-w-[1200px]">
+          <h2 className="text-center font-display text-[28px] leading-tight tracking-tight md:text-[38px]" style={{ color: "var(--w-ink)" }}>
+            An ecosystem for the life you share
+          </h2>
+          <p className="mx-auto mt-3 max-w-2xl text-center text-[14px] leading-relaxed md:text-[15px]" style={{ color: "var(--w-muted)" }}>
+            Health, milestones, community and everything they need — bright, simple, and always at hand.
+          </p>
+          <ul className="mt-10 grid gap-4 md:grid-cols-3 md:gap-6">
+            {LIFE_TILES.map((t) => (
+              <li key={t.key}>
+                <LifeTileCard tile={t} onDev={onDev} />
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function LifeTileCard({ tile, onDev }: { tile: LifeTile; onDev: (source: string) => void }) {
+  const { title, body, Icon, kind, source } = tile;
+  const isDev = !!source;
+  const stroke = kind ? "var(--w-kind)" : "var(--w-accent)";
+  const borderGrad = kind
+    ? "linear-gradient(160deg, rgba(92,154,110,.5), rgba(92,154,110,.05) 42%, transparent)"
+    : "linear-gradient(160deg, rgba(168,100,28,.35), rgba(168,100,28,.05) 42%, transparent)";
+  const innerBg = kind
+    ? "linear-gradient(165deg,#FFFDF7,#EFEDDF 62%,#E6E5D2)"
+    : "linear-gradient(165deg,#FFFDF7,#F6ECD8 62%,#F0E1C1)";
+  const iconBg = kind
+    ? "radial-gradient(circle at 40% 35%, rgba(92,154,110,.22), rgba(92,154,110,.05))"
+    : "radial-gradient(circle at 40% 35%, rgba(168,100,28,.22), rgba(168,100,28,.04))";
+  const iconShadow = kind
+    ? "inset 0 0 0 1px rgba(92,154,110,.4), 0 0 22px -8px rgba(92,154,110,.55)"
+    : "inset 0 0 0 1px rgba(168,100,28,.35), 0 0 22px -8px rgba(168,100,28,.5)";
+
+  const inner = (
+    <div className="rounded-[19px] p-6" style={{ background: innerBg }}>
+      <div className="flex items-start justify-between gap-3">
+        <div
+          className="flex h-[52px] w-[52px] items-center justify-center rounded-[14px]"
+          style={{ background: iconBg, boxShadow: iconShadow }}
+        >
+          <Icon width={24} height={24} strokeWidth={1.5} style={{ stroke: stroke as string }} />
+        </div>
+        {isDev && (
+          <span className="inline-flex items-center rounded-full border px-2 py-[3px] text-[9px] font-medium uppercase tracking-[0.22em]" style={{ borderColor: "rgba(58,44,28,0.25)", color: "rgba(58,44,28,0.6)" }}>
+            In development
+          </span>
+        )}
+      </div>
+      <h3 className="mt-5 font-display text-[22px] leading-tight" style={{ color: "var(--w-ink)" }}>
+        {title}
+      </h3>
+      <p className="mt-2 text-[13.5px]" style={{ lineHeight: 1.62, color: "var(--w-muted)" }}>
+        {body}
+      </p>
+    </div>
+  );
+
+  const wrapperStyle: CSSProperties = {
+    background: borderGrad,
+    padding: 1,
+    borderRadius: 20,
+  };
+
+  if (isDev) {
+    return (
+      <button
+        type="button"
+        onClick={() => onDev(source!)}
+        className="block w-full text-left transition duration-300 hover:-translate-y-1"
+        style={wrapperStyle}
+      >
+        {inner}
+      </button>
+    );
+  }
+  return (
+    <Link
+      to="/community"
+      className="block transition duration-300 hover:-translate-y-1"
+      style={wrapperStyle}
+    >
+      {inner}
+    </Link>
+  );
+}
+
+/* ────────── BRIDGE + BETA BAND ────────── */
+
+function Bridge() {
+  return (
+    <section className="relative px-5 py-16 md:px-8 md:py-20">
+      <div
+        className="mx-auto max-w-[900px] rounded-[20px] p-8 md:p-10 text-center"
+        style={{
+          background: "linear-gradient(160deg, rgba(232,185,109,0.08), rgba(232,185,109,0.02))",
+          border: "1px solid var(--w-hair)",
+        }}
+      >
+        <p className="text-[11px] uppercase tracking-[0.3em]" style={{ color: "var(--w-accent)" }}>
+          The two are one
+        </p>
+        <h3 className="mt-3 font-display text-[24px] leading-[1.2] tracking-tight md:text-[32px]" style={{ color: "var(--w-ink)" }}>
+          A pet never leaves. They only move from one sky to another.
+        </h3>
+        <p className="mx-auto mt-5 max-w-[62ch] text-[15px] leading-relaxed md:text-[16px]" style={{ color: "var(--w-muted)" }}>
+          When the hardest day comes, a living pet's profile becomes their memorial — their whole life, every birthday and photo and milestone, carried gently across. The same love, in both seasons. This is the only place that holds all of it.
+        </p>
+      </div>
+    </section>
+  );
+}
+
+function BetaBand({ onOpen }: { onOpen: () => void }) {
+  return (
+    <section className="relative px-5 py-14 md:px-8 md:py-20">
+      <div
+        className="mx-auto flex max-w-[900px] flex-col items-center rounded-[20px] p-8 text-center md:p-12"
+        style={{
+          background: "linear-gradient(150deg,#12182b,#0a0e1c 70%)",
+          border: "1px solid rgba(232,185,109,0.28)",
+          color: "#F2ECDD",
+        }}
+      >
+        <span
+          className="inline-flex items-center gap-2 rounded-full border border-[rgba(232,185,109,0.4)] bg-white/[0.03] px-3 py-1 text-[10.5px] font-medium uppercase tracking-[0.22em] text-[#E8B96D]"
+        >
+          <span className="relative flex h-2 w-2">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#E8B96D] opacity-70" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-[#E8B96D]" />
+          </span>
+          Invitation-only beta · limited seats
+        </span>
+        <h3 className="mt-5 font-display text-[26px] leading-[1.15] tracking-tight text-white md:text-[36px]">
+          Be one of the first through the door.
+        </h3>
+        <p className="mt-4 max-w-[60ch] text-[15px] leading-relaxed text-white/70 md:text-[16px]">
+          RememFur is opening quietly, to a small circle of early companions who'll help shape it. Request your invitation — we're letting people in a few at a time.
+        </p>
+        <button
+          type="button"
+          onClick={onOpen}
+          className="mt-7 inline-flex items-center gap-2 rounded-full bg-gradient-to-b from-[#F6D9A0] to-[#E8B96D] px-6 py-3 text-[14px] font-semibold text-[#1a1200] shadow-[0_10px_28px_-12px_rgba(232,185,109,0.6)] hover:brightness-105"
+        >
+          <Sparkles className="h-4 w-4" />
+          Request an invitation
+        </button>
+        <p className="mt-4 text-[11.5px] text-white/45">
+          No spam. Just a note when a seat opens for you.
+        </p>
+      </div>
+    </section>
+  );
+}
+
+/* ────────── Plaques for dev chapters ────────── */
+
+function PlaqueLastLetter() {
+  return (
+    <div className="w-full max-w-[340px]">
+      <Plaque>
+        <div className="rounded-md bg-[#0a1024] p-5 ring-1 ring-white/10">
+          <p className="text-[11px] uppercase tracking-[0.28em] text-white/50">A sealed letter</p>
+          <p className="mt-3 font-hand text-[22px] leading-snug text-[var(--gold)]">
+            There are things I didn't get to say.
+          </p>
+          <div className="mt-4 space-y-2">
+            <div className="hw-line w-11/12" />
+            <div className="hw-line w-10/12" />
+            <div className="hw-line w-9/12" />
+            <div className="hw-line w-6/12" />
+          </div>
+          <p className="mt-5 flex items-center gap-2 text-[10px] uppercase tracking-[0.28em] text-amber-200/60">
+            <Mail className="h-3 w-3" /> Sealed with love
+          </p>
+        </div>
+      </Plaque>
+    </div>
+  );
+}
+
+function PlaquePawtrait() {
+  return (
+    <div className="w-full max-w-[340px]">
+      <Plaque>
+        <div className="flex flex-col items-center py-4">
+          <div className="flex h-28 w-28 items-center justify-center rounded-2xl border border-[var(--gold)]/50 bg-[#04060D]" style={{ boxShadow: "inset 0 0 20px rgba(212,179,120,0.15), 0 0 30px -10px rgba(212,179,120,0.35)" }}>
+            <BookOpen className="h-12 w-12 text-[var(--gold)]" strokeWidth={1.5} />
+          </div>
+          <p className="mt-5 font-display italic text-[15px] text-white/75">
+            "Once upon a good boy…"
+          </p>
+          <p className="mt-2 text-[11px] uppercase tracking-[0.26em] text-amber-200/60">
+            An illustrated storybook, of them
+          </p>
+        </div>
+      </Plaque>
+    </div>
+  );
+}
+
