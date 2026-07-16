@@ -146,7 +146,15 @@ function CosmosBg({ mode = "memory", reduced = false }: { mode?: WorldMode; redu
   }, [reduced]);
 
   return (
-    <div className="cosmos-bg" aria-hidden>
+    <div
+      className="cosmos-bg"
+      aria-hidden
+      style={{
+        opacity: mode === "life" ? 0 : 1,
+        transition: reduced ? "none" : "opacity 1.1s ease",
+        pointerEvents: "none",
+      }}
+    >
       <div className="base" />
       <div className="nebula">
         <div className="n n1" />
