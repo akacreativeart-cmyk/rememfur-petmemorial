@@ -1323,9 +1323,9 @@ function WorldToggle({ mode, setMode, reduced }: { mode: WorldMode; setMode: (m:
           }}
         />
         {[
-          { key: "memory" as const, label: "Their memory", Icon: Moon },
-          { key: "life" as const, label: "Their life", Icon: Heart },
-        ].map(({ key, label, Icon }) => {
+          { key: "memory" as const, label: "Their memory", shortLabel: "Memory", Icon: Moon },
+          { key: "life" as const, label: "Their life", shortLabel: "Life", Icon: Heart },
+        ].map(({ key, label, shortLabel, Icon }) => {
           const active = mode === key;
           return (
             <button
@@ -1334,7 +1334,7 @@ function WorldToggle({ mode, setMode, reduced }: { mode: WorldMode; setMode: (m:
               role="tab"
               aria-selected={active}
               onClick={() => setMode(key)}
-              className="relative z-[1] inline-flex items-center gap-2 rounded-full px-4 py-2 text-[13px] font-medium transition"
+              className="relative z-[1] inline-flex items-center gap-1.5 rounded-full px-3.5 py-2 text-[11.5px] font-medium transition md:gap-2 md:px-4 md:py-2 md:text-[13px]"
               style={{
                 color: active
                   ? isLife ? "#1a1200" : "#1a1200"
@@ -1342,7 +1342,8 @@ function WorldToggle({ mode, setMode, reduced }: { mode: WorldMode; setMode: (m:
               }}
             >
               <Icon className="h-3.5 w-3.5" strokeWidth={2} />
-              {label}
+              <span className="md:hidden">{shortLabel}</span>
+              <span className="hidden md:inline">{label}</span>
             </button>
           );
         })}
