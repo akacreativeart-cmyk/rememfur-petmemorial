@@ -96,7 +96,7 @@ function VigilDog({ size = 150, className = "" }: { size?: number; className?: s
 
 /* ────────── Cosmos background with shooting stars ────────── */
 
-function CosmosBg() {
+function CosmosBg({ mode = "memory", reduced = false }: { mode?: WorldMode; reduced?: boolean }) {
   const [stars, setStars] = useState<{ className: string; style: React.CSSProperties }[]>([]);
   const [streaks, setStreaks] = useState<{ id: number; top: string; left: string; ang: string }[]>([]);
   const [reduced, setReduced] = useState(false);
