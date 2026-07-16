@@ -472,7 +472,7 @@ function Hero({ primaryCandle, onLastLetter }: { primaryCandle: ReactNode; onLas
       </div>
 
       {/* TOP: story + CTA in normal flow, centered vertically in remaining space */}
-      <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-5 pb-8 pt-20 text-center md:pt-24">
+      <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-5 pb-8 pt-14 text-center md:pt-24">
         <div className="mx-auto flex w-full max-w-md flex-col items-center md:max-w-2xl">
           <p className="rise-in font-display italic text-[15px] leading-[1.4] text-[var(--gold)]/90 md:text-[18px]" style={{ animationDelay: "0.05s" }}>
             From their first day to long after their last.
@@ -480,16 +480,18 @@ function Hero({ primaryCandle, onLastLetter }: { primaryCandle: ReactNode; onLas
           <p className="rise-in mt-3 text-[11px] uppercase tracking-[0.32em] text-amber-200/75" style={{ animationDelay: "0.15s" }}>
             In loving memory · and in living joy
           </p>
-          <h1 className="rise-in mt-4 font-display text-[30px] leading-[1.08] tracking-tight text-white md:text-6xl lg:text-[64px]" style={{ animationDelay: "0.3s" }}>
+          <h1 className="rise-in mt-4 font-display leading-[1.08] tracking-tight text-white" style={{ animationDelay: "0.3s", fontSize: "clamp(26px, 7.4vw, 64px)" }}>
             Our beloved companions become the{" "}
             <span className="italic text-[var(--gold)]">stars that watch over us</span>.
           </h1>
-          <p className="rise-in mt-5 font-display italic text-[17px] leading-[1.55] text-white/75 md:text-[20px]" style={{ animationDelay: "0.7s" }}>
+          <p className="rise-in mx-auto mt-5 max-w-[30ch] font-display italic text-[16px] leading-[1.55] text-white/75 md:max-w-none md:text-[20px]" style={{ animationDelay: "0.7s" }}>
             Grief this deep needs somewhere to belong. Here, it does.
           </p>
 
-          <div className="rise-in mt-8 flex flex-col items-center gap-3" style={{ animationDelay: "1.1s" }}>
-            {primaryCandle}
+          <div className="rise-in mt-8 flex w-full flex-col items-center gap-3" style={{ animationDelay: "1.1s" }}>
+            <div className="w-full max-w-[300px] [&>*]:w-full [&>*]:justify-center md:w-auto md:max-w-none">
+              {primaryCandle}
+            </div>
             <Link to="/create/memorial" className="link-gold">
               Write a memorial
             </Link>
@@ -507,7 +509,7 @@ function Hero({ primaryCandle, onLastLetter }: { primaryCandle: ReactNode; onLas
 
 
       {/* BOTTOM: Vigil scene as normal-flow block — content above can never overlap */}
-      <div className="relative w-full h-[260px] md:h-[340px]">
+      <div className="relative w-full h-[220px] md:h-[340px]">
         {/* Hill — full-width, always spans viewport */}
         <svg
           aria-hidden
@@ -523,7 +525,7 @@ function Hero({ primaryCandle, onLastLetter }: { primaryCandle: ReactNode; onLas
           className="pointer-events-none absolute left-1/2 z-[3] -translate-x-1/2 vigil-dog-torso"
           style={{ bottom: "20%", transformOrigin: "bottom center" }}
         >
-          <div className="w-[104px] md:w-[124px]">
+          <div className="w-[88px] md:w-[124px]">
             <VigilDog size={150} className="h-auto w-full" />
           </div>
         </div>
