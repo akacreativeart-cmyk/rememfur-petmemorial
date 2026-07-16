@@ -15,6 +15,9 @@ import {
   listRecentCandles,
   countCandlesThisWeek,
 } from "@/lib/candle-guest.functions";
+import lifeHeroImg from "@/assets/life-hero.jpg";
+import bridgeSkyImg from "@/assets/bridge-sky.jpg";
+import pawtraitPreviewImg from "@/assets/pawtrait-preview.jpg";
 
 type WorldMode = "memory" | "life";
 
