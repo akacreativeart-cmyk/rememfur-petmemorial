@@ -1449,7 +1449,7 @@ function LifeWorld({ onDev }: { onDev: (source: string) => void }) {
   return (
     <div style={{ color: "var(--w-ink)" }}>
       {/* Hero */}
-      <section className="relative px-5 pb-16 pt-10 text-center md:px-8 md:pb-20 md:pt-14">
+      <section className="relative px-5 pb-12 pt-8 text-center md:px-8 md:pb-20 md:pt-14">
         <div className="mx-auto max-w-md md:max-w-2xl">
           <p className="font-display italic text-[15px] leading-[1.4] md:text-[18px]" style={{ color: "var(--w-accent)" }}>
             From their first day to long after their last.
@@ -1457,16 +1457,16 @@ function LifeWorld({ onDev }: { onDev: (source: string) => void }) {
           <p className="mt-3 text-[11px] uppercase tracking-[0.32em]" style={{ color: "var(--w-accent)" }}>
             In living joy · and in loving memory
           </p>
-          <h1 className="mt-4 font-display text-[30px] leading-[1.08] tracking-tight md:text-6xl lg:text-[64px]" style={{ color: "var(--w-ink)" }}>
+          <h1 className="mt-4 font-display leading-[1.08] tracking-tight" style={{ color: "var(--w-ink)", fontSize: "clamp(26px, 7.4vw, 64px)" }}>
             Every good day, <span className="italic" style={{ color: "var(--w-accent)" }}>looked after</span>.
           </h1>
-          <p className="mt-5 font-display italic text-[17px] leading-[1.55] md:text-[20px]" style={{ color: "var(--w-muted)" }}>
+          <p className="mx-auto mt-5 max-w-[30ch] font-display italic text-[16px] leading-[1.55] md:max-w-none md:text-[20px]" style={{ color: "var(--w-muted)" }}>
             One home for their whole life with you.
           </p>
           <div className="mt-8 flex flex-col items-center gap-3">
             <Link
               to="/create"
-              className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-[14px] font-semibold shadow-[0_10px_28px_-12px_rgba(168,100,28,0.6)] hover:brightness-105"
+              className="inline-flex w-full max-w-[300px] items-center justify-center gap-2 rounded-full px-6 py-3 text-[14px] font-semibold shadow-[0_10px_28px_-12px_rgba(168,100,28,0.6)] hover:brightness-105 md:w-auto md:max-w-none"
               style={{ background: "linear-gradient(180deg,#E7C79A,#C9852F)", color: "#231604" }}
             >
               <PawPrint className="h-4 w-4" strokeWidth={2} />
@@ -1475,6 +1475,32 @@ function LifeWorld({ onDev }: { onDev: (source: string) => void }) {
             <Link to="/community" className="text-[14px] font-medium underline-offset-4 hover:underline" style={{ color: "var(--w-accent)" }}>
               Explore the community →
             </Link>
+          </div>
+        </div>
+
+        {/* Painterly hero image */}
+        <div className="mx-auto mt-10 w-full max-w-[900px] md:mt-12">
+          <div
+            className="relative overflow-hidden rounded-[24px]"
+            style={{
+              aspectRatio: "4 / 3",
+              border: "1px solid var(--w-hair)",
+              boxShadow: "0 24px 60px -30px rgba(58,44,28,0.35)",
+            }}
+          >
+            <img
+              src={lifeHeroImg}
+              alt="A person tenderly holding a golden retriever's face while a tabby cat weaves around them at dawn"
+              className="h-full w-full object-cover md:[aspect-ratio:16/10]"
+              style={{ aspectRatio: "inherit" }}
+              width={1440}
+              height={912}
+              loading="lazy"
+            />
+            <div
+              className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3"
+              style={{ background: "linear-gradient(180deg, rgba(244,233,216,0) 0%, rgba(244,233,216,0.85) 100%)" }}
+            />
           </div>
         </div>
       </section>
