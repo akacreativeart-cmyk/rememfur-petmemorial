@@ -1560,7 +1560,7 @@ function LifeTileCard({ tile, onDev }: { tile: LifeTile; onDev: (source: string)
     : "inset 0 0 0 1px rgba(168,100,28,.35), 0 0 22px -8px rgba(168,100,28,.5)";
 
   const inner = (
-    <div className="rounded-[19px] p-6" style={{ background: innerBg }}>
+    <div className="rounded-[19px] p-[18px] md:p-6" style={{ background: innerBg }}>
       <div className="flex items-start justify-between gap-3">
         <div
           className="flex h-[52px] w-[52px] items-center justify-center rounded-[14px]"
@@ -1569,7 +1569,7 @@ function LifeTileCard({ tile, onDev }: { tile: LifeTile; onDev: (source: string)
           <Icon width={24} height={24} strokeWidth={1.5} style={{ stroke: stroke as string }} />
         </div>
         {isDev && (
-          <span className="inline-flex items-center rounded-full border px-2 py-[3px] text-[9px] font-medium uppercase tracking-[0.22em]" style={{ borderColor: "rgba(58,44,28,0.25)", color: "rgba(58,44,28,0.6)" }}>
+          <span className="inline-flex shrink-0 items-center whitespace-nowrap rounded-full border px-2 py-[3px] text-[9px] font-medium uppercase tracking-[0.2em]" style={{ borderColor: "rgba(58,44,28,0.25)", color: "rgba(58,44,28,0.6)" }}>
             In development
           </span>
         )}
@@ -1577,7 +1577,7 @@ function LifeTileCard({ tile, onDev }: { tile: LifeTile; onDev: (source: string)
       <h3 className="mt-5 font-display text-[22px] leading-tight" style={{ color: "var(--w-ink)" }}>
         {title}
       </h3>
-      <p className="mt-2 text-[13.5px]" style={{ lineHeight: 1.62, color: "var(--w-muted)" }}>
+      <p className="mt-2 text-[13px] md:text-[13.5px]" style={{ lineHeight: 1.62, color: "var(--w-muted)" }}>
         {body}
       </p>
     </div>
