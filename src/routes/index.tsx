@@ -1523,13 +1523,13 @@ function LifeWorld({ onDev }: { onDev: (source: string) => void }) {
       {/* Tiles */}
       <section className="relative px-5 py-10 md:px-8 md:py-14">
         <div className="mx-auto max-w-[1200px]">
-          <h2 className="text-center font-display text-[28px] leading-tight tracking-tight md:text-[38px]" style={{ color: "var(--w-ink)" }}>
+          <h2 className="text-center font-display leading-tight tracking-tight" style={{ color: "var(--w-ink)", fontSize: "clamp(22px, 5.5vw, 38px)" }}>
             An ecosystem for the life you share
           </h2>
           <p className="mx-auto mt-3 max-w-2xl text-center text-[14px] leading-relaxed md:text-[15px]" style={{ color: "var(--w-muted)" }}>
             Health, milestones, community and everything they need — bright, simple, and always at hand.
           </p>
-          <ul className="mt-10 grid gap-4 md:grid-cols-3 md:gap-6">
+          <ul className="mt-10 grid gap-3 md:grid-cols-3 md:gap-6">
             {LIFE_TILES.map((t) => (
               <li key={t.key}>
                 <LifeTileCard tile={t} onDev={onDev} />
