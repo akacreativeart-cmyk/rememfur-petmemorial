@@ -252,14 +252,6 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <Link
-            to={user ? "/create" : "/signup"}
-            search={user ? undefined : ({ redirect: "/create" } as never)}
-            className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-b from-[#F6D9A0] to-[#E8B96D] px-4 py-2 text-sm font-semibold text-[#1a1200] shadow-[0_6px_24px_-8px_rgba(232,185,109,0.5)] hover:brightness-105"
-          >
-            <PlusCircle className="h-4 w-4" strokeWidth={2.25} />
-            Create
-          </Link>
           <NotificationBell />
           {user ? (
             <button
