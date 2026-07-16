@@ -446,7 +446,7 @@ function HomePage() {
 
       <BetaInviteDialog source={betaSource} open={betaOpen} onOpenChange={setBetaOpen} />
 
-      <div className="pb-[calc(72px+env(safe-area-inset-bottom))] md:pb-6">
+      <div className="pb-[calc(120px+env(safe-area-inset-bottom))] md:pb-6">
         <SiteFooter />
       </div>
     </div>
