@@ -15,6 +15,9 @@ import {
   listRecentCandles,
   countCandlesThisWeek,
 } from "@/lib/candle-guest.functions";
+import lifeHeroImg from "@/assets/life-hero.jpg";
+import bridgeSkyImg from "@/assets/bridge-sky.jpg";
+import pawtraitPreviewImg from "@/assets/pawtrait-preview.jpg";
 
 type WorldMode = "memory" | "life";
 
@@ -443,7 +446,7 @@ function HomePage() {
 
       <BetaInviteDialog source={betaSource} open={betaOpen} onOpenChange={setBetaOpen} />
 
-      <div className="pb-[calc(72px+env(safe-area-inset-bottom))] md:pb-6">
+      <div className="pb-[calc(120px+env(safe-area-inset-bottom))] md:pb-6">
         <SiteFooter />
       </div>
     </div>
@@ -472,7 +475,7 @@ function Hero({ primaryCandle, onLastLetter }: { primaryCandle: ReactNode; onLas
       </div>
 
       {/* TOP: story + CTA in normal flow, centered vertically in remaining space */}
-      <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-5 pb-8 pt-20 text-center md:pt-24">
+      <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-5 pb-8 pt-14 text-center md:pt-24">
         <div className="mx-auto flex w-full max-w-md flex-col items-center md:max-w-2xl">
           <p className="rise-in font-display italic text-[15px] leading-[1.4] text-[var(--gold)]/90 md:text-[18px]" style={{ animationDelay: "0.05s" }}>
             From their first day to long after their last.
@@ -480,16 +483,18 @@ function Hero({ primaryCandle, onLastLetter }: { primaryCandle: ReactNode; onLas
           <p className="rise-in mt-3 text-[11px] uppercase tracking-[0.32em] text-amber-200/75" style={{ animationDelay: "0.15s" }}>
             In loving memory · and in living joy
           </p>
-          <h1 className="rise-in mt-4 font-display text-[30px] leading-[1.08] tracking-tight text-white md:text-6xl lg:text-[64px]" style={{ animationDelay: "0.3s" }}>
+          <h1 className="rise-in mt-4 font-display leading-[1.08] tracking-tight text-white" style={{ animationDelay: "0.3s", fontSize: "clamp(26px, 7.4vw, 64px)" }}>
             Our beloved companions become the{" "}
             <span className="italic text-[var(--gold)]">stars that watch over us</span>.
           </h1>
-          <p className="rise-in mt-5 font-display italic text-[17px] leading-[1.55] text-white/75 md:text-[20px]" style={{ animationDelay: "0.7s" }}>
+          <p className="rise-in mx-auto mt-5 max-w-[30ch] font-display italic text-[16px] leading-[1.55] text-white/75 md:max-w-none md:text-[20px]" style={{ animationDelay: "0.7s" }}>
             Grief this deep needs somewhere to belong. Here, it does.
           </p>
 
-          <div className="rise-in mt-8 flex flex-col items-center gap-3" style={{ animationDelay: "1.1s" }}>
-            {primaryCandle}
+          <div className="rise-in mt-8 flex w-full flex-col items-center gap-3" style={{ animationDelay: "1.1s" }}>
+            <div className="w-full max-w-[300px] [&>*]:w-full [&>*]:justify-center md:w-auto md:max-w-none">
+              {primaryCandle}
+            </div>
             <Link to="/create/memorial" className="link-gold">
               Write a memorial
             </Link>
@@ -507,7 +512,7 @@ function Hero({ primaryCandle, onLastLetter }: { primaryCandle: ReactNode; onLas
 
 
       {/* BOTTOM: Vigil scene as normal-flow block — content above can never overlap */}
-      <div className="relative w-full h-[260px] md:h-[340px]">
+      <div className="relative w-full h-[220px] md:h-[340px]">
         {/* Hill — full-width, always spans viewport */}
         <svg
           aria-hidden
@@ -523,7 +528,7 @@ function Hero({ primaryCandle, onLastLetter }: { primaryCandle: ReactNode; onLas
           className="pointer-events-none absolute left-1/2 z-[3] -translate-x-1/2 vigil-dog-torso"
           style={{ bottom: "20%", transformOrigin: "bottom center" }}
         >
-          <div className="w-[104px] md:w-[124px]">
+          <div className="w-[88px] md:w-[124px]">
             <VigilDog size={150} className="h-auto w-full" />
           </div>
         </div>
@@ -1323,9 +1328,9 @@ function WorldToggle({ mode, setMode, reduced }: { mode: WorldMode; setMode: (m:
           }}
         />
         {[
-          { key: "memory" as const, label: "Their memory", Icon: Moon },
-          { key: "life" as const, label: "Their life", Icon: Heart },
-        ].map(({ key, label, Icon }) => {
+          { key: "memory" as const, label: "Their memory", shortLabel: "Memory", Icon: Moon },
+          { key: "life" as const, label: "Their life", shortLabel: "Life", Icon: Heart },
+        ].map(({ key, label, shortLabel, Icon }) => {
           const active = mode === key;
           return (
             <button
@@ -1334,7 +1339,7 @@ function WorldToggle({ mode, setMode, reduced }: { mode: WorldMode; setMode: (m:
               role="tab"
               aria-selected={active}
               onClick={() => setMode(key)}
-              className="relative z-[1] inline-flex items-center gap-2 rounded-full px-4 py-2 text-[13px] font-medium transition"
+              className="relative z-[1] inline-flex items-center gap-1.5 rounded-full px-3.5 py-2 text-[11.5px] font-medium transition md:gap-2 md:px-4 md:py-2 md:text-[13px]"
               style={{
                 color: active
                   ? isLife ? "#1a1200" : "#1a1200"
@@ -1342,7 +1347,8 @@ function WorldToggle({ mode, setMode, reduced }: { mode: WorldMode; setMode: (m:
               }}
             >
               <Icon className="h-3.5 w-3.5" strokeWidth={2} />
-              {label}
+              <span className="md:hidden">{shortLabel}</span>
+              <span className="hidden md:inline">{label}</span>
             </button>
           );
         })}
@@ -1443,7 +1449,7 @@ function LifeWorld({ onDev }: { onDev: (source: string) => void }) {
   return (
     <div style={{ color: "var(--w-ink)" }}>
       {/* Hero */}
-      <section className="relative px-5 pb-16 pt-10 text-center md:px-8 md:pb-20 md:pt-14">
+      <section className="relative px-5 pb-12 pt-8 text-center md:px-8 md:pb-20 md:pt-14">
         <div className="mx-auto max-w-md md:max-w-2xl">
           <p className="font-display italic text-[15px] leading-[1.4] md:text-[18px]" style={{ color: "var(--w-accent)" }}>
             From their first day to long after their last.
@@ -1451,16 +1457,16 @@ function LifeWorld({ onDev }: { onDev: (source: string) => void }) {
           <p className="mt-3 text-[11px] uppercase tracking-[0.32em]" style={{ color: "var(--w-accent)" }}>
             In living joy · and in loving memory
           </p>
-          <h1 className="mt-4 font-display text-[30px] leading-[1.08] tracking-tight md:text-6xl lg:text-[64px]" style={{ color: "var(--w-ink)" }}>
+          <h1 className="mt-4 font-display leading-[1.08] tracking-tight" style={{ color: "var(--w-ink)", fontSize: "clamp(26px, 7.4vw, 64px)" }}>
             Every good day, <span className="italic" style={{ color: "var(--w-accent)" }}>looked after</span>.
           </h1>
-          <p className="mt-5 font-display italic text-[17px] leading-[1.55] md:text-[20px]" style={{ color: "var(--w-muted)" }}>
+          <p className="mx-auto mt-5 max-w-[30ch] font-display italic text-[16px] leading-[1.55] md:max-w-none md:text-[20px]" style={{ color: "var(--w-muted)" }}>
             One home for their whole life with you.
           </p>
           <div className="mt-8 flex flex-col items-center gap-3">
             <Link
               to="/create"
-              className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-[14px] font-semibold shadow-[0_10px_28px_-12px_rgba(168,100,28,0.6)] hover:brightness-105"
+              className="inline-flex w-full max-w-[300px] items-center justify-center gap-2 rounded-full px-6 py-3 text-[14px] font-semibold shadow-[0_10px_28px_-12px_rgba(168,100,28,0.6)] hover:brightness-105 md:w-auto md:max-w-none"
               style={{ background: "linear-gradient(180deg,#E7C79A,#C9852F)", color: "#231604" }}
             >
               <PawPrint className="h-4 w-4" strokeWidth={2} />
@@ -1469,6 +1475,32 @@ function LifeWorld({ onDev }: { onDev: (source: string) => void }) {
             <Link to="/community" className="text-[14px] font-medium underline-offset-4 hover:underline" style={{ color: "var(--w-accent)" }}>
               Explore the community →
             </Link>
+          </div>
+        </div>
+
+        {/* Painterly hero image */}
+        <div className="mx-auto mt-10 w-full max-w-[900px] md:mt-12">
+          <div
+            className="relative overflow-hidden rounded-[24px]"
+            style={{
+              aspectRatio: "4 / 3",
+              border: "1px solid var(--w-hair)",
+              boxShadow: "0 24px 60px -30px rgba(58,44,28,0.35)",
+            }}
+          >
+            <img
+              src={lifeHeroImg}
+              alt="A person tenderly holding a golden retriever's face while a tabby cat weaves around them at dawn"
+              className="h-full w-full object-cover md:[aspect-ratio:16/10]"
+              style={{ aspectRatio: "inherit" }}
+              width={1440}
+              height={912}
+              loading="lazy"
+            />
+            <div
+              className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3"
+              style={{ background: "linear-gradient(180deg, rgba(244,233,216,0) 0%, rgba(244,233,216,0.85) 100%)" }}
+            />
           </div>
         </div>
       </section>
@@ -1491,13 +1523,13 @@ function LifeWorld({ onDev }: { onDev: (source: string) => void }) {
       {/* Tiles */}
       <section className="relative px-5 py-10 md:px-8 md:py-14">
         <div className="mx-auto max-w-[1200px]">
-          <h2 className="text-center font-display text-[28px] leading-tight tracking-tight md:text-[38px]" style={{ color: "var(--w-ink)" }}>
+          <h2 className="text-center font-display leading-tight tracking-tight" style={{ color: "var(--w-ink)", fontSize: "clamp(22px, 5.5vw, 38px)" }}>
             An ecosystem for the life you share
           </h2>
           <p className="mx-auto mt-3 max-w-2xl text-center text-[14px] leading-relaxed md:text-[15px]" style={{ color: "var(--w-muted)" }}>
             Health, milestones, community and everything they need — bright, simple, and always at hand.
           </p>
-          <ul className="mt-10 grid gap-4 md:grid-cols-3 md:gap-6">
+          <ul className="mt-10 grid gap-3 md:grid-cols-3 md:gap-6">
             {LIFE_TILES.map((t) => (
               <li key={t.key}>
                 <LifeTileCard tile={t} onDev={onDev} />
@@ -1528,7 +1560,7 @@ function LifeTileCard({ tile, onDev }: { tile: LifeTile; onDev: (source: string)
     : "inset 0 0 0 1px rgba(168,100,28,.35), 0 0 22px -8px rgba(168,100,28,.5)";
 
   const inner = (
-    <div className="rounded-[19px] p-6" style={{ background: innerBg }}>
+    <div className="rounded-[19px] p-[18px] md:p-6" style={{ background: innerBg }}>
       <div className="flex items-start justify-between gap-3">
         <div
           className="flex h-[52px] w-[52px] items-center justify-center rounded-[14px]"
@@ -1537,7 +1569,7 @@ function LifeTileCard({ tile, onDev }: { tile: LifeTile; onDev: (source: string)
           <Icon width={24} height={24} strokeWidth={1.5} style={{ stroke: stroke as string }} />
         </div>
         {isDev && (
-          <span className="inline-flex items-center rounded-full border px-2 py-[3px] text-[9px] font-medium uppercase tracking-[0.22em]" style={{ borderColor: "rgba(58,44,28,0.25)", color: "rgba(58,44,28,0.6)" }}>
+          <span className="inline-flex shrink-0 items-center whitespace-nowrap rounded-full border px-2 py-[3px] text-[9px] font-medium uppercase tracking-[0.2em]" style={{ borderColor: "rgba(58,44,28,0.25)", color: "rgba(58,44,28,0.6)" }}>
             In development
           </span>
         )}
@@ -1545,7 +1577,7 @@ function LifeTileCard({ tile, onDev }: { tile: LifeTile; onDev: (source: string)
       <h3 className="mt-5 font-display text-[22px] leading-tight" style={{ color: "var(--w-ink)" }}>
         {title}
       </h3>
-      <p className="mt-2 text-[13.5px]" style={{ lineHeight: 1.62, color: "var(--w-muted)" }}>
+      <p className="mt-2 text-[13px] md:text-[13.5px]" style={{ lineHeight: 1.62, color: "var(--w-muted)" }}>
         {body}
       </p>
     </div>
@@ -1584,23 +1616,44 @@ function LifeTileCard({ tile, onDev }: { tile: LifeTile; onDev: (source: string)
 
 function Bridge() {
   return (
-    <section className="relative px-5 py-16 md:px-8 md:py-20">
+    <section className="relative px-[18px] py-14 md:px-8 md:py-20">
       <div
-        className="mx-auto max-w-[900px] rounded-[20px] p-8 md:p-10 text-center"
+        className="relative mx-auto max-w-[900px] overflow-hidden rounded-[20px] p-6 text-center md:p-10"
         style={{
           background: "linear-gradient(160deg, rgba(232,185,109,0.08), rgba(232,185,109,0.02))",
           border: "1px solid var(--w-hair)",
         }}
       >
-        <p className="text-[11px] uppercase tracking-[0.3em]" style={{ color: "var(--w-accent)" }}>
-          The two are one
-        </p>
-        <h3 className="mt-3 font-display text-[24px] leading-[1.2] tracking-tight md:text-[32px]" style={{ color: "var(--w-ink)" }}>
-          A pet never leaves. They only move from one sky to another.
-        </h3>
-        <p className="mx-auto mt-5 max-w-[62ch] text-[15px] leading-relaxed md:text-[16px]" style={{ color: "var(--w-muted)" }}>
-          When the hardest day comes, a living pet's profile becomes their memorial — their whole life, every birthday and photo and milestone, carried gently across. The same love, in both seasons. This is the only place that holds all of it.
-        </p>
+        {/* Painterly sky background */}
+        <img
+          src={bridgeSkyImg}
+          alt=""
+          aria-hidden
+          className="pointer-events-none absolute inset-0 h-full w-full object-cover"
+          style={{ opacity: 0.28 }}
+          width={1600}
+          height={704}
+          loading="lazy"
+        />
+        {/* Legibility scrim (adapts per world via w-bg) */}
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(180deg, color-mix(in srgb, var(--w-bg) 55%, transparent) 0%, color-mix(in srgb, var(--w-bg) 78%, transparent) 100%)",
+          }}
+        />
+        <div className="relative">
+          <p className="text-[11px] uppercase tracking-[0.3em]" style={{ color: "var(--w-accent)" }}>
+            The two are one
+          </p>
+          <h3 className="mt-3 font-display leading-[1.2] tracking-tight" style={{ color: "var(--w-ink)", fontSize: "clamp(22px, 5.5vw, 32px)" }}>
+            A pet never leaves. They only move from one sky to another.
+          </h3>
+          <p className="mx-auto mt-5 max-w-[62ch] text-[14.5px] leading-relaxed md:text-[16px]" style={{ color: "var(--w-muted)" }}>
+            When the hardest day comes, a living pet's profile becomes their memorial — their whole life, every birthday and photo and milestone, carried gently across. The same love, in both seasons. This is the only place that holds all of it.
+          </p>
+        </div>
       </div>
     </section>
   );
@@ -1608,9 +1661,9 @@ function Bridge() {
 
 function BetaBand({ onOpen }: { onOpen: () => void }) {
   return (
-    <section className="relative px-5 py-14 md:px-8 md:py-20">
+    <section className="relative px-[18px] py-12 md:px-8 md:py-20">
       <div
-        className="mx-auto flex max-w-[900px] flex-col items-center rounded-[20px] p-8 text-center md:p-12"
+        className="mx-auto flex max-w-[900px] flex-col items-center rounded-[20px] p-6 text-center md:p-12"
         style={{
           background: "linear-gradient(150deg,#12182b,#0a0e1c 70%)",
           border: "1px solid rgba(232,185,109,0.28)",
@@ -1626,16 +1679,16 @@ function BetaBand({ onOpen }: { onOpen: () => void }) {
           </span>
           Invitation-only beta · limited seats
         </span>
-        <h3 className="mt-5 font-display text-[26px] leading-[1.15] tracking-tight text-white md:text-[36px]">
+        <h3 className="mt-5 font-display leading-[1.15] tracking-tight text-white" style={{ fontSize: "clamp(22px, 5.6vw, 36px)" }}>
           Be one of the first through the door.
         </h3>
-        <p className="mt-4 max-w-[60ch] text-[15px] leading-relaxed text-white/70 md:text-[16px]">
+        <p className="mt-4 max-w-[60ch] text-[14.5px] leading-relaxed text-white/70 md:text-[16px]">
           RememFur is opening quietly, to a small circle of early companions who'll help shape it. Request your invitation — we're letting people in a few at a time.
         </p>
         <button
           type="button"
           onClick={onOpen}
-          className="mt-7 inline-flex items-center gap-2 rounded-full bg-gradient-to-b from-[#F6D9A0] to-[#E8B96D] px-6 py-3 text-[14px] font-semibold text-[#1a1200] shadow-[0_10px_28px_-12px_rgba(232,185,109,0.6)] hover:brightness-105"
+          className="mt-7 inline-flex w-full max-w-[320px] items-center justify-center gap-2 rounded-full bg-gradient-to-b from-[#F6D9A0] to-[#E8B96D] px-6 py-3 text-[14px] font-semibold text-[#1a1200] shadow-[0_10px_28px_-12px_rgba(232,185,109,0.6)] hover:brightness-105 md:w-auto md:max-w-none"
         >
           <Sparkles className="h-4 w-4" />
           Request an invitation
@@ -1679,8 +1732,23 @@ function PlaquePawtrait() {
     <div className="w-full max-w-[340px]">
       <Plaque>
         <div className="flex flex-col items-center py-4">
-          <div className="flex h-28 w-28 items-center justify-center rounded-2xl border border-[var(--gold)]/50 bg-[#04060D]" style={{ boxShadow: "inset 0 0 20px rgba(212,179,120,0.15), 0 0 30px -10px rgba(212,179,120,0.35)" }}>
-            <BookOpen className="h-12 w-12 text-[var(--gold)]" strokeWidth={1.5} />
+          <div
+            className="overflow-hidden rounded-xl border border-[var(--gold)]/40"
+            style={{
+              width: "100%",
+              maxWidth: 260,
+              height: 120,
+              boxShadow: "inset 0 0 20px rgba(212,179,120,0.12), 0 0 30px -10px rgba(212,179,120,0.35)",
+            }}
+          >
+            <img
+              src={pawtraitPreviewImg}
+              alt="An open illustrated storybook of a dog through the seasons in warm lamplight"
+              className="h-full w-full object-cover"
+              width={1024}
+              height={768}
+              loading="lazy"
+            />
           </div>
           <p className="mt-5 font-display italic text-[15px] text-white/75">
             "Once upon a good boy…"
