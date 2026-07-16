@@ -41,6 +41,30 @@ export type Database = {
         }
         Relationships: []
       }
+      beta_invites: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          note: string | null
+          source: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          note?: string | null
+          source?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          note?: string | null
+          source?: string | null
+        }
+        Relationships: []
+      }
       candles: {
         Row: {
           created_at: string
