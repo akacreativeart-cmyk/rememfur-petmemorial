@@ -99,12 +99,10 @@ function VigilDog({ size = 150, className = "" }: { size?: number; className?: s
 function CosmosBg({ mode = "memory", reduced = false }: { mode?: WorldMode; reduced?: boolean }) {
   const [stars, setStars] = useState<{ className: string; style: React.CSSProperties }[]>([]);
   const [streaks, setStreaks] = useState<{ id: number; top: string; left: string; ang: string }[]>([]);
-  const [reduced, setReduced] = useState(false);
 
   useEffect(() => {
-    const mq = window.matchMedia?.("(prefers-reduced-motion: reduce)");
-    setReduced(mq?.matches ?? false);
-    if (mq?.matches) return;
+    if (reduced) return;
+
 
     const generated = Array.from({ length: 130 }, () => {
       const r = Math.random();
