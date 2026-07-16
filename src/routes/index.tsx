@@ -1732,8 +1732,23 @@ function PlaquePawtrait() {
     <div className="w-full max-w-[340px]">
       <Plaque>
         <div className="flex flex-col items-center py-4">
-          <div className="flex h-28 w-28 items-center justify-center rounded-2xl border border-[var(--gold)]/50 bg-[#04060D]" style={{ boxShadow: "inset 0 0 20px rgba(212,179,120,0.15), 0 0 30px -10px rgba(212,179,120,0.35)" }}>
-            <BookOpen className="h-12 w-12 text-[var(--gold)]" strokeWidth={1.5} />
+          <div
+            className="overflow-hidden rounded-xl border border-[var(--gold)]/40"
+            style={{
+              width: "100%",
+              maxWidth: 260,
+              height: 120,
+              boxShadow: "inset 0 0 20px rgba(212,179,120,0.12), 0 0 30px -10px rgba(212,179,120,0.35)",
+            }}
+          >
+            <img
+              src={pawtraitPreviewImg}
+              alt="An open illustrated storybook of a dog through the seasons in warm lamplight"
+              className="h-full w-full object-cover"
+              width={1024}
+              height={768}
+              loading="lazy"
+            />
           </div>
           <p className="mt-5 font-display italic text-[15px] text-white/75">
             "Once upon a good boy…"
