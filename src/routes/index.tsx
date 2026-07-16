@@ -453,7 +453,7 @@ function HomePage() {
 
 /* ────────── HERO ────────── */
 
-function Hero({ primaryCandle }: { primaryCandle: ReactNode }) {
+function Hero({ primaryCandle, onLastLetter }: { primaryCandle: ReactNode; onLastLetter?: () => void }) {
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -474,7 +474,10 @@ function Hero({ primaryCandle }: { primaryCandle: ReactNode }) {
       {/* TOP: story + CTA in normal flow, centered vertically in remaining space */}
       <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-5 pb-8 pt-20 text-center md:pt-24">
         <div className="mx-auto flex w-full max-w-md flex-col items-center md:max-w-2xl">
-          <p className="rise-in text-[11px] uppercase tracking-[0.32em] text-amber-200/75" style={{ animationDelay: "0.1s" }}>
+          <p className="rise-in font-display italic text-[15px] leading-[1.4] text-[var(--gold)]/90 md:text-[18px]" style={{ animationDelay: "0.05s" }}>
+            From their first day to long after their last.
+          </p>
+          <p className="rise-in mt-3 text-[11px] uppercase tracking-[0.32em] text-amber-200/75" style={{ animationDelay: "0.15s" }}>
             In loving memory · and in living joy
           </p>
           <h1 className="rise-in mt-4 font-display text-[30px] leading-[1.08] tracking-tight text-white md:text-6xl lg:text-[64px]" style={{ animationDelay: "0.3s" }}>
@@ -490,9 +493,18 @@ function Hero({ primaryCandle }: { primaryCandle: ReactNode }) {
             <Link to="/create/memorial" className="link-gold">
               Write a memorial
             </Link>
+            <button
+              type="button"
+              onClick={onLastLetter}
+              className="mt-1 inline-flex items-center gap-2 font-display italic text-[15.5px] text-[var(--gold)]/90 underline-offset-4 opacity-90 hover:underline"
+            >
+              <Mail className="h-4 w-4" />
+              Send them your last letter
+            </button>
           </div>
         </div>
       </div>
+
 
       {/* BOTTOM: Vigil scene as normal-flow block — content above can never overlap */}
       <div className="relative w-full h-[260px] md:h-[340px]">
