@@ -261,6 +261,26 @@ function HomePage() {
     staleTime: 60_000,
   });
 
+  // World state — default to memory; restore from localStorage
+  const [mode, setMode] = useState<WorldMode>("memory");
+  const [reduced, setReduced] = useState(false);
+  useEffect(() => {
+    try {
+      const saved = window.localStorage.getItem("rememfur.world");
+      if (saved === "life" || saved === "memory") setMode(saved);
+    } catch { /* ignore */ }
+    const mq = window.matchMedia?.("(prefers-reduced-motion: reduce)");
+    setReduced(!!mq?.matches);
+  }, []);
+  useEffect(() => {
+    try { window.localStorage.setItem("rememfur.world", mode); } catch { /* ignore */ }
+  }, [mode]);
+
+  // Beta dialog controlled from many places
+  const [betaOpen, setBetaOpen] = useState(false);
+  const [betaSource, setBetaSource] = useState("hero");
+  const openBeta = (source: string) => { setBetaSource(source); setBetaOpen(true); };
+
   const primaryCandle = (label: string = "Light a paw lamp") =>
     featured.data ? (
       <CandleDialog
@@ -290,89 +310,132 @@ function HomePage() {
         </Link>
       );
 
+  // Palette variables scoped to the wrapper (do NOT bleed globally)
+  const memoryVars: CSSProperties = {
+    ["--w-bg" as string]: "radial-gradient(130% 90% at 50% 0%, #0D1530, #050810 62%)",
+    ["--w-ink" as string]: "#F2ECDD",
+    ["--w-muted" as string]: "rgba(242,236,221,0.6)",
+    ["--w-accent" as string]: "#E8B96D",
+    ["--w-accent-2" as string]: "#F6D9A0",
+    ["--w-hair" as string]: "rgba(232,185,109,0.2)",
+    ["--w-card-1" as string]: "#151f36",
+    ["--w-card-2" as string]: "#0a0f20",
+    ["--w-kind" as string]: "#8FC79E",
+  };
+  const lifeVars: CSSProperties = {
+    ["--w-bg" as string]: "radial-gradient(130% 90% at 50% 0%, #F4E9D8, #EAD9BE 62%)",
+    ["--w-ink" as string]: "#3A2C1C",
+    ["--w-muted" as string]: "rgba(58,44,28,0.62)",
+    ["--w-accent" as string]: "#A8641C",
+    ["--w-accent-2" as string]: "#C9852F",
+    ["--w-hair" as string]: "rgba(168,100,28,0.3)",
+    ["--w-card-1" as string]: "#FFFDF7",
+    ["--w-card-2" as string]: "#F6ECD8",
+    ["--w-kind" as string]: "#5C9A6E",
+  };
+  const wrapperStyle: CSSProperties = {
+    ...(mode === "life" ? lifeVars : memoryVars),
+    background: "var(--w-bg)",
+    color: "var(--w-ink)",
+    transition: reduced ? "none" : "background 1.1s ease, color 1.1s ease",
+  };
+
   return (
-    <div className="relative min-h-screen text-white">
+    <div className="relative min-h-screen text-white" style={wrapperStyle}>
       <VigilDogSymbol />
-      <CosmosBg />
+      <CosmosBg mode={mode} reduced={reduced} />
+      <DawnBg mode={mode} reduced={reduced} />
       <IntroSequence />
       <SiteHeader />
 
-      {/* A · HERO — grief-first CTA */}
-      <Hero primaryCandle={primaryCandle("Light a paw lamp")} />
+      <WorldToggle mode={mode} setMode={setMode} reduced={reduced} />
 
-      {/* A2 · PASSAGE — they were never "just" a pet */}
-      <section className="relative px-5 py-20 text-center md:px-8 md:py-28">
-        <Reveal className="mx-auto max-w-3xl">
-          <h2 className="font-display italic text-[24px] leading-[1.3] text-[#f5e6c8]/90 md:text-[34px] lg:text-[38px]">
-            They were never <span className="not-italic">"just"</span> a pet. They were years of coming home to someone.
-          </h2>
-          <p className="mt-6 font-display text-[18px] leading-[1.5] text-white/70 md:text-[22px]">
-            All that love doesn't disappear when they do. It just needs somewhere to go — a paw lamp in the dark, a memorial that stays, a star in a sky that remembers.
-          </p>
-        </Reveal>
+      {/* MEMORY WORLD */}
+      <WorldPane active={mode === "memory"} reduced={reduced}>
+        <Hero
+          primaryCandle={primaryCandle("Light a paw lamp")}
+          onLastLetter={() => openBeta("last-letter")}
+        />
+        <section className="relative px-5 py-20 text-center md:px-8 md:py-28">
+          <Reveal className="mx-auto max-w-3xl">
+            <h2 className="font-display italic text-[24px] leading-[1.3] text-[#f5e6c8]/90 md:text-[34px] lg:text-[38px]">
+              They were never <span className="not-italic">"just"</span> a pet. They were years of coming home to someone.
+            </h2>
+            <p className="mt-6 font-display text-[18px] leading-[1.5] text-white/70 md:text-[22px]">
+              All that love doesn't disappear when they do. It just needs somewhere to go — a paw lamp in the dark, a memorial that stays, a star in a sky that remembers.
+            </p>
+          </Reveal>
+          <Divider />
+        </section>
+
+        <GriefBelongingSection />
+        <CareRail />
+        <MarketplaceRail />
+        <Chapters
+          primaryCandle={primaryCandle("Light theirs now")}
+          onDev={openBeta}
+        />
+
         <Divider />
-      </section>
+        <CandleStrip
+          candles={recent.data ?? []}
+          weekCount={weekly.data?.count ?? 0}
+          loading={recent.isLoading}
+        />
 
-      {/* A3 · GRIEF THAT BELONGS SOMEWHERE */}
-      <GriefBelongingSection />
-
-      {/* A4 · MARKETPLACE / CARE RAILS */}
-      <CareRail />
-      <MarketplaceRail />
-
-      {/* C · SIX CHAPTERS */}
-      <Chapters primaryCandle={primaryCandle("Light theirs now")} />
-
-      {/* D · LIVE CANDLES */}
-      <Divider />
-      <CandleStrip
-        candles={recent.data ?? []}
-        weekCount={weekly.data?.count ?? 0}
-        loading={recent.isLoading}
-      />
-
-      {/* E · HOW IT WORKS */}
-      <Divider />
-      <section className="relative px-5 py-16 md:px-8 md:py-24">
-        <div className="mx-auto max-w-md md:max-w-[1100px]">
-          <Reveal>
-            <h2 className="text-center font-display text-[30px] leading-[1.1] tracking-tight text-white md:text-5xl">
-              How it works
-            </h2>
-          </Reveal>
-          <div className="mt-10 grid gap-6 md:mt-14 md:grid-cols-3 md:gap-8">
-            <Reveal><Step n="I" title="Say their name." body="Tell us who they were — a name, a photo, a few words. Or just a name. That's enough." /></Reveal>
-            <Reveal><Step n="II" title="Light their paw lamp." body="A small warm light burning in their name. Yours forever, and lit by anyone who visits." /></Reveal>
-            <Reveal><Step n="III" title="Return anytime." body="Their page stays. Come back on the hard days — birthdays, anniversaries, quiet Tuesdays." /></Reveal>
+        <Divider />
+        <section className="relative px-5 py-16 md:px-8 md:py-24">
+          <div className="mx-auto max-w-md md:max-w-[1100px]">
+            <Reveal>
+              <h2 className="text-center font-display text-[30px] leading-[1.1] tracking-tight text-white md:text-5xl">
+                How it works
+              </h2>
+            </Reveal>
+            <div className="mt-10 grid gap-6 md:mt-14 md:grid-cols-3 md:gap-8">
+              <Reveal><Step n="I" title="Say their name." body="Tell us who they were — a name, a photo, a few words. Or just a name. That's enough." /></Reveal>
+              <Reveal><Step n="II" title="Light their paw lamp." body="A small warm light burning in their name. Yours forever, and lit by anyone who visits." /></Reveal>
+              <Reveal><Step n="III" title="Return anytime." body="Their page stays. Come back on the hard days — birthdays, anniversaries, quiet Tuesdays." /></Reveal>
+            </div>
+            <p className="mt-10 text-center text-[11px] uppercase tracking-[0.28em] text-white/45">
+              No account needed. It takes about a minute.
+            </p>
           </div>
-          <p className="mt-10 text-center text-[11px] uppercase tracking-[0.28em] text-white/45">
-            No account needed. It takes about a minute.
-          </p>
-        </div>
-      </section>
+        </section>
 
-      {/* F · FAQ */}
-      <Divider />
-      <section className="relative px-5 py-16 md:px-8 md:py-24">
-        <div className="mx-auto max-w-md md:max-w-3xl">
-          <Reveal>
-            <h2 className="text-center font-display text-[30px] leading-[1.1] tracking-tight text-white md:text-5xl">
-              Gentle answers
-            </h2>
-          </Reveal>
-          <div className="mt-8 grid gap-3 md:mt-10">
-            <FaqItem q="Is it free?" a="Yes. Creating a memorial, lighting a paw lamp, and visiting the garden are all free." />
-            <FaqItem q="Do I need an account to light a paw lamp?" a="No. You can light a paw lamp for any pet without signing up. An account is only needed if you want to create your own memorial, keep a journal, or track your pets' records." />
-            <FaqItem q="Can I keep a memorial private?" a="Yes. You can keep a memorial just for you, share it only with a link, or let it live in the garden — your choice, and you can change it anytime." />
-            <FaqItem q="Can I add more photos later?" a="Yes. You can return anytime to add photos, edit their story, or update anything about their memorial." />
-            <FaqItem q="What about the marketplace, vets, or funeral services?" a="Those are on the way — join the notify list on any card above and we'll let you know as each part opens." />
-            <FaqItem q="Can I take a memorial down?" a="Yes. You control your memorials completely, and you can quietly take one down whenever you need to." />
+        <Divider />
+        <section className="relative px-5 py-16 md:px-8 md:py-24">
+          <div className="mx-auto max-w-md md:max-w-3xl">
+            <Reveal>
+              <h2 className="text-center font-display text-[30px] leading-[1.1] tracking-tight text-white md:text-5xl">
+                Gentle answers
+              </h2>
+            </Reveal>
+            <div className="mt-8 grid gap-3 md:mt-10">
+              <FaqItem q="Is it free?" a="Yes. Creating a memorial, lighting a paw lamp, and visiting the garden are all free." />
+              <FaqItem q="Do I need an account to light a paw lamp?" a="No. You can light a paw lamp for any pet without signing up. An account is only needed if you want to create your own memorial, keep a journal, or track your pets' records." />
+              <FaqItem q="Can I keep a memorial private?" a="Yes. You can keep a memorial just for you, share it only with a link, or let it live in the garden — your choice, and you can change it anytime." />
+              <FaqItem q="Can I add more photos later?" a="Yes. You can return anytime to add photos, edit their story, or update anything about their memorial." />
+              <FaqItem q="What about the marketplace, vets, or funeral services?" a="Those are on the way — join the notify list on any card above and we'll let you know as each part opens." />
+              <FaqItem q="Can I take a memorial down?" a="Yes. You control your memorials completely, and you can quietly take one down whenever you need to." />
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* G · CLOSING */}
-      <ClosingScene primaryCandle={primaryCandle("Light a paw lamp")} />
+        <ClosingScene primaryCandle={primaryCandle("Light a paw lamp")} />
+      </WorldPane>
+
+      {/* LIFE WORLD */}
+      <WorldPane active={mode === "life"} reduced={reduced}>
+        <LifeWorld onDev={openBeta} />
+      </WorldPane>
+
+      {/* BRIDGE — shared */}
+      <Bridge />
+
+      {/* BETA — shared */}
+      <BetaBand onOpen={() => openBeta("beta-band")} />
+
+      <BetaInviteDialog source={betaSource} open={betaOpen} onOpenChange={setBetaOpen} />
 
       <div className="pb-[calc(72px+env(safe-area-inset-bottom))] md:pb-6">
         <SiteFooter />
@@ -380,6 +443,7 @@ function HomePage() {
     </div>
   );
 }
+
 
 /* ────────── HERO ────────── */
 
