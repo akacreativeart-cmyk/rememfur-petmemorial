@@ -1616,23 +1616,44 @@ function LifeTileCard({ tile, onDev }: { tile: LifeTile; onDev: (source: string)
 
 function Bridge() {
   return (
-    <section className="relative px-5 py-16 md:px-8 md:py-20">
+    <section className="relative px-[18px] py-14 md:px-8 md:py-20">
       <div
-        className="mx-auto max-w-[900px] rounded-[20px] p-8 md:p-10 text-center"
+        className="relative mx-auto max-w-[900px] overflow-hidden rounded-[20px] p-6 text-center md:p-10"
         style={{
           background: "linear-gradient(160deg, rgba(232,185,109,0.08), rgba(232,185,109,0.02))",
           border: "1px solid var(--w-hair)",
         }}
       >
-        <p className="text-[11px] uppercase tracking-[0.3em]" style={{ color: "var(--w-accent)" }}>
-          The two are one
-        </p>
-        <h3 className="mt-3 font-display text-[24px] leading-[1.2] tracking-tight md:text-[32px]" style={{ color: "var(--w-ink)" }}>
-          A pet never leaves. They only move from one sky to another.
-        </h3>
-        <p className="mx-auto mt-5 max-w-[62ch] text-[15px] leading-relaxed md:text-[16px]" style={{ color: "var(--w-muted)" }}>
-          When the hardest day comes, a living pet's profile becomes their memorial — their whole life, every birthday and photo and milestone, carried gently across. The same love, in both seasons. This is the only place that holds all of it.
-        </p>
+        {/* Painterly sky background */}
+        <img
+          src={bridgeSkyImg}
+          alt=""
+          aria-hidden
+          className="pointer-events-none absolute inset-0 h-full w-full object-cover"
+          style={{ opacity: 0.28 }}
+          width={1600}
+          height={704}
+          loading="lazy"
+        />
+        {/* Legibility scrim (adapts per world via w-bg) */}
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(180deg, color-mix(in srgb, var(--w-bg) 55%, transparent) 0%, color-mix(in srgb, var(--w-bg) 78%, transparent) 100%)",
+          }}
+        />
+        <div className="relative">
+          <p className="text-[11px] uppercase tracking-[0.3em]" style={{ color: "var(--w-accent)" }}>
+            The two are one
+          </p>
+          <h3 className="mt-3 font-display leading-[1.2] tracking-tight" style={{ color: "var(--w-ink)", fontSize: "clamp(22px, 5.5vw, 32px)" }}>
+            A pet never leaves. They only move from one sky to another.
+          </h3>
+          <p className="mx-auto mt-5 max-w-[62ch] text-[14.5px] leading-relaxed md:text-[16px]" style={{ color: "var(--w-muted)" }}>
+            When the hardest day comes, a living pet's profile becomes their memorial — their whole life, every birthday and photo and milestone, carried gently across. The same love, in both seasons. This is the only place that holds all of it.
+          </p>
+        </div>
       </div>
     </section>
   );
@@ -1640,9 +1661,9 @@ function Bridge() {
 
 function BetaBand({ onOpen }: { onOpen: () => void }) {
   return (
-    <section className="relative px-5 py-14 md:px-8 md:py-20">
+    <section className="relative px-[18px] py-12 md:px-8 md:py-20">
       <div
-        className="mx-auto flex max-w-[900px] flex-col items-center rounded-[20px] p-8 text-center md:p-12"
+        className="mx-auto flex max-w-[900px] flex-col items-center rounded-[20px] p-6 text-center md:p-12"
         style={{
           background: "linear-gradient(150deg,#12182b,#0a0e1c 70%)",
           border: "1px solid rgba(232,185,109,0.28)",
@@ -1658,16 +1679,16 @@ function BetaBand({ onOpen }: { onOpen: () => void }) {
           </span>
           Invitation-only beta · limited seats
         </span>
-        <h3 className="mt-5 font-display text-[26px] leading-[1.15] tracking-tight text-white md:text-[36px]">
+        <h3 className="mt-5 font-display leading-[1.15] tracking-tight text-white" style={{ fontSize: "clamp(22px, 5.6vw, 36px)" }}>
           Be one of the first through the door.
         </h3>
-        <p className="mt-4 max-w-[60ch] text-[15px] leading-relaxed text-white/70 md:text-[16px]">
+        <p className="mt-4 max-w-[60ch] text-[14.5px] leading-relaxed text-white/70 md:text-[16px]">
           RememFur is opening quietly, to a small circle of early companions who'll help shape it. Request your invitation — we're letting people in a few at a time.
         </p>
         <button
           type="button"
           onClick={onOpen}
-          className="mt-7 inline-flex items-center gap-2 rounded-full bg-gradient-to-b from-[#F6D9A0] to-[#E8B96D] px-6 py-3 text-[14px] font-semibold text-[#1a1200] shadow-[0_10px_28px_-12px_rgba(232,185,109,0.6)] hover:brightness-105"
+          className="mt-7 inline-flex w-full max-w-[320px] items-center justify-center gap-2 rounded-full bg-gradient-to-b from-[#F6D9A0] to-[#E8B96D] px-6 py-3 text-[14px] font-semibold text-[#1a1200] shadow-[0_10px_28px_-12px_rgba(232,185,109,0.6)] hover:brightness-105 md:w-auto md:max-w-none"
         >
           <Sparkles className="h-4 w-4" />
           Request an invitation
