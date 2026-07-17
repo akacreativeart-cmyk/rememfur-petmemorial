@@ -3,6 +3,7 @@ import { Copy, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { format } from "date-fns";
+import { getConstellation, getProse, type Constellation } from "@/lib/constellations";
 
 interface TheirSkyProps {
   petName: string;
@@ -10,97 +11,35 @@ interface TheirSkyProps {
   location?: string | null;
   memorialUrl: string;
   species?: "dog" | "cat" | "other" | null;
+  memorialId?: string | null;
 }
 
-/** Canis Major layout — the dog constellation. Extension point below for future variants. */
-const CANIS_MAJOR = {
-  name: "Canis Major",
-  stars: [
-    { id: "sirius", x: 30, y: 30, r: 3, glow: true },
-    { id: "s1", x: 14, y: 38, r: 1.4 },
-    { id: "s2", x: 46, y: 16, r: 1.4 },
-    { id: "s3", x: 52, y: 56, r: 1.6 },
-    { id: "s4", x: 38, y: 78, r: 1.4 },
-    { id: "s5", x: 72, y: 72, r: 1.5 },
-    { id: "s6", x: 20, y: 72, r: 1.3 },
-  ],
-  lines: [
-    ["sirius", "s1"],
-    ["sirius", "s2"],
-    ["sirius", "s3"],
-    ["s3", "s5"],
-    ["s3", "s4"],
-    ["s4", "s6"],
-  ] as Array<[string, string]>,
-};
-
-function seasonOf(iso: string | null): "spring" | "summer" | "autumn" | "winter" {
-  if (!iso) return "winter";
-  const m = new Date(iso).getUTCMonth() + 1; // 1..12
-  if (m >= 3 && m <= 5) return "spring";
-  if (m >= 6 && m <= 8) return "summer";
-  if (m >= 9 && m <= 11) return "autumn";
-  return "winter";
-}
-
-const PROSE: Record<ReturnType<typeof seasonOf>, string[]> = {
-  spring: [
-    "The night they left, the first warm wind moved through the yard — and Sirius held steady, as if it had been waiting.",
-    "Somewhere between the blossoms and the last cold breath, Canis Major turned its slow head westward, watching.",
-    "Spring nights are honest — every star bright enough to hurt, and one bright enough to keep them company.",
-  ],
-  summer: [
-    "On the shortest night of their life, Sirius was hidden by the dawn — but the dog star always finds its way back.",
-    "Summer skies are shy about grief. Canis Major waits below the horizon, quietly, until you're ready.",
-    "The night they left, warm air held the smell of grass, and one star kept vigil where they used to sleep.",
-  ],
-  autumn: [
-    "As the leaves turned, Sirius returned to the eastern sky at four in the morning — a companion for anyone still awake.",
-    "Autumn brought Canis Major back to your window. He rises early now, watching, the way they used to.",
-    "The night they left, a long shadow of a dog crossed the sky, and Sirius burned so bright it cast one of its own.",
-  ],
-  winter: [
-    "On the night they left, Sirius burned so bright it cast a shadow — the whole southern sky was a dog looking up.",
-    "Winter is when Canis Major stands tall over the world, faithful, refusing to leave the sky before morning.",
-    "Cold nights hold the brightest stars. Sirius watched, the way they used to watch the door.",
-  ],
-};
-
-export function TheirSky({ petName, passingDate, location, memorialUrl, species }: TheirSkyProps) {
+export function TheirSky({ petName, passingDate, location, memorialUrl, species, memorialId }: TheirSkyProps) {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const [pulsing, setPulsing] = useState(false);
-  // species reserved for future cat/rabbit variants; today always Canis Major.
   void species;
 
-  const constellation = CANIS_MAJOR;
-  const season = seasonOf(passingDate);
-  const sentence = useMemo(() => {
-    const opts = PROSE[season];
-    return opts[Math.floor(Math.random() * opts.length)];
-  }, [season]);
+  const constellation: Constellation = useMemo(
+    () => getConstellation(passingDate ? new Date(passingDate) : new Date()),
+    [passingDate],
+  );
+
+  const seed = memorialId ?? `${petName}-${passingDate ?? ""}`;
+  const sentence = useMemo(() => getProse(constellation, seed), [constellation, seed]);
 
   const dateLabel = passingDate ? format(new Date(passingDate), "MMMM d, yyyy") : null;
   const eyebrow = [dateLabel ? `On ${dateLabel}` : null, location?.trim() || null].filter(Boolean).join(" · ");
   const captionLoc = location?.trim();
-  const caption = [dateLabel, "Evening sky", captionLoc].filter(Boolean).join(" · ");
-
-  const byId = Object.fromEntries(constellation.stars.map((s) => [s.id, s]));
+  const caption = [dateLabel, "Evening sky", constellation.name, captionLoc].filter(Boolean).join(" · ");
 
   const triggerPulse = () => {
     setPulsing(false);
-    // Force reflow so animation restarts on rapid taps.
     requestAnimationFrame(() => setPulsing(true));
     window.setTimeout(() => setPulsing(false), 650);
   };
 
   const shareText = () => {
-    const bits = [
-      `${constellation.name} for ${petName}.`,
-      sentence,
-      caption,
-      memorialUrl,
-    ];
-    return bits.filter(Boolean).join("\n");
+    return [`${constellation.name} for ${petName}.`, sentence, caption, memorialUrl].filter(Boolean).join("\n");
   };
 
   const onCopy = async () => {
@@ -120,35 +59,33 @@ export function TheirSky({ petName, passingDate, location, memorialUrl, species 
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // Deep navy background
     const bg = ctx.createLinearGradient(0, 0, 0, size);
     bg.addColorStop(0, "#0a0e1f");
     bg.addColorStop(1, "#05070f");
     ctx.fillStyle = bg;
     ctx.fillRect(0, 0, size, size);
 
-    // Constellation — coords are on a 0..90 canvas roughly (leaves margins)
     const pad = 140;
     const inner = size - pad * 2;
-    const toXY = (x: number, y: number) => [pad + (x / 90) * inner, pad + (y / 90) * inner] as const;
+    const toXY = (x: number, y: number) => [pad + (x / 100) * inner, pad + (y / 100) * inner] as const;
 
-    // lines
     ctx.strokeStyle = "rgba(212,179,120,0.55)";
     ctx.lineWidth = 1.5;
-    for (const [a, b] of constellation.lines) {
-      const A = byId[a]!;
-      const B = byId[b]!;
-      const [ax, ay] = toXY(A.x, A.y);
-      const [bx, by] = toXY(B.x, B.y);
+    for (const [ai, bi] of constellation.lines) {
+      const A = constellation.stars[ai];
+      const B = constellation.stars[bi];
+      if (!A || !B) continue;
+      const [ax, ay] = toXY(A[0], A[1]);
+      const [bx, by] = toXY(B[0], B[1]);
       ctx.beginPath();
       ctx.moveTo(ax, ay);
       ctx.lineTo(bx, by);
       ctx.stroke();
     }
-    // stars
     for (const s of constellation.stars) {
-      const [cx, cy] = toXY(s.x, s.y);
-      if (s.glow) {
+      const [cx, cy] = toXY(s[0], s[1]);
+      const r = s[2];
+      if (r >= 2) {
         const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, 90);
         g.addColorStop(0, "rgba(255,249,220,0.9)");
         g.addColorStop(0.5, "rgba(212,179,120,0.25)");
@@ -160,18 +97,16 @@ export function TheirSky({ petName, passingDate, location, memorialUrl, species 
       }
       ctx.fillStyle = "#fffbe6";
       ctx.beginPath();
-      ctx.arc(cx, cy, (s.r ?? 1.4) * 3.2, 0, Math.PI * 2);
+      ctx.arc(cx, cy, r * 3.2, 0, Math.PI * 2);
       ctx.fill();
     }
 
-    // Text
     ctx.fillStyle = "#e6e1d6";
     ctx.textAlign = "center";
     ctx.font = "600 42px Georgia, 'Cormorant Garamond', serif";
     ctx.fillText(constellation.name, size / 2, 90);
     ctx.font = "italic 28px Georgia, 'Cormorant Garamond', serif";
     ctx.fillStyle = "rgba(230,225,214,0.9)";
-    // wrap sentence
     const words = sentence.split(" ");
     const lines: string[] = [];
     let line = "";
@@ -197,7 +132,8 @@ export function TheirSky({ petName, passingDate, location, memorialUrl, species 
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `${petName}-canis-major.png`;
+      const slug = constellation.name.toLowerCase().replace(/\s+/g, "-");
+      a.download = `${petName}-${slug}.png`;
       document.body.appendChild(a);
       a.click();
       a.remove();
@@ -205,7 +141,6 @@ export function TheirSky({ petName, passingDate, location, memorialUrl, species 
     }, "image/png");
   };
 
-  // Trigger the initial stroke-dashoffset animation once mounted.
   useEffect(() => {
     const el = svgRef.current;
     if (!el) return;
@@ -218,7 +153,7 @@ export function TheirSky({ petName, passingDate, location, memorialUrl, species 
         <p className="text-[11px] uppercase tracking-[0.28em] text-amber-200/70">{eyebrow}</p>
       )}
       <h2 className="mt-2 font-display text-2xl text-foreground">{constellation.name}</h2>
-      <p className="mt-1 text-xs text-white/50">The dog constellation. Sirius is its brightest star.</p>
+      <p className="mt-1 text-xs text-white/50">The constellation that hung over you that night.</p>
 
       <button
         type="button"
@@ -228,7 +163,7 @@ export function TheirSky({ petName, passingDate, location, memorialUrl, species 
       >
         <svg
           ref={svgRef}
-          viewBox="0 0 90 90"
+          viewBox="0 0 100 100"
           className={`their-sky-svg h-full w-full ${pulsing ? "sky-pulse" : ""}`}
         >
           <defs>
@@ -244,20 +179,21 @@ export function TheirSky({ petName, passingDate, location, memorialUrl, species 
             </radialGradient>
           </defs>
 
-          <g className="ts-lines" stroke="#d4b378" strokeOpacity="0.55" strokeWidth="0.35" strokeLinecap="round" fill="none">
-            {constellation.lines.map(([a, b], i) => {
-              const A = byId[a]!;
-              const B = byId[b]!;
-              const dx = B.x - A.x;
-              const dy = B.y - A.y;
+          <g className="ts-lines" stroke="#d4b378" strokeOpacity="0.55" strokeWidth="0.4" strokeLinecap="round" fill="none">
+            {constellation.lines.map(([ai, bi], i) => {
+              const A = constellation.stars[ai];
+              const B = constellation.stars[bi];
+              if (!A || !B) return null;
+              const dx = B[0] - A[0];
+              const dy = B[1] - A[1];
               const len = Math.sqrt(dx * dx + dy * dy);
               return (
                 <line
-                  key={`${a}-${b}`}
-                  x1={A.x}
-                  y1={A.y}
-                  x2={B.x}
-                  y2={B.y}
+                  key={`${ai}-${bi}`}
+                  x1={A[0]}
+                  y1={A[1]}
+                  x2={B[0]}
+                  y2={B[1]}
                   className="ts-line"
                   style={
                     {
@@ -272,16 +208,19 @@ export function TheirSky({ petName, passingDate, location, memorialUrl, species 
             })}
           </g>
 
-          {constellation.stars.map((s, i) => (
-            <g
-              key={s.id}
-              className={`ts-star ${s.glow ? "ts-star-sirius" : ""}`}
-              style={{ ["--delay" as any]: `${constellation.lines.length * 150 + i * 90}ms`, transformOrigin: `${s.x}px ${s.y}px` }}
-            >
-              {s.glow && <circle cx={s.x} cy={s.y} r="9" fill="url(#tsSiriusGlow)" />}
-              <circle cx={s.x} cy={s.y} r={s.r} fill={s.glow ? "url(#tsSirius)" : "#fffbe6"} />
-            </g>
-          ))}
+          {constellation.stars.map((s, i) => {
+            const glow = s[2] >= 2;
+            return (
+              <g
+                key={i}
+                className={`ts-star ${glow ? "ts-star-sirius" : ""}`}
+                style={{ ["--delay" as any]: `${constellation.lines.length * 150 + i * 90}ms`, transformOrigin: `${s[0]}px ${s[1]}px` }}
+              >
+                {glow && <circle cx={s[0]} cy={s[1]} r={s[2] + 4} fill="url(#tsSiriusGlow)" />}
+                <circle cx={s[0]} cy={s[1]} r={s[2]} fill={glow ? "url(#tsSirius)" : "#fffbe6"} />
+              </g>
+            );
+          })}
         </svg>
       </button>
 
