@@ -385,7 +385,6 @@ function HomePage() {
         </section>
 
         <GriefBelongingSection />
-        <CareRail />
         <MarketplaceRail />
         <Chapters
           primaryCandle={primaryCandle("Light theirs now")}
