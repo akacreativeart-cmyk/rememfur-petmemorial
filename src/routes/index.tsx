@@ -1547,7 +1547,7 @@ function LifeWorld({ onDev }: { onDev: (source: string) => void }) {
 }
 
 function LifeTileCard({ tile, onDev }: { tile: LifeTile; onDev: (source: string) => void }) {
-  const { title, body, Icon, kind, source } = tile;
+  const { title, body, Icon, kind, source, cover, coverAlt } = tile;
   const isDev = !!source;
   const stroke = kind ? "var(--w-kind)" : "var(--w-accent)";
   const borderGrad = kind
@@ -1564,26 +1564,41 @@ function LifeTileCard({ tile, onDev }: { tile: LifeTile; onDev: (source: string)
     : "inset 0 0 0 1px rgba(168,100,28,.35), 0 0 22px -8px rgba(168,100,28,.5)";
 
   const inner = (
-    <div className="rounded-[19px] p-[18px] md:p-6" style={{ background: innerBg }}>
-      <div className="flex items-start justify-between gap-3">
-        <div
-          className="flex h-[52px] w-[52px] items-center justify-center rounded-[14px]"
-          style={{ background: iconBg, boxShadow: iconShadow }}
-        >
-          <Icon width={24} height={24} strokeWidth={1.5} style={{ stroke: stroke as string }} />
+    <div className="overflow-hidden rounded-[19px]" style={{ background: innerBg }}>
+      {cover && (
+        <div className="relative h-[120px] w-full overflow-hidden">
+          <img
+            src={cover}
+            alt={coverAlt ?? ""}
+            className="h-full w-full object-cover"
+            loading="lazy"
+            width={1200}
+            height={720}
+          />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2" style={{ background: `linear-gradient(180deg, transparent, ${kind ? "#EFEDDF" : "#F6ECD8"} 92%)` }} />
         </div>
-        {isDev && (
-          <span className="inline-flex shrink-0 items-center whitespace-nowrap rounded-full border px-2 py-[3px] text-[9px] font-medium uppercase tracking-[0.2em]" style={{ borderColor: "rgba(58,44,28,0.25)", color: "rgba(58,44,28,0.6)" }}>
-            In development
-          </span>
-        )}
+      )}
+      <div className={`relative p-[18px] md:p-6 ${cover ? "pt-3 md:pt-4" : ""}`}>
+        <div className="flex items-start justify-between gap-3">
+          <div
+            className={`flex h-[52px] w-[52px] items-center justify-center rounded-[14px] ${cover ? "-mt-10 bg-[#FFFDF7]" : ""}`}
+            style={{ background: cover ? undefined : iconBg, boxShadow: iconShadow, backgroundImage: cover ? iconBg : undefined }}
+          >
+            <Icon width={24} height={24} strokeWidth={1.5} style={{ stroke: stroke as string }} />
+          </div>
+          {isDev && (
+            <span className="inline-flex shrink-0 items-center whitespace-nowrap rounded-full border px-2 py-[3px] text-[9px] font-medium uppercase tracking-[0.2em]" style={{ borderColor: "rgba(58,44,28,0.25)", color: "rgba(58,44,28,0.6)" }}>
+              In development
+            </span>
+          )}
+        </div>
+        <h3 className="mt-4 font-display text-[19px] leading-tight md:text-[22px]" style={{ color: "var(--w-ink)" }}>
+          {title}
+        </h3>
+        <p className="mt-2 text-[13px] md:text-[13.5px]" style={{ lineHeight: 1.62, color: "var(--w-muted)" }}>
+          {body}
+        </p>
       </div>
-      <h3 className="mt-5 font-display text-[22px] leading-tight" style={{ color: "var(--w-ink)" }}>
-        {title}
-      </h3>
-      <p className="mt-2 text-[13px] md:text-[13.5px]" style={{ lineHeight: 1.62, color: "var(--w-muted)" }}>
-        {body}
-      </p>
     </div>
   );
 
