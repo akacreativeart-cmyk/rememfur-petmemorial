@@ -231,16 +231,21 @@ export type Database = {
       }
       memorials: {
         Row: {
+          approx_age: string | null
           birth_date: string | null
+          breed: string | null
           created_at: string
           deleted_at: string | null
           epitaph: string | null
           hero_image_url: string | null
           id: string
           is_public: boolean
+          location_city: string | null
+          nickname: string | null
           owner_id: string | null
           passing_date: string | null
           pet_name: string
+          pronouns: string | null
           slug: string
           species: string
           story: string | null
@@ -249,16 +254,21 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          approx_age?: string | null
           birth_date?: string | null
+          breed?: string | null
           created_at?: string
           deleted_at?: string | null
           epitaph?: string | null
           hero_image_url?: string | null
           id?: string
           is_public?: boolean
+          location_city?: string | null
+          nickname?: string | null
           owner_id?: string | null
           passing_date?: string | null
           pet_name: string
+          pronouns?: string | null
           slug: string
           species?: string
           story?: string | null
@@ -267,16 +277,21 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          approx_age?: string | null
           birth_date?: string | null
+          breed?: string | null
           created_at?: string
           deleted_at?: string | null
           epitaph?: string | null
           hero_image_url?: string | null
           id?: string
           is_public?: boolean
+          location_city?: string | null
+          nickname?: string | null
           owner_id?: string | null
           passing_date?: string | null
           pet_name?: string
+          pronouns?: string | null
           slug?: string
           species?: string
           story?: string | null
