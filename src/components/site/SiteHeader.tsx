@@ -239,7 +239,7 @@ export function SiteHeader() {
               <Link
                 key={item.to}
                 to={item.to}
-                className={`rounded-full px-3.5 py-1.5 text-sm transition ${
+                className={`rounded-full px-2.5 py-1.5 text-sm transition lg:px-3.5 ${
                   active
                     ? "bg-white/10 text-white"
                     : "text-white/70 hover:bg-white/5 hover:text-white"
