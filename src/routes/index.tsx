@@ -900,9 +900,9 @@ function GriefBelongingSection() {
       body: "A community who won't say 'it was just a dog' — because for them, it never was.",
     },
     {
-      Icon: BookOpen,
-      title: "Be guided",
-      body: "Gentle guidance for the first night, telling children, guilt, and anniversaries.",
+      Icon: MessagesSquare,
+      title: "Be heard",
+      body: "Post a memory at 2am and wake up to people who understand. No performance, no explaining yourself.",
     },
   ];
   return (
