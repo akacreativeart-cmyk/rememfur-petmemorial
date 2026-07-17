@@ -364,7 +364,12 @@ function HomePage() {
   // Beta dialog controlled from many places
   const [betaOpen, setBetaOpen] = useState(false);
   const [betaSource, setBetaSource] = useState("hero");
-  const openBeta = (source: string) => { setBetaSource(source); setBetaOpen(true); };
+  const [betaVariant, setBetaVariant] = useState<"console" | "waitlist">("waitlist");
+  const openBeta = (source: string, variant: "console" | "waitlist" = "waitlist") => {
+    setBetaSource(source);
+    setBetaVariant(variant);
+    setBetaOpen(true);
+  };
 
   const primaryCandle = (label: string = "Light a paw lamp") =>
     featured.data ? (
