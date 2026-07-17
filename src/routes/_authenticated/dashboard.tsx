@@ -162,10 +162,8 @@ function ZeroStateWelcome() {
       <p className="mx-auto mt-3 max-w-md text-sm text-muted-foreground">
         Take your time. We'll keep everything safe as you go — you can pause, come back, and finish whenever feels right.
       </p>
-      <Link to="/create" search={{ welcome: 1 } as never} className="mt-6 inline-block">
-        <Button className="rounded-full bg-amber-400 px-6 text-navy hover:bg-amber-300">
-          <Plus className="mr-1.5 h-4 w-4" /> Begin a memorial
-        </Button>
+      <Link to="/create" search={{ welcome: 1 } as never} className="btn-gold-sm mt-6">
+        <Plus className="h-4 w-4" /> Begin a memorial
       </Link>
     </div>
   );
