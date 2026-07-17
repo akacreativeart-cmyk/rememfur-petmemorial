@@ -2,7 +2,7 @@ import { Link, useRouter, useLocation } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { useIsAdmin } from "@/hooks/use-admin";
-import { ChevronLeft, LogOut, ShoppingBag, Menu, Home, Flower2, Users, BookOpen, PlusCircle, PenLine, User as UserIcon, Settings, HeartHandshake, Info, HandHeart, Stethoscope, LifeBuoy, ShieldCheck, Download, MessageSquare } from "lucide-react";
+import { ChevronLeft, LogOut, ShoppingBag, Menu, Home, Flower2, Users, BookOpen, PlusCircle, Feather, User as UserIcon, Settings, HeartHandshake, Info, HandHeart, Stethoscope, LifeBuoy, ShieldCheck, Download, MessageSquare } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { NotificationBell } from "@/components/site/NotificationBell";
 import { FeedbackDialog } from "@/components/site/FeedbackDialog";
@@ -225,7 +225,7 @@ export function SiteHeader() {
       </div>
 
       {/* Desktop header */}
-      <div className="mx-auto hidden h-16 max-w-[1200px] items-center justify-between gap-6 px-8 md:flex">
+      <div className="mx-auto hidden h-16 max-w-[1200px] items-center justify-between gap-4 px-6 md:flex lg:gap-6 lg:px-8">
         <Link to="/" className="flex items-center gap-2">
           <img src={logo} alt="" width={28} height={28} className="h-7 w-7 opacity-90" />
           <span className="brand-wordmark text-xl">rememfur</span>
@@ -239,7 +239,7 @@ export function SiteHeader() {
               <Link
                 key={item.to}
                 to={item.to}
-                className={`rounded-full px-3.5 py-1.5 text-sm transition ${
+                className={`rounded-full px-2.5 py-1.5 text-sm transition lg:px-3.5 ${
                   active
                     ? "bg-white/10 text-white"
                     : "text-white/70 hover:bg-white/5 hover:text-white"
@@ -251,15 +251,15 @@ export function SiteHeader() {
           })}
         </nav>
 
-        <Link
-          to="/create"
-          className="hidden md:inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-gradient-to-b from-[#F6D9A0] to-[#E8B96D] px-3.5 lg:px-4 py-2 text-sm font-semibold text-[#1a1200] shadow-[0_2px_14px_rgba(232,185,109,0.25)] transition hover:brightness-105"
-        >
-          <PenLine className="h-4 w-4 shrink-0" />
-          <span>Write a memorial</span>
-        </Link>
-
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 md:gap-2">
+          <Link
+            to={user ? "/create" : "/signup"}
+            search={user ? undefined : ({ redirect: "/create" } as never)}
+            className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-gradient-to-b from-[#F6D9A0] to-[#E8B96D] px-3.5 py-2 text-sm font-semibold text-[#1a1200] shadow-[0_6px_24px_-8px_rgba(232,185,109,0.5)] hover:brightness-105 lg:px-4"
+          >
+            <Feather className="h-4 w-4" strokeWidth={2} />
+            <span>Write a memorial</span>
+          </Link>
           <NotificationBell />
           {user ? (
             <button
