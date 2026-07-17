@@ -84,7 +84,7 @@ function CommunityPage() {
             <p className="text-sm text-muted-foreground">Sign in to share memories and join the conversation.</p>
             <div className="mt-3 flex justify-center gap-2">
               <Link to="/login"><Button variant="outline" size="sm">Log in</Button></Link>
-              <Link to="/signup"><Button size="sm" className="bg-amber-400 text-primary-foreground hover:bg-amber-300">Join</Button></Link>
+              <Link to="/signup" className="btn-gold-sm">Join</Link>
             </div>
           </div>
         )}
@@ -128,10 +128,8 @@ function CommunityPage() {
                   : "This is a quiet, tender room. A photo, a sentence, a small story — anything is welcome."}
               </p>
               <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
-                <Link to={user ? "/create" : "/signup"} search={user ? undefined : ({ redirect: "/create" } as never)}>
-                  <Button size="sm" className="rounded-full bg-[var(--cta)] text-[var(--cta-foreground,white)] hover:opacity-90">
-                    <PlusCircle className="mr-2 h-4 w-4" /> Create a post
-                  </Button>
+                <Link to={user ? "/create" : "/signup"} search={user ? undefined : ({ redirect: "/create" } as never)} className="btn-gold-sm">
+                  <PlusCircle className="h-4 w-4" /> Create a post
                 </Link>
                 <Link to="/">
                   <Button size="sm" variant="outline" className="rounded-full">

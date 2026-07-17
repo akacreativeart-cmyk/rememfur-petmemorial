@@ -90,10 +90,10 @@
   --faint:     rgba(242,236,221,.55);
   --hair:      rgba(232,185,109,.22);
 
-  /* CTA stays purple (user preference). Secondary warm accent = terracotta. */
-  --cta:            oklch(0.62 0.22 295);
-  --cta-deep:       oklch(0.48 0.24 290);
-  --cta-foreground: #ffffff;
+  /* Canonical CTA = brand gold. Matches btn-gold gradient tone. */
+  --cta:            #E8B96D;
+  --cta-deep:       #C9852F;
+  --cta-foreground: #1a1200;
 
   --background:   var(--bg);
   --foreground:   var(--cr);
@@ -996,7 +996,7 @@ html, body { overflow-x: hidden; }
 
 /* ── Uploaded RememFur CTA utilities ── */
 @utility btn-gold {
-  display: inline-flex; align-items: center; gap: 10px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
   font-family: var(--font-sans);
   font-size: 13px;
   letter-spacing: 0.22em;
@@ -1005,9 +1005,10 @@ html, body { overflow-x: hidden; }
   color: var(--void);
   background: linear-gradient(120deg, #F6D9A0, var(--upload-gold) 45%, var(--ember));
   padding: 17px 34px;
+  min-height: 44px;
   border-radius: 999px;
   box-shadow: 0 0 0 1px rgba(246,217,160,0.35), 0 8px 40px -8px rgba(232,185,109,0.5);
-  transition: transform 0.35s, box-shadow 0.35s;
+  transition: transform 0.35s, box-shadow 0.35s, filter 0.35s;
 
   &:hover {
     transform: translateY(-2px);
@@ -1017,6 +1018,86 @@ html, body { overflow-x: hidden; }
   &:active {
     transform: translateY(-1px);
   }
+
+  &:disabled {
+    opacity: 0.55;
+    transform: none;
+    filter: saturate(0.7);
+    cursor: not-allowed;
+  }
+}
+
+@utility btn-gold-sm {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--void);
+  background: linear-gradient(120deg, #F6D9A0, var(--upload-gold) 45%, var(--ember));
+  padding: 10px 18px;
+  min-height: 44px;
+  border-radius: 999px;
+  box-shadow: 0 6px 24px -8px rgba(232,185,109,0.5);
+  transition: transform 0.35s, box-shadow 0.35s, filter 0.35s;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px -10px rgba(232,185,109,0.65);
+  }
+
+  &:active { transform: translateY(-1px); }
+
+  &:disabled {
+    opacity: 0.55; transform: none; filter: saturate(0.7); cursor: not-allowed;
+  }
+}
+
+@utility btn-quiet {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--upload-gold);
+  background: rgba(232,185,109,0.06);
+  border: 1px solid rgba(232,185,109,0.2);
+  border-radius: 999px;
+  padding: 10px 18px;
+  min-height: 44px;
+  transition: background 0.3s, border-color 0.3s, transform 0.3s;
+
+  &:hover {
+    background: rgba(232,185,109,0.14);
+    border-color: rgba(232,185,109,0.4);
+  }
+
+  &:disabled { opacity: 0.55; cursor: not-allowed; }
+}
+
+@utility btn-kind {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #BEE3C8;
+  background: rgba(143,199,158,0.1);
+  border: 1px solid rgba(143,199,158,0.5);
+  border-radius: 999px;
+  padding: 10px 18px;
+  min-height: 44px;
+  transition: background 0.3s, border-color 0.3s, transform 0.3s;
+
+  &:hover {
+    background: rgba(143,199,158,0.2);
+    border-color: rgba(143,199,158,0.7);
+  }
+
+  &:disabled { opacity: 0.55; cursor: not-allowed; }
 }
 
 @utility link-gold {

@@ -73,7 +73,7 @@ function Resources() {
           <p className="mt-2 text-sm text-muted-foreground">
             See how others are honoring their pets. Light a paw lamp. Leave a kind word.
           </p>
-          <a href="/garden" className="mt-5 inline-flex items-center gap-2 rounded-full bg-amber-400 px-5 py-2.5 text-sm text-primary-foreground hover:bg-amber-300">
+          <a href="/garden" className="btn-gold-sm mt-5">
             <Heart className="h-4 w-4 fill-current" /> Visit the garden
           </a>
         </section>

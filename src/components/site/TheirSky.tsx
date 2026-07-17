@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Copy, Download } from "lucide-react";
-import { Button } from "@/components/ui/button";
+
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { getConstellation, getProse, type Constellation } from "@/lib/constellations";
@@ -230,12 +230,12 @@ export function TheirSky({ petName, passingDate, location, memorialUrl, species,
       <p className="mt-3 text-xs text-white/50">{caption}</p>
 
       <div className="mt-5 flex gap-2">
-        <Button variant="outline" size="sm" onClick={onCopy} className="rounded-full border-white/15 bg-white/5 text-white hover:bg-white/10">
-          <Copy className="mr-1.5 h-3.5 w-3.5" /> Share
-        </Button>
-        <Button variant="outline" size="sm" onClick={onSave} className="rounded-full border-white/15 bg-white/5 text-white hover:bg-white/10">
-          <Download className="mr-1.5 h-3.5 w-3.5" /> Save
-        </Button>
+        <button type="button" onClick={onCopy} className="btn-quiet">
+          <Copy className="h-3.5 w-3.5" /> Share
+        </button>
+        <button type="button" onClick={onSave} className="btn-quiet">
+          <Download className="h-3.5 w-3.5" /> Save
+        </button>
       </div>
     </section>
   );
