@@ -18,6 +18,9 @@ import {
 import lifeHeroImg from "@/assets/life-hero.jpg";
 import bridgeSkyImg from "@/assets/bridge-sky.jpg";
 import pawtraitPreviewImg from "@/assets/pawtrait-preview.jpg";
+import lifeServicesImg from "@/assets/life-services.jpg";
+import lifeLifestyleImg from "@/assets/life-lifestyle.jpg";
+import lifeAdoptionImg from "@/assets/life-adoption.jpg";
 
 type WorldMode = "memory" | "life";
 
