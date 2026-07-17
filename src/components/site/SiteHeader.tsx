@@ -225,7 +225,7 @@ export function SiteHeader() {
       </div>
 
       {/* Desktop header */}
-      <div className="mx-auto hidden h-16 max-w-[1200px] items-center justify-between gap-6 px-8 md:flex">
+      <div className="mx-auto hidden h-16 max-w-[1200px] items-center justify-between gap-4 px-6 md:flex lg:gap-6 lg:px-8">
         <Link to="/" className="flex items-center gap-2">
           <img src={logo} alt="" width={28} height={28} className="h-7 w-7 opacity-90" />
           <span className="brand-wordmark text-xl">rememfur</span>
