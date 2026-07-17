@@ -18,6 +18,9 @@ import {
 import lifeHeroImg from "@/assets/life-hero.jpg";
 import bridgeSkyImg from "@/assets/bridge-sky.jpg";
 import pawtraitPreviewImg from "@/assets/pawtrait-preview.jpg";
+import lifeServicesImg from "@/assets/life-services.jpg";
+import lifeLifestyleImg from "@/assets/life-lifestyle.jpg";
+import lifeAdoptionImg from "@/assets/life-adoption.jpg";
 
 type WorldMode = "memory" | "life";
 
@@ -107,7 +110,8 @@ function CosmosBg({ mode = "memory", reduced = false }: { mode?: WorldMode; redu
     if (reduced) return;
 
 
-    const generated = Array.from({ length: 130 }, () => {
+    const starCount = typeof window !== "undefined" && window.innerWidth < 768 ? 60 : 130;
+    const generated = Array.from({ length: starCount }, () => {
       const r = Math.random();
       const kind = r < 0.18 ? " warm" : r < 0.3 ? " blue" : "";
       const size = Math.random() < 0.85 ? 1.4 : 2.2;
@@ -1431,16 +1435,16 @@ function DawnBg({ mode, reduced }: { mode: WorldMode; reduced: boolean }) {
 
 /* ────────── LIFE WORLD ────────── */
 
-type LifeTile = { key: string; title: string; body: string; Icon: IconType; kind?: boolean; source?: string };
+type LifeTile = { key: string; title: string; body: string; Icon: IconType; kind?: boolean; source?: string; cover?: string; coverAlt?: string };
 
 const LIFE_TILES: LifeTile[] = [
   { key: "pet-profiles", title: "Pet profiles", body: "Every companion in one place — their records, milestones, and people.", Icon: PawPrint, source: "life-pet-profiles" },
   { key: "health", title: "Health & reminders", body: "Vaccinations, vet visits, insurance, grooming — tracked, with gentle nudges so nothing slips.", Icon: CalendarClock, source: "life-health" },
-  { key: "services", title: "Services near you", body: "Trusted vets, groomers, walkers, sitters and boarding — booked without the chaos.", Icon: Stethoscope, source: "life-services" },
+  { key: "services", title: "Services near you", body: "Trusted vets, groomers, walkers, sitters and boarding — booked without the chaos.", Icon: Stethoscope, source: "life-services", cover: lifeServicesImg, coverAlt: "A calm veterinary moment — gentle hands examining a relaxed golden dog" },
   { key: "food", title: "Food & essentials", body: "Genuinely wholesome nutrition and gear — no junk brands, no clutter.", Icon: ShoppingBag, source: "life-food" },
-  { key: "lifestyle", title: "Lifestyle & celebrations", body: "Birthdays, gotcha-days, playdates and outings — the joy, organised.", Icon: Cake, source: "life-lifestyle" },
+  { key: "lifestyle", title: "Lifestyle & celebrations", body: "Birthdays, gotcha-days, playdates and outings — the joy, organised.", Icon: Cake, source: "life-lifestyle", cover: lifeLifestyleImg, coverAlt: "A small joyful birthday moment for a dog with a paper hat and a bowl of treats" },
   { key: "community", title: "Community feed", body: "Share the wins and the mess with people who get it. Ask anything.", Icon: MessagesSquare },
-  { key: "adoption", title: "Adoption & shelters", body: "Give a waiting companion a home. Verified rescues — non-commercial, always first.", Icon: Home, kind: true, source: "life-adoption" },
+  { key: "adoption", title: "Adoption & shelters", body: "Give a waiting companion a home. Verified rescues — non-commercial, always first.", Icon: Home, kind: true, source: "life-adoption", cover: lifeAdoptionImg, coverAlt: "A hopeful shelter dog looking up through kennel bars into warm light" },
   { key: "stray", title: "Tag a stray", body: "Map neighbourhood strays so the whole community can watch over them.", Icon: MapPin, kind: true, source: "life-stray" },
   { key: "donate", title: "Donate to care", body: "Fund a shelter, or help someone who can't afford care for the pet they love.", Icon: HandHeart, kind: true, source: "life-donate" },
 ];
@@ -1543,7 +1547,7 @@ function LifeWorld({ onDev }: { onDev: (source: string) => void }) {
 }
 
 function LifeTileCard({ tile, onDev }: { tile: LifeTile; onDev: (source: string) => void }) {
-  const { title, body, Icon, kind, source } = tile;
+  const { title, body, Icon, kind, source, cover, coverAlt } = tile;
   const isDev = !!source;
   const stroke = kind ? "var(--w-kind)" : "var(--w-accent)";
   const borderGrad = kind
@@ -1560,26 +1564,41 @@ function LifeTileCard({ tile, onDev }: { tile: LifeTile; onDev: (source: string)
     : "inset 0 0 0 1px rgba(168,100,28,.35), 0 0 22px -8px rgba(168,100,28,.5)";
 
   const inner = (
-    <div className="rounded-[19px] p-[18px] md:p-6" style={{ background: innerBg }}>
-      <div className="flex items-start justify-between gap-3">
-        <div
-          className="flex h-[52px] w-[52px] items-center justify-center rounded-[14px]"
-          style={{ background: iconBg, boxShadow: iconShadow }}
-        >
-          <Icon width={24} height={24} strokeWidth={1.5} style={{ stroke: stroke as string }} />
+    <div className="overflow-hidden rounded-[19px]" style={{ background: innerBg }}>
+      {cover && (
+        <div className="relative h-[120px] w-full overflow-hidden">
+          <img
+            src={cover}
+            alt={coverAlt ?? ""}
+            className="h-full w-full object-cover"
+            loading="lazy"
+            width={1200}
+            height={720}
+          />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2" style={{ background: `linear-gradient(180deg, transparent, ${kind ? "#EFEDDF" : "#F6ECD8"} 92%)` }} />
         </div>
-        {isDev && (
-          <span className="inline-flex shrink-0 items-center whitespace-nowrap rounded-full border px-2 py-[3px] text-[9px] font-medium uppercase tracking-[0.2em]" style={{ borderColor: "rgba(58,44,28,0.25)", color: "rgba(58,44,28,0.6)" }}>
-            In development
-          </span>
-        )}
+      )}
+      <div className={`relative p-[18px] md:p-6 ${cover ? "pt-3 md:pt-4" : ""}`}>
+        <div className="flex items-start justify-between gap-3">
+          <div
+            className={`flex h-[52px] w-[52px] items-center justify-center rounded-[14px] ${cover ? "-mt-10 ring-4 ring-[#FFFDF7]" : ""}`}
+            style={{ background: iconBg, boxShadow: iconShadow }}
+          >
+            <Icon width={24} height={24} strokeWidth={1.5} style={{ stroke: stroke as string }} />
+          </div>
+          {isDev && (
+            <span className="inline-flex shrink-0 items-center whitespace-nowrap rounded-full border px-2 py-[3px] text-[9px] font-medium uppercase tracking-[0.2em]" style={{ borderColor: "rgba(58,44,28,0.25)", color: "rgba(58,44,28,0.6)" }}>
+              In development
+            </span>
+          )}
+        </div>
+        <h3 className="mt-4 font-display text-[19px] leading-tight md:text-[22px]" style={{ color: "var(--w-ink)" }}>
+          {title}
+        </h3>
+        <p className="mt-2 text-[13px] md:text-[13.5px]" style={{ lineHeight: 1.62, color: "var(--w-muted)" }}>
+          {body}
+        </p>
       </div>
-      <h3 className="mt-5 font-display text-[22px] leading-tight" style={{ color: "var(--w-ink)" }}>
-        {title}
-      </h3>
-      <p className="mt-2 text-[13px] md:text-[13.5px]" style={{ lineHeight: 1.62, color: "var(--w-muted)" }}>
-        {body}
-      </p>
     </div>
   );
 
