@@ -252,6 +252,14 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-1.5 md:gap-2">
+          <Link
+            to={user ? "/create" : "/signup"}
+            search={user ? undefined : ({ redirect: "/create" } as never)}
+            className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-gradient-to-b from-[#F6D9A0] to-[#E8B96D] px-3.5 py-2 text-sm font-semibold text-[#1a1200] shadow-[0_6px_24px_-8px_rgba(232,185,109,0.5)] hover:brightness-105 lg:px-4"
+          >
+            <Feather className="h-4 w-4" strokeWidth={2} />
+            <span>Write a memorial</span>
+          </Link>
           <NotificationBell />
           {user ? (
             <button
