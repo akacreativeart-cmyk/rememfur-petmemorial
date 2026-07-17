@@ -251,6 +251,14 @@ export function SiteHeader() {
           })}
         </nav>
 
+        <Link
+          to="/create"
+          className="hidden md:inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-gradient-to-b from-[#F6D9A0] to-[#E8B96D] px-3.5 lg:px-4 py-2 text-sm font-semibold text-[#1a1200] shadow-[0_2px_14px_rgba(232,185,109,0.25)] transition hover:brightness-105"
+        >
+          <PenLine className="h-4 w-4 shrink-0" />
+          <span>Write a memorial</span>
+        </Link>
+
         <div className="flex items-center gap-2">
           <NotificationBell />
           {user ? (
