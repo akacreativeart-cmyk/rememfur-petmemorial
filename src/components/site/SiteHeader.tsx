@@ -2,7 +2,7 @@ import { Link, useRouter, useLocation } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { useIsAdmin } from "@/hooks/use-admin";
-import { ChevronLeft, LogOut, ShoppingBag, Menu, Home, Flower2, Users, BookOpen, PlusCircle, PenLine, User as UserIcon, Settings, HeartHandshake, Info, HandHeart, Stethoscope, LifeBuoy, ShieldCheck, Download, MessageSquare } from "lucide-react";
+import { ChevronLeft, LogOut, ShoppingBag, Menu, Home, Flower2, Users, BookOpen, PlusCircle, Feather, User as UserIcon, Settings, HeartHandshake, Info, HandHeart, Stethoscope, LifeBuoy, ShieldCheck, Download, MessageSquare } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { NotificationBell } from "@/components/site/NotificationBell";
 import { FeedbackDialog } from "@/components/site/FeedbackDialog";
