@@ -1580,31 +1580,29 @@ function BetaBand({ onOpen }: { onOpen: () => void }) {
           color: "#F2ECDD",
         }}
       >
-        <span
-          className="inline-flex items-center gap-2 rounded-full border border-[rgba(232,185,109,0.4)] bg-white/[0.03] px-3 py-1 text-[10.5px] font-medium uppercase tracking-[0.22em] text-[#E8B96D]"
-        >
+        <span className="inline-flex items-center gap-2 rounded-full border border-[rgba(232,185,109,0.4)] bg-white/[0.03] px-3 py-1 text-[10.5px] font-medium uppercase tracking-[0.22em] text-[#E8B96D]">
           <span className="relative flex h-2 w-2">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#E8B96D] opacity-70" />
             <span className="relative inline-flex h-2 w-2 rounded-full bg-[#E8B96D]" />
           </span>
-          Invitation-only beta · limited seats
+          For someone who's hurting
         </span>
         <h3 className="mt-5 font-display leading-[1.15] tracking-tight text-white" style={{ fontSize: "clamp(22px, 5.6vw, 36px)" }}>
-          Be one of the first through the door.
+          Someone you love is grieving?
         </h3>
         <p className="mt-4 max-w-[60ch] text-[14.5px] leading-relaxed text-white/70 md:text-[16px]">
-          RememFur is opening quietly, to a small circle of early companions who'll help shape it. Request your invitation — we're letting people in a few at a time.
+          When a friend loses a pet, most people freeze — they want to help but don't know what to say, so they say nothing. Send them somewhere gentle instead.
         </p>
         <button
           type="button"
           onClick={onOpen}
           className="btn-gold ios-tappable mt-7 w-full max-w-[320px] md:w-auto md:max-w-none"
         >
-          <Sparkles className="h-4 w-4" />
-          Request an invitation
+          <Heart className="h-4 w-4" />
+          Be there for them
         </button>
         <p className="mt-4 text-[11.5px] text-white/45">
-          No spam. Just a note when a seat opens for you.
+          It takes a minute. It means everything.
         </p>
       </div>
     </section>
