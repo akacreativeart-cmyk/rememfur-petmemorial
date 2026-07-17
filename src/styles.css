@@ -1033,3 +1033,32 @@ html, body { overflow-x: hidden; }
     border-bottom-color: var(--hair);
   }
 }
+
+/* Realistic candle flame — subtle organic flicker.
+   Uses transform (scale + tiny sway) and opacity, with a paired halo pulse. */
+@keyframes candleFlicker {
+  0%   { transform: scaleY(1)     scaleX(1)    translateX(0);      opacity: 1; }
+  18%  { transform: scaleY(1.06)  scaleX(0.97) translateX(-0.12px); opacity: 0.96; }
+  34%  { transform: scaleY(0.94)  scaleX(1.04) translateX(0.14px);  opacity: 1; }
+  52%  { transform: scaleY(1.08)  scaleX(0.96) translateX(-0.08px); opacity: 0.94; }
+  68%  { transform: scaleY(0.97)  scaleX(1.02) translateX(0.1px);   opacity: 1; }
+  82%  { transform: scaleY(1.03)  scaleX(0.99) translateX(-0.06px); opacity: 0.98; }
+  100% { transform: scaleY(1)     scaleX(1)    translateX(0);       opacity: 1; }
+}
+@keyframes candleHaloPulse {
+  0%, 100% { opacity: 1;    transform: scale(1); }
+  50%      { opacity: 0.82; transform: scale(1.04); }
+}
+.candle-flame {
+  animation: candleFlicker 2.4s ease-in-out infinite;
+  transform-box: fill-box;
+  will-change: transform, opacity;
+}
+.candle-halo {
+  animation: candleHaloPulse 3.1s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+@media (prefers-reduced-motion: reduce) {
+  .candle-flame, .candle-halo { animation: none; }
+}
