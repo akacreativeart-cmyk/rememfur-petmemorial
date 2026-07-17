@@ -851,8 +851,8 @@ function ClosingScene({ primaryCandle }: { primaryCandle: ReactNode }) {
         </p>
         <div className="mt-8 flex flex-col items-center gap-3">
           {primaryCandle}
-          <Link to="/create" className="link-gold">
-            Create their memorial
+          <Link to="/create/memorial" className="link-gold">
+            Write a memorial
           </Link>
         </div>
       </Reveal>
