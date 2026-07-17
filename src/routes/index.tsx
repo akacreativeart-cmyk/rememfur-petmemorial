@@ -575,7 +575,7 @@ function Chapters({ primaryCandle, onDev }: { primaryCandle: ReactNode; onDev?: 
     {
       roman: "I", eyebrow: "Their memorial", title: "A page that stays.",
       body: "Photos, their story, the details only you knew — a place their name can live.",
-      cta: <Link to="/create" className="mt-6 btn-gold ios-tappable">Begin their memorial</Link>,
+      cta: <Link to="/create/memorial" className="mt-6 btn-gold ios-tappable">Write a memorial</Link>,
       plaque: <PlaqueMedallion />,
     },
     {
@@ -585,38 +585,20 @@ function Chapters({ primaryCandle, onDev }: { primaryCandle: ReactNode; onDev?: 
       plaque: <PlaqueCandles />,
     },
     {
-      roman: "III", eyebrow: "The garden", title: "A sky full of dogs.",
-      body: "Above the garden hangs Canis Major — the Great Dog — home of Sirius, the brightest star in Earth's whole night sky. The ancients put a dog there so it would never be forgotten. We understand completely.",
-      cta: <Link to="/garden" className="mt-6 link-gold">Visit the garden →</Link>,
-      plaque: <PlaqueCanisMajor />,
-    },
-    {
-      roman: "IV", eyebrow: "Their Sky", title: "The sky remembers the night they left.",
-      body: "Every memorial carries the real constellation from the night they passed, paired with a hand-written line. Tap the sky on any memorial to feel it pulse.",
-      cta: <Link to="/garden" className="mt-6 link-gold">See a sky →</Link>,
-      plaque: <PlaqueTheirSky />,
-    },
-    {
-      roman: "V", eyebrow: "The journal", title: "For the words you're not ready to say out loud.",
+      roman: "III", eyebrow: "The journal", title: "For the words you're not ready to say out loud.",
       body: "Private. Only yours. Written when the house is at its quietest.",
       cta: <Link to="/journal" className="mt-6 link-gold">Open the journal →</Link>,
       plaque: <PlaqueJournal />,
     },
     {
-      roman: "VI", eyebrow: "Grief support", title: "This grief is real. You're not overreacting.",
-      body: (<>Free pet-loss support lines: <a href="tel:+18774743310" className="text-white/80 hover:text-white">ASPCA · 877-474-3310</a> · <a href="tel:+18559335683" className="text-white/80 hover:text-white">Lap of Love · 855-933-5683</a></>),
-      cta: <Link to="/grief-support" className="mt-6 link-gold">Grief support →</Link>,
-      plaque: <PlaqueSupport />,
-    },
-    {
-      roman: "VII", eyebrow: "Their last letter", title: "The things left unsaid.",
+      roman: "IV", eyebrow: "Their last letter", title: "The things left unsaid.",
       body: "Write it, seal it, send it — wherever they are now.",
       dev: true, source: "last-letter",
       cta: devCta("last-letter", "Get early access"),
       plaque: <PlaqueLastLetter />,
     },
     {
-      roman: "VIII", eyebrow: "Pawtrait Tales™", title: "Their whole life, an illustrated storybook.",
+      roman: "V", eyebrow: "Pawtrait Tales™", title: "Their whole life, an illustrated storybook.",
       body: "Their whole life woven into an illustrated storybook, with a gentle hand from AI.",
       dev: true, source: "pawtrait-tales",
       cta: devCta("pawtrait-tales", "Get early access"),
