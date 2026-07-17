@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState, type ComponentType, type CSSProperties, type ReactNode, type SVGProps } from "react";
-import { ChevronDown, Utensils, Shirt, Stethoscope, Shield, Sparkles, PawPrint, HandHeart, MapPin, Skull, Cake, HeartHandshake, Home, Heart, Users, BookOpen, Feather, Cross, Gift, Bell, Mail, Moon, CalendarClock, ShoppingBag, MessagesSquare, Star, Phone } from "lucide-react";
+import { ChevronDown, Stethoscope, Sparkles, PawPrint, HandHeart, MapPin, Cake, Home, Heart, Users, Feather, Cross, Gift, Bell, Mail, Moon, CalendarClock, ShoppingBag, MessagesSquare, Star, Phone } from "lucide-react";
 import { getConstellation, getProse, type Constellation } from "@/lib/constellations";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -385,7 +385,6 @@ function HomePage() {
         </section>
 
         <GriefBelongingSection />
-        <CareRail />
         <MarketplaceRail />
         <Chapters
           primaryCandle={primaryCandle("Light theirs now")}
@@ -576,7 +575,7 @@ function Chapters({ primaryCandle, onDev }: { primaryCandle: ReactNode; onDev?: 
     {
       roman: "I", eyebrow: "Their memorial", title: "A page that stays.",
       body: "Photos, their story, the details only you knew — a place their name can live.",
-      cta: <Link to="/create" className="mt-6 btn-gold ios-tappable">Begin their memorial</Link>,
+      cta: <Link to="/create/memorial" className="mt-6 btn-gold ios-tappable">Write a memorial</Link>,
       plaque: <PlaqueMedallion />,
     },
     {
@@ -586,38 +585,20 @@ function Chapters({ primaryCandle, onDev }: { primaryCandle: ReactNode; onDev?: 
       plaque: <PlaqueCandles />,
     },
     {
-      roman: "III", eyebrow: "The garden", title: "A sky full of dogs.",
-      body: "Above the garden hangs Canis Major — the Great Dog — home of Sirius, the brightest star in Earth's whole night sky. The ancients put a dog there so it would never be forgotten. We understand completely.",
-      cta: <Link to="/garden" className="mt-6 link-gold">Visit the garden →</Link>,
-      plaque: <PlaqueCanisMajor />,
-    },
-    {
-      roman: "IV", eyebrow: "Their Sky", title: "The sky remembers the night they left.",
-      body: "Every memorial carries the real constellation from the night they passed, paired with a hand-written line. Tap the sky on any memorial to feel it pulse.",
-      cta: <Link to="/garden" className="mt-6 link-gold">See a sky →</Link>,
-      plaque: <PlaqueTheirSky />,
-    },
-    {
-      roman: "V", eyebrow: "The journal", title: "For the words you're not ready to say out loud.",
+      roman: "III", eyebrow: "The journal", title: "For the words you're not ready to say out loud.",
       body: "Private. Only yours. Written when the house is at its quietest.",
       cta: <Link to="/journal" className="mt-6 link-gold">Open the journal →</Link>,
       plaque: <PlaqueJournal />,
     },
     {
-      roman: "VI", eyebrow: "Grief support", title: "This grief is real. You're not overreacting.",
-      body: (<>Free pet-loss support lines: <a href="tel:+18774743310" className="text-white/80 hover:text-white">ASPCA · 877-474-3310</a> · <a href="tel:+18559335683" className="text-white/80 hover:text-white">Lap of Love · 855-933-5683</a></>),
-      cta: <Link to="/grief-support" className="mt-6 link-gold">Grief support →</Link>,
-      plaque: <PlaqueSupport />,
-    },
-    {
-      roman: "VII", eyebrow: "Their last letter", title: "The things left unsaid.",
+      roman: "IV", eyebrow: "Their last letter", title: "The things left unsaid.",
       body: "Write it, seal it, send it — wherever they are now.",
       dev: true, source: "last-letter",
       cta: devCta("last-letter", "Get early access"),
       plaque: <PlaqueLastLetter />,
     },
     {
-      roman: "VIII", eyebrow: "Pawtrait Tales™", title: "Their whole life, an illustrated storybook.",
+      roman: "V", eyebrow: "Pawtrait Tales™", title: "Their whole life, an illustrated storybook.",
       body: "Their whole life woven into an illustrated storybook, with a gentle hand from AI.",
       dev: true, source: "pawtrait-tales",
       cta: devCta("pawtrait-tales", "Get early access"),
@@ -708,114 +689,6 @@ function PlaqueCandles() {
   );
 }
 
-function PlaqueCanisMajor() {
-  const ref = useRef<SVGSVGElement | null>(null);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el || typeof IntersectionObserver === "undefined") { el?.classList.add("sky-in-view"); return; }
-    const io = new IntersectionObserver((es) => {
-      for (const e of es) if (e.isIntersecting) { (e.target as SVGSVGElement).classList.add("sky-in-view"); io.unobserve(e.target); }
-    }, { threshold: 0.35 });
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-
-  const stars = [
-    { id: "sirius", cx: 180, cy: 110, r: 5, label: "Sirius · the Dog Star" },
-    { id: "mirzam", cx: 90, cy: 155, label: "" },
-    { id: "muliphein", cx: 210, cy: 70, label: "" },
-    { id: "wezen", cx: 258, cy: 200, label: "Wezen" },
-    { id: "adhara", cx: 218, cy: 250, label: "Adhara" },
-    { id: "aludra", cx: 315, cy: 210, label: "" },
-    { id: "furud", cx: 140, cy: 232, label: "" },
-  ];
-  const byId = Object.fromEntries(stars.map((s) => [s.id, s]));
-  const lines: [string, string][] = [
-    ["sirius", "mirzam"], ["sirius", "muliphein"], ["sirius", "wezen"],
-    ["wezen", "aludra"], ["wezen", "adhara"], ["adhara", "furud"],
-  ];
-  return (
-    <div className="w-full max-w-[380px]">
-      <Plaque>
-        <svg ref={ref} viewBox="0 0 360 300" className="their-sky-svg block h-[260px] w-full" aria-hidden>
-          {/* faint background stars */}
-          {Array.from({ length: 26 }).map((_, i) => {
-            const x = (i * 47) % 360; const y = (i * 71) % 300;
-            return <circle key={i} cx={x} cy={y} r={i % 5 === 0 ? 1.2 : 0.8} fill="#e6e1d6" opacity={0.4} />;
-          })}
-          {/* lines */}
-          {lines.map(([a, b], i) => {
-            const A = byId[a]!; const B = byId[b]!;
-            const len = Math.hypot(B.cx - A.cx, B.cy - A.cy);
-            return (
-              <line key={i} x1={A.cx} y1={A.cy} x2={B.cx} y2={B.cy}
-                stroke="#d4b378" strokeOpacity="0.55" strokeWidth="1" strokeLinecap="round"
-                className="ts-line"
-                style={{ strokeDasharray: len, strokeDashoffset: len, ["--delay" as string]: `${i * 150}ms` } as React.CSSProperties}
-              />
-            );
-          })}
-          {/* stars */}
-          {stars.map((s, i) => (
-            <g key={s.id} className={`ts-star ${s.id === "sirius" ? "ts-star-sirius" : ""}`} style={{ ["--delay" as string]: `${300 + i * 100}ms` } as React.CSSProperties}>
-              <circle cx={s.cx} cy={s.cy} r={(s.r ?? 2.4) + 4} fill="#fff2cc" opacity="0.25" />
-              <circle cx={s.cx} cy={s.cy} r={s.r ?? 2.2} fill="#fffbe6" />
-              {s.label && (
-                <text x={s.cx + 10} y={s.cy + 4} fontSize="10" fontStyle="italic" fill="#d4b378" opacity="0.75">{s.label}</text>
-              )}
-            </g>
-          ))}
-        </svg>
-        <p className="mt-3 text-center font-display italic text-[14px] text-white/70">Canis Major, the Great Dog.</p>
-      </Plaque>
-    </div>
-  );
-}
-
-function PlaqueTheirSky() {
-  const c = useMemo(() => getConstellation(new Date("2025-03-14")), []);
-  const sentence = useMemo(() => getProse(c, "chapter-their-sky"), [c]);
-  // Scale 0-100 coordinates into a 360x220 viewBox with padding
-  const PAD_X = 40, PAD_Y = 20;
-  const W = 360 - PAD_X * 2, H = 220 - PAD_Y * 2;
-  const sx = (x: number) => PAD_X + (x / 100) * W;
-  const sy = (y: number) => PAD_Y + (y / 100) * H;
-  return (
-    <div className="w-full max-w-[380px]">
-      <Plaque>
-        <svg viewBox="0 0 360 220" className="block h-[200px] w-full" aria-hidden>
-          {Array.from({ length: 18 }).map((_, i) => {
-            const x = (i * 61) % 360; const y = (i * 43) % 220;
-            return <circle key={`bg-${i}`} cx={x} cy={y} r={0.9} fill="#e6e1d6" opacity={0.4} />;
-          })}
-          {c.lines.map(([a, b], i) => {
-            const [x1, y1] = c.stars[a];
-            const [x2, y2] = c.stars[b];
-            return (
-              <line
-                key={`ln-${i}`}
-                x1={sx(x1)} y1={sy(y1)} x2={sx(x2)} y2={sy(y2)}
-                stroke="#d4b378" strokeOpacity="0.5" strokeWidth="0.8"
-              />
-            );
-          })}
-          {c.stars.map(([x, y, r], i) => (
-            <g key={`st-${i}`}>
-              <circle cx={sx(x)} cy={sy(y)} r={r * 1.5 + 2} fill="#fff2cc" opacity="0.22" />
-              <circle cx={sx(x)} cy={sy(y)} r={Math.max(1.4, r * 1.2)} fill="#fffbe6" />
-            </g>
-          ))}
-        </svg>
-        <p className="mt-2 text-center font-display italic text-[14px] text-[#f5e6c8]/80">
-          "{sentence}"
-        </p>
-        <p className="mt-2 text-center text-[10px] uppercase tracking-[0.26em] text-white/45">
-          {c.name} · a night to remember
-        </p>
-      </Plaque>
-    </div>
-  );
-}
 
 function PlaqueJournal() {
   return (
@@ -841,26 +714,6 @@ function PlaqueJournal() {
   );
 }
 
-function PlaqueSupport() {
-  return (
-    <div className="w-full max-w-[340px]">
-      <Plaque>
-        <div className="flex flex-col items-center py-4 text-center">
-          <div className="oc-candle" style={{ height: 60, width: 22 }}>
-            <span className="oc-flame"><span className="l1" /><span className="l2" /><span className="l3" /></span>
-          </div>
-          <p className="mt-6 font-display text-[18px] leading-snug text-white/85">
-            You don't have to carry this alone.
-          </p>
-          <div className="mt-4 grid w-full gap-2 text-[12px] text-white/70">
-            <div className="rounded-xl bg-white/[0.04] px-3 py-2 ring-1 ring-white/10">ASPCA · 877-474-3310</div>
-            <div className="rounded-xl bg-white/[0.04] px-3 py-2 ring-1 ring-white/10">Lap of Love · 855-933-5683</div>
-          </div>
-        </div>
-      </Plaque>
-    </div>
-  );
-}
 
 /* ────────── Live candles ────────── */
 
@@ -998,8 +851,8 @@ function ClosingScene({ primaryCandle }: { primaryCandle: ReactNode }) {
         </p>
         <div className="mt-8 flex flex-col items-center gap-3">
           {primaryCandle}
-          <Link to="/create" className="link-gold">
-            Create their memorial
+          <Link to="/create/memorial" className="link-gold">
+            Write a memorial
           </Link>
         </div>
       </Reveal>
@@ -1047,9 +900,9 @@ function GriefBelongingSection() {
       body: "A community who won't say 'it was just a dog' — because for them, it never was.",
     },
     {
-      Icon: BookOpen,
-      title: "Be guided",
-      body: "Gentle guidance for the first night, telling children, guilt, and anniversaries.",
+      Icon: MessagesSquare,
+      title: "Be heard",
+      body: "Post a memory at 2am and wake up to people who understand. No performance, no explaining yourself.",
     },
   ];
   return (
@@ -1117,49 +970,20 @@ type RailCard = {
   highlight?: boolean;
 };
 
-const CARE_CARDS: RailCard[] = [
-  { key: "adoption", title: "Adoption", desc: "Give a waiting companion a home. Verified shelters & rescues.", Icon: Home, highlight: true },
-  { key: "donate", title: "Donate to care", desc: "Fund a shelter, or help a person who can't afford care for their pet.", Icon: Heart, highlight: true },
-  { key: "strays", title: "Tag a stray", desc: "Map and tag neighbourhood strays so the community can watch over them.", Icon: MapPin, highlight: true },
-  { key: "vets", title: "Vets", desc: "Vetted local vets, second opinions, gentle care.", Icon: Stethoscope },
-  { key: "whisperer", title: "Pet whisperer", desc: "Behaviour help, training, and quiet communication.", Icon: Feather },
-];
-
 const MARKET_CARDS: RailCard[] = [
-  { key: "food", title: "Healthy food", desc: "Only genuinely wholesome, non-junk nutrition.", Icon: Utensils },
-  { key: "apparel", title: "Apparel", desc: "Small-batch clothing and accessories for both of you.", Icon: Shirt },
-  { key: "insurance", title: "Insurance", desc: "Honest, jargon-free pet insurance.", Icon: Shield },
   { key: "funeral", title: "Funeral services", desc: "Cremation, home burial, and after-care.", Icon: Cross },
-  { key: "birthdays", title: "Birthdays", desc: "Celebrate the days they came into the world.", Icon: Cake },
   { key: "keepsakes", title: "Keepsakes", desc: "Handmade paw prints, portraits, and memorabilia.", Icon: Gift },
-  { key: "training", title: "Enrichment", desc: "Play, puzzles, and gentle brain-work for a full life.", Icon: Sparkles },
-  { key: "wellbeing", title: "Wellbeing", desc: "Supplements, recovery, and everyday care.", Icon: PawPrint },
+  { key: "jewellery", title: "Memorial jewellery", desc: "Ashes, paw prints and portraits, made into something you can hold.", Icon: Sparkles },
 ];
-
-function CareRail() {
-  return (
-    <RailSection
-      title="Care, honour & good karma"
-      subtitle="Not everything here is for sale. Some things are just kind — and they come first."
-      kicker={
-        <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/40 bg-emerald-500/10 px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider text-emerald-200">
-          <HandHeart className="h-3 w-3" /> Non-commercial first
-        </span>
-      }
-      cards={CARE_CARDS}
-      section="kind"
-    />
-  );
-}
 
 function MarketplaceRail() {
   return (
     <RailSection
-      title="For the life you share"
-      subtitle="One day, everything they need — chosen with the same care you'd choose it."
+      title="In their memory"
+      subtitle="Gentle things for after — made slowly, made well."
       kicker={
         <span className="inline-flex items-center rounded-full border border-white/15 bg-white/[0.04] px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider text-white/70">
-          Marketplace
+          Memorabilia
         </span>
       }
       cards={MARKET_CARDS}
@@ -1436,6 +1260,8 @@ const LIFE_TILES: LifeTile[] = [
   { key: "pet-profiles", title: "Pet profiles", body: "Every companion in one place — their records, milestones, and people.", Icon: PawPrint, source: "life-pet-profiles" },
   { key: "health", title: "Health & reminders", body: "Vaccinations, vet visits, insurance, grooming — tracked, with gentle nudges so nothing slips.", Icon: CalendarClock, source: "life-health" },
   { key: "services", title: "Services near you", body: "Trusted vets, groomers, walkers, sitters and boarding — booked without the chaos.", Icon: Stethoscope, source: "life-services", cover: lifeServicesImg, coverAlt: "A calm veterinary moment — gentle hands examining a relaxed golden dog" },
+  { key: "vets", title: "Vets & second opinions", body: "Vetted local vets, second opinions, and gentle end-of-life care.", Icon: Stethoscope, source: "life-vets" },
+  { key: "whisperer", title: "Pet whisperer", body: "Behaviour help, training, and quiet communication.", Icon: Feather, source: "life-whisperer" },
   { key: "food", title: "Food & essentials", body: "Genuinely wholesome nutrition and gear — no junk brands, no clutter.", Icon: ShoppingBag, source: "life-food" },
   { key: "lifestyle", title: "Lifestyle & celebrations", body: "Birthdays, gotcha-days, playdates and outings — the joy, organised.", Icon: Cake, source: "life-lifestyle", cover: lifeLifestyleImg, coverAlt: "A small joyful birthday moment for a dog with a paper hat and a bowl of treats" },
   { key: "community", title: "Community feed", body: "Share the wins and the mess with people who get it. Ask anything.", Icon: MessagesSquare },
@@ -1864,7 +1690,12 @@ function TheirSkyBand({ reduced }: { reduced: boolean }) {
           <p className="mt-5 text-[15px] leading-relaxed text-white/70 md:text-[17px]">
             Every memorial carries the real constellation that hung over your city the night they passed —
             computed from the true position of the stars. Not a decoration. The actual sky that watched with you.
+            Every memorial carries its own — tap the sky on any memorial to feel it pulse.
+            The ancients hung a dog in the sky — Canis Major, home of Sirius, the brightest star we can see — so it would never be forgotten. We understand completely.
           </p>
+          <Link to="/garden" className="mt-3 inline-block link-gold">
+            Visit the garden →
+          </Link>
 
           <label className="mt-6 flex flex-col items-center gap-2 text-[11px] uppercase tracking-[0.28em] text-white/55 md:items-start">
             See the sky on
