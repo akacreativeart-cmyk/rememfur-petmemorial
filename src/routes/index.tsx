@@ -1581,8 +1581,8 @@ function LifeTileCard({ tile, onDev }: { tile: LifeTile; onDev: (source: string)
       <div className={`relative p-[18px] md:p-6 ${cover ? "pt-3 md:pt-4" : ""}`}>
         <div className="flex items-start justify-between gap-3">
           <div
-            className={`flex h-[52px] w-[52px] items-center justify-center rounded-[14px] ${cover ? "-mt-10 bg-[#FFFDF7]" : ""}`}
-            style={{ background: cover ? undefined : iconBg, boxShadow: iconShadow, backgroundImage: cover ? iconBg : undefined }}
+            className={`flex h-[52px] w-[52px] items-center justify-center rounded-[14px] ${cover ? "-mt-10 ring-4 ring-[#FFFDF7]" : ""}`}
+            style={{ background: iconBg, boxShadow: iconShadow }}
           >
             <Icon width={24} height={24} strokeWidth={1.5} style={{ stroke: stroke as string }} />
           </div>
