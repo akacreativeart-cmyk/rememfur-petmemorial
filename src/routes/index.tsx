@@ -970,49 +970,20 @@ type RailCard = {
   highlight?: boolean;
 };
 
-const CARE_CARDS: RailCard[] = [
-  { key: "adoption", title: "Adoption", desc: "Give a waiting companion a home. Verified shelters & rescues.", Icon: Home, highlight: true },
-  { key: "donate", title: "Donate to care", desc: "Fund a shelter, or help a person who can't afford care for their pet.", Icon: Heart, highlight: true },
-  { key: "strays", title: "Tag a stray", desc: "Map and tag neighbourhood strays so the community can watch over them.", Icon: MapPin, highlight: true },
-  { key: "vets", title: "Vets", desc: "Vetted local vets, second opinions, gentle care.", Icon: Stethoscope },
-  { key: "whisperer", title: "Pet whisperer", desc: "Behaviour help, training, and quiet communication.", Icon: Feather },
-];
-
 const MARKET_CARDS: RailCard[] = [
-  { key: "food", title: "Healthy food", desc: "Only genuinely wholesome, non-junk nutrition.", Icon: Utensils },
-  { key: "apparel", title: "Apparel", desc: "Small-batch clothing and accessories for both of you.", Icon: Shirt },
-  { key: "insurance", title: "Insurance", desc: "Honest, jargon-free pet insurance.", Icon: Shield },
   { key: "funeral", title: "Funeral services", desc: "Cremation, home burial, and after-care.", Icon: Cross },
-  { key: "birthdays", title: "Birthdays", desc: "Celebrate the days they came into the world.", Icon: Cake },
   { key: "keepsakes", title: "Keepsakes", desc: "Handmade paw prints, portraits, and memorabilia.", Icon: Gift },
-  { key: "training", title: "Enrichment", desc: "Play, puzzles, and gentle brain-work for a full life.", Icon: Sparkles },
-  { key: "wellbeing", title: "Wellbeing", desc: "Supplements, recovery, and everyday care.", Icon: PawPrint },
+  { key: "jewellery", title: "Memorial jewellery", desc: "Ashes, paw prints and portraits, made into something you can hold.", Icon: Sparkles },
 ];
-
-function CareRail() {
-  return (
-    <RailSection
-      title="Care, honour & good karma"
-      subtitle="Not everything here is for sale. Some things are just kind — and they come first."
-      kicker={
-        <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/40 bg-emerald-500/10 px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider text-emerald-200">
-          <HandHeart className="h-3 w-3" /> Non-commercial first
-        </span>
-      }
-      cards={CARE_CARDS}
-      section="kind"
-    />
-  );
-}
 
 function MarketplaceRail() {
   return (
     <RailSection
-      title="For the life you share"
-      subtitle="One day, everything they need — chosen with the same care you'd choose it."
+      title="In their memory"
+      subtitle="Gentle things for after — made slowly, made well."
       kicker={
         <span className="inline-flex items-center rounded-full border border-white/15 bg-white/[0.04] px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider text-white/70">
-          Marketplace
+          Memorabilia
         </span>
       }
       cards={MARKET_CARDS}
