@@ -114,13 +114,14 @@ export function BetaInviteDialog({
               <Button variant="ghost" onClick={() => handleOpen(false)} className="rounded-full">
                 Cancel
               </Button>
-              <Button
+              <button
+                type="button"
                 onClick={() => mut.mutate()}
                 disabled={!emailOk || mut.isPending}
-                className="rounded-full bg-gradient-to-b from-[#F6D9A0] to-[#E8B96D] text-[#1a1200] hover:brightness-105"
+                className="btn-gold-sm w-full sm:w-auto"
               >
                 {mut.isPending ? "Sending…" : "Request invitation"}
-              </Button>
+              </button>
             </>
           )}
         </DialogFooter>

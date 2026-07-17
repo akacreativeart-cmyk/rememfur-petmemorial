@@ -1272,26 +1272,8 @@ function RailCardView({ card, section }: { card: RailCard; section: string }) {
             itemName={title}
             section={section}
             trigger={
-              <button
-                type="button"
-                className="notify-btn flex w-full items-center justify-center gap-2 rounded-[12px] px-3 py-3 text-[11px] font-medium uppercase transition"
-                style={
-                  highlight
-                    ? {
-                        border: "1px solid rgba(143,199,158,.5)",
-                        background: "rgba(143,199,158,.1)",
-                        color: "#BEE3C8",
-                        letterSpacing: "0.22em",
-                      }
-                    : {
-                        border: "1px solid rgba(232,185,109,.2)",
-                        background: "rgba(232,185,109,.06)",
-                        color: "#E8B96D",
-                        letterSpacing: "0.22em",
-                      }
-                }
-              >
-                <Bell size={18} strokeWidth={1.5} />
+              <button type="button" className={`${highlight ? "btn-kind" : "btn-quiet"} w-full`}>
+                <Bell size={16} strokeWidth={1.75} />
                 Notify me
               </button>
             }
@@ -1710,7 +1692,7 @@ function BetaBand({ onOpen }: { onOpen: () => void }) {
         <button
           type="button"
           onClick={onOpen}
-          className="mt-7 inline-flex w-full max-w-[320px] items-center justify-center gap-2 rounded-full bg-gradient-to-b from-[#F6D9A0] to-[#E8B96D] px-6 py-3 text-[14px] font-semibold text-[#1a1200] shadow-[0_10px_28px_-12px_rgba(232,185,109,0.6)] hover:brightness-105 md:w-auto md:max-w-none"
+          className="btn-gold ios-tappable mt-7 w-full max-w-[320px] md:w-auto md:max-w-none"
         >
           <Sparkles className="h-4 w-4" />
           Request an invitation
