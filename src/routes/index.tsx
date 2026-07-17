@@ -714,26 +714,6 @@ function PlaqueJournal() {
   );
 }
 
-function PlaqueSupport() {
-  return (
-    <div className="w-full max-w-[340px]">
-      <Plaque>
-        <div className="flex flex-col items-center py-4 text-center">
-          <div className="oc-candle" style={{ height: 60, width: 22 }}>
-            <span className="oc-flame"><span className="l1" /><span className="l2" /><span className="l3" /></span>
-          </div>
-          <p className="mt-6 font-display text-[18px] leading-snug text-white/85">
-            You don't have to carry this alone.
-          </p>
-          <div className="mt-4 grid w-full gap-2 text-[12px] text-white/70">
-            <div className="rounded-xl bg-white/[0.04] px-3 py-2 ring-1 ring-white/10">ASPCA · 877-474-3310</div>
-            <div className="rounded-xl bg-white/[0.04] px-3 py-2 ring-1 ring-white/10">Lap of Love · 855-933-5683</div>
-          </div>
-        </div>
-      </Plaque>
-    </div>
-  );
-}
 
 /* ────────── Live candles ────────── */
 
