@@ -205,22 +205,93 @@ function moonPhase(now = new Date()) {
 }
 function MoonBadge() {
   const [state] = useState(() => moonPhase());
-  const { illum, phase, name } = state;
-  // Simple shadow disc offset for a waxing/waning look
-  const waxing = phase < 0.5;
-  const offset = (1 - illum) * 40; // px
-  const dx = waxing ? -offset : offset;
+  const { phase, name } = state;
   return (
-    <div className="flex flex-col items-end gap-1">
-      <div className="moon-wrap">
-        <div className="moon-disc">
-          <div className="moon-shadow" style={{ transform: `translateX(${dx}px)` }} />
-        </div>
+    <div className="flex max-w-[92px] flex-col items-end gap-1.5 text-right">
+      <RealisticMoon phase={phase} className="h-11 w-11 md:h-16 md:w-16" />
+      <div className="leading-tight">
+        <p className="text-[8.5px] uppercase tracking-[0.2em] text-white/50">Tonight's moon</p>
+        <p className="mt-0.5 text-[9.5px] leading-snug text-white/75">{name}</p>
       </div>
-      <p className="text-[10px] uppercase tracking-[0.22em] text-white/55">
-        Tonight's moon · <span className="text-white/75">{name}</span>
-      </p>
     </div>
+  );
+}
+
+/**
+ * Proper spherical moon with a true terminator.
+ * phase: 0=new, 0.25=first quarter (waxing, lit on the right),
+ * 0.5=full, 0.75=last quarter (waning, lit on the left).
+ *
+ * Terminator maths: the day/night boundary on a sphere projects to an
+ * ellipse whose horizontal radius is R * cos(2π · phase). When |cos| is
+ * positive we're between new→first→full (waxing side lit on the right);
+ * negative → waning (lit on the left). Whether the middle ellipse adds or
+ * subtracts from a half-disc distinguishes crescent from gibbous.
+ */
+function RealisticMoon({ phase, className }: { phase: number; className?: string }) {
+  const rid = useId().replace(/:/g, "");
+  const R = 32;
+  const cx = 34;
+  const cy = 34;
+  const cos = Math.cos(2 * Math.PI * phase);
+  const rx = Math.max(0.1, Math.abs(cos) * R);
+  const waxing = phase < 0.5; // lit side on the right when waxing
+  const gibbous = Math.abs(cos) < 1 && ((phase > 0.25 && phase < 0.5) || (phase > 0.5 && phase < 0.75));
+
+  // Build the lit-region mask:
+  //  - Full white circle (everything lit by default)
+  //  - Then override with a black rectangle covering the SHADOW half
+  //  - Then draw a middle ellipse: WHITE if gibbous (adds light to shadow half),
+  //    BLACK if crescent (removes light from lit half)
+  const shadowOnRight = !waxing; // waning → shadow covers right half
+  const rectX = shadowOnRight ? cx : cx - R;
+  const midFill = gibbous ? "white" : "black";
+
+  return (
+    <svg viewBox="0 0 68 68" className={className} aria-hidden>
+      <defs>
+        <radialGradient id={`${rid}-lit`} cx="34%" cy="32%" r="70%">
+          <stop offset="0%" stopColor="#FDFBF2" />
+          <stop offset="55%" stopColor="#E8E3D2" />
+          <stop offset="100%" stopColor="#B9B3A0" />
+        </radialGradient>
+        <radialGradient id={`${rid}-dark`} cx="60%" cy="60%" r="70%">
+          <stop offset="0%" stopColor="#1a1c26" />
+          <stop offset="100%" stopColor="#05070f" />
+        </radialGradient>
+        <radialGradient id={`${rid}-limb`} cx="50%" cy="50%" r="50%">
+          <stop offset="70%" stopColor="rgba(0,0,0,0)" />
+          <stop offset="100%" stopColor="rgba(0,0,0,0.3)" />
+        </radialGradient>
+        <radialGradient id={`${rid}-crater`} cx="45%" cy="40%" r="55%">
+          <stop offset="0%" stopColor="rgba(120,115,100,0.28)" />
+          <stop offset="100%" stopColor="rgba(120,115,100,0)" />
+        </radialGradient>
+        <mask id={`${rid}-mask`}>
+          <rect x="0" y="0" width="68" height="68" fill="black" />
+          <circle cx={cx} cy={cy} r={R} fill="white" />
+          <rect x={rectX} y={cy - R} width={R} height={R * 2} fill="black" />
+          <ellipse cx={cx} cy={cy} rx={rx} ry={R} fill={midFill} />
+        </mask>
+      </defs>
+
+      {/* Dark side (always drawn under, faint rim visible on new moon) */}
+      <circle cx={cx} cy={cy} r={R} fill={`url(#${rid}-dark)`} />
+      <circle cx={cx} cy={cy} r={R} fill="none" stroke="rgba(232,185,109,0.18)" strokeWidth="0.6" />
+
+      {/* Lit side, cut by the terminator mask */}
+      <g mask={`url(#${rid}-mask)`}>
+        <circle cx={cx} cy={cy} r={R} fill={`url(#${rid}-lit)`} />
+        {/* Craters — only visible on the lit side */}
+        <ellipse cx="22" cy="44" rx="7" ry="5" fill={`url(#${rid}-crater)`} />
+        <ellipse cx="42" cy="24" rx="3" ry="2.4" fill={`url(#${rid}-crater)`} />
+        <ellipse cx="48" cy="40" rx="2.2" ry="2" fill={`url(#${rid}-crater)`} />
+        <ellipse cx="30" cy="20" rx="2.5" ry="2" fill={`url(#${rid}-crater)`} />
+        <ellipse cx="38" cy="48" rx="2" ry="1.6" fill={`url(#${rid}-crater)`} />
+        {/* Limb darkening on lit side */}
+        <circle cx={cx} cy={cy} r={R} fill={`url(#${rid}-limb)`} />
+      </g>
+    </svg>
   );
 }
 
