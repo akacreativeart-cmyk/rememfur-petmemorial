@@ -110,7 +110,8 @@ function CosmosBg({ mode = "memory", reduced = false }: { mode?: WorldMode; redu
     if (reduced) return;
 
 
-    const generated = Array.from({ length: 130 }, () => {
+    const starCount = typeof window !== "undefined" && window.innerWidth < 768 ? 60 : 130;
+    const generated = Array.from({ length: starCount }, () => {
       const r = Math.random();
       const kind = r < 0.18 ? " warm" : r < 0.3 ? " blue" : "";
       const size = Math.random() < 0.85 ? 1.4 : 2.2;
