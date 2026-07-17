@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useMemo, useRef, useState, type ComponentType, type CSSProperties, type ReactNode, type SVGProps } from "react";
+import { useEffect, useId, useMemo, useRef, useState, type ComponentType, type CSSProperties, type ReactNode, type SVGProps } from "react";
 import { ChevronDown, Stethoscope, Sparkles, PawPrint, HandHeart, MapPin, Cake, Home, Heart, Users, Feather, Cross, Gift, Bell, Mail, Moon, CalendarClock, ShoppingBag, MessagesSquare, Star, Phone } from "lucide-react";
 import { getConstellation, getProse, type Constellation } from "@/lib/constellations";
 import { useQuery } from "@tanstack/react-query";
