@@ -217,6 +217,7 @@ function MemorialPage() {
               location={(m as any).location ?? null}
               memorialUrl={typeof window !== "undefined" ? window.location.href : `https://rememfur.com/memorial/${m.slug}`}
               species={m.species as any}
+              memorialId={m.id ?? m.slug}
             />
 
 
