@@ -524,9 +524,9 @@ function HomePage() {
       <Bridge />
 
       {/* BETA — shared */}
-      <BetaBand onOpen={() => openBeta("beta-band")} />
+      <BetaBand onOpen={() => openBeta("console-friend", "console")} />
 
-      <BetaInviteDialog source={betaSource} open={betaOpen} onOpenChange={setBetaOpen} />
+      <BetaInviteDialog source={betaSource} variant={betaVariant} open={betaOpen} onOpenChange={setBetaOpen} />
 
       <div className="pb-[calc(120px+env(safe-area-inset-bottom))] md:pb-6">
         <SiteFooter />
