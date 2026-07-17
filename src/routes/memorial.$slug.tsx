@@ -195,9 +195,9 @@ function MemorialPage() {
             target={{ kind: "memorial", memorial_id: m.id, pet_name: m.pet_name }}
             onLit={() => qc.invalidateQueries({ queryKey: ["memorial", m.slug] })}
             trigger={
-              <Button size="lg" className="w-full rounded-full bg-amber-400 text-accent-foreground hover:bg-amber-300 sm:w-auto">
-                <span className="mr-2 inline-flex"><PawLamp size={16} glow={false} /></span> Light a paw lamp
-              </Button>
+              <button type="button" className="btn-gold w-full sm:w-auto">
+                <PawLamp size={16} glow={false} /> Light a paw lamp
+              </button>
             }
           />
         </div>
@@ -240,9 +240,9 @@ function MemorialPage() {
                 <div className="mt-4 space-y-2">
                   <Textarea value={body} onChange={(e) => setBody(e.target.value)} placeholder={`Share a memory of ${m.pet_name}…`} rows={3} />
                   <div className="flex justify-end">
-                    <Button onClick={() => body.trim() && msgMut.mutate({ body: body.trim() })} disabled={msgMut.isPending || !body.trim()} className="rounded-full bg-amber-400 text-primary-foreground hover:bg-amber-300">
+                    <button type="button" onClick={() => body.trim() && msgMut.mutate({ body: body.trim() })} disabled={msgMut.isPending || !body.trim()} className="btn-gold-sm">
                       Share message
-                    </Button>
+                    </button>
                   </div>
                 </div>
               ) : (
@@ -274,9 +274,9 @@ function MemorialPage() {
               {user ? (
                 <div className="mt-4 space-y-2 text-left">
                   <Textarea value={candleMsg} onChange={(e) => setCandleMsg(e.target.value)} placeholder="A few words (optional)" rows={2} />
-                  <Button onClick={() => candleMut.mutate({ message: candleMsg.trim() || undefined })} disabled={candleMut.isPending} className="w-full rounded-full bg-amber-400 text-accent-foreground hover:bg-amber-300">
-                    <Heart className="mr-1.5 h-4 w-4 fill-current" /> Light paw lamp
-                  </Button>
+                  <button type="button" onClick={() => candleMut.mutate({ message: candleMsg.trim() || undefined })} disabled={candleMut.isPending} className="btn-gold-sm w-full">
+                    <Heart className="h-4 w-4 fill-current" /> Light paw lamp
+                  </button>
                 </div>
               ) : (
                 <div className="mt-4">
@@ -284,9 +284,9 @@ function MemorialPage() {
                     target={{ kind: "memorial", memorial_id: m.id, pet_name: m.pet_name }}
                     onLit={() => qc.invalidateQueries({ queryKey: ["memorial", m.slug] })}
                     trigger={
-                      <Button className="w-full rounded-full bg-amber-400 text-accent-foreground hover:bg-amber-300">
-                        <span className="mr-1.5 inline-flex"><PawLamp size={16} glow={false} /></span> Light a paw lamp
-                      </Button>
+                      <button type="button" className="btn-gold-sm w-full">
+                        <PawLamp size={16} glow={false} /> Light a paw lamp
+                      </button>
                     }
                   />
                   <p className="mt-2 text-[11px] text-muted-foreground">
@@ -355,7 +355,7 @@ function MemorialPage() {
                 <li>· Replica plush</li>
                 <li>· Digital paw lamp card</li>
               </ul>
-              <Link to="/marketplace" className="mt-4 inline-flex w-full items-center justify-center rounded-full bg-amber-400 px-4 py-2 text-sm text-accent-foreground hover:bg-amber-300">
+              <Link to="/marketplace" className="btn-gold-sm mt-4 w-full">
                 Browse memory gifts
               </Link>
             </div>

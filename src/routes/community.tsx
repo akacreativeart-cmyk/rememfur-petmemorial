@@ -84,7 +84,7 @@ function CommunityPage() {
             <p className="text-sm text-muted-foreground">Sign in to share memories and join the conversation.</p>
             <div className="mt-3 flex justify-center gap-2">
               <Link to="/login"><Button variant="outline" size="sm">Log in</Button></Link>
-              <Link to="/signup"><Button size="sm" className="bg-amber-400 text-primary-foreground hover:bg-amber-300">Join</Button></Link>
+              <Link to="/signup" className="btn-gold-sm">Join</Link>
             </div>
           </div>
         )}

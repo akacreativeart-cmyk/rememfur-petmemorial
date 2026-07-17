@@ -88,7 +88,7 @@ function CreatePostPage() {
         <p className="mt-2 text-sm text-muted-foreground">You need an account to share with the community.</p>
         <div className="mt-6 flex justify-center gap-2">
           <Link to="/login"><Button variant="outline">Log in</Button></Link>
-          <Link to="/signup"><Button className="bg-amber-400 text-primary-foreground hover:bg-amber-300">Join</Button></Link>
+          <Link to="/signup" className="btn-gold-sm">Join</Link>
         </div>
       </div>
     );
