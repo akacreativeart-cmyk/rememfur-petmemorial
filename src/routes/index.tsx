@@ -370,6 +370,8 @@ function HomePage() {
           primaryCandle={primaryCandle("Light a paw lamp")}
           onLastLetter={() => openBeta("last-letter")}
         />
+        <TheirSkyBand reduced={reduced} />
+        <GriefCopeBand />
         <section className="relative px-5 py-20 text-center md:px-8 md:py-28">
           <Reveal className="mx-auto max-w-3xl">
             <h2 className="font-display italic text-[24px] leading-[1.3] text-[#f5e6c8]/90 md:text-[34px] lg:text-[38px]">
