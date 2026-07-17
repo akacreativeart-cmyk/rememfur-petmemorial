@@ -565,7 +565,7 @@ function Chapters({ primaryCandle, onDev }: { primaryCandle: ReactNode; onDev?: 
     <button
       type="button"
       onClick={() => onDev?.(source)}
-      className="mt-6 inline-flex items-center gap-2 rounded-full border border-[var(--gold)]/40 bg-white/[0.03] px-5 py-2.5 text-[13px] font-medium text-[var(--gold)] hover:bg-white/[0.06]"
+      className="btn-quiet mt-6"
     >
       <Sparkles className="h-4 w-4" />
       {label}
@@ -773,30 +773,44 @@ function PlaqueCanisMajor() {
 }
 
 function PlaqueTheirSky() {
+  const c = useMemo(() => getConstellation(new Date("2025-03-14")), []);
+  const sentence = useMemo(() => getProse(c, "chapter-their-sky"), [c]);
+  // Scale 0-100 coordinates into a 360x220 viewBox with padding
+  const PAD_X = 40, PAD_Y = 20;
+  const W = 360 - PAD_X * 2, H = 220 - PAD_Y * 2;
+  const sx = (x: number) => PAD_X + (x / 100) * W;
+  const sy = (y: number) => PAD_Y + (y / 100) * H;
   return (
     <div className="w-full max-w-[380px]">
       <Plaque>
         <svg viewBox="0 0 360 220" className="block h-[200px] w-full" aria-hidden>
           {Array.from({ length: 18 }).map((_, i) => {
             const x = (i * 61) % 360; const y = (i * 43) % 220;
-            return <circle key={i} cx={x} cy={y} r={0.9} fill="#e6e1d6" opacity={0.4} />;
+            return <circle key={`bg-${i}`} cx={x} cy={y} r={0.9} fill="#e6e1d6" opacity={0.4} />;
           })}
-          {[[80, 60], [140, 100], [200, 70], [250, 130], [180, 160]].map(([x1, y1], i, arr) => {
-            const [x2, y2] = arr[(i + 1) % arr.length];
-            return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke="#d4b378" strokeOpacity="0.5" strokeWidth="0.8" />;
+          {c.lines.map(([a, b], i) => {
+            const [x1, y1] = c.stars[a];
+            const [x2, y2] = c.stars[b];
+            return (
+              <line
+                key={`ln-${i}`}
+                x1={sx(x1)} y1={sy(y1)} x2={sx(x2)} y2={sy(y2)}
+                stroke="#d4b378" strokeOpacity="0.5" strokeWidth="0.8"
+              />
+            );
           })}
-          {[[80, 60, 2.8], [140, 100, 2.2], [200, 70, 2.4], [250, 130, 3], [180, 160, 2]].map(([x, y, r], i) => (
-            <g key={i}>
-              <circle cx={x} cy={y} r={r + 3} fill="#fff2cc" opacity="0.22" />
-              <circle cx={x} cy={y} r={r} fill="#fffbe6" />
+          {c.stars.map(([x, y, r], i) => (
+            <g key={`st-${i}`}>
+              <circle cx={sx(x)} cy={sy(y)} r={r * 1.5 + 2} fill="#fff2cc" opacity="0.22" />
+              <circle cx={sx(x)} cy={sy(y)} r={Math.max(1.4, r * 1.2)} fill="#fffbe6" />
             </g>
           ))}
         </svg>
         <p className="mt-2 text-center font-display italic text-[14px] text-[#f5e6c8]/80">
-          "The sky was clear the night he left. It hasn't stopped watching since."
+          "{sentence}"
         </p>
         <p className="mt-2 text-center text-[10px] uppercase tracking-[0.26em] text-white/45">
-          Evening sky · a night to remember
+          {c.name} · a night to remember
         </p>
       </Plaque>
     </div>
@@ -1079,10 +1093,7 @@ function GriefBelongingSection() {
         <Link to="/create/memorial" className="btn-gold ios-tappable">
           Write a memorial
         </Link>
-        <Link
-          to="/community"
-          className="inline-flex items-center rounded-full border border-white/20 px-6 py-3 text-[14px] font-medium text-white/85 hover:border-white/40 hover:bg-white/5"
-        >
+        <Link to="/community" className="btn-quiet">
           Join the community
         </Link>
         <Link to="/grief-support" className="link-gold">
@@ -1296,7 +1307,7 @@ function WorldToggle({ mode, setMode, reduced }: { mode: WorldMode; setMode: (m:
       <div
         role="tablist"
         aria-label="Choose a world"
-        className="relative inline-flex rounded-full p-1 shadow-[0_2px_16px_-8px_rgba(0,0,0,0.5)]"
+        className="relative flex w-[300px] md:w-[340px] rounded-full p-1 shadow-[0_2px_16px_-8px_rgba(0,0,0,0.5)]"
         style={{
           background: isLife ? "rgba(255,255,255,0.55)" : "rgba(255,255,255,0.05)",
           border: `1px solid ${isLife ? "rgba(168,100,28,0.28)" : "rgba(232,185,109,0.28)"}`,
@@ -1317,9 +1328,9 @@ function WorldToggle({ mode, setMode, reduced }: { mode: WorldMode; setMode: (m:
           }}
         />
         {[
-          { key: "memory" as const, label: "Their memory", shortLabel: "Memory", Icon: Moon },
-          { key: "life" as const, label: "Their life", shortLabel: "Life", Icon: Heart },
-        ].map(({ key, label, shortLabel, Icon }) => {
+          { key: "memory" as const, label: "Their memory", Icon: Moon },
+          { key: "life" as const, label: "Their life", Icon: Heart },
+        ].map(({ key, label, Icon }) => {
           const active = mode === key;
           return (
             <button
@@ -1328,16 +1339,15 @@ function WorldToggle({ mode, setMode, reduced }: { mode: WorldMode; setMode: (m:
               role="tab"
               aria-selected={active}
               onClick={() => setMode(key)}
-              className="relative z-[1] inline-flex items-center gap-1.5 rounded-full px-3.5 py-2 text-[11.5px] font-medium transition md:gap-2 md:px-4 md:py-2 md:text-[13px]"
+              className="relative z-[1] flex flex-1 items-center justify-center gap-1.5 rounded-full px-3 py-2 text-[11.5px] font-medium transition md:gap-2 md:px-4 md:text-[13px]"
               style={{
                 color: active
-                  ? isLife ? "#1a1200" : "#1a1200"
+                  ? "#1a1200"
                   : isLife ? "rgba(58,44,28,0.7)" : "rgba(242,236,221,0.7)",
               }}
             >
               <Icon className="h-3.5 w-3.5" strokeWidth={2} />
-              <span className="md:hidden">{shortLabel}</span>
-              <span className="hidden md:inline">{label}</span>
+              <span>{label}</span>
             </button>
           );
         })}
@@ -1455,13 +1465,12 @@ function LifeWorld({ onDev }: { onDev: (source: string) => void }) {
           <div className="mt-8 flex flex-col items-center gap-3">
             <Link
               to="/create"
-              className="inline-flex w-full max-w-[300px] items-center justify-center gap-2 rounded-full px-6 py-3 text-[14px] font-semibold shadow-[0_10px_28px_-12px_rgba(168,100,28,0.6)] hover:brightness-105 md:w-auto md:max-w-none"
-              style={{ background: "linear-gradient(180deg,#E7C79A,#C9852F)", color: "#231604" }}
+              className="btn-gold ios-tappable w-full max-w-[300px] md:w-auto md:max-w-none"
             >
               <PawPrint className="h-4 w-4" strokeWidth={2} />
               Add your pet
             </Link>
-            <Link to="/community" className="text-[14px] font-medium underline-offset-4 hover:underline" style={{ color: "var(--w-accent)" }}>
+            <Link to="/community" className="link-gold" style={{ color: "var(--w-accent)" }}>
               Explore the community →
             </Link>
           </div>
