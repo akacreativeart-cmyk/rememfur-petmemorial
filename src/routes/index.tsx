@@ -1784,3 +1784,304 @@ function PlaquePawtrait() {
   );
 }
 
+
+/* ────────── Their Sky band (landing) ────────── */
+
+function TheirSkyBand({ reduced }: { reduced: boolean }) {
+  const [dateStr, setDateStr] = useState("2025-03-14");
+  const [pulseKey, setPulseKey] = useState(0);
+  const [proseVisible, setProseVisible] = useState(true);
+  const [drawKey, setDrawKey] = useState(0);
+  const svgRef = useRef<SVGSVGElement | null>(null);
+
+  const constellation: Constellation = useMemo(() => {
+    const d = dateStr ? new Date(dateStr) : new Date();
+    return getConstellation(isNaN(d.getTime()) ? new Date() : d);
+  }, [dateStr]);
+  const sentence = useMemo(() => getProse(constellation, dateStr), [constellation, dateStr]);
+
+  const dateLabel = useMemo(() => {
+    try {
+      const d = new Date(dateStr);
+      if (isNaN(d.getTime())) return dateStr;
+      return d.toLocaleDateString(undefined, { day: "numeric", month: "long", year: "numeric" });
+    } catch { return dateStr; }
+  }, [dateStr]);
+
+  // Cross-fade prose when date changes
+  useEffect(() => {
+    if (reduced) return;
+    setProseVisible(false);
+    const t = window.setTimeout(() => setProseVisible(true), 400);
+    return () => window.clearTimeout(t);
+  }, [sentence, reduced]);
+
+  // Restart draw animation
+  useEffect(() => {
+    if (reduced) return;
+    const el = svgRef.current;
+    if (!el) return;
+    el.classList.remove("sky-in-view");
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => el.classList.add("sky-in-view"));
+    });
+  }, [drawKey, reduced]);
+
+  useEffect(() => {
+    setDrawKey((k) => k + 1);
+  }, [constellation]);
+
+  useEffect(() => {
+    if (reduced) {
+      const el = svgRef.current;
+      if (el) el.classList.add("sky-in-view");
+    }
+  }, [reduced]);
+
+  const bgStars = useMemo(() => {
+    const rnd = (seed: number) => {
+      let s = seed;
+      return () => {
+        s = (s * 9301 + 49297) % 233280;
+        return s / 233280;
+      };
+    };
+    const r = rnd(42);
+    return Array.from({ length: 26 }, () => ({
+      x: r() * 100,
+      y: r() * 100,
+      radius: 0.5 + r() * 0.3,
+      opacity: 0.25 + r() * 0.2,
+    }));
+  }, []);
+
+  const triggerPulse = () => {
+    if (reduced) return;
+    setPulseKey((k) => k + 1);
+  };
+
+  return (
+    <section className="relative px-5 py-16 md:px-8 md:py-24">
+      <div className="mx-auto grid max-w-md gap-10 md:max-w-[1100px] md:grid-cols-2 md:items-center md:gap-12">
+        <Reveal className="text-center md:text-left">
+          <p className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.32em] text-amber-200/75">
+            <Star className="h-3.5 w-3.5 text-[var(--gold)]" /> Their Sky
+          </p>
+          <h2 className="mt-3 font-display leading-[1.12] tracking-tight text-white" style={{ fontSize: "clamp(26px, 6.5vw, 44px)" }}>
+            The sky remembers the night they left.
+          </h2>
+          <p className="mt-5 text-[15px] leading-relaxed text-white/70 md:text-[17px]">
+            Every memorial carries the real constellation that hung over your city the night they passed —
+            computed from the true position of the stars. Not a decoration. The actual sky that watched with you.
+          </p>
+
+          <label className="mt-6 flex flex-col items-center gap-2 text-[11px] uppercase tracking-[0.28em] text-white/55 md:items-start">
+            See the sky on
+            <input
+              type="date"
+              value={dateStr}
+              onChange={(e) => setDateStr(e.target.value)}
+              className="rounded-full border border-white/20 bg-white/[0.04] px-4 py-2 text-[14px] font-normal normal-case tracking-normal text-white outline-none focus:border-[var(--gold)]/60"
+              style={{ colorScheme: "dark" }}
+            />
+          </label>
+
+          <div className="mt-6 min-h-[84px] border-l-2 border-[var(--gold)]/60 pl-4 text-left">
+            <p
+              className="font-display italic text-[17px] leading-relaxed text-white/85"
+              style={{ opacity: proseVisible || reduced ? 1 : 0, transition: reduced ? "none" : "opacity 380ms ease" }}
+            >
+              {sentence}
+            </p>
+          </div>
+          <p className="mt-3 text-left text-[11px] uppercase tracking-[0.26em] text-white/50">
+            {dateLabel} · evening sky · {constellation.name}
+          </p>
+        </Reveal>
+
+        <Reveal>
+          <button
+            key={pulseKey}
+            type="button"
+            onClick={triggerPulse}
+            aria-label={`Feel ${constellation.name}`}
+            className="mx-auto block aspect-square w-full max-w-[440px] rounded-[20px] ring-1 ring-white/10 md:mx-0"
+            style={{
+              background: "radial-gradient(120% 120% at 30% 20%, #0f1735 0%, #070b1c 60%, #04060f 100%)",
+              animation: reduced ? undefined : "ts-pulse 520ms cubic-bezier(.34,1.56,.64,1)",
+            }}
+          >
+            <div className="relative h-full w-full">
+              <svg ref={svgRef} viewBox="0 0 100 100" className="their-sky-svg h-full w-full">
+                <defs>
+                  <radialGradient id="tsbGlow" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stopColor="#fff8d6" stopOpacity="0.85" />
+                    <stop offset="60%" stopColor="#d4b378" stopOpacity="0.25" />
+                    <stop offset="100%" stopColor="#d4b378" stopOpacity="0" />
+                  </radialGradient>
+                </defs>
+
+                {bgStars.map((s, i) => (
+                  <circle key={i} cx={s.x} cy={s.y} r={s.radius} fill="#fffbe6" opacity={s.opacity} />
+                ))}
+
+                <g className="ts-lines" stroke="#e8b96d" strokeOpacity="0.45" strokeWidth="0.8" strokeLinecap="round" fill="none">
+                  {constellation.lines.map(([ai, bi], i) => {
+                    const A = constellation.stars[ai];
+                    const B = constellation.stars[bi];
+                    if (!A || !B) return null;
+                    const dx = B[0] - A[0];
+                    const dy = B[1] - A[1];
+                    const len = Math.sqrt(dx * dx + dy * dy);
+                    return (
+                      <line
+                        key={`${drawKey}-${ai}-${bi}`}
+                        x1={A[0]}
+                        y1={A[1]}
+                        x2={B[0]}
+                        y2={B[1]}
+                        className="ts-line"
+                        style={{
+                          strokeDasharray: len,
+                          strokeDashoffset: len,
+                          "--dash": `${len}`,
+                          "--delay": `${i * 120}ms`,
+                        } as React.CSSProperties}
+                      />
+                    );
+                  })}
+                </g>
+
+                {constellation.stars.map((s, i) => {
+                  const glow = s[2] >= 2;
+                  return (
+                    <g
+                      key={`${drawKey}-${i}`}
+                      className={`ts-star ${glow ? "ts-star-sirius" : ""}`}
+                      style={{
+                        ["--delay" as any]: `${constellation.lines.length * 120 + i * 100}ms`,
+                        transformOrigin: `${s[0]}px ${s[1]}px`,
+                      }}
+                    >
+                      {glow && <circle cx={s[0]} cy={s[1]} r={s[2] + 5} fill="url(#tsbGlow)" />}
+                      <circle
+                        cx={s[0]}
+                        cy={s[1]}
+                        r={s[2]}
+                        fill="#fffbe6"
+                        style={glow ? { filter: "drop-shadow(0 0 3px #ffe9b0)" } : undefined}
+                      />
+                    </g>
+                  );
+                })}
+              </svg>
+
+              <p className="pointer-events-none absolute bottom-3 left-4 font-display italic text-[15px] text-[var(--gold)]/90">
+                {constellation.name}
+              </p>
+              <p className="pointer-events-none absolute bottom-3 right-4 text-[8.5px] uppercase tracking-[0.28em] text-white/35">
+                tap the sky
+              </p>
+            </div>
+          </button>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+/* ────────── Grief-coping band (landing) ────────── */
+
+function GriefCopeBand() {
+  const cards: Array<{ n: string; title: string; body: string }> = [
+    { n: "01", title: "The first night", body: "Don't tidy their bed away. Eat something. Let the house be loud or silent — whatever you need. Nothing has to be decided tonight." },
+    { n: "02", title: "The guilt", body: "\"Did I wait too long? Too little?\" Almost every owner asks this. Love made the decision, not failure. The guilt is grief wearing a mask." },
+    { n: "03", title: "When people say \"it was just a pet\"", body: "They don't understand — that's their limit, not yours. Find the people who do. Grief spoken to the right ears begins to soften." },
+    { n: "04", title: "Telling children", body: "Simple, true words. No \"went to sleep\" or \"went away\" — it frightens them. Let them see you cry; it teaches them love is allowed to hurt." },
+    { n: "05", title: "The other pets", body: "They grieve too — searching, off their food, quiet. Keep their routine steady. Let them see the body, if you can. It helps them understand." },
+    { n: "06", title: "Ritual over \"moving on\"", body: "You don't get over them; you build somewhere to put the love. A lamp. A letter. A memorial. That's not clinging — that's how grief heals." },
+  ];
+  return (
+    <section className="relative px-4 py-10 md:px-8 md:py-16">
+      <div
+        className="relative mx-auto max-w-[1000px] overflow-hidden rounded-[24px] px-5 py-8 md:px-10 md:py-12"
+        style={{
+          background: "linear-gradient(155deg, #171f36 0%, #0b1020 72%)",
+          border: "1px solid rgba(232,185,109,.34)",
+        }}
+      >
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-0 h-40"
+          style={{ background: "radial-gradient(60% 100% at 50% 0%, rgba(232,185,109,.22), transparent 70%)" }}
+        />
+
+        <div className="relative">
+          <span className="inline-flex items-center gap-2 rounded-full border border-[var(--gold)]/40 px-3 py-1 text-[10px] uppercase tracking-[0.3em] text-[var(--gold)]">
+            <span className="relative inline-flex h-1.5 w-1.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--gold)] opacity-70" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[var(--gold)]" />
+            </span>
+            Start here if today is the day
+          </span>
+
+          <h2 className="mt-4 font-display leading-[1.1] tracking-tight text-[#f5efe0]" style={{ fontSize: "clamp(28px, 6.5vw, 46px)" }}>
+            How to cope with losing them.
+          </h2>
+          <p className="mt-4 font-display italic leading-relaxed text-white/80" style={{ fontSize: "clamp(15px, 3.6vw, 19px)" }}>
+            There's no correct way to grieve an animal who slept at your feet for a decade. But there are things that help —
+            and things nobody tells you.
+          </p>
+
+          <div className="mt-8 grid grid-cols-1 gap-3 md:mt-10 md:grid-cols-3 md:gap-4">
+            {cards.map((c) => (
+              <article
+                key={c.n}
+                className="rounded-[14px] p-[18px] ring-1"
+                style={{ background: "rgba(255,255,255,.035)", borderColor: "transparent" }}
+              >
+                <p className="font-display text-[16px] text-[var(--gold)]/80">{c.n}</p>
+                <h3 className="mt-1 font-display text-[18px] leading-snug text-[#f5efe0]">{c.title}</h3>
+                <p className="mt-2 text-[12.8px] leading-relaxed text-white/60">{c.body}</p>
+              </article>
+            ))}
+          </div>
+
+          <div className="mt-8 border-t border-white/10 pt-6">
+            <p className="text-[13.5px] leading-relaxed text-white/70">
+              If the weight is too much right now, talk to someone. Free, kind, and used to exactly this:
+            </p>
+            <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2">
+              <a
+                href="tel:8774743310"
+                className="flex items-center justify-between rounded-[14px] border border-white/12 bg-white/[0.03] px-4 py-3 hover:border-[var(--gold)]/40 hover:bg-white/[0.06]"
+              >
+                <div>
+                  <p className="text-[10px] uppercase tracking-[0.28em] text-white/55">ASPCA Pet Loss</p>
+                  <p className="mt-1 font-display text-[20px] text-[var(--gold)]">877-474-3310</p>
+                </div>
+                <Phone className="h-4 w-4 text-[var(--gold)]/80" />
+              </a>
+              <a
+                href="tel:8559335683"
+                className="flex items-center justify-between rounded-[14px] border border-white/12 bg-white/[0.03] px-4 py-3 hover:border-[var(--gold)]/40 hover:bg-white/[0.06]"
+              >
+                <div>
+                  <p className="text-[10px] uppercase tracking-[0.28em] text-white/55">Lap of Love</p>
+                  <p className="mt-1 font-display text-[20px] text-[var(--gold)]">855-933-5683</p>
+                </div>
+                <Phone className="h-4 w-4 text-[var(--gold)]/80" />
+              </a>
+            </div>
+          </div>
+
+          <div className="mt-8 flex justify-center md:justify-start">
+            <Link to="/grief-support" className="btn-gold ios-tappable">
+              Read the full grief guide
+            </Link>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
