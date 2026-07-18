@@ -14,9 +14,11 @@ import heroImg from "@/assets/hero-meadow.jpg";
 
 export const Route = createFileRoute("/login")({
   component: LoginPage,
-  validateSearch: (search: Record<string, unknown>) => ({
-    redirect: typeof search.redirect === "string" ? search.redirect : undefined,
-  }),
+  validateSearch: (search: Record<string, unknown>): { redirect?: string } => {
+    const r = typeof search.redirect === "string" ? search.redirect : undefined;
+    return r ? { redirect: r } : {};
+  },
+
   head: () => ({ meta: [{ title: "Sign in — Rememfur" }] }),
 });
 
