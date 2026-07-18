@@ -609,7 +609,7 @@ function StepPhoto({
   onPickClick: () => void;
   onLampOnly: () => void;
   onRecrop: () => void;
-  fileInputRef: React.RefObject<HTMLInputElement>;
+  fileInputRef: React.RefObject<HTMLInputElement | null>;
   onFile: (f: File | null) => void;
 }) {
   return (
