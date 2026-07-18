@@ -457,7 +457,7 @@ function CreatePage() {
         onOpenChange={setAuthOpen}
         onAuthed={() => { /* useEffect on user picks it up */ }}
         title="Sign in to save their memorial"
-        description="We keep drafts safe. Sign in and we'll finish where you left off."
+        subtitle="We keep drafts safe. Sign in and we'll finish where you left off."
       />
 
       <BetaInviteDialog
