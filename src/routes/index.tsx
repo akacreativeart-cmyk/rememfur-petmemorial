@@ -1590,13 +1590,13 @@ function BetaBand({ onOpen }: { onOpen: () => void }) {
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#E8B96D] opacity-70" />
             <span className="relative inline-flex h-2 w-2 rounded-full bg-[#E8B96D]" />
           </span>
-          For someone who's hurting
+          When someone you love is grieving
         </span>
         <h3 className="mt-5 font-display leading-[1.15] tracking-tight text-white" style={{ fontSize: "clamp(22px, 5.6vw, 36px)" }}>
-          Someone you love is grieving?
+          Be there for them.
         </h3>
         <p className="mt-4 max-w-[60ch] text-[14.5px] leading-relaxed text-white/70 md:text-[16px]">
-          When a friend loses a pet, most people freeze — they want to help but don't know what to say, so they say nothing. Send them somewhere gentle instead.
+          The hardest part is knowing what to say. Send a friend a paw lamp and a few gentle words — and bring them somewhere that understands.
         </p>
         <button
           type="button"
@@ -1604,7 +1604,7 @@ function BetaBand({ onOpen }: { onOpen: () => void }) {
           className="btn-gold ios-tappable mt-7 w-full max-w-[320px] md:w-auto md:max-w-none"
         >
           <Heart className="h-4 w-4" />
-          Be there for them
+          Console a friend
         </button>
         <p className="mt-4 text-[11.5px] text-white/45">
           It takes a minute. It means everything.
