@@ -240,6 +240,7 @@ export type Database = {
           hero_image_url: string | null
           id: string
           is_public: boolean
+          location: string | null
           location_city: string | null
           nickname: string | null
           owner_id: string | null
@@ -263,6 +264,7 @@ export type Database = {
           hero_image_url?: string | null
           id?: string
           is_public?: boolean
+          location?: string | null
           location_city?: string | null
           nickname?: string | null
           owner_id?: string | null
@@ -286,6 +288,7 @@ export type Database = {
           hero_image_url?: string | null
           id?: string
           is_public?: boolean
+          location?: string | null
           location_city?: string | null
           nickname?: string | null
           owner_id?: string | null
