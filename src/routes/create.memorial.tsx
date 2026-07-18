@@ -1,955 +1,826 @@
-import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
-import { AuthGateDialog } from "@/components/site/AuthGateDialog";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import Cropper, { type Area } from "react-easy-crop";
 import { useServerFn } from "@tanstack/react-start";
+import { toast } from "sonner";
+
+import { AuthGateDialog } from "@/components/site/AuthGateDialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { toast } from "sonner";
+import { Slider } from "@/components/ui/slider";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Switch } from "@/components/ui/switch";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { createMemorial } from "@/lib/memorials.functions";
-import { transformPortrait } from "@/lib/transform.functions";
-import { lightCandle } from "@/lib/tributes.functions";
 import { assistCaption } from "@/lib/ai-assist.functions";
+import { Polaroid } from "@/components/site/Polaroid";
+import { PawLamp } from "@/components/site/PawLamp";
+import { BetaInviteDialog } from "@/components/site/BetaInviteDialog";
 import {
-  Sparkles,
-  Upload,
-  Heart,
+  ArrowLeft,
+  ArrowRight,
+  Camera,
   Check,
   Loader2,
+  Sparkles,
+  Upload,
+  Video,
   X,
-  ShoppingBag,
-  Phone,
-  Users,
-  HandHeart,
-  ArrowRight,
-  Copy,
-  Share2,
-  Mail,
-  MessageCircle,
-  Facebook,
-  Twitter,
 } from "lucide-react";
-import { GravestoneCard } from "@/components/site/GravestoneCard";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 
 export const Route = createFileRoute("/create/memorial")({
   component: CreatePage,
-  validateSearch: (search: Record<string, unknown>) => ({
-    welcome: search.welcome === 1 || search.welcome === "1" ? 1 : undefined,
-  }),
-  head: () => ({ meta: [{ title: "Create memorial — Rememfur" }] }),
+  head: () => ({ meta: [{ title: "Write a memorial — Rememfur" }] }),
 });
 
-const STYLES = [
-  { key: "painting", label: "Memory Painting", note: "Oil portrait" },
-  { key: "storybook", label: "Soft Storybook", note: "Whimsical illustration" },
-  { key: "sketch", label: "Timeless Sketch", note: "Pencil portrait" },
-  { key: "watercolor", label: "Watercolor", note: "Dreamy remembrance" },
+/* ─────────────────────────── constants ─────────────────────────── */
+
+const SPECIES = [
+  { key: "dog", label: "Dog" },
+  { key: "cat", label: "Cat" },
+  { key: "other", label: "Other" }, // bird / rabbit / other → all map to "other" in DB
 ] as const;
 
-type StyleKey = (typeof STYLES)[number]["key"];
+const PRONOUN_OPTIONS = ["he/him", "she/her", "they/them"] as const;
 
-const TRAIT_TAGS = [
-  "playful", "loyal", "gentle", "mischievous", "cuddly", "brave",
-  "curious", "goofy", "wise", "sunshine", "shadow", "best friend",
-];
+const STEP_LABELS = ["Who they were", "Their time", "A photo", "A message", "Keepsake"] as const;
+
+const DRAFT_KEY = "rememfur.create.draft.v2";
+
+type SpeciesKey = (typeof SPECIES)[number]["key"];
+
+/* ─────────────────────────── page ─────────────────────────── */
 
 function CreatePage() {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const transformFn = useServerFn(transformPortrait);
   const createFn = useServerFn(createMemorial);
-  const candleFn = useServerFn(lightCandle);
   const assistFn = useServerFn(assistCaption);
 
-  const [step, setStep] = useState(1);
-  const [heroUrl, setHeroUrl] = useState<string | null>(null);
-  const [heroKind, setHeroKind] = useState<"image" | "video" | "audio" | "file">("image");
-  const [uploading, setUploading] = useState(false);
-  // For guests: keep the actual File in memory (blob URL for preview).
-  const [pendingFile, setPendingFile] = useState<File | null>(null);
-  const [needsPhotoReattach, setNeedsPhotoReattach] = useState(false);
+  const [step, setStep] = useState(0);
 
-  const [style, setStyle] = useState<StyleKey>("painting");
-  const [transformedUrl, setTransformedUrl] = useState<string | null>(null);
-  const [transforming, setTransforming] = useState(false);
-  const [modFilter, setModFilter] = useState<"none" | "warm" | "noir" | "bloom" | "honey" | "dream" | "fade">("none");
-  const [compareView, setCompareView] = useState<"split" | "stack">("split");
-
-
+  // Step 1 — who
   const [petName, setPetName] = useState("");
-  const [species, setSpecies] = useState<"dog" | "cat" | "other">("dog");
+  const [nickname, setNickname] = useState("");
+  const [species, setSpecies] = useState<SpeciesKey>("dog");
+  const [speciesOther, setSpeciesOther] = useState(""); // free text kept in `breed` alongside actual breed for now
+  const [breed, setBreed] = useState("");
+
+  // Step 2 — their time
+  const [pronouns, setPronouns] = useState<string>("they/them");
   const [birthDate, setBirthDate] = useState("");
   const [passingDate, setPassingDate] = useState("");
-  const [epitaph, setEpitaph] = useState("");
-  const [story, setStory] = useState("");
-  const [tags, setTags] = useState<string[]>([]);
+  const [unsureDates, setUnsureDates] = useState(false);
+  const [approxAge, setApproxAge] = useState("");
+  const [location, setLocation] = useState("");
+
+  // Step 3 — photo
+  const [photoFile, setPhotoFile] = useState<File | null>(null);
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null); // blob url of raw
+  const [cropOpen, setCropOpen] = useState(false);
+  const [cropAspect, setCropAspect] = useState<1 | 0.8>(1); // 1 square, 4/5=0.8 portrait
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [croppedAreaPx, setCroppedAreaPx] = useState<Area | null>(null);
+  const [croppedBlob, setCroppedBlob] = useState<Blob | null>(null);
+  const [croppedPreview, setCroppedPreview] = useState<string | null>(null);
+  const [lampOnly, setLampOnly] = useState(false);
+
+  // Step 4 — message
+  const [message, setMessage] = useState("");
   const [assisting, setAssisting] = useState(false);
-  const [showGravestone, setShowGravestone] = useState(false);
 
-  const [candleMsg, setCandleMsg] = useState("");
+  // Submit / auth
   const [submitting, setSubmitting] = useState(false);
-  const [cancelling, setCancelling] = useState(false);
-  const [publishedSlug, setPublishedSlug] = useState<string | null>(null);
   const [authOpen, setAuthOpen] = useState(false);
+  const [printOpen, setPrintOpen] = useState(false);
   const finishOnAuthRef = useRef(false);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const DRAFT_KEY = "rememfur.create.draft.v1";
-  const FINISH_FLAG = "rememfur.create.finishAfterAuth.v1";
+  /* ── draft persistence (survives sign-in bounce) ── */
 
-  const saveDraft = () => {
-    try {
-      localStorage.setItem(
-        DRAFT_KEY,
-        JSON.stringify({ petName, species, birthDate, passingDate, epitaph, story, tags, candleMsg, style, step }),
-      );
-    } catch { /* ignore */ }
-  };
-
-  const clearDraft = () => {
-    try { localStorage.removeItem(DRAFT_KEY); localStorage.removeItem(FINISH_FLAG); } catch { /* ignore */ }
-  };
-
-  // On mount: restore any pending draft (fields survive, photo file does not).
   useEffect(() => {
     try {
       const raw = localStorage.getItem(DRAFT_KEY);
       if (!raw) return;
       const d = JSON.parse(raw);
-      if (d.petName && !petName) setPetName(d.petName);
+      if (d.petName) setPetName(d.petName);
+      if (d.nickname) setNickname(d.nickname);
       if (d.species) setSpecies(d.species);
+      if (d.speciesOther) setSpeciesOther(d.speciesOther);
+      if (d.breed) setBreed(d.breed);
+      if (d.pronouns) setPronouns(d.pronouns);
       if (d.birthDate) setBirthDate(d.birthDate);
       if (d.passingDate) setPassingDate(d.passingDate);
-      if (d.epitaph) setEpitaph(d.epitaph);
-      if (d.story) setStory(d.story);
-      if (Array.isArray(d.tags)) setTags(d.tags);
-      if (d.candleMsg) setCandleMsg(d.candleMsg);
-      if (d.style) setStyle(d.style);
-      if (d.step && typeof d.step === "number") setStep(Math.min(d.step, 4));
-      if (localStorage.getItem(FINISH_FLAG) === "1") setNeedsPhotoReattach(true);
+      if (d.unsureDates) setUnsureDates(d.unsureDates);
+      if (d.approxAge) setApproxAge(d.approxAge);
+      if (d.location) setLocation(d.location);
+      if (d.message) setMessage(d.message);
+      if (d.lampOnly) setLampOnly(d.lampOnly);
+      if (typeof d.step === "number") setStep(Math.min(d.step, 4));
     } catch { /* ignore */ }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const hasProgress =
-    !!heroUrl || !!transformedUrl || !!petName || !!epitaph || !!story || !!candleMsg;
-
-  const handleCancel = () => {
-    setCancelling(true);
-    clearDraft();
-    window.setTimeout(() => navigate({ to: user ? "/dashboard" : "/" }), 360);
+  const saveDraft = () => {
+    try {
+      localStorage.setItem(
+        DRAFT_KEY,
+        JSON.stringify({
+          petName, nickname, species, speciesOther, breed,
+          pronouns, birthDate, passingDate, unsureDates, approxAge, location,
+          message, lampOnly, step,
+        }),
+      );
+    } catch { /* ignore */ }
   };
 
-  const uploadFileForUser = async (file: File, userId: string): Promise<string> => {
-    const ext = file.name.split(".").pop() || "bin";
-    const path = `${userId}/${Date.now()}.${ext}`;
-    const { error } = await supabase.storage.from("pet-photos").upload(path, file, { contentType: file.type });
-    if (error) throw new Error(error.message);
-    const { data } = supabase.storage.from("pet-photos").getPublicUrl(path);
-    return data.publicUrl;
+  const clearDraft = () => {
+    try { localStorage.removeItem(DRAFT_KEY); } catch { /* ignore */ }
   };
 
-  const handleUpload = async (file: File) => {
-    const t = file.type;
-    const kind: typeof heroKind = t.startsWith("video/") ? "video" : t.startsWith("audio/") ? "audio" : t.startsWith("image/") ? "image" : "file";
-    setHeroKind(kind);
-    setNeedsPhotoReattach(false);
-    if (!user) {
-      // Guest: hold onto the file in memory, preview via blob URL.
-      setPendingFile(file);
-      setHeroUrl(URL.createObjectURL(file));
-      toast.success("Photo added — we'll finish saving when you're signed in.");
+  /* ── photo handling ── */
+
+  const onPickFile = (f: File | null) => {
+    if (!f) return;
+    if (!f.type.startsWith("image/")) {
+      toast.error("Please choose a photo (JPG or PNG).");
       return;
     }
-    setUploading(true);
-    try {
-      const url = await uploadFileForUser(file, user.id);
-      setHeroUrl(url);
-      setPendingFile(null);
-      toast.success("Memory uploaded.");
-    } catch (e: any) {
-      toast.error(e?.message ?? "Upload failed");
-    } finally {
-      setUploading(false);
-    }
+    setLampOnly(false);
+    setPhotoFile(f);
+    const url = URL.createObjectURL(f);
+    setPhotoPreview(url);
+    setCropOpen(true);
+    setCrop({ x: 0, y: 0 });
+    setZoom(1);
   };
 
+  const onCropComplete = useCallback((_: Area, areaPx: Area) => {
+    setCroppedAreaPx(areaPx);
+  }, []);
 
-  const runTransform = async () => {
-    if (!heroUrl) return;
-    if (!user || heroUrl.startsWith("blob:")) {
-      // Guests can't paint the portrait yet — the server needs a real URL.
-      saveDraft();
-      finishOnAuthRef.current = false;
-      setAuthOpen(true);
-      return;
-    }
-    setTransforming(true);
-    try {
-      const res = await transformFn({ data: { source_image_url: heroUrl, style } });
-      setTransformedUrl(res.url);
-      toast.success("Portrait painted.");
-    } catch (e: any) {
-      toast.error(e.message ?? "Could not paint the portrait");
-    } finally {
-      setTransforming(false);
-    }
+  const applyCrop = async () => {
+    if (!photoPreview || !croppedAreaPx) return;
+    const blob = await canvasCrop(photoPreview, croppedAreaPx);
+    setCroppedBlob(blob);
+    if (croppedPreview) URL.revokeObjectURL(croppedPreview);
+    setCroppedPreview(URL.createObjectURL(blob));
+    setCropOpen(false);
   };
 
-  const toggleTag = (t: string) => {
-    setTags((prev) => (prev.includes(t) ? prev.filter((x) => x !== t) : [...prev, t]));
+  const chooseLampOnly = () => {
+    setLampOnly(true);
+    setPhotoFile(null);
+    setCroppedBlob(null);
+    if (photoPreview) { URL.revokeObjectURL(photoPreview); setPhotoPreview(null); }
+    if (croppedPreview) { URL.revokeObjectURL(croppedPreview); setCroppedPreview(null); }
   };
 
-  const aiAssist = async () => {
+  /* ── AI assist for message ── */
+
+  const runAssist = async () => {
     setAssisting(true);
     try {
-      const seed = [
-        petName && `About ${petName}, a ${species}.`,
-        tags.length && `They were ${tags.join(", ")}.`,
-        story.trim(),
-      ].filter(Boolean).join(" ");
-      const res = await assistFn({ data: { draft: seed, tone: "tender" } });
-      if (res?.caption) setStory(res.caption);
-      toast.success("AI draft ready — edit freely.");
+      const { caption } = await assistFn({
+        data: {
+          draft: message,
+          tone: "tender",
+          petName,
+          nickname,
+          species: species === "other" ? (speciesOther || "beloved companion") : species,
+          pronouns,
+        },
+      });
+      if (caption) setMessage(caption);
     } catch (e: any) {
-      toast.error(e.message ?? "AI assist unavailable");
+      if (String(e?.message ?? "").toLowerCase().includes("unauthorized")) {
+        saveDraft();
+        finishOnAuthRef.current = false;
+        setAuthOpen(true);
+        return;
+      }
+      toast.error(e?.message ?? "AI couldn't help just now.");
     } finally {
       setAssisting(false);
     }
   };
 
-  const doFinish = async (activeUserId: string) => {
-    setSubmitting(true);
-    try {
-      // If a guest picked a file before signing in, upload it now.
-      let finalHeroUrl = heroUrl;
-      if (pendingFile) {
-        const url = await uploadFileForUser(pendingFile, activeUserId);
-        finalHeroUrl = url;
-        setHeroUrl(url);
-        setPendingFile(null);
-      } else if (heroUrl && heroUrl.startsWith("blob:")) {
-        // Stale blob URL with no file — clear it (photo was lost on redirect).
-        finalHeroUrl = null;
-        setHeroUrl(null);
-      }
-      const fullStory = [story.trim(), tags.length ? `\n\nThey were ${tags.join(", ")}.` : ""].join("");
-      const res = await createFn({
-        data: {
-          pet_name: petName,
-          species,
-          birth_date: birthDate || null,
-          passing_date: passingDate || null,
-          epitaph: epitaph || null,
-          story: fullStory || null,
-          hero_image_url: finalHeroUrl,
-          transformed_image_url: transformedUrl,
-          transform_style: transformedUrl ? style : null,
-          is_public: true,
-        },
-      });
-      try {
-        await candleFn({ data: { memorial_id: res.id, message: candleMsg || null } });
-      } catch {}
-      toast.success("Memorial created with love.");
-      setPublishedSlug(res.slug);
-      setStep(5);
-      clearDraft();
-    } catch (e: any) {
-      toast.error(e.message ?? "Could not create memorial");
-    } finally {
-      setSubmitting(false);
-    }
+  /* ── submit / publish ── */
+
+  const canGoNext = useMemo(() => {
+    if (step === 0) return petName.trim().length > 0;
+    return true;
+  }, [step, petName]);
+
+  const goNext = () => {
+    if (!canGoNext) return;
+    saveDraft();
+    setStep((s) => Math.min(s + 1, 4));
+  };
+  const goBack = () => setStep((s) => Math.max(s - 1, 0));
+
+  const uploadCropped = async (userId: string): Promise<string | null> => {
+    if (!croppedBlob) return null;
+    const path = `${userId}/${Date.now()}.jpg`;
+    const { error } = await supabase.storage
+      .from("pet-photos")
+      .upload(path, croppedBlob, { contentType: "image/jpeg" });
+    if (error) throw new Error(error.message);
+    return supabase.storage.from("pet-photos").getPublicUrl(path).data.publicUrl;
   };
 
-  const finish = async () => {
-    if (!petName) return toast.error("Please add their name.");
+  const publish = async () => {
+    if (!petName.trim()) {
+      toast.error("A name, please — even a single letter.");
+      setStep(0);
+      return;
+    }
     if (!user) {
-      // Guest: preserve draft and prompt sign-in.
       saveDraft();
       finishOnAuthRef.current = true;
       setAuthOpen(true);
       return;
     }
-    await doFinish(user.id);
+    setSubmitting(true);
+    try {
+      const heroUrl = croppedBlob ? await uploadCropped(user.id) : null;
+      const breedField = species === "other" && speciesOther
+        ? `${speciesOther}${breed ? ` · ${breed}` : ""}`
+        : (breed || null);
+      const res = await createFn({
+        data: {
+          pet_name: petName.trim(),
+          species: species,
+          birth_date: unsureDates ? null : (birthDate || null),
+          passing_date: unsureDates ? null : (passingDate || null),
+          epitaph: message.trim() ? message.trim().slice(0, 200) : null,
+          story: null,
+          hero_image_url: heroUrl,
+          is_public: true,
+          nickname: nickname.trim() || null,
+          pronouns: pronouns || null,
+          breed: breedField,
+          approx_age: unsureDates ? (approxAge.trim() || null) : null,
+          location: location.trim() || null,
+        },
+      });
+      clearDraft();
+      toast.success("Their memorial is lit.");
+      navigate({ to: "/memorial/$slug", params: { slug: res.slug }, search: { welcome: 1 } as never });
+    } catch (e: any) {
+      toast.error(e?.message ?? "Couldn't save. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
-  // If a guest signs in via password inside the dialog, auto-continue the save.
+  // If the auth gate closed with a user, and we intended to finish, do it.
   useEffect(() => {
-    if (user && finishOnAuthRef.current && petName) {
+    if (user && finishOnAuthRef.current) {
       finishOnAuthRef.current = false;
-      void doFinish(user.id);
-    }
-    // Also handle post-OAuth-redirect return.
-    if (user && !finishOnAuthRef.current && petName) {
-      try {
-        if (localStorage.getItem(FINISH_FLAG) === "1") {
-          localStorage.removeItem(FINISH_FLAG);
-          if (pendingFile || !needsPhotoReattach) {
-            void doFinish(user.id);
-          }
-        }
-      } catch { /* ignore */ }
+      publish();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
-  const { welcome } = Route.useSearch();
+  /* ─────────────────────── render ─────────────────────── */
+
+  const heroPreviewUrl = croppedPreview || null;
 
   return (
-    <div
-      className={
-        cancelling
-          ? "pointer-events-none animate-fade-out transition-opacity duration-300"
-          : "animate-fade-in"
-      }
-    >
-      {welcome === 1 && step === 1 && (
-        <div className="mb-8 overflow-hidden rounded-3xl border border-amber-400/25 bg-gradient-to-br from-amber-400/10 via-amber-300/5 to-transparent p-8 text-center soft-shadow md:p-12">
-          <p className="font-display text-3xl text-foreground md:text-4xl lg:text-5xl">
-            Welcome. Who are we remembering?
-          </p>
-          <p className="mx-auto mt-3 max-w-xl text-sm text-muted-foreground md:text-base">
-            Take your time. We'll keep everything safe as you go.
-          </p>
-        </div>
-      )}
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h1 className="font-display text-4xl text-foreground">Create a memorial</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            A gentle ritual: photo, transform, tribute, paw lamp.
-          </p>
-        </div>
-        {step < 5 && (hasProgress ? (
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button variant="ghost" size="sm" className="rounded-full text-muted-foreground">
-                <X className="mr-1 h-4 w-4" /> Cancel
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle className="font-display text-2xl">
-                  Set this aside for now?
-                </AlertDialogTitle>
-                <AlertDialogDescription>
-                  Your progress won't be saved. You can begin again whenever you feel ready.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel className="rounded-full">Keep going</AlertDialogCancel>
-                <AlertDialogAction
-                  onClick={handleCancel}
-                  className="rounded-full bg-muted text-foreground hover:bg-muted/80"
-                >
-                  Yes, cancel
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-        ) : (
-          <Button
-            variant="ghost"
-            size="sm"
-            className="rounded-full text-muted-foreground"
-            onClick={handleCancel}
-          >
-            <X className="mr-1 h-4 w-4" /> Cancel
-          </Button>
-        ))}
-      </div>
+    <main className="min-h-screen bg-background pb-24 pt-8">
+      <div className="mx-auto max-w-2xl px-5">
+        <Stepper step={step} />
 
+        <div className="mt-8 rounded-3xl border border-border/60 bg-card/80 p-6 shadow-sm md:p-10">
+          {step === 0 && (
+            <StepWho
+              petName={petName} setPetName={setPetName}
+              nickname={nickname} setNickname={setNickname}
+              species={species} setSpecies={setSpecies}
+              speciesOther={speciesOther} setSpeciesOther={setSpeciesOther}
+              breed={breed} setBreed={setBreed}
+            />
+          )}
 
-      {step < 5 && (
-      <div className="mt-7">
-        <div
-          className="h-1.5 w-full overflow-hidden rounded-full bg-muted"
-          role="progressbar"
-          aria-valuemin={0}
-          aria-valuemax={4}
-          aria-valuenow={step}
-          aria-label={`Wizard progress: step ${step} of 4`}
-        >
-          <div
-            className="h-full rounded-full bg-[var(--cta)] transition-all duration-500 ease-out"
-            style={{ width: `${(step / 4) * 100}%` }}
-          />
+          {step === 1 && (
+            <StepTime
+              pronouns={pronouns} setPronouns={setPronouns}
+              birthDate={birthDate} setBirthDate={setBirthDate}
+              passingDate={passingDate} setPassingDate={setPassingDate}
+              unsureDates={unsureDates} setUnsureDates={setUnsureDates}
+              approxAge={approxAge} setApproxAge={setApproxAge}
+              location={location} setLocation={setLocation}
+            />
+          )}
+
+          {step === 2 && (
+            <StepPhoto
+              heroPreviewUrl={heroPreviewUrl}
+              lampOnly={lampOnly}
+              onPickClick={() => fileInputRef.current?.click()}
+              onLampOnly={chooseLampOnly}
+              onRecrop={() => photoPreview && setCropOpen(true)}
+              fileInputRef={fileInputRef}
+              onFile={onPickFile}
+            />
+          )}
+
+          {step === 3 && (
+            <StepMessage
+              petName={nickname || petName}
+              message={message}
+              setMessage={setMessage}
+              assisting={assisting}
+              runAssist={runAssist}
+            />
+          )}
+
+          {step === 4 && (
+            <StepPreview
+              petName={petName}
+              nickname={nickname}
+              message={message}
+              heroPreviewUrl={heroPreviewUrl}
+              submitting={submitting}
+              onPublish={publish}
+              onOrderPrint={() => setPrintOpen(true)}
+            />
+          )}
+
+          {/* nav */}
+          <div className="mt-8 flex items-center justify-between border-t border-border/50 pt-6">
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={goBack}
+              disabled={step === 0}
+              className="rounded-full"
+            >
+              <ArrowLeft className="mr-1.5 h-4 w-4" /> Back
+            </Button>
+
+            {step < 4 ? (
+              <button
+                type="button"
+                onClick={goNext}
+                disabled={!canGoNext}
+                className="btn-gold-sm"
+              >
+                Continue <ArrowRight className="h-4 w-4" />
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={publish}
+                disabled={submitting}
+                className="btn-gold-sm"
+              >
+                {submitting ? (
+                  <><Loader2 className="h-4 w-4 animate-spin" /> Lighting…</>
+                ) : (
+                  <><Check className="h-4 w-4" /> Publish memorial</>
+                )}
+              </button>
+            )}
+          </div>
         </div>
-        <ol className="mt-4 flex items-center gap-3 text-xs">
-          {["Photo", "Transform", "Tribute", "Paw lamp"].map((label, i) => {
-            const n = i + 1;
-            const active = step === n;
-            const done = step > n;
-            return (
-              <li key={label} className="flex flex-1 items-center gap-2">
-                <span className={`flex h-7 w-7 items-center justify-center rounded-full text-xs ${done ? "bg-sage-deep text-primary-foreground" : active ? "bg-[var(--cta)] text-[var(--cta-foreground)]" : "bg-muted text-muted-foreground"}`}>
-                  {done ? <Check className="h-3.5 w-3.5" /> : n}
-                </span>
-                <span className={`${active ? "text-foreground" : "text-muted-foreground"}`}>{label}</span>
-                {i < 3 && <div className="ml-1 h-px flex-1 bg-border" />}
-              </li>
-            );
-          })}
-        </ol>
-        <p className="mt-2 text-center text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
-          Step {step} of 4 · {Math.round((step / 4) * 100)}%
+
+        <p className="mt-6 text-center text-[11.5px] uppercase tracking-[0.2em] text-muted-foreground">
+          Every field but their name is optional. Take your time.
         </p>
       </div>
-      )}
 
-      {needsPhotoReattach && step === 1 && (
-        <div className="mt-6 rounded-2xl border border-amber-400/30 bg-amber-400/5 p-4 text-sm text-foreground">
-          Add their photo back — everything else is safe.
+      {/* Cropper dialog */}
+      {cropOpen && photoPreview && (
+        <div className="fixed inset-0 z-50 flex flex-col bg-[#0B1122]/95 backdrop-blur">
+          <div className="flex items-center justify-between px-5 py-4 text-white">
+            <button
+              type="button"
+              onClick={() => setCropOpen(false)}
+              className="rounded-full p-2 text-white/70 hover:bg-white/10 hover:text-white"
+              aria-label="Cancel crop"
+            >
+              <X className="h-5 w-5" />
+            </button>
+            <div className="text-[11px] uppercase tracking-[0.22em] text-white/70">Reposition</div>
+            <div className="w-9" />
+          </div>
+          <div className="relative flex-1">
+            <Cropper
+              image={photoPreview}
+              crop={crop}
+              zoom={zoom}
+              aspect={cropAspect}
+              onCropChange={setCrop}
+              onZoomChange={setZoom}
+              onCropComplete={onCropComplete}
+              objectFit="contain"
+            />
+          </div>
+          <div className="space-y-4 px-5 pb-8 pt-4 text-white">
+            <div className="flex justify-center gap-2">
+              <button
+                type="button"
+                onClick={() => setCropAspect(1)}
+                className={aspectPillClass(cropAspect === 1)}
+              >Square</button>
+              <button
+                type="button"
+                onClick={() => setCropAspect(0.8)}
+                className={aspectPillClass(cropAspect === 0.8)}
+              >Portrait 4:5</button>
+            </div>
+            <div className="mx-auto max-w-xs">
+              <Slider
+                value={[zoom]}
+                min={1}
+                max={3}
+                step={0.01}
+                onValueChange={(v) => setZoom(v[0] ?? 1)}
+              />
+            </div>
+            <div className="flex justify-center">
+              <button type="button" onClick={applyCrop} className="btn-gold-sm">
+                <Check className="h-4 w-4" /> Use this crop
+              </button>
+            </div>
+          </div>
         </div>
       )}
-
-      <div className="mt-8 rounded-3xl border border-border/60 bg-card p-8 soft-shadow">
-        {step === 1 && (
-          <section>
-            <h2 className="font-display text-2xl text-foreground">Upload a photo</h2>
-            <p className="mt-1 text-sm text-muted-foreground">A photo that feels most like them — the one you keep coming back to.</p>
-
-            <label className="mt-6 flex h-64 cursor-pointer flex-col items-center justify-center gap-3 overflow-hidden rounded-2xl border-2 border-dashed border-border bg-cream/40 transition hover:border-sage">
-              {heroUrl ? (
-                heroKind === "video" ? (
-                  <video src={heroUrl} controls className="h-full w-full rounded-2xl object-cover" />
-                ) : heroKind === "audio" ? (
-                  <div className="flex w-full flex-col items-center gap-3 p-6">
-                    <div className="text-sm text-muted-foreground">Voice memory</div>
-                    <audio src={heroUrl} controls className="w-full" />
-                  </div>
-                ) : heroKind === "image" ? (
-                  <img src={heroUrl} alt="" className="h-full w-full rounded-2xl object-cover" />
-                ) : (
-                  <a href={heroUrl} target="_blank" rel="noreferrer" className="text-sm text-sage-deep underline">View file</a>
-                )
-              ) : (
-                <>
-                  <Upload className="h-8 w-8 text-sage-deep" />
-                  <div className="text-sm text-foreground">{uploading ? "Uploading…" : "Click to upload or drop a memory"}</div>
-                  <div className="text-xs text-muted-foreground">Photo, video, or audio · up to ~25MB</div>
-                </>
-              )}
-              <input
-                type="file"
-                accept="image/*,video/*,audio/*"
-                className="hidden"
-                onChange={(e) => e.target.files?.[0] && handleUpload(e.target.files[0])}
-              />
-            </label>
-            <div className="mt-6 flex justify-end">
-              <Button disabled={!heroUrl} onClick={() => setStep(2)} className="rounded-full bg-[var(--cta)] text-[var(--cta-foreground)] hover:bg-[var(--cta-deep)]">Next</Button>
-            </div>
-          </section>
-        )}
-
-        {step === 2 && (
-          <section>
-            <h2 className="font-display text-2xl text-foreground">Transform & refine</h2>
-            <p className="mt-1 text-sm text-muted-foreground">
-              {heroKind === "image"
-                ? "Paint their portrait in a style — then add a modern filter. See the original and transformed side by side."
-                : "Painted portraits work best with photos. You can skip this step."}
-            </p>
-
-            {heroKind === "image" && (
-              <>
-                <div className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-4">
-                  {STYLES.map((s) => (
-                    <button key={s.key} onClick={() => setStyle(s.key)} className={`rounded-2xl border-2 p-4 text-left transition ${style === s.key ? "border-[var(--cta)] bg-[color-mix(in_oklab,var(--cta)_8%,transparent)]" : "border-border hover:border-sage/40"}`}>
-                      <Sparkles className="h-5 w-5 text-[var(--cta)]" />
-                      <div className="mt-2 font-display text-sm text-foreground">{s.label}</div>
-                      <div className="text-xs text-muted-foreground">{s.note}</div>
-                    </button>
-                  ))}
-                </div>
-
-                {/* Compare toggle */}
-                <div className="mt-5 flex items-center justify-between gap-3">
-                  <div className="text-xs uppercase tracking-wider text-muted-foreground">View</div>
-                  <div className="inline-flex rounded-full border border-border bg-muted/40 p-0.5 text-xs">
-                    <button onClick={() => setCompareView("split")} className={`rounded-full px-3 py-1 ${compareView === "split" ? "bg-[var(--cta)] text-[var(--cta-foreground)]" : "text-muted-foreground"}`}>Side by side</button>
-                    <button onClick={() => setCompareView("stack")} className={`rounded-full px-3 py-1 ${compareView === "stack" ? "bg-[var(--cta)] text-[var(--cta-foreground)]" : "text-muted-foreground"}`}>Overlay</button>
-                  </div>
-                </div>
-
-                {compareView === "split" ? (
-                  <div className="mt-3 grid gap-4 md:grid-cols-2">
-                    <div className="rounded-2xl border border-border bg-muted/30 p-3 text-center">
-                      <div className="text-xs uppercase tracking-wider text-muted-foreground">Original</div>
-                      {heroUrl && <img src={heroUrl} alt="" className={`mt-2 aspect-square w-full rounded-xl object-cover filt-${modFilter}`} />}
-                    </div>
-                    <div className="rounded-2xl border border-border bg-muted/30 p-3 text-center">
-                      <div className="text-xs uppercase tracking-wider text-muted-foreground">Painted portrait</div>
-                      {transforming ? (
-                        <div className="mt-2 flex aspect-square w-full items-center justify-center rounded-xl bg-cream/40 text-sage-deep">
-                          <Loader2 className="h-6 w-6 animate-spin" />
-                        </div>
-                      ) : transformedUrl ? (
-                        <img src={transformedUrl} alt="" className={`mt-2 aspect-square w-full rounded-xl object-cover filt-${modFilter}`} />
-                      ) : (
-                        <div className="mt-2 flex aspect-square w-full items-center justify-center rounded-xl bg-cream/40 text-sm text-muted-foreground">Preview will appear here</div>
-                      )}
-                    </div>
-                  </div>
-                ) : (
-                  <div className="mt-3 relative mx-auto aspect-square w-full max-w-md overflow-hidden rounded-2xl border border-border bg-muted/30">
-                    {heroUrl && <img src={heroUrl} alt="original" className={`absolute inset-0 h-full w-full object-cover filt-${modFilter}`} />}
-                    {transformedUrl && (
-                      <img src={transformedUrl} alt="painted" className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 filt-${modFilter}`} style={{ clipPath: "inset(0 0 0 50%)" }} />
-                    )}
-                    <div className="pointer-events-none absolute inset-y-0 left-1/2 w-px bg-white/80 mix-blend-difference" />
-                    <div className="absolute left-2 top-2 rounded-full bg-black/50 px-2 py-0.5 text-[10px] uppercase tracking-wider text-white">Original</div>
-                    {transformedUrl && (
-                      <div className="absolute right-2 top-2 rounded-full bg-black/50 px-2 py-0.5 text-[10px] uppercase tracking-wider text-white">Painted</div>
-                    )}
-                  </div>
-                )}
-
-                {/* Modern filter strip */}
-                <div className="mt-5">
-                  <div className="text-xs uppercase tracking-wider text-muted-foreground">Modern filters</div>
-                  <div className="mt-2 -mx-1 flex gap-2 overflow-x-auto pb-1">
-                    {(["none","warm","noir","bloom","honey","dream","fade"] as const).map((f) => (
-                      <button
-                        key={f}
-                        onClick={() => setModFilter(f)}
-                        className={`shrink-0 rounded-xl border p-1.5 text-center transition ${modFilter === f ? "border-[var(--cta)] ring-2 ring-[var(--cta)]/30" : "border-border/60"}`}
-                      >
-                        <img src={transformedUrl ?? heroUrl ?? ""} alt="" className={`h-14 w-14 rounded-md object-cover filt-${f}`} />
-                        <div className="mt-1 text-[10px] capitalize text-muted-foreground">{f}</div>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </>
-            )}
-
-            <div className="mt-6 flex flex-wrap justify-between gap-2">
-              <Button variant="ghost" onClick={() => setStep(1)} className="rounded-full">Back</Button>
-              <div className="flex gap-2">
-                {heroKind === "image" && (
-                  <Button onClick={runTransform} disabled={transforming || !heroUrl} variant="outline" className="rounded-full">
-                    {transforming ? "Painting…" : transformedUrl ? "Repaint" : "Paint portrait"}
-                  </Button>
-                )}
-                <Button onClick={() => setStep(3)} className="rounded-full bg-[var(--cta)] text-[var(--cta-foreground)] hover:bg-[var(--cta-deep)]">
-                  {transformedUrl ? "Next" : "Skip and continue"}
-                </Button>
-              </div>
-            </div>
-          </section>
-        )}
-
-
-        {step === 3 && (
-          <section>
-            <h2 className="font-display text-2xl text-foreground">Write a tribute</h2>
-            <p className="mt-1 text-sm text-muted-foreground">In your own voice, in your own time.</p>
-            <div className="mt-6 grid gap-4 md:grid-cols-2">
-              <div>
-                <Label htmlFor="pn">Their name</Label>
-                <Input id="pn" value={petName} onChange={(e) => setPetName(e.target.value)} placeholder="Luna" />
-              </div>
-              <div>
-                <Label htmlFor="sp">Species</Label>
-                <select id="sp" value={species} onChange={(e) => setSpecies(e.target.value as any)} className="mt-1 flex h-9 w-full rounded-md border border-input bg-background px-3 text-sm">
-                  <option value="dog">Dog</option>
-                  <option value="cat">Cat</option>
-                  <option value="other">Other</option>
-                </select>
-              </div>
-              <div>
-                <Label htmlFor="bd">Birth date (optional)</Label>
-                <Input id="bd" type="date" value={birthDate} onChange={(e) => setBirthDate(e.target.value)} />
-              </div>
-              <div>
-                <Label htmlFor="pd">Angel day (optional)</Label>
-                <Input id="pd" type="date" value={passingDate} onChange={(e) => setPassingDate(e.target.value)} />
-              </div>
-              <div className="md:col-span-2">
-                <Label htmlFor="ep">A short epitaph</Label>
-                <Input id="ep" value={epitaph} onChange={(e) => setEpitaph(e.target.value)} placeholder="You were my sunshine, every single day." />
-              </div>
-
-              <div className="md:col-span-2">
-                <Label>Tap a few traits that capture them</Label>
-                <div className="mt-2 flex flex-wrap gap-2">
-                  {TRAIT_TAGS.map((t) => {
-                    const active = tags.includes(t);
-                    return (
-                      <button
-                        type="button"
-                        key={t}
-                        onClick={() => toggleTag(t)}
-                        className={`rounded-full border px-3 py-1 text-xs transition ${
-                          active
-                            ? "border-[var(--cta)] bg-[var(--cta)] text-[var(--cta-foreground)]"
-                            : "border-border bg-card text-foreground hover:bg-muted/50"
-                        }`}
-                      >
-                        {active ? "✓ " : "+ "}{t}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              <div className="md:col-span-2">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="st">Their story</Label>
-                  <Button
-                    type="button"
-                    size="sm"
-                    variant="ghost"
-                    disabled={assisting}
-                    onClick={aiAssist}
-                    className="h-7 text-xs text-[var(--cta)] hover:bg-[color-mix(in_oklab,var(--cta)_10%,transparent)]"
-                  >
-                    <Sparkles className="mr-1 h-3.5 w-3.5" />
-                    {assisting ? "Writing…" : "AI assist"}
-                  </Button>
-                </div>
-                <Textarea id="st" rows={6} value={story} onChange={(e) => setStory(e.target.value)} placeholder="What made them uniquely them? What will you miss most?" />
-                <p className="mt-1 text-xs text-muted-foreground">
-                  Tip: add a few traits above, then tap <span className="text-[var(--cta)]">AI assist</span> to draft a starting paragraph.
-                </p>
-              </div>
-            </div>
-
-            <div className="mt-6 rounded-2xl border border-border/60 bg-cream/30 p-4">
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <div>
-                  <div className="font-display text-lg text-foreground">Gravestone keepsake</div>
-                  <p className="text-xs text-muted-foreground">
-                    A gentle headstone with their name, dates, a small message, fresh flowers and a burning paw lamp.
-                  </p>
-                </div>
-                <Button
-                  type="button"
-                  variant={showGravestone ? "default" : "outline"}
-                  size="sm"
-                  className={`rounded-full ${showGravestone ? "bg-[var(--cta)] text-[var(--cta-foreground)] hover:bg-[var(--cta-deep)]" : ""}`}
-                  onClick={() => setShowGravestone((v) => !v)}
-                >
-                  {showGravestone ? "Hide preview" : "Preview gravestone"}
-                </Button>
-              </div>
-              {showGravestone && (
-                <div className="mt-4 animate-fade-in">
-                  <GravestoneCard
-                    name={petName}
-                    birth={birthDate}
-                    passing={passingDate}
-                    epitaph={epitaph}
-                  />
-                  <p className="mt-2 text-center text-[11px] text-muted-foreground">
-                    Updates live as you edit the fields above.
-                  </p>
-                </div>
-              )}
-            </div>
-
-            <div className="mt-6 flex justify-between">
-
-              <Button variant="ghost" onClick={() => setStep(2)} className="rounded-full">Back</Button>
-              <Button disabled={!petName} onClick={() => setStep(4)} className="rounded-full bg-[var(--cta)] text-[var(--cta-foreground)] hover:bg-[var(--cta-deep)]">Next</Button>
-            </div>
-          </section>
-        )}
-
-        {step === 4 && (
-          <section className="text-center">
-            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-[color-mix(in_oklab,var(--cta)_15%,transparent)] candle-glow">
-              <Heart className="h-9 w-9 text-[var(--cta)]" />
-            </div>
-            <h2 className="mt-5 font-display text-3xl text-foreground">Light their first paw lamp</h2>
-            <p className="mt-2 text-sm text-muted-foreground">A warm light to mark the moment.</p>
-            <div className="mx-auto mt-5 max-w-md text-left">
-              <Label htmlFor="cm">A few words (optional)</Label>
-              <Textarea id="cm" rows={3} value={candleMsg} onChange={(e) => setCandleMsg(e.target.value)} placeholder="Rest gently, sweet friend." />
-            </div>
-            <div className="mt-7 flex justify-center gap-3">
-              <Button variant="ghost" onClick={() => setStep(3)} className="rounded-full">Back</Button>
-              <Button disabled={submitting} onClick={finish} size="lg" className="rounded-full bg-[var(--cta)] px-7 text-[var(--cta-foreground)] hover:bg-[var(--cta-deep)]">
-                {submitting ? "Lighting…" : "Light paw lamp & publish"}
-              </Button>
-            </div>
-          </section>
-        )}
-
-        {step === 5 && (
-          <section className="animate-fade-in">
-            <div className="text-center">
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-sage/20">
-                <Check className="h-7 w-7 text-sage-deep" />
-              </div>
-              <h2 className="mt-4 font-display text-3xl text-foreground">
-                {petName ? `${petName}'s memorial is live` : "Memorial published"}
-              </h2>
-              <p className="mt-2 text-sm text-muted-foreground">
-                Their story has a home now. When you're ready, here are gentle next steps.
-              </p>
-              {publishedSlug && (
-                <Link
-                  to="/memorial/$slug"
-                  params={{ slug: publishedSlug }}
-                  className="mt-4 inline-flex items-center gap-1 text-sm text-[var(--cta)] hover:underline"
-                >
-                  Visit memorial <ArrowRight className="h-3.5 w-3.5" />
-                </Link>
-              )}
-            </div>
-
-            {publishedSlug && (
-              <ShareMemorialCard slug={publishedSlug} petName={petName} epitaph={epitaph} />
-            )}
-
-            <div className="chapter-rule mt-8" aria-hidden />
-            <h3 className="mt-6 text-center font-display text-xl text-foreground">Continue the journey</h3>
-
-            <div className="mt-5 grid gap-3 md:grid-cols-2">
-              {/* Adoption — most important, first + full width */}
-              <Link
-                to="/adoption"
-                className="group md:col-span-2 flex items-center gap-4 rounded-2xl border border-border/60 bg-gradient-to-br from-[color-mix(in_oklab,var(--sage)_18%,var(--card))] to-card p-5 soft-shadow transition hover:border-sage-deep/40"
-              >
-                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-sage/25 text-sage-deep">
-                  <HandHeart className="h-6 w-6" />
-                </span>
-                <div className="flex-1">
-                  <div className="flex items-center gap-2">
-                    <span className="font-display text-lg text-foreground">Open your home again</span>
-                    <span className="rounded-full bg-sage-deep/15 px-2 py-0.5 text-[10px] uppercase tracking-wider text-sage-deep">
-                      most loved
-                    </span>
-                  </div>
-                  <p className="text-sm text-muted-foreground">
-                    When the time is right, another soul is waiting. Browse pets from partner shelters near you.
-                  </p>
-                </div>
-                <ArrowRight className="h-5 w-5 text-muted-foreground transition group-hover:translate-x-0.5 group-hover:text-foreground" />
-              </Link>
-
-              <Link
-                to="/grief-support"
-                className="group flex items-start gap-3 rounded-2xl border border-border/60 bg-card p-5 soft-shadow transition hover:border-[var(--cta)]/40"
-              >
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_oklab,var(--cta)_12%,transparent)] text-[var(--cta)]">
-                  <Phone className="h-5 w-5" />
-                </span>
-                <div>
-                  <div className="font-display text-base text-foreground">Grief helpline</div>
-                  <p className="text-xs text-muted-foreground">
-                    Talk to a counselor who understands pet loss — 24/7, confidential.
-                  </p>
-                </div>
-              </Link>
-
-              <Link
-                to="/community"
-                className="group flex items-start gap-3 rounded-2xl border border-border/60 bg-card p-5 soft-shadow transition hover:border-sage/60"
-              >
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-sage/20 text-sage-deep">
-                  <Users className="h-5 w-5" />
-                </span>
-                <div>
-                  <div className="font-display text-base text-foreground">Community circles</div>
-                  <p className="text-xs text-muted-foreground">
-                    Weekly online support groups with others who get it.
-                  </p>
-                </div>
-              </Link>
-
-              <Link
-                to="/marketplace"
-                className="group md:col-span-2 flex items-start gap-3 rounded-2xl border border-border/60 bg-card p-5 soft-shadow transition hover:border-gold/60"
-              >
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_oklab,var(--gold)_25%,transparent)] text-foreground">
-                  <ShoppingBag className="h-5 w-5" />
-                </span>
-                <div className="flex-1">
-                  <div className="font-display text-base text-foreground">Keepsakes & memorial gifts</div>
-                  <p className="text-xs text-muted-foreground">
-                    Custom portraits, paw-print jewelry, urns, garden stones — handpicked from artisan makers.
-                  </p>
-                </div>
-                <ArrowRight className="h-5 w-5 text-muted-foreground transition group-hover:translate-x-0.5 group-hover:text-foreground" />
-              </Link>
-            </div>
-
-            <div className="mt-8 flex justify-center">
-              <Button
-                onClick={() => publishedSlug ? navigate({ to: "/memorial/$slug", params: { slug: publishedSlug } }) : navigate({ to: "/dashboard" })}
-                className="rounded-full bg-[var(--cta)] px-6 text-[var(--cta-foreground)] hover:bg-[var(--cta-deep)]"
-              >
-                Visit the memorial
-              </Button>
-            </div>
-          </section>
-        )}
-      </div>
 
       <AuthGateDialog
         open={authOpen}
         onOpenChange={setAuthOpen}
-        title={petName ? `So ${petName}'s place is always here when you return` : "So their place is always here when you return"}
-        subtitle="A quick sign-in — everything you've written stays exactly as it is."
-        beforeOAuthRedirect={() => {
-          saveDraft();
-          try { localStorage.setItem(FINISH_FLAG, "1"); } catch { /* ignore */ }
-        }}
-        onAuthed={() => { /* auto-finish handled by user effect */ }}
-        oauthRedirectPath="/create"
+        onAuthed={() => { /* useEffect on user picks it up */ }}
+        title="Sign in to save their memorial"
+        description="We keep drafts safe. Sign in and we'll finish where you left off."
       />
+
+      <BetaInviteDialog
+        source="polaroid-print"
+        variant="waitlist"
+        open={printOpen}
+        onOpenChange={setPrintOpen}
+      />
+    </main>
+  );
+}
+
+/* ─────────────────────── steps ─────────────────────── */
+
+function Stepper({ step }: { step: number }) {
+  return (
+    <div>
+      <div className="mb-3 flex items-center justify-center gap-1.5">
+        {STEP_LABELS.map((_, i) => (
+          <span
+            key={i}
+            className={`h-1 rounded-full transition-all ${
+              i === step ? "w-8 bg-[var(--cta)]" : i < step ? "w-4 bg-[var(--cta)]/60" : "w-4 bg-border"
+            }`}
+          />
+        ))}
+      </div>
+      <div className="text-center">
+        <div className="text-[10.5px] uppercase tracking-[0.24em] text-muted-foreground">
+          Step {step + 1} of {STEP_LABELS.length}
+        </div>
+        <h1 className="mt-1 font-display text-2xl leading-tight md:text-3xl">
+          {STEP_LABELS[step]}
+        </h1>
+      </div>
     </div>
   );
 }
 
-function ShareMemorialCard({
-  slug,
-  petName,
-  epitaph,
+function StepWho({
+  petName, setPetName, nickname, setNickname, species, setSpecies,
+  speciesOther, setSpeciesOther, breed, setBreed,
 }: {
-  slug: string;
-  petName: string;
-  epitaph: string;
+  petName: string; setPetName: (v: string) => void;
+  nickname: string; setNickname: (v: string) => void;
+  species: SpeciesKey; setSpecies: (v: SpeciesKey) => void;
+  speciesOther: string; setSpeciesOther: (v: string) => void;
+  breed: string; setBreed: (v: string) => void;
 }) {
-  const [copied, setCopied] = useState(false);
-  const url =
-    typeof window !== "undefined"
-      ? `${window.location.origin}/memorial/${slug}`
-      : `/memorial/${slug}`;
-  const shareTitle = petName ? `${petName}'s memorial` : "A memorial on Rememfur";
-  const shareText = epitaph
-    ? `${shareTitle} — "${epitaph}"`
-    : `${shareTitle} — light a paw lamp and leave a memory.`;
-
-  const encodedUrl = encodeURIComponent(url);
-  const encodedText = encodeURIComponent(shareText);
-
-  const copy = async () => {
-    try {
-      await navigator.clipboard.writeText(url);
-      setCopied(true);
-      toast.success("Link copied");
-      window.setTimeout(() => setCopied(false), 2000);
-    } catch {
-      toast.error("Could not copy — please copy manually.");
-    }
-  };
-
-  const nativeShare = async () => {
-    if (typeof navigator !== "undefined" && "share" in navigator) {
-      try {
-        await (navigator as any).share({ title: shareTitle, text: shareText, url });
-      } catch {
-        /* user cancelled */
-      }
-    } else {
-      copy();
-    }
-  };
-
-  const socials: { label: string; href: string; icon: any }[] = [
-    {
-      label: "Share on WhatsApp",
-      icon: MessageCircle,
-      href: `https://wa.me/?text=${encodedText}%20${encodedUrl}`,
-    },
-    {
-      label: "Share by email",
-      icon: Mail,
-      href: `mailto:?subject=${encodeURIComponent(shareTitle)}&body=${encodedText}%0A%0A${encodedUrl}`,
-    },
-    {
-      label: "Share on Facebook",
-      icon: Facebook,
-      href: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
-    },
-    {
-      label: "Share on X",
-      icon: Twitter,
-      href: `https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}`,
-    },
-  ];
-
   return (
-    <div className="mt-8 rounded-2xl border border-border/60 bg-cream/30 p-5 soft-shadow">
-      <div className="flex items-center gap-2">
-        <Share2 className="h-4 w-4 text-[var(--cta)]" />
-        <h3 className="font-display text-lg text-foreground">Share their memorial</h3>
-      </div>
-      <p className="mt-1 text-xs text-muted-foreground">
-        Send this gentle link to family and friends so they can light a paw lamp too.
+    <div className="space-y-5">
+      <p className="text-[15px] leading-relaxed text-muted-foreground">
+        Start with a name. The one you called out at the door.
+      </p>
+      <Field label="Their name" required>
+        <Input value={petName} onChange={(e) => setPetName(e.target.value)} maxLength={80} placeholder="e.g. Luna" autoFocus />
+      </Field>
+      <Field label="Nickname" hint="what you really called them (optional)">
+        <Input value={nickname} onChange={(e) => setNickname(e.target.value)} maxLength={80} placeholder="e.g. Moonpie" />
+      </Field>
+      <Field label="What kind of soul?">
+        <div className="grid grid-cols-3 gap-2">
+          {SPECIES.map((s) => (
+            <button
+              key={s.key}
+              type="button"
+              onClick={() => setSpecies(s.key)}
+              className={choiceClass(species === s.key)}
+            >
+              {s.label}
+            </button>
+          ))}
+        </div>
+      </Field>
+      {species === "other" && (
+        <Field label="Specifically" hint="e.g. rabbit, bird, ferret">
+          <Input value={speciesOther} onChange={(e) => setSpeciesOther(e.target.value)} maxLength={40} placeholder="e.g. rabbit" />
+        </Field>
+      )}
+      <Field label="Breed" hint="optional">
+        <Input value={breed} onChange={(e) => setBreed(e.target.value)} maxLength={80} placeholder="e.g. Golden Retriever" />
+      </Field>
+    </div>
+  );
+}
+
+function StepTime({
+  pronouns, setPronouns, birthDate, setBirthDate, passingDate, setPassingDate,
+  unsureDates, setUnsureDates, approxAge, setApproxAge, location, setLocation,
+}: {
+  pronouns: string; setPronouns: (v: string) => void;
+  birthDate: string; setBirthDate: (v: string) => void;
+  passingDate: string; setPassingDate: (v: string) => void;
+  unsureDates: boolean; setUnsureDates: (v: boolean) => void;
+  approxAge: string; setApproxAge: (v: string) => void;
+  location: string; setLocation: (v: string) => void;
+}) {
+  return (
+    <div className="space-y-5">
+      <p className="text-[15px] leading-relaxed text-muted-foreground">
+        A few gentle details. Nothing here is required.
+      </p>
+      <Field label="How they were known">
+        <RadioGroup value={pronouns} onValueChange={setPronouns} className="grid grid-cols-3 gap-2">
+          {PRONOUN_OPTIONS.map((p) => (
+            <label
+              key={p}
+              className={`${choiceClass(pronouns === p)} cursor-pointer text-center`}
+            >
+              <RadioGroupItem value={p} className="sr-only" />
+              {p}
+            </label>
+          ))}
+        </RadioGroup>
+      </Field>
+
+      {!unsureDates ? (
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Field label="Date of birth" hint="optional">
+            <Input type="date" value={birthDate} onChange={(e) => setBirthDate(e.target.value)} />
+          </Field>
+          <Field label="Date they passed" hint="optional — powers Their Sky">
+            <Input type="date" value={passingDate} onChange={(e) => setPassingDate(e.target.value)} />
+          </Field>
+        </div>
+      ) : (
+        <Field label="Approximate age or time" hint="e.g. about 12 years · summer of 2019">
+          <Input value={approxAge} onChange={(e) => setApproxAge(e.target.value)} maxLength={120} placeholder="e.g. around 12 years" />
+        </Field>
+      )}
+
+      <label className="flex items-center gap-3 rounded-2xl border border-border/60 bg-muted/40 px-4 py-3">
+        <Switch checked={unsureDates} onCheckedChange={setUnsureDates} />
+        <span className="text-sm text-foreground/85">I'm not sure of exact dates</span>
+      </label>
+
+      <Field label="Their city" hint="optional — shapes their constellation">
+        <Input value={location} onChange={(e) => setLocation(e.target.value)} maxLength={120} placeholder="e.g. Brooklyn, NY" />
+      </Field>
+    </div>
+  );
+}
+
+function StepPhoto({
+  heroPreviewUrl, lampOnly, onPickClick, onLampOnly, onRecrop, fileInputRef, onFile,
+}: {
+  heroPreviewUrl: string | null;
+  lampOnly: boolean;
+  onPickClick: () => void;
+  onLampOnly: () => void;
+  onRecrop: () => void;
+  fileInputRef: React.RefObject<HTMLInputElement>;
+  onFile: (f: File | null) => void;
+}) {
+  return (
+    <div className="space-y-6">
+      <p className="text-[15px] leading-relaxed text-muted-foreground">
+        A single photo is enough. Or light a paw lamp for now — you can always add one later.
       </p>
 
-      <label htmlFor="memorial-url" className="sr-only">
-        Memorial URL
-      </label>
-      <div className="mt-4 flex items-stretch gap-2">
-        <input
-          id="memorial-url"
-          readOnly
-          value={url}
-          onFocus={(e) => e.currentTarget.select()}
-          className="min-w-0 flex-1 truncate rounded-full border border-border bg-background px-4 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-[var(--cta)]/40"
-          aria-label="Memorial URL"
-        />
-        <Button
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={(e) => onFile(e.target.files?.[0] ?? null)}
+      />
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <button
           type="button"
-          onClick={copy}
-          className="shrink-0 rounded-full bg-[var(--cta)] px-4 text-[var(--cta-foreground)] hover:bg-[var(--cta-deep)]"
-          aria-live="polite"
+          onClick={onPickClick}
+          className={`group flex flex-col items-center justify-center gap-3 rounded-3xl border-2 border-dashed p-8 transition ${
+            heroPreviewUrl
+              ? "border-[var(--cta)]/60 bg-[var(--cta)]/5"
+              : "border-border hover:border-[var(--cta)]/60 hover:bg-muted/40"
+          }`}
         >
-          {copied ? (
+          {heroPreviewUrl ? (
             <>
-              <Check className="mr-1 h-4 w-4" /> Copied
+              <img src={heroPreviewUrl} alt="" className="h-40 w-40 rounded-2xl object-cover shadow-md" />
+              <div className="flex gap-2 pt-2">
+                <span className="btn-quiet text-[11px]">Replace</span>
+                <button type="button" onClick={(e) => { e.stopPropagation(); onRecrop(); }} className="btn-quiet text-[11px]">
+                  Reposition
+                </button>
+              </div>
             </>
           ) : (
             <>
-              <Copy className="mr-1 h-4 w-4" /> Copy
+              <Upload className="h-8 w-8 text-muted-foreground group-hover:text-[var(--cta)]" />
+              <div className="text-center">
+                <div className="font-medium">Upload a photo</div>
+                <div className="text-xs text-muted-foreground">JPG or PNG · you can crop next</div>
+              </div>
             </>
           )}
-        </Button>
+        </button>
+
+        <button
+          type="button"
+          onClick={onLampOnly}
+          className={`flex flex-col items-center justify-center gap-3 rounded-3xl border-2 p-8 transition ${
+            lampOnly
+              ? "border-[var(--cta)]/60 bg-[var(--cta)]/5"
+              : "border-border hover:border-[var(--cta)]/60 hover:bg-muted/40"
+          }`}
+        >
+          <PawLamp size={40} />
+          <div className="text-center">
+            <div className="font-medium">Just light a paw lamp</div>
+            <div className="text-xs text-muted-foreground">No photo — soft glow instead</div>
+          </div>
+        </button>
       </div>
 
-      <div className="mt-4 flex flex-wrap items-center gap-2">
-        <Button
-          type="button"
-          variant="outline"
-          onClick={nativeShare}
-          className="rounded-full"
-        >
-          <Share2 className="mr-1.5 h-4 w-4" /> Share…
-        </Button>
-        {socials.map(({ label, href, icon: Icon }) => (
-          <a
-            key={label}
-            href={href}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={label}
-            className="ios-tappable inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background text-foreground transition hover:bg-muted"
-          >
-            <Icon className="h-4 w-4" aria-hidden="true" />
-          </a>
-        ))}
+      <div className="flex items-center gap-3 rounded-2xl border border-dashed border-border/60 bg-muted/30 px-4 py-3 opacity-60">
+        <Video className="h-4 w-4 text-muted-foreground" />
+        <div className="flex-1">
+          <div className="text-sm font-medium">Add a video</div>
+          <div className="text-xs text-muted-foreground">Coming soon.</div>
+        </div>
       </div>
     </div>
   );
+}
+
+function StepMessage({
+  petName, message, setMessage, assisting, runAssist,
+}: {
+  petName: string;
+  message: string;
+  setMessage: (v: string) => void;
+  assisting: boolean;
+  runAssist: () => void;
+}) {
+  return (
+    <div className="space-y-5">
+      <p className="text-[15px] leading-relaxed text-muted-foreground">
+        A short message — an epitaph, a private joke, one true sentence.
+        {petName ? ` We'll write it about ${petName}, not "it".` : ""}
+      </p>
+      <Textarea
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+        rows={5}
+        maxLength={500}
+        placeholder="e.g. He waited by the door every evening. He still does, somewhere."
+        className="text-base leading-relaxed"
+      />
+      <div className="flex items-center justify-between">
+        <span className="text-xs text-muted-foreground">{message.length}/500</span>
+        <button
+          type="button"
+          onClick={runAssist}
+          disabled={assisting}
+          className="btn-quiet"
+        >
+          {assisting ? (
+            <><Loader2 className="h-3.5 w-3.5 animate-spin" /> Thinking…</>
+          ) : (
+            <><Sparkles className="h-3.5 w-3.5" /> Help me write this</>
+          )}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function StepPreview({
+  petName, nickname, message, heroPreviewUrl, submitting, onPublish, onOrderPrint,
+}: {
+  petName: string;
+  nickname: string;
+  message: string;
+  heroPreviewUrl: string | null;
+  submitting: boolean;
+  onPublish: () => void;
+  onOrderPrint: () => void;
+}) {
+  return (
+    <div className="space-y-6">
+      <p className="text-center text-[15px] leading-relaxed text-muted-foreground">
+        Their keepsake. Yours to hold, print, or share.
+      </p>
+      <Polaroid
+        imageUrl={heroPreviewUrl}
+        petName={nickname || petName}
+        message={message}
+        onOrderPrint={onOrderPrint}
+      />
+      <p className="text-center text-[12px] text-muted-foreground">
+        Publishing opens their memorial page — their constellation, the wall of paw lamps, and this keepsake.
+      </p>
+      {submitting && (
+        <div className="flex justify-center text-sm text-muted-foreground">
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Lighting their memorial…
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ─────────────────────── small building blocks ─────────────────────── */
+
+function Field({
+  label, hint, required, children,
+}: { label: string; hint?: string; required?: boolean; children: React.ReactNode }) {
+  return (
+    <div className="space-y-1.5">
+      <Label className="flex items-center gap-2 text-[13px] font-medium">
+        {label}
+        {required && <span className="text-[10px] uppercase tracking-wider text-[var(--cta)]">required</span>}
+        {hint && <span className="text-[11px] font-normal text-muted-foreground">{hint}</span>}
+      </Label>
+      {children}
+    </div>
+  );
+}
+
+function choiceClass(active: boolean) {
+  return `rounded-2xl border px-3 py-2.5 text-sm transition ${
+    active
+      ? "border-[var(--cta)] bg-[var(--cta)]/10 text-foreground"
+      : "border-border bg-background/50 text-foreground/80 hover:border-[var(--cta)]/50"
+  }`;
+}
+
+function aspectPillClass(active: boolean) {
+  return `rounded-full border px-4 py-1.5 text-[12px] uppercase tracking-[0.16em] transition ${
+    active ? "border-[#E8B96D] bg-[#E8B96D]/15 text-[#E8B96D]" : "border-white/20 text-white/70 hover:bg-white/5"
+  }`;
+}
+
+/* ─────────────────────── canvas crop helper ─────────────────────── */
+
+async function canvasCrop(imageSrc: string, area: Area): Promise<Blob> {
+  const img = await loadImage(imageSrc);
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.round(area.width);
+  canvas.height = Math.round(area.height);
+  const ctx = canvas.getContext("2d");
+  if (!ctx) throw new Error("Canvas unavailable");
+  ctx.drawImage(
+    img,
+    area.x, area.y, area.width, area.height,
+    0, 0, area.width, area.height,
+  );
+  return await new Promise<Blob>((resolve, reject) => {
+    canvas.toBlob(
+      (b) => (b ? resolve(b) : reject(new Error("Crop failed"))),
+      "image/jpeg",
+      0.92,
+    );
+  });
+}
+
+function loadImage(src: string): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+    img.src = src;
+  });
 }
