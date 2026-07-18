@@ -420,6 +420,7 @@ function MemorialPage() {
         </div>
       </main>
       <SiteFooter />
+      <BetaInviteDialog source="polaroid-print" variant="waitlist" open={printOpen} onOpenChange={setPrintOpen} />
     </div>
   );
 }
