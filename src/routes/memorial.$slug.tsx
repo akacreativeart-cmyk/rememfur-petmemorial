@@ -228,6 +228,55 @@ function MemorialPage() {
               memorialId={m.id ?? m.slug}
             />
 
+            {isWelcome && (
+              <section className="rounded-3xl border border-[var(--cta)]/30 bg-gradient-to-br from-[#fff8ec] to-card p-7 soft-shadow">
+                <div className="text-center">
+                  <div className="text-[10.5px] uppercase tracking-[0.24em] text-[var(--cta)]">Your keepsake</div>
+                  <h2 className="mt-1 font-display text-2xl text-foreground">A photo to hold onto</h2>
+                  <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">
+                    Download it, print it, tuck it into a frame. It's yours.
+                  </p>
+                </div>
+                <div className="mt-6 flex justify-center">
+                  <Polaroid
+                    imageUrl={m.hero_image_url ?? null}
+                    petName={(m as any).nickname || m.pet_name}
+                    message={m.epitaph ?? null}
+                    onOrderPrint={() => setPrintOpen(true)}
+                  />
+                </div>
+              </section>
+            )}
+
+            {isWelcome && (
+              <section className="rounded-3xl border border-border/60 bg-card p-7 soft-shadow">
+                <div className="text-center">
+                  <div className="text-[10.5px] uppercase tracking-[0.24em] text-muted-foreground">In their memory</div>
+                  <h3 className="mt-1 font-display text-xl text-foreground">Gentle keepsakes, when you're ready</h3>
+                </div>
+                <div className="mt-5 grid gap-3 sm:grid-cols-3">
+                  {[
+                    { title: "Funeral & farewell", note: "Home services, urns" },
+                    { title: "Keepsakes", note: "Paw prints, hair lockets" },
+                    { title: "Jewellery", note: "Ashes into stone" },
+                  ].map((it) => (
+                    <button
+                      key={it.title}
+                      type="button"
+                      onClick={() => setPrintOpen(true)}
+                      className="rounded-2xl border border-border/60 bg-background/40 p-4 text-left transition hover:border-[var(--cta)]/50 hover:bg-muted/40"
+                    >
+                      <div className="font-medium">{it.title}</div>
+                      <div className="mt-1 text-xs text-muted-foreground">{it.note}</div>
+                      <div className="mt-3 text-[10.5px] uppercase tracking-[0.18em] text-[var(--cta)]">Notify me →</div>
+                    </button>
+                  ))}
+                </div>
+              </section>
+            )}
+
+
+
 
             {photos.length > 0 && (
               <section className="rounded-3xl border border-border/60 bg-card p-7 soft-shadow">
