@@ -121,7 +121,7 @@ export function CandleDialog({ target, trigger, onLit }: Props) {
       <DialogContent className="sm:max-w-md overflow-hidden">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 font-display text-2xl">
-            <Flame className="h-5 w-5 text-[var(--cta)]" />
+            <PawLamp size={20} glow={false} />
             {lit ? "Paw lamp lit ✨" : "Light a paw lamp"}
             {!lit && target.kind === "memorial" && target.pet_name ? (
               <span className="text-base font-normal text-muted-foreground">for {target.pet_name}</span>
