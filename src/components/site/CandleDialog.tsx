@@ -186,7 +186,7 @@ export function CandleDialog({ target, trigger, onLit }: Props) {
               disabled={disabled}
               className="w-full rounded-full bg-[var(--cta)] text-[var(--cta-foreground,white)] hover:opacity-90"
             >
-              <Flame className="mr-2 h-4 w-4" />
+              <PawLamp size={16} glow={false} />
               {mut.isPending ? "Releasing…" : user ? "Release the star" : "Light a paw lamp anonymously"}
             </Button>
           </div>
