@@ -182,6 +182,11 @@ const updateSchema = z.object({
   epitaph: z.string().max(200).nullable().optional(),
   story: z.string().max(5000).nullable().optional(),
   is_public: z.boolean(),
+  breed: OPTIONAL_STR,
+  nickname: OPTIONAL_STR,
+  pronouns: OPTIONAL_STR,
+  approx_age: OPTIONAL_STR,
+  location: OPTIONAL_STR,
 });
 
 export const getMyMemorialBySlug = createServerFn({ method: "GET" })
