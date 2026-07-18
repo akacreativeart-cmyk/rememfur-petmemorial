@@ -25,6 +25,9 @@ import { format } from "date-fns";
 
 export const Route = createFileRoute("/memorial/$slug")({
   component: MemorialPage,
+  validateSearch: (search: Record<string, unknown>) => ({
+    welcome: search.welcome === 1 || search.welcome === "1" ? 1 : undefined,
+  }),
   loader: async ({ params }) => {
     const data = await getMemorialBySlug({ data: { slug: params.slug } });
     if (!data) throw notFound();
