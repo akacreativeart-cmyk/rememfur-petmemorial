@@ -16,6 +16,8 @@ import { CandleDialog } from "@/components/site/CandleDialog";
 import { CandleCountdown } from "@/components/site/CandleCountdown";
 import { ReportButton } from "@/components/site/ReportButton";
 import { TheirSky } from "@/components/site/TheirSky";
+import { Polaroid } from "@/components/site/Polaroid";
+import { BetaInviteDialog } from "@/components/site/BetaInviteDialog";
 
 
 import { useAuth } from "@/hooks/use-auth";
