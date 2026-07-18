@@ -54,8 +54,11 @@ export const Route = createFileRoute("/memorial/$slug")({
 
 function MemorialPage() {
   const data = Route.useLoaderData();
+  const search = Route.useSearch();
+  const isWelcome = search.welcome === 1;
   const { memorial: m, photos, candles, messages } = data;
   const { user } = useAuth();
+  const [printOpen, setPrintOpen] = useState(false);
   const qc = useQueryClient();
   const fetchMemorial = useServerFn(getMemorialBySlug);
   const fetchLightCandle = useServerFn(lightCandle);
