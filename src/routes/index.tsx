@@ -551,13 +551,17 @@ function Hero({ primaryCandle, onLastLetter }: { primaryCandle: ReactNode; onLas
       style={{ minHeight: "100svh" }}
       aria-label="A quiet vigil beneath the night sky"
     >
-      {/* Moon top-right — clear of mobile header */}
-      <div className="pointer-events-none absolute right-5 top-16 z-20 md:right-10 md:top-8">
+      {/* Moon top-right — clear of mobile header. Capped to 80px wide so the
+          caption sits BELOW the moon (own column) and cannot cross the
+          centred hero text below it. */}
+      <div className="pointer-events-none absolute right-4 top-14 z-20 md:right-10 md:top-8">
         <MoonBadge />
       </div>
 
-      {/* TOP: story + CTA in normal flow, centered vertically in remaining space */}
-      <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-5 pb-8 pt-14 text-center md:pt-24">
+      {/* TOP: story + CTA. Extra top padding on mobile so the moon block
+          (moon 44px + gap + two-line caption ≈ 90px) never overlaps the
+          eyebrow line. */}
+      <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-5 pb-8 pt-36 text-center md:pt-24">
         <div className="mx-auto flex w-full max-w-md flex-col items-center md:max-w-2xl">
           <p className="rise-in font-display italic text-[15px] leading-[1.4] text-[var(--gold)]/90 md:text-[18px]" style={{ animationDelay: "0.05s" }}>
             From their first day to long after their last.
