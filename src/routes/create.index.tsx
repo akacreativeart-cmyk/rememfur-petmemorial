@@ -2,9 +2,11 @@ import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { Heart, MessageSquare } from "lucide-react";
 
 export const Route = createFileRoute("/create/")({
-  validateSearch: (s: Record<string, unknown>) => ({
-    type: typeof s.type === "string" ? (s.type as string) : undefined,
-  }),
+  validateSearch: (s: Record<string, unknown>): { type?: string } => {
+    const t = typeof s.type === "string" ? s.type : undefined;
+    return t ? { type: t } : {};
+  },
+
   beforeLoad: ({ search }) => {
     if (search.type === "memorial") throw redirect({ to: "/create/memorial" });
     if (search.type === "post") throw redirect({ to: "/create/post" });
