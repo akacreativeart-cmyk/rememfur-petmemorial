@@ -4,6 +4,8 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { slugify, withRandomSuffix } from "./slug";
 
+const OPTIONAL_STR = z.string().max(120).nullable().optional();
+
 const createSchema = z.object({
   pet_name: z.string().min(1).max(80),
   species: z.enum(["dog", "cat", "other"]),
@@ -15,6 +17,12 @@ const createSchema = z.object({
   transformed_image_url: z.string().url().nullable().optional(),
   transform_style: z.string().nullable().optional(),
   is_public: z.boolean().default(true),
+  // New optional fields (added additive; used by AI + Their Sky + gentle copy)
+  breed: OPTIONAL_STR,
+  nickname: OPTIONAL_STR,
+  pronouns: OPTIONAL_STR,
+  approx_age: OPTIONAL_STR,
+  location: OPTIONAL_STR,
 });
 
 export const createMemorial = createServerFn({ method: "POST" })
@@ -174,6 +182,11 @@ const updateSchema = z.object({
   epitaph: z.string().max(200).nullable().optional(),
   story: z.string().max(5000).nullable().optional(),
   is_public: z.boolean(),
+  breed: OPTIONAL_STR,
+  nickname: OPTIONAL_STR,
+  pronouns: OPTIONAL_STR,
+  approx_age: OPTIONAL_STR,
+  location: OPTIONAL_STR,
 });
 
 export const getMyMemorialBySlug = createServerFn({ method: "GET" })

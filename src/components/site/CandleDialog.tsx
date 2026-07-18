@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { softHaptic } from "@/lib/haptic";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { Flame, Share2, Copy, Twitter, Facebook, MessageCircle, Lock, Heart } from "lucide-react";
+import { Share2, Copy, Twitter, Facebook, MessageCircle, Lock, Heart } from "lucide-react";
+import { PawLamp } from "@/components/site/PawLamp";
 import { toast } from "sonner";
 import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
@@ -120,7 +121,7 @@ export function CandleDialog({ target, trigger, onLit }: Props) {
       <DialogContent className="sm:max-w-md overflow-hidden">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 font-display text-2xl">
-            <Flame className="h-5 w-5 text-[var(--cta)]" />
+            <PawLamp size={20} glow={false} />
             {lit ? "Paw lamp lit ✨" : "Light a paw lamp"}
             {!lit && target.kind === "memorial" && target.pet_name ? (
               <span className="text-base font-normal text-muted-foreground">for {target.pet_name}</span>
@@ -185,7 +186,7 @@ export function CandleDialog({ target, trigger, onLit }: Props) {
               disabled={disabled}
               className="w-full rounded-full bg-[var(--cta)] text-[var(--cta-foreground,white)] hover:opacity-90"
             >
-              <Flame className="mr-2 h-4 w-4" />
+              <PawLamp size={16} glow={false} />
               {mut.isPending ? "Releasing…" : user ? "Release the star" : "Light a paw lamp anonymously"}
             </Button>
           </div>

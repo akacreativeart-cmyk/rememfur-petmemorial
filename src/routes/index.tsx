@@ -551,13 +551,17 @@ function Hero({ primaryCandle, onLastLetter }: { primaryCandle: ReactNode; onLas
       style={{ minHeight: "100svh" }}
       aria-label="A quiet vigil beneath the night sky"
     >
-      {/* Moon top-right — clear of mobile header */}
-      <div className="pointer-events-none absolute right-5 top-16 z-20 md:right-10 md:top-8">
+      {/* Moon top-right — clear of mobile header. Capped to 80px wide so the
+          caption sits BELOW the moon (own column) and cannot cross the
+          centred hero text below it. */}
+      <div className="pointer-events-none absolute right-4 top-14 z-20 md:right-10 md:top-8">
         <MoonBadge />
       </div>
 
-      {/* TOP: story + CTA in normal flow, centered vertically in remaining space */}
-      <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-5 pb-8 pt-14 text-center md:pt-24">
+      {/* TOP: story + CTA. Extra top padding on mobile so the moon block
+          (moon 44px + gap + two-line caption ≈ 90px) never overlaps the
+          eyebrow line. */}
+      <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-5 pb-8 pt-36 text-center md:pt-24">
         <div className="mx-auto flex w-full max-w-md flex-col items-center md:max-w-2xl">
           <p className="rise-in font-display italic text-[15px] leading-[1.4] text-[var(--gold)]/90 md:text-[18px]" style={{ animationDelay: "0.05s" }}>
             From their first day to long after their last.
@@ -1590,13 +1594,13 @@ function BetaBand({ onOpen }: { onOpen: () => void }) {
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#E8B96D] opacity-70" />
             <span className="relative inline-flex h-2 w-2 rounded-full bg-[#E8B96D]" />
           </span>
-          For someone who's hurting
+          When someone you love is grieving
         </span>
         <h3 className="mt-5 font-display leading-[1.15] tracking-tight text-white" style={{ fontSize: "clamp(22px, 5.6vw, 36px)" }}>
-          Someone you love is grieving?
+          Be there for them.
         </h3>
         <p className="mt-4 max-w-[60ch] text-[14.5px] leading-relaxed text-white/70 md:text-[16px]">
-          When a friend loses a pet, most people freeze — they want to help but don't know what to say, so they say nothing. Send them somewhere gentle instead.
+          The hardest part is knowing what to say. Send a friend a paw lamp and a few gentle words — and bring them somewhere that understands.
         </p>
         <button
           type="button"
@@ -1604,7 +1608,7 @@ function BetaBand({ onOpen }: { onOpen: () => void }) {
           className="btn-gold ios-tappable mt-7 w-full max-w-[320px] md:w-auto md:max-w-none"
         >
           <Heart className="h-4 w-4" />
-          Be there for them
+          Console a friend
         </button>
         <p className="mt-4 text-[11.5px] text-white/45">
           It takes a minute. It means everything.
