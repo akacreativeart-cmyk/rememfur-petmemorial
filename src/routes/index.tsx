@@ -536,7 +536,7 @@ function HomePage() {
 
 /* ────────── HERO ────────── */
 
-function Hero({ primaryCandle, onLastLetter }: { primaryCandle: ReactNode; onLastLetter?: () => void }) {
+function Hero({ secondaryCandle, onLastLetter }: { secondaryCandle: ReactNode; onLastLetter?: () => void }) {
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -576,12 +576,18 @@ function Hero({ primaryCandle, onLastLetter }: { primaryCandle: ReactNode; onLas
           </p>
 
           <div className="rise-in mt-8 flex w-full flex-col items-center gap-3" style={{ animationDelay: "1.1s" }}>
+            {/* PRIMARY — write a memorial */}
             <div className="w-full max-w-[300px] [&>*]:w-full [&>*]:justify-center md:w-auto md:max-w-none">
-              {primaryCandle}
+              <Link to="/create/memorial" className="btn-gold ios-tappable">
+                <Feather className="h-4 w-4" />
+                Write a memorial
+              </Link>
             </div>
-            <Link to="/create/memorial" className="link-gold">
-              Write a memorial
-            </Link>
+            {/* SECONDARY — light a paw lamp */}
+            <div className="w-full max-w-[300px] [&>*]:w-full [&>*]:justify-center md:w-auto md:max-w-none">
+              {secondaryCandle}
+            </div>
+            {/* TERTIARY — last letter */}
             <button
               type="button"
               onClick={onLastLetter}
@@ -593,6 +599,7 @@ function Hero({ primaryCandle, onLastLetter }: { primaryCandle: ReactNode; onLas
           </div>
         </div>
       </div>
+
 
 
       {/* BOTTOM: Vigil scene as normal-flow block — content above can never overlap */}
