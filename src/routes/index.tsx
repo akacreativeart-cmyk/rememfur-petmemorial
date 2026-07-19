@@ -146,7 +146,7 @@ function CosmosBg({ mode = "memory", reduced = false }: { mode?: WorldMode; redu
       };
       setStreaks((prev) => [...prev, item]);
       window.setTimeout(() => setStreaks((prev) => prev.filter((s) => s.id !== item.id)), 1500);
-      const next = 3600 + Math.random() * 3600;
+      const next = 6000 + Math.random() * 4000;
       window.setTimeout(spawn, next);
     };
     const t = window.setTimeout(spawn, 2000);
