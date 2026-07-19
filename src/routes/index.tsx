@@ -1409,13 +1409,24 @@ function LifeWorld({ onDev }: { onDev: (source: string) => void }) {
             }}
           >
             <img
-              src={lifeHeroImg}
-              alt="A person tenderly holding a golden retriever's face while a tabby cat weaves around them at dawn"
+              src={UNSPLASH_LIFE_HERO}
+              alt="A person warmly with a dog and cat together in soft home light"
               className="h-full w-full object-cover md:[aspect-ratio:16/10]"
               style={{ aspectRatio: "inherit" }}
               width={1440}
               height={912}
               loading="lazy"
+              onError={(e) => { (e.currentTarget as HTMLImageElement).src = lifeHeroImg; }}
+            />
+            {/* Warm consistent grade to unify photography */}
+            <div
+              className="pointer-events-none absolute inset-0"
+              style={{
+                background:
+                  "linear-gradient(180deg, rgba(255,220,170,0.10) 0%, rgba(120,70,30,0.10) 100%)",
+                mixBlendMode: "multiply",
+              }}
+              aria-hidden
             />
             <div
               className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3"
