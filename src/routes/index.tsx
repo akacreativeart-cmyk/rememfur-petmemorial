@@ -23,6 +23,17 @@ import lifeServicesImg from "@/assets/life-services.jpg";
 import lifeLifestyleImg from "@/assets/life-lifestyle.jpg";
 import lifeAdoptionImg from "@/assets/life-adoption.jpg";
 
+// Real photography from Unsplash for the Life world — warm, real moments.
+// Local painterly assets remain as onError fallbacks.
+const UNSPLASH_LIFE_HERO =
+  "https://images.unsplash.com/photo-1543852786-1cf6624b9987?auto=format&fit=crop&w=1600&q=70"; // dog + cat together in warm home light
+const UNSPLASH_LIFE_SERVICES =
+  "https://images.unsplash.com/photo-1628009368231-7bb7cfcb0def?auto=format&fit=crop&w=1200&q=70"; // vet gently examining a dog
+const UNSPLASH_LIFE_CELEBRATIONS =
+  "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&fit=crop&w=1200&q=70"; // dog with a small birthday moment
+const UNSPLASH_LIFE_ADOPTION =
+  "https://images.unsplash.com/photo-1450778869180-41d0601e046e?auto=format&fit=crop&w=1200&q=70"; // hopeful shelter dog
+
 type WorldMode = "memory" | "life";
 
 export const Route = createFileRoute("/")({
@@ -146,7 +157,7 @@ function CosmosBg({ mode = "memory", reduced = false }: { mode?: WorldMode; redu
       };
       setStreaks((prev) => [...prev, item]);
       window.setTimeout(() => setStreaks((prev) => prev.filter((s) => s.id !== item.id)), 1500);
-      const next = 3600 + Math.random() * 3600;
+      const next = 6000 + Math.random() * 4000;
       window.setTimeout(spawn, next);
     };
     const t = window.setTimeout(spawn, 2000);
@@ -371,8 +382,9 @@ function HomePage() {
     setBetaOpen(true);
   };
 
-  const primaryCandle = (label: string = "Light a paw lamp") =>
-    featured.data ? (
+  const buildCandle = (label: string = "Light a paw lamp", variant: "gold" | "quiet" = "gold") => {
+    const cls = variant === "gold" ? "btn-gold ios-tappable" : "btn-quiet";
+    return featured.data ? (
       <CandleDialog
         target={{
           kind: "memorial",
@@ -380,25 +392,22 @@ function HomePage() {
           pet_name: featured.data.pet_name,
           slug: featured.data.slug,
         }}
-          trigger={
-            <button
-              type="button"
-              className="btn-gold ios-tappable"
-            >
-              <PawLamp size={18} />
-              {label}
-            </button>
-          }
-        />
-      ) : (
-        <Link
-          to="/garden"
-          className="btn-gold ios-tappable"
-        >
-          <PawLamp size={18} />
-          {label}
-        </Link>
-      );
+        trigger={
+          <button type="button" className={cls}>
+            <PawLamp size={18} />
+            {label}
+          </button>
+        }
+      />
+    ) : (
+      <Link to="/garden" className={cls}>
+        <PawLamp size={18} />
+        {label}
+      </Link>
+    );
+  };
+  const primaryCandle = (label?: string) => buildCandle(label, "gold");
+  const secondaryCandle = (label?: string) => buildCandle(label, "quiet");
 
   // Palette variables scoped to the wrapper (do NOT bleed globally)
   const memoryVars: CSSProperties = {
@@ -443,7 +452,7 @@ function HomePage() {
       {/* MEMORY WORLD */}
       <WorldPane active={mode === "memory"} reduced={reduced}>
         <Hero
-          primaryCandle={primaryCandle("Light a paw lamp")}
+          secondaryCandle={secondaryCandle("Light a paw lamp")}
           onLastLetter={() => openBeta("last-letter")}
         />
         <TheirSkyBand reduced={reduced} />
@@ -538,7 +547,7 @@ function HomePage() {
 
 /* ────────── HERO ────────── */
 
-function Hero({ primaryCandle, onLastLetter }: { primaryCandle: ReactNode; onLastLetter?: () => void }) {
+function Hero({ secondaryCandle, onLastLetter }: { secondaryCandle: ReactNode; onLastLetter?: () => void }) {
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -578,12 +587,18 @@ function Hero({ primaryCandle, onLastLetter }: { primaryCandle: ReactNode; onLas
           </p>
 
           <div className="rise-in mt-8 flex w-full flex-col items-center gap-3" style={{ animationDelay: "1.1s" }}>
+            {/* PRIMARY — write a memorial */}
             <div className="w-full max-w-[300px] [&>*]:w-full [&>*]:justify-center md:w-auto md:max-w-none">
-              {primaryCandle}
+              <Link to="/create/memorial" className="btn-gold ios-tappable">
+                <Feather className="h-4 w-4" />
+                Write a memorial
+              </Link>
             </div>
-            <Link to="/create/memorial" className="link-gold">
-              Write a memorial
-            </Link>
+            {/* SECONDARY — light a paw lamp */}
+            <div className="w-full max-w-[300px] [&>*]:w-full [&>*]:justify-center md:w-auto md:max-w-none">
+              {secondaryCandle}
+            </div>
+            {/* TERTIARY — last letter */}
             <button
               type="button"
               onClick={onLastLetter}
@@ -595,6 +610,7 @@ function Hero({ primaryCandle, onLastLetter }: { primaryCandle: ReactNode; onLas
           </div>
         </div>
       </div>
+
 
 
       {/* BOTTOM: Vigil scene as normal-flow block — content above can never overlap */}
@@ -1334,18 +1350,18 @@ function DawnBg({ mode, reduced }: { mode: WorldMode; reduced: boolean }) {
 
 /* ────────── LIFE WORLD ────────── */
 
-type LifeTile = { key: string; title: string; body: string; Icon: IconType; kind?: boolean; source?: string; cover?: string; coverAlt?: string };
+type LifeTile = { key: string; title: string; body: string; Icon: IconType; kind?: boolean; source?: string; cover?: string; coverFallback?: string; coverAlt?: string };
 
 const LIFE_TILES: LifeTile[] = [
   { key: "pet-profiles", title: "Pet profiles", body: "Every companion in one place — their records, milestones, and people.", Icon: PawPrint, source: "life-pet-profiles" },
   { key: "health", title: "Health & reminders", body: "Vaccinations, vet visits, insurance, grooming — tracked, with gentle nudges so nothing slips.", Icon: CalendarClock, source: "life-health" },
-  { key: "services", title: "Services near you", body: "Trusted vets, groomers, walkers, sitters and boarding — booked without the chaos.", Icon: Stethoscope, source: "life-services", cover: lifeServicesImg, coverAlt: "A calm veterinary moment — gentle hands examining a relaxed golden dog" },
+  { key: "services", title: "Services near you", body: "Trusted vets, groomers, walkers, sitters and boarding — booked without the chaos.", Icon: Stethoscope, source: "life-services", cover: UNSPLASH_LIFE_SERVICES, coverFallback: lifeServicesImg, coverAlt: "A calm veterinary moment — gentle hands with a relaxed dog" },
   { key: "vets", title: "Vets & second opinions", body: "Vetted local vets, second opinions, and gentle end-of-life care.", Icon: Stethoscope, source: "life-vets" },
   { key: "whisperer", title: "Pet whisperer", body: "Behaviour help, training, and quiet communication.", Icon: Feather, source: "life-whisperer" },
   { key: "food", title: "Food & essentials", body: "Genuinely wholesome nutrition and gear — no junk brands, no clutter.", Icon: ShoppingBag, source: "life-food" },
-  { key: "lifestyle", title: "Lifestyle & celebrations", body: "Birthdays, gotcha-days, playdates and outings — the joy, organised.", Icon: Cake, source: "life-lifestyle", cover: lifeLifestyleImg, coverAlt: "A small joyful birthday moment for a dog with a paper hat and a bowl of treats" },
+  { key: "lifestyle", title: "Lifestyle & celebrations", body: "Birthdays, gotcha-days, playdates and outings — the joy, organised.", Icon: Cake, source: "life-lifestyle", cover: UNSPLASH_LIFE_CELEBRATIONS, coverFallback: lifeLifestyleImg, coverAlt: "A dog enjoying a small celebration with treats" },
   { key: "community", title: "Community feed", body: "Share the wins and the mess with people who get it. Ask anything.", Icon: MessagesSquare },
-  { key: "adoption", title: "Adoption & shelters", body: "Give a waiting companion a home. Verified rescues — non-commercial, always first.", Icon: Home, kind: true, source: "life-adoption", cover: lifeAdoptionImg, coverAlt: "A hopeful shelter dog looking up through kennel bars into warm light" },
+  { key: "adoption", title: "Adoption & shelters", body: "Give a waiting companion a home. Verified rescues — non-commercial, always first.", Icon: Home, kind: true, source: "life-adoption", cover: UNSPLASH_LIFE_ADOPTION, coverFallback: lifeAdoptionImg, coverAlt: "A hopeful shelter dog looking up into warm light" },
   { key: "stray", title: "Tag a stray", body: "Map neighbourhood strays so the whole community can watch over them.", Icon: MapPin, kind: true, source: "life-stray" },
   { key: "donate", title: "Donate to care", body: "Fund a shelter, or help someone who can't afford care for the pet they love.", Icon: HandHeart, kind: true, source: "life-donate" },
 ];
@@ -1393,13 +1409,24 @@ function LifeWorld({ onDev }: { onDev: (source: string) => void }) {
             }}
           >
             <img
-              src={lifeHeroImg}
-              alt="A person tenderly holding a golden retriever's face while a tabby cat weaves around them at dawn"
+              src={UNSPLASH_LIFE_HERO}
+              alt="A person warmly with a dog and cat together in soft home light"
               className="h-full w-full object-cover md:[aspect-ratio:16/10]"
               style={{ aspectRatio: "inherit" }}
               width={1440}
               height={912}
               loading="lazy"
+              onError={(e) => { (e.currentTarget as HTMLImageElement).src = lifeHeroImg; }}
+            />
+            {/* Warm consistent grade to unify photography */}
+            <div
+              className="pointer-events-none absolute inset-0"
+              style={{
+                background:
+                  "linear-gradient(180deg, rgba(255,220,170,0.10) 0%, rgba(120,70,30,0.10) 100%)",
+                mixBlendMode: "multiply",
+              }}
+              aria-hidden
             />
             <div
               className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3"
@@ -1447,7 +1474,7 @@ function LifeWorld({ onDev }: { onDev: (source: string) => void }) {
 }
 
 function LifeTileCard({ tile, onDev }: { tile: LifeTile; onDev: (source: string) => void }) {
-  const { title, body, Icon, kind, source, cover, coverAlt } = tile;
+  const { title, body, Icon, kind, source, cover, coverFallback, coverAlt } = tile;
   const isDev = !!source;
   const stroke = kind ? "var(--w-kind)" : "var(--w-accent)";
   const borderGrad = kind
@@ -1474,6 +1501,20 @@ function LifeTileCard({ tile, onDev }: { tile: LifeTile; onDev: (source: string)
             loading="lazy"
             width={1200}
             height={720}
+            onError={(e) => {
+              const el = e.currentTarget as HTMLImageElement;
+              if (coverFallback && el.src !== coverFallback) el.src = coverFallback;
+            }}
+          />
+          {/* Warm consistent grade — unifies photography */}
+          <div
+            className="pointer-events-none absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(180deg, rgba(255,220,170,0.12) 0%, rgba(120,70,30,0.10) 100%)",
+              mixBlendMode: "multiply",
+            }}
+            aria-hidden
           />
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2" style={{ background: `linear-gradient(180deg, transparent, ${kind ? "#EFEDDF" : "#F6ECD8"} 92%)` }} />
         </div>
@@ -1767,8 +1808,7 @@ function TheirSkyBand({ reduced }: { reduced: boolean }) {
           </h2>
           <p className="mt-5 text-[15px] leading-relaxed text-white/70 md:text-[17px]">
             Every memorial carries the real constellation that hung over your city the night they passed —
-            computed from the true position of the stars. Not a decoration. The actual sky that watched with you.
-            Every memorial carries its own — tap the sky on any memorial to feel it pulse.
+            computed from the true position of the stars, not a decoration. Tap the sky on any memorial to feel it pulse.
             The ancients hung a dog in the sky — Canis Major, home of Sirius, the brightest star we can see — so it would never be forgotten. We understand completely.
           </p>
           <Link to="/garden" className="mt-3 inline-block link-gold">
@@ -1805,12 +1845,29 @@ function TheirSkyBand({ reduced }: { reduced: boolean }) {
             type="button"
             onClick={triggerPulse}
             aria-label={`Feel ${constellation.name}`}
-            className="mx-auto block aspect-square w-full max-w-[440px] rounded-[20px] ring-1 ring-white/10 md:mx-0"
+            className="relative mx-auto block aspect-square w-full max-w-[440px] overflow-hidden rounded-[20px] ring-1 ring-white/10 md:mx-0"
             style={{
-              background: "radial-gradient(120% 120% at 30% 20%, #0f1735 0%, #070b1c 60%, #04060f 100%)",
+              background: "#04060f",
               animation: reduced ? undefined : "ts-pulse 520ms cubic-bezier(.34,1.56,.64,1)",
             }}
           >
+            {/* Real night-sky photograph as the panel backdrop */}
+            <img
+              src="https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?auto=format&fit=crop&w=1200&q=70"
+              alt=""
+              aria-hidden
+              loading="lazy"
+              className="pointer-events-none absolute inset-0 h-full w-full object-cover"
+              onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
+            />
+            {/* Navy overlay for legibility of drawn lines/stars */}
+            <div
+              className="pointer-events-none absolute inset-0"
+              style={{
+                background:
+                  "radial-gradient(120% 120% at 30% 20%, rgba(15,23,53,0.55) 0%, rgba(7,11,28,0.72) 55%, rgba(4,6,15,0.78) 100%)",
+              }}
+            />
             <div className="relative h-full w-full">
               <svg ref={svgRef} viewBox="0 0 100 100" className="their-sky-svg h-full w-full">
                 <defs>
