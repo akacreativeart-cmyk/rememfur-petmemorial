@@ -1772,8 +1772,7 @@ function TheirSkyBand({ reduced }: { reduced: boolean }) {
           </h2>
           <p className="mt-5 text-[15px] leading-relaxed text-white/70 md:text-[17px]">
             Every memorial carries the real constellation that hung over your city the night they passed —
-            computed from the true position of the stars. Not a decoration. The actual sky that watched with you.
-            Every memorial carries its own — tap the sky on any memorial to feel it pulse.
+            computed from the true position of the stars, not a decoration. Tap the sky on any memorial to feel it pulse.
             The ancients hung a dog in the sky — Canis Major, home of Sirius, the brightest star we can see — so it would never be forgotten. We understand completely.
           </p>
           <Link to="/garden" className="mt-3 inline-block link-gold">
