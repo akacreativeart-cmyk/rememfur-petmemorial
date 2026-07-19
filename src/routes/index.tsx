@@ -1350,18 +1350,18 @@ function DawnBg({ mode, reduced }: { mode: WorldMode; reduced: boolean }) {
 
 /* ────────── LIFE WORLD ────────── */
 
-type LifeTile = { key: string; title: string; body: string; Icon: IconType; kind?: boolean; source?: string; cover?: string; coverAlt?: string };
+type LifeTile = { key: string; title: string; body: string; Icon: IconType; kind?: boolean; source?: string; cover?: string; coverFallback?: string; coverAlt?: string };
 
 const LIFE_TILES: LifeTile[] = [
   { key: "pet-profiles", title: "Pet profiles", body: "Every companion in one place — their records, milestones, and people.", Icon: PawPrint, source: "life-pet-profiles" },
   { key: "health", title: "Health & reminders", body: "Vaccinations, vet visits, insurance, grooming — tracked, with gentle nudges so nothing slips.", Icon: CalendarClock, source: "life-health" },
-  { key: "services", title: "Services near you", body: "Trusted vets, groomers, walkers, sitters and boarding — booked without the chaos.", Icon: Stethoscope, source: "life-services", cover: lifeServicesImg, coverAlt: "A calm veterinary moment — gentle hands examining a relaxed golden dog" },
+  { key: "services", title: "Services near you", body: "Trusted vets, groomers, walkers, sitters and boarding — booked without the chaos.", Icon: Stethoscope, source: "life-services", cover: UNSPLASH_LIFE_SERVICES, coverFallback: lifeServicesImg, coverAlt: "A calm veterinary moment — gentle hands with a relaxed dog" },
   { key: "vets", title: "Vets & second opinions", body: "Vetted local vets, second opinions, and gentle end-of-life care.", Icon: Stethoscope, source: "life-vets" },
   { key: "whisperer", title: "Pet whisperer", body: "Behaviour help, training, and quiet communication.", Icon: Feather, source: "life-whisperer" },
   { key: "food", title: "Food & essentials", body: "Genuinely wholesome nutrition and gear — no junk brands, no clutter.", Icon: ShoppingBag, source: "life-food" },
-  { key: "lifestyle", title: "Lifestyle & celebrations", body: "Birthdays, gotcha-days, playdates and outings — the joy, organised.", Icon: Cake, source: "life-lifestyle", cover: lifeLifestyleImg, coverAlt: "A small joyful birthday moment for a dog with a paper hat and a bowl of treats" },
+  { key: "lifestyle", title: "Lifestyle & celebrations", body: "Birthdays, gotcha-days, playdates and outings — the joy, organised.", Icon: Cake, source: "life-lifestyle", cover: UNSPLASH_LIFE_CELEBRATIONS, coverFallback: lifeLifestyleImg, coverAlt: "A dog enjoying a small celebration with treats" },
   { key: "community", title: "Community feed", body: "Share the wins and the mess with people who get it. Ask anything.", Icon: MessagesSquare },
-  { key: "adoption", title: "Adoption & shelters", body: "Give a waiting companion a home. Verified rescues — non-commercial, always first.", Icon: Home, kind: true, source: "life-adoption", cover: lifeAdoptionImg, coverAlt: "A hopeful shelter dog looking up through kennel bars into warm light" },
+  { key: "adoption", title: "Adoption & shelters", body: "Give a waiting companion a home. Verified rescues — non-commercial, always first.", Icon: Home, kind: true, source: "life-adoption", cover: UNSPLASH_LIFE_ADOPTION, coverFallback: lifeAdoptionImg, coverAlt: "A hopeful shelter dog looking up into warm light" },
   { key: "stray", title: "Tag a stray", body: "Map neighbourhood strays so the whole community can watch over them.", Icon: MapPin, kind: true, source: "life-stray" },
   { key: "donate", title: "Donate to care", body: "Fund a shelter, or help someone who can't afford care for the pet they love.", Icon: HandHeart, kind: true, source: "life-donate" },
 ];
