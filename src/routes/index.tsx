@@ -371,8 +371,9 @@ function HomePage() {
     setBetaOpen(true);
   };
 
-  const primaryCandle = (label: string = "Light a paw lamp") =>
-    featured.data ? (
+  const buildCandle = (label: string = "Light a paw lamp", variant: "gold" | "quiet" = "gold") => {
+    const cls = variant === "gold" ? "btn-gold ios-tappable" : "btn-quiet";
+    return featured.data ? (
       <CandleDialog
         target={{
           kind: "memorial",
@@ -380,25 +381,22 @@ function HomePage() {
           pet_name: featured.data.pet_name,
           slug: featured.data.slug,
         }}
-          trigger={
-            <button
-              type="button"
-              className="btn-gold ios-tappable"
-            >
-              <PawLamp size={18} />
-              {label}
-            </button>
-          }
-        />
-      ) : (
-        <Link
-          to="/garden"
-          className="btn-gold ios-tappable"
-        >
-          <PawLamp size={18} />
-          {label}
-        </Link>
-      );
+        trigger={
+          <button type="button" className={cls}>
+            <PawLamp size={18} />
+            {label}
+          </button>
+        }
+      />
+    ) : (
+      <Link to="/garden" className={cls}>
+        <PawLamp size={18} />
+        {label}
+      </Link>
+    );
+  };
+  const primaryCandle = (label?: string) => buildCandle(label, "gold");
+  const secondaryCandle = (label?: string) => buildCandle(label, "quiet");
 
   // Palette variables scoped to the wrapper (do NOT bleed globally)
   const memoryVars: CSSProperties = {
