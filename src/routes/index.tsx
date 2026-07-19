@@ -1474,7 +1474,7 @@ function LifeWorld({ onDev }: { onDev: (source: string) => void }) {
 }
 
 function LifeTileCard({ tile, onDev }: { tile: LifeTile; onDev: (source: string) => void }) {
-  const { title, body, Icon, kind, source, cover, coverAlt } = tile;
+  const { title, body, Icon, kind, source, cover, coverFallback, coverAlt } = tile;
   const isDev = !!source;
   const stroke = kind ? "var(--w-kind)" : "var(--w-accent)";
   const borderGrad = kind
