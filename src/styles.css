@@ -610,21 +610,27 @@
 
 @keyframes intro-fade {
   0%   { opacity: 0; transform: translateY(6px); }
-  20%  { opacity: 1; transform: translateY(0); }
-  80%  { opacity: 1; transform: translateY(0); }
+  18%  { opacity: 1; transform: translateY(0); }
+  82%  { opacity: 1; transform: translateY(0); }
   100% { opacity: 0; transform: translateY(-4px); }
 }
-.intro-fade { animation: intro-fade 2400ms ease-in-out forwards; }
+.intro-fade { animation: intro-fade 3500ms cubic-bezier(.4,0,.2,1) forwards; }
 
 @keyframes intro-flame {
-  from { opacity: 0; transform: scale(0.6); }
-  to   { opacity: 1; transform: scale(0.9); }
+  from { opacity: 0; transform: scale(0.72); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes intro-flicker {
+  0%, 100% { transform: scale(1, 1) translateY(0); opacity: 1; }
+  20%      { transform: scale(1.02, 0.98) translateY(-0.5px); opacity: 0.96; }
+  45%      { transform: scale(0.98, 1.03) translateY(0.5px); opacity: 1; }
+  70%      { transform: scale(1.03, 0.97) translateY(-0.4px); opacity: 0.94; }
 }
 @keyframes intro-in {
   from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-.intro-in { animation: intro-in 900ms ease-out forwards; }
+.intro-in { animation: intro-in 1400ms cubic-bezier(.4,0,.2,1) forwards; }
 
 /* ---------- Home hero: starfield + story stagger ---------- */
 .home-hero {
