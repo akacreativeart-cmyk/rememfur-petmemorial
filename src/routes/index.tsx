@@ -441,7 +441,7 @@ function HomePage() {
       {/* MEMORY WORLD */}
       <WorldPane active={mode === "memory"} reduced={reduced}>
         <Hero
-          primaryCandle={primaryCandle("Light a paw lamp")}
+          secondaryCandle={secondaryCandle("Light a paw lamp")}
           onLastLetter={() => openBeta("last-letter")}
         />
         <TheirSkyBand reduced={reduced} />
