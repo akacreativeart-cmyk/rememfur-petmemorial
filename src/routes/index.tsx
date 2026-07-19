@@ -1809,12 +1809,29 @@ function TheirSkyBand({ reduced }: { reduced: boolean }) {
             type="button"
             onClick={triggerPulse}
             aria-label={`Feel ${constellation.name}`}
-            className="mx-auto block aspect-square w-full max-w-[440px] rounded-[20px] ring-1 ring-white/10 md:mx-0"
+            className="relative mx-auto block aspect-square w-full max-w-[440px] overflow-hidden rounded-[20px] ring-1 ring-white/10 md:mx-0"
             style={{
-              background: "radial-gradient(120% 120% at 30% 20%, #0f1735 0%, #070b1c 60%, #04060f 100%)",
+              background: "#04060f",
               animation: reduced ? undefined : "ts-pulse 520ms cubic-bezier(.34,1.56,.64,1)",
             }}
           >
+            {/* Real night-sky photograph as the panel backdrop */}
+            <img
+              src="https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?auto=format&fit=crop&w=1200&q=70"
+              alt=""
+              aria-hidden
+              loading="lazy"
+              className="pointer-events-none absolute inset-0 h-full w-full object-cover"
+              onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
+            />
+            {/* Navy overlay for legibility of drawn lines/stars */}
+            <div
+              className="pointer-events-none absolute inset-0"
+              style={{
+                background:
+                  "radial-gradient(120% 120% at 30% 20%, rgba(15,23,53,0.55) 0%, rgba(7,11,28,0.72) 55%, rgba(4,6,15,0.78) 100%)",
+              }}
+            />
             <div className="relative h-full w-full">
               <svg ref={svgRef} viewBox="0 0 100 100" className="their-sky-svg h-full w-full">
                 <defs>
