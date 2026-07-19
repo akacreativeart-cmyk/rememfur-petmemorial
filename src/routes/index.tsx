@@ -23,6 +23,17 @@ import lifeServicesImg from "@/assets/life-services.jpg";
 import lifeLifestyleImg from "@/assets/life-lifestyle.jpg";
 import lifeAdoptionImg from "@/assets/life-adoption.jpg";
 
+// Real photography from Unsplash for the Life world — warm, real moments.
+// Local painterly assets remain as onError fallbacks.
+const UNSPLASH_LIFE_HERO =
+  "https://images.unsplash.com/photo-1543852786-1cf6624b9987?auto=format&fit=crop&w=1600&q=70"; // dog + cat together in warm home light
+const UNSPLASH_LIFE_SERVICES =
+  "https://images.unsplash.com/photo-1628009368231-7bb7cfcb0def?auto=format&fit=crop&w=1200&q=70"; // vet gently examining a dog
+const UNSPLASH_LIFE_CELEBRATIONS =
+  "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&fit=crop&w=1200&q=70"; // dog with a small birthday moment
+const UNSPLASH_LIFE_ADOPTION =
+  "https://images.unsplash.com/photo-1450778869180-41d0601e046e?auto=format&fit=crop&w=1200&q=70"; // hopeful shelter dog
+
 type WorldMode = "memory" | "life";
 
 export const Route = createFileRoute("/")({
