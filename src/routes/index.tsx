@@ -1501,6 +1501,20 @@ function LifeTileCard({ tile, onDev }: { tile: LifeTile; onDev: (source: string)
             loading="lazy"
             width={1200}
             height={720}
+            onError={(e) => {
+              const el = e.currentTarget as HTMLImageElement;
+              if (coverFallback && el.src !== coverFallback) el.src = coverFallback;
+            }}
+          />
+          {/* Warm consistent grade — unifies photography */}
+          <div
+            className="pointer-events-none absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(180deg, rgba(255,220,170,0.12) 0%, rgba(120,70,30,0.10) 100%)",
+              mixBlendMode: "multiply",
+            }}
+            aria-hidden
           />
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2" style={{ background: `linear-gradient(180deg, transparent, ${kind ? "#EFEDDF" : "#F6ECD8"} 92%)` }} />
         </div>
