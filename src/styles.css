@@ -898,15 +898,15 @@ html, body { overflow-x: hidden; }
 /* Shooting star (contained) */
 .shooter {
   position: absolute; width: 130px; height: 1.5px; pointer-events: none;
-  background: linear-gradient(90deg, rgba(242,236,221,0), rgba(242,236,221,0.9) 60%, #fff);
+  background: linear-gradient(90deg, rgba(232,185,109,0), rgba(246,217,160,0.85) 55%, #fff2cc);
   border-radius: 2px; opacity: 0; transform: rotate(var(--ang, -28deg));
   animation: shoot 1.35s ease-out forwards;
 }
 .shooter::after {
   content: ""; position: absolute; right: -2px; top: -1.6px;
   width: 4.5px; height: 4.5px; border-radius: 50%;
-  background: #fff;
-  box-shadow: 0 0 12px 3px rgba(242,236,221,0.85);
+  background: #fff5d8;
+  box-shadow: 0 0 12px 3px rgba(246,217,160,0.85);
 }
 @keyframes shoot {
   0%   { opacity: 0; transform: rotate(var(--ang)) translateX(0); }
