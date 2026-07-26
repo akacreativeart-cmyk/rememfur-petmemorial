@@ -69,11 +69,8 @@ function phaseForHour(h: number): Phase {
 }
 
 function useHour() {
-  const [h, setH] = useState(() => {
-    if (typeof window === "undefined") return 12;
-    const d = new Date();
-    return d.getHours() + d.getMinutes() / 60 + d.getSeconds() / 3600;
-  });
+  // Stable default to avoid SSR/hydration mismatch; real hour set on client only.
+  const [h, setH] = useState(12);
   useEffect(() => {
     const tick = () => {
       const d = new Date();
