@@ -215,7 +215,11 @@ function moonPhase(now = new Date()) {
   return { phase, illum, name: MOON_NAMES[idx] };
 }
 function MoonBadge() {
-  const [state] = useState(() => moonPhase());
+  // Stable server value to avoid hydration mismatch; real phase computed on client.
+  const [state, setState] = useState(() => ({ phase: 0.5, illum: 1, name: "Full moon" }));
+  useEffect(() => {
+    setState(moonPhase());
+  }, []);
   const { phase, name } = state;
   return (
     <div className="flex max-w-[92px] flex-col items-end gap-1.5 text-right">

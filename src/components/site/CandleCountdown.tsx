@@ -16,13 +16,16 @@ function format(ms: number) {
 export function CandleCountdown({ litAt, className = "" }: { litAt: string | Date; className?: string }) {
   const start = typeof litAt === "string" ? new Date(litAt).getTime() : litAt.getTime();
   const end = start + BURN_MS;
-  const [now, setNow] = useState(() => Date.now());
+  // Start from `start` so the server and first paint agree on 100% remaining.
+  // The effect then advances the countdown to the real time.
+  const [now, setNow] = useState(start);
 
   useEffect(() => {
-    if (now >= end) return;
+    setNow(Date.now());
+    if (Date.now() >= end) return;
     const id = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(id);
-  }, [end, now]);
+  }, [end]);
 
   const remaining = end - now;
   const burning = remaining > 0;
