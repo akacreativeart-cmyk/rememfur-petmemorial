@@ -166,7 +166,8 @@ export const softDeleteMemorial = createServerFn({ method: "POST" })
     const { supabase, userId } = context;
     const { error } = await supabase
       .from("memorials")
-      .update({ deleted_at: new Date().toISOString() })
+      // also unpublish so RLS stops serving the row to non-owners
+      .update({ deleted_at: new Date().toISOString(), is_public: false })
       .eq("id", data.id)
       .eq("owner_id", userId);
     if (error) throw new Error(error.message);
