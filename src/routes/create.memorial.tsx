@@ -396,7 +396,7 @@ function CreatePage() {
 
       {/* Cropper dialog */}
       {cropOpen && photoPreview && (
-        <div className="fixed inset-0 z-50 flex flex-col bg-[#0B1122]/95 backdrop-blur">
+        <div className="fixed inset-0 z-[80] flex h-[100dvh] flex-col bg-[#0B1122]/95 backdrop-blur">
           <div className="flex items-center justify-between px-5 py-4 text-white">
             <button
               type="button"
