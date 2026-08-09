@@ -48,7 +48,7 @@ function SignupPage() {
     // Signal welcome flow for the default (no ?redirect) landing.
     if (!search.redirect) setPostAuthIntent("welcome");
     setBusy(true);
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -57,8 +57,14 @@ function SignupPage() {
       },
     });
     setBusy(false);
-    if (error) toast.error(error.message);
-    else toast.success("Check your email to confirm your account.");
+    if (error) { toast.error(error.message); return; }
+    if (data.session) {
+      // Signed in right away — welcome them and land on the home screen.
+      toast.success(`Welcome${name ? `, ${name}` : ""}. We're glad you're here.`);
+      navigate({ to: search.redirect ? redirectTo : "/" });
+    } else {
+      toast.success("Check your email to confirm your account.");
+    }
   };
 
   const google = async () => {
