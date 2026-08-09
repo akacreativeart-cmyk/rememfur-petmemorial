@@ -9,6 +9,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { consumePostAuthIntent } from "@/lib/post-auth-intent";
 import { Plus, Flame, MessageCircle, Heart, X } from "lucide-react";
 import { format } from "date-fns";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   component: Dashboard,
