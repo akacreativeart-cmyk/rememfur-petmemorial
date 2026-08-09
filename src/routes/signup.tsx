@@ -38,9 +38,11 @@ function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
+  // A fresh signup handles its own landing (welcome → home); don't double-navigate.
+  const justSignedUp = useRef(false);
 
   useEffect(() => {
-    if (user) navigate({ to: redirectTo });
+    if (user && !justSignedUp.current) navigate({ to: redirectTo });
   }, [user, navigate, redirectTo]);
 
   const submit = async (e: React.FormEvent) => {
