@@ -356,7 +356,7 @@ function CreatePage() {
           )}
 
           {/* nav */}
-          <div className="mt-8 flex items-center justify-between border-t border-border/50 pt-6">
+          <div className="sticky bottom-[calc(76px+env(safe-area-inset-bottom))] z-10 -mx-6 mt-8 flex items-center justify-between rounded-b-3xl border-t border-border/50 bg-card/95 px-6 py-4 backdrop-blur md:bottom-4 md:-mx-10 md:px-10 md:pt-6">
             <Button
               type="button"
               variant="ghost"
