@@ -49,6 +49,7 @@ function SignupPage() {
     e.preventDefault();
     // Signal welcome flow for the default (no ?redirect) landing.
     if (!search.redirect) setPostAuthIntent("welcome");
+    justSignedUp.current = true;
     setBusy(true);
     const { data, error } = await supabase.auth.signUp({
       email,
