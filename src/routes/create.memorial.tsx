@@ -215,12 +215,16 @@ function CreatePage() {
     return true;
   }, [step, petName]);
 
+  const scrollTop = () => {
+    if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
+  };
   const goNext = () => {
     if (!canGoNext) return;
     saveDraft();
     setStep((s) => Math.min(s + 1, 4));
+    scrollTop();
   };
-  const goBack = () => setStep((s) => Math.max(s - 1, 0));
+  const goBack = () => { setStep((s) => Math.max(s - 1, 0)); scrollTop(); };
 
   const uploadCropped = async (userId: string): Promise<string | null> => {
     if (!croppedBlob) return null;
