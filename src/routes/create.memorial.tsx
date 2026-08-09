@@ -421,7 +421,7 @@ function CreatePage() {
               objectFit="contain"
             />
           </div>
-          <div className="space-y-4 px-5 pb-8 pt-4 text-white">
+          <div className="space-y-4 px-5 pb-[calc(2rem+env(safe-area-inset-bottom))] pt-4 text-white">
             <div className="flex justify-center gap-2">
               <button
                 type="button"
