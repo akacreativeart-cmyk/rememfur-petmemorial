@@ -51,11 +51,12 @@ function Dashboard() {
   });
 
   // Honor the post-auth intent set on /signup or /login (only when no ?redirect was used).
-  // "welcome" → route new signup into the create flow with the welcome hero.
+  // "welcome" → greet the new member and land them on the home screen.
   useEffect(() => {
     const intent = consumePostAuthIntent();
     if (intent === "welcome") {
-      navigate({ to: "/create", search: { welcome: 1 } as never, replace: true });
+      toast.success("Welcome to Rememfur. We're glad you're here.");
+      navigate({ to: "/", replace: true });
     }
   }, [navigate]);
 
