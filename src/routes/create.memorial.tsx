@@ -215,12 +215,16 @@ function CreatePage() {
     return true;
   }, [step, petName]);
 
+  const scrollTop = () => {
+    if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
+  };
   const goNext = () => {
     if (!canGoNext) return;
     saveDraft();
     setStep((s) => Math.min(s + 1, 4));
+    scrollTop();
   };
-  const goBack = () => setStep((s) => Math.max(s - 1, 0));
+  const goBack = () => { setStep((s) => Math.max(s - 1, 0)); scrollTop(); };
 
   const uploadCropped = async (userId: string): Promise<string | null> => {
     if (!croppedBlob) return null;
@@ -352,7 +356,7 @@ function CreatePage() {
           )}
 
           {/* nav */}
-          <div className="mt-8 flex items-center justify-between border-t border-border/50 pt-6">
+          <div className="sticky bottom-[calc(76px+env(safe-area-inset-bottom))] z-10 -mx-6 mt-8 flex items-center justify-between rounded-b-3xl border-t border-border/50 bg-card/95 px-6 py-4 backdrop-blur md:bottom-4 md:-mx-10 md:px-10 md:pt-6">
             <Button
               type="button"
               variant="ghost"
@@ -396,7 +400,7 @@ function CreatePage() {
 
       {/* Cropper dialog */}
       {cropOpen && photoPreview && (
-        <div className="fixed inset-0 z-50 flex flex-col bg-[#0B1122]/95 backdrop-blur">
+        <div className="fixed inset-0 z-[80] flex h-[100dvh] flex-col bg-[#0B1122]/95 backdrop-blur">
           <div className="flex items-center justify-between px-5 py-4 text-white">
             <button
               type="button"
@@ -421,7 +425,7 @@ function CreatePage() {
               objectFit="contain"
             />
           </div>
-          <div className="space-y-4 px-5 pb-8 pt-4 text-white">
+          <div className="space-y-4 px-5 pb-[calc(2rem+env(safe-area-inset-bottom))] pt-4 text-white">
             <div className="flex justify-center gap-2">
               <button
                 type="button"

@@ -10,8 +10,22 @@ export const Route = createFileRoute("/_authenticated")({
       throw redirect({ to: "/login", search: { redirect: location.href } as never });
     }
   },
+  // Never leave a blank screen while the session is being checked.
+  pendingMs: 0,
+  pendingComponent: AuthenticatedPending,
   component: AuthenticatedLayout,
 });
+
+function AuthenticatedPending() {
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-background paper-grain">
+      <div className="flex flex-col items-center gap-3 text-muted-foreground">
+        <span className="h-6 w-6 animate-spin rounded-full border-2 border-current border-t-transparent" />
+        <span className="text-[11px] uppercase tracking-[0.22em]">Opening your space…</span>
+      </div>
+    </div>
+  );
+}
 
 function AuthenticatedLayout() {
   return (

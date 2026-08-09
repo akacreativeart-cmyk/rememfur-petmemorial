@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -38,17 +38,20 @@ function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
+  // A fresh signup handles its own landing (welcome → home); don't double-navigate.
+  const justSignedUp = useRef(false);
 
   useEffect(() => {
-    if (user) navigate({ to: redirectTo });
+    if (user && !justSignedUp.current) navigate({ to: redirectTo });
   }, [user, navigate, redirectTo]);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     // Signal welcome flow for the default (no ?redirect) landing.
     if (!search.redirect) setPostAuthIntent("welcome");
+    justSignedUp.current = true;
     setBusy(true);
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -57,8 +60,14 @@ function SignupPage() {
       },
     });
     setBusy(false);
-    if (error) toast.error(error.message);
-    else toast.success("Check your email to confirm your account.");
+    if (error) { toast.error(error.message); return; }
+    if (data.session) {
+      // Signed in right away — welcome them and land on the home screen.
+      toast.success(`Welcome${name ? `, ${name}` : ""}. We're glad you're here.`);
+      navigate({ to: search.redirect ? redirectTo : "/" });
+    } else {
+      toast.success("Check your email to confirm your account.");
+    }
   };
 
   const google = async () => {

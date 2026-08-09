@@ -147,10 +147,11 @@ export const getMemorialBySlug = createServerFn({ method: "GET" })
 export const listMyMemorials = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
-    const { supabase } = context;
+    const { supabase, userId } = context;
     const { data, error } = await supabase
       .from("memorials")
       .select("id, slug, pet_name, species, passing_date, hero_image_url, transformed_image_url, created_at")
+      .eq("owner_id", userId)
       .is("deleted_at", null)
       .order("created_at", { ascending: false });
     if (error) throw new Error(error.message);
