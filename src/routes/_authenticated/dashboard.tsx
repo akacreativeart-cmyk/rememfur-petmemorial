@@ -121,12 +121,31 @@ function Dashboard() {
           <h1 className="font-display text-4xl text-foreground">My memorials</h1>
           <p className="mt-1 text-sm text-muted-foreground">A private space for the bonds you've honored.</p>
         </div>
-        <Link to="/create">
+        <Link to="/create/memorial">
           <Button className="rounded-full bg-sage-deep text-primary-foreground hover:bg-sage-deep/90">
             <Plus className="mr-1.5 h-4 w-4" /> Create memorial
           </Button>
         </Link>
       </div>
+
+      <nav className="mt-5 flex flex-wrap gap-2">
+        {[
+          { to: "/journal", label: "Journal", icon: BookOpen },
+          { to: "/pets", label: "My pets", icon: PawPrint },
+          { to: "/notifications", label: "Notifications", icon: Bell },
+          { to: "/settings", label: "Settings", icon: Settings },
+        ].map(({ to, label, icon: Icon }) => (
+          <Link
+            key={to}
+            to={to}
+            className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-card px-3.5 py-1.5 text-sm text-foreground/80 transition hover:border-border hover:text-foreground"
+          >
+            <Icon className="h-3.5 w-3.5 text-sage-deep" />
+            {label}
+          </Link>
+        ))}
+      </nav>
+
 
       <div className="mt-8">
         {isLoading ? (
