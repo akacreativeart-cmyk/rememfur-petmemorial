@@ -1746,7 +1746,7 @@ function TheirSkyBand({ reduced }: { reduced: boolean }) {
     try {
       const d = new Date(dateStr);
       if (isNaN(d.getTime())) return dateStr;
-      return d.toLocaleDateString(undefined, { day: "numeric", month: "long", year: "numeric" });
+      return d.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
     } catch { return dateStr; }
   }, [dateStr]);
 
