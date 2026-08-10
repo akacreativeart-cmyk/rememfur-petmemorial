@@ -117,16 +117,25 @@ function PetDetailPage() {
           <p className="text-sm text-muted-foreground">
             {pet.species}{pet.breed ? ` · ${pet.breed}` : ""}
             {pet.birthdate ? ` · born ${new Date(pet.birthdate).toLocaleDateString()}` : ""}
+            {pet.passing_date ? ` · passed ${new Date(pet.passing_date).toLocaleDateString()}` : ""}
           </p>
         </div>
+        <EditPetDialog pet={pet} />
         <Button variant="ghost" size="sm" onClick={() => confirm("Remove this pet and all its records?") && delPet.mutate()}>
           <Trash2 className="h-4 w-4 text-muted-foreground" />
         </Button>
       </header>
 
-      {pet.notes && (
-        <p className="mt-4 whitespace-pre-wrap rounded-2xl bg-muted/50 p-4 text-sm text-foreground">{pet.notes}</p>
+      {pet.story && (
+        <p className="mt-4 whitespace-pre-wrap rounded-2xl bg-muted/50 p-4 text-sm text-foreground">{pet.story}</p>
       )}
+      {pet.notes && (
+        <p className="mt-3 whitespace-pre-wrap rounded-2xl bg-muted/30 p-4 text-sm text-muted-foreground">{pet.notes}</p>
+      )}
+
+      <MemoryTimeline petId={pet.id} petName={pet.name} />
+
+
 
       {nextDue7.length > 0 && (
         <div className="mt-6 rounded-2xl border border-amber-400/40 bg-amber-400/5 p-4">
