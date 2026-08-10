@@ -44,8 +44,12 @@ export const deleteMyAccount = createServerFn({ method: "POST" })
     z.object({ purge_memorials: z.boolean().default(false) }).parse(input),
   )
   .handler(async ({ data, context }) => {
-    const { supabase } = context;
-    const { error } = await supabase.rpc("delete_my_account", {
+    // Account deletion runs with service-role privileges after the caller's
+    // identity has been verified by requireSupabaseAuth. The database function
+    // is not callable by signed-in users directly.
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error } = await supabaseAdmin.rpc("delete_user_account", {
+      _user_id: context.userId,
       _purge_memorials: data.purge_memorials,
     });
     if (error) throw new Error(error.message);

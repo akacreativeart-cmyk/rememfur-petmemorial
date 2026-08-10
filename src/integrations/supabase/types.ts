@@ -675,8 +675,8 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      delete_my_account: {
-        Args: { _purge_memorials?: boolean }
+      delete_user_account: {
+        Args: { _purge_memorials?: boolean; _user_id: string }
         Returns: undefined
       }
       is_admin: { Args: { _user_id: string }; Returns: boolean }
