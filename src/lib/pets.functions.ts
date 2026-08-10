@@ -7,10 +7,13 @@ const petSchema = z.object({
   species: z.enum(["dog", "cat", "bird", "rabbit", "reptile", "fish", "other"]).default("other"),
   breed: z.string().max(120).nullable().optional(),
   birthdate: z.string().nullable().optional(),
+  passing_date: z.string().nullable().optional(),
   adoption_date: z.string().nullable().optional(),
+  story: z.string().max(5000).nullable().optional(),
   notes: z.string().max(2000).nullable().optional(),
   avatar_url: z.string().url().nullable().optional(),
 });
+
 
 const recordKinds = ["health", "vaccination", "grooming", "insurance", "birthday", "other"] as const;
 const recordSchema = z.object({
@@ -28,7 +31,7 @@ export const listMyPets = createServerFn({ method: "GET" })
   .handler(async ({ context }) => {
     const { data, error } = await context.supabase
       .from("pets")
-      .select("id, name, species, breed, birthdate, adoption_date, avatar_url, notes, created_at")
+      .select("id, name, species, breed, birthdate, passing_date, adoption_date, avatar_url, story, notes, created_at")
       .order("created_at", { ascending: false });
     if (error) throw new Error(error.message);
     return data ?? [];
@@ -41,7 +44,7 @@ export const getMyPet = createServerFn({ method: "GET" })
     const [{ data: pet, error: pErr }, { data: records, error: rErr }] = await Promise.all([
       context.supabase
         .from("pets")
-        .select("id, name, species, breed, birthdate, adoption_date, notes, avatar_url, created_at, updated_at")
+        .select("id, name, species, breed, birthdate, passing_date, adoption_date, notes, story, avatar_url, created_at, updated_at")
         .eq("id", data.pet_id)
         .maybeSingle(),
       context.supabase
