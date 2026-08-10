@@ -5,16 +5,23 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { listMyMemorials } from "@/lib/memorials.functions";
 import { sinceYouWereAway } from "@/lib/notifications.functions";
+import { memoryKeeperOverview } from "@/lib/memories.functions";
 import { useAuth } from "@/hooks/use-auth";
 import { consumePostAuthIntent } from "@/lib/post-auth-intent";
-import { Plus, Flame, MessageCircle, Heart, X } from "lucide-react";
+import { Plus, Flame, MessageCircle, Heart, X, PawPrint, BookHeart } from "lucide-react";
 import { format } from "date-fns";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   component: Dashboard,
-  head: () => ({ meta: [{ title: "My memorials — Rememfur" }] }),
+  head: () => ({
+    meta: [
+      { title: "Your Memory Keeper — Rememfur" },
+      { name: "description", content: "Your pets and the memories you keep for them, saved safely in one place." },
+    ],
+  }),
 });
+
 
 const TYPE_LABEL: Record<string, { verb: string; icon: typeof Flame }> = {
   candle: { verb: "paw lamps were lit", icon: Flame },
