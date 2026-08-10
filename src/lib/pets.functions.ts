@@ -7,10 +7,13 @@ const petSchema = z.object({
   species: z.enum(["dog", "cat", "bird", "rabbit", "reptile", "fish", "other"]).default("other"),
   breed: z.string().max(120).nullable().optional(),
   birthdate: z.string().nullable().optional(),
+  passing_date: z.string().nullable().optional(),
   adoption_date: z.string().nullable().optional(),
+  story: z.string().max(5000).nullable().optional(),
   notes: z.string().max(2000).nullable().optional(),
   avatar_url: z.string().url().nullable().optional(),
 });
+
 
 const recordKinds = ["health", "vaccination", "grooming", "insurance", "birthday", "other"] as const;
 const recordSchema = z.object({
