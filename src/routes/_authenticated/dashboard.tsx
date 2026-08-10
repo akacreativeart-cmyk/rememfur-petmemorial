@@ -7,7 +7,7 @@ import { listMyMemorials } from "@/lib/memorials.functions";
 import { sinceYouWereAway } from "@/lib/notifications.functions";
 import { useAuth } from "@/hooks/use-auth";
 import { consumePostAuthIntent } from "@/lib/post-auth-intent";
-import { Plus, Flame, MessageCircle, Heart, X } from "lucide-react";
+import { Plus, Flame, MessageCircle, Heart, X, BookOpen, PawPrint, Bell, Settings } from "lucide-react";
 import { format } from "date-fns";
 import { toast } from "sonner";
 
