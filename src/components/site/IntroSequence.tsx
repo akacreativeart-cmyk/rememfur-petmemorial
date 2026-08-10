@@ -110,7 +110,6 @@ export function IntroSequence() {
             <p className="font-display italic text-[32px] leading-[1.25] text-[#f5e6c8] md:text-[52px]">
               {FINAL}
             </p>
-            <IntroCandle reduced={reduced} />
             <button
               type="button"
               onClick={(e) => {
@@ -124,118 +123,6 @@ export function IntroSequence() {
           </div>
         )}
       </div>
-    </div>
-  );
-}
-
-/**
- * A crafted lit candle for the intro finale.
- * SVG wax pillar + layered flame (outer amber glow → warm mid → bright core)
- * with a gentle CSS flicker and a soft under-halo. Respects reduced motion.
- */
-function IntroCandle({ reduced }: { reduced: boolean }) {
-  return (
-    <div
-      className="relative mt-9"
-      aria-hidden
-      style={{
-        width: 88,
-        height: 168,
-        opacity: 0,
-        animation: reduced ? "none" : "intro-flame 1400ms ease-out 600ms forwards",
-      }}
-    >
-      {/* Soft under-glow on the surface below */}
-      <span
-        className="absolute left-1/2 -translate-x-1/2"
-        style={{
-          bottom: -8,
-          width: 140,
-          height: 34,
-          borderRadius: "50%",
-          background:
-            "radial-gradient(ellipse at center, rgba(255,196,120,0.55) 0%, rgba(232,185,109,0.18) 45%, rgba(232,185,109,0) 75%)",
-          filter: "blur(3px)",
-        }}
-      />
-
-      {/* Flame — layered glow behind, sharp core in front */}
-      <svg
-        viewBox="0 0 88 100"
-        width="88"
-        height="100"
-        className="absolute left-1/2 -translate-x-1/2"
-        style={{
-          top: 0,
-          overflow: "visible",
-          transformOrigin: "50% 92%",
-          animation: reduced ? "none" : "intro-flicker 2.4s ease-in-out infinite",
-        }}
-      >
-        <defs>
-          <radialGradient id="ic-outer" cx="50%" cy="70%" r="55%">
-            <stop offset="0%" stopColor="#ffb060" stopOpacity="0.55" />
-            <stop offset="55%" stopColor="#e8901c" stopOpacity="0.22" />
-            <stop offset="100%" stopColor="#e8901c" stopOpacity="0" />
-          </radialGradient>
-          <radialGradient id="ic-mid" cx="50%" cy="75%" r="50%">
-            <stop offset="0%" stopColor="#fff2c4" stopOpacity="1" />
-            <stop offset="55%" stopColor="#f4b866" stopOpacity="0.9" />
-            <stop offset="100%" stopColor="#c9822a" stopOpacity="0" />
-          </radialGradient>
-          <radialGradient id="ic-core" cx="50%" cy="80%" r="45%">
-            <stop offset="0%" stopColor="#ffffff" stopOpacity="1" />
-            <stop offset="55%" stopColor="#fff4c4" stopOpacity="0.95" />
-            <stop offset="100%" stopColor="#fff4c4" stopOpacity="0" />
-          </radialGradient>
-        </defs>
-        {/* Outer amber glow — big teardrop */}
-        <ellipse cx="44" cy="58" rx="30" ry="42" fill="url(#ic-outer)" />
-        {/* Warm mid — the flame body */}
-        <path
-          d="M44 18 C 58 40, 66 58, 60 76 C 56 90, 32 90, 28 76 C 22 58, 30 40, 44 18 Z"
-          fill="url(#ic-mid)"
-        />
-        {/* Bright hot core */}
-        <path
-          d="M44 40 C 51 54, 52 66, 48 78 C 46 84, 42 84, 40 78 C 36 66, 37 54, 44 40 Z"
-          fill="url(#ic-core)"
-        />
-      </svg>
-
-      {/* Wick */}
-      <span
-        className="absolute left-1/2 -translate-x-1/2"
-        style={{ top: 92, width: 2, height: 10, background: "#1a1206", borderRadius: 1 }}
-      />
-
-      {/* Candle wax pillar */}
-      <span
-        className="absolute left-1/2 -translate-x-1/2"
-        style={{
-          top: 100,
-          width: 42,
-          height: 62,
-          borderRadius: "6px 6px 8px 8px",
-          background:
-            "linear-gradient(180deg, #f8efd6 0%, #ecdbb0 45%, #d6bd85 100%)",
-          boxShadow:
-            "inset -7px 0 12px -6px rgba(80,50,20,0.45), inset 6px 0 10px -6px rgba(255,240,210,0.55), 0 12px 26px -12px rgba(0,0,0,0.6)",
-        }}
-      />
-      {/* Melted rim */}
-      <span
-        className="absolute left-1/2 -translate-x-1/2"
-        style={{
-          top: 96,
-          width: 46,
-          height: 8,
-          borderRadius: "50%",
-          background:
-            "radial-gradient(ellipse at 45% 30%, #fff4d4 0%, #e5cf9c 55%, #b89658 100%)",
-          boxShadow: "0 4px 8px -3px rgba(0,0,0,0.5)",
-        }}
-      />
     </div>
   );
 }
