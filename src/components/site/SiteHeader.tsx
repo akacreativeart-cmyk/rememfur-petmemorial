@@ -265,8 +265,7 @@ export function SiteHeader() {
 
         <div className="flex items-center gap-1.5 md:gap-2">
           <Link
-            to={user ? "/create" : "/signup"}
-            search={user ? undefined : ({ redirect: "/create" } as never)}
+            to="/create/memorial"
             className="btn-gold-sm ios-tappable hidden whitespace-nowrap md:inline-flex"
           >
             <Feather className="h-4 w-4" strokeWidth={2} />
@@ -274,14 +273,51 @@ export function SiteHeader() {
           </Link>
           <NotificationBell />
           {user ? (
-            <button
-              onClick={() => signOut()}
-              aria-label="Sign out"
-              className="flex h-9 w-9 items-center justify-center rounded-full text-white/70 hover:bg-white/10 hover:text-white"
-            >
-              <LogOut className="h-4 w-4" />
-            </button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button
+                  aria-label="Your account"
+                  className="flex h-9 w-9 items-center justify-center rounded-full text-white/70 ring-1 ring-white/10 hover:bg-white/10 hover:text-white"
+                >
+                  <UserIcon className="h-4 w-4" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                align="end"
+                className="w-56 border-white/10 text-white"
+                style={{ background: "linear-gradient(180deg,#0B1122,#080d1f)" }}
+              >
+                <DropdownMenuLabel className="text-[10px] uppercase tracking-[0.2em] text-white/40">
+                  Your space
+                </DropdownMenuLabel>
+                {authItems.map(({ to, label, icon: Icon }) => (
+                  <DropdownMenuItem key={to} asChild className="focus:bg-white/10 focus:text-white">
+                    <Link to={to} className="flex items-center gap-2.5 text-white/85">
+                      <Icon className="h-4 w-4 text-[#E8B96D]" />
+                      {label}
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
+                {isAdmin && (
+                  <DropdownMenuItem asChild className="focus:bg-white/10 focus:text-white">
+                    <Link to="/admin" className="flex items-center gap-2.5 text-white/85">
+                      <ShieldCheck className="h-4 w-4 text-[#E8B96D]" />
+                      Admin · Moderation
+                    </Link>
+                  </DropdownMenuItem>
+                )}
+                <DropdownMenuSeparator className="bg-white/10" />
+                <DropdownMenuItem
+                  onSelect={() => signOut()}
+                  className="flex items-center gap-2.5 text-white/85 focus:bg-white/10 focus:text-white"
+                >
+                  <LogOut className="h-4 w-4 text-[#E8B96D]" />
+                  Sign out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           ) : (
+
             <Link
               to="/login"
               className="rounded-full px-3 py-1.5 text-sm font-medium text-white/80 hover:bg-white/10 hover:text-white"
