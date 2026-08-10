@@ -156,29 +156,31 @@ export function SiteHeader() {
               {authItems.length > 0 && (
                 <>
                   <div className="my-4 h-px bg-white/10" />
+                  <p className="px-3 pb-1 text-[10px] uppercase tracking-[0.2em] text-white/40">Your space</p>
                   <nav className="space-y-1">
                     {authItems.map(({ to, label, icon: Icon }) => (
-                      <a
+                      <Link
                         key={to}
-                        href={to}
+                        to={to}
                         onClick={() => setOpen(false)}
                         className="flex items-center gap-3 rounded-xl px-3 py-3 text-base text-white/85 hover:bg-white/5"
                       >
                         <Icon className="h-5 w-5 text-[#E8B96D]" />
                         {label}
-                      </a>
+                      </Link>
                     ))}
                     {isAdmin && (
-                      <a
-                        href="/admin"
+                      <Link
+                        to="/admin"
                         onClick={() => setOpen(false)}
                         className="flex items-center gap-3 rounded-xl px-3 py-3 text-base text-white/85 hover:bg-white/5"
                       >
                         <ShieldCheck className="h-5 w-5 text-[#E8B96D]" />
                         Admin · Moderation
-                      </a>
+                      </Link>
                     )}
                   </nav>
+
                 </>
               )}
 
