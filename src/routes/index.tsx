@@ -457,7 +457,7 @@ function HomePage() {
       <WorldPane active={mode === "memory"} reduced={reduced}>
         <Hero
           secondaryCandle={secondaryCandle("Light a paw lamp")}
-          onLastLetter={() => openBeta("last-letter")}
+          
         />
         <TheirSkyBand reduced={reduced} />
         <GriefCopeBand />
@@ -551,7 +551,7 @@ function HomePage() {
 
 /* ────────── HERO ────────── */
 
-function Hero({ secondaryCandle, onLastLetter }: { secondaryCandle: ReactNode; onLastLetter?: () => void }) {
+function Hero({ secondaryCandle }: { secondaryCandle: ReactNode }) {
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
