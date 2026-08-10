@@ -35,21 +35,40 @@ export const Route = createFileRoute("/memorial/$slug")({
     if (!data) throw notFound();
     return data;
   },
-  head: ({ loaderData }) => {
+  head: ({ params, loaderData }) => {
     if (!loaderData) return { meta: [{ title: "Memorial — Rememfur" }] };
     const m = loaderData.memorial;
     const img = m.transformed_image_url ?? m.hero_image_url;
+    const url = `https://rememfur.com/memorial/${params.slug}`;
     return {
       meta: [
         { title: `${m.pet_name} — A Rememfur memorial` },
         { name: "description", content: m.epitaph ?? `Honoring ${m.pet_name}, forever loved.` },
         { property: "og:title", content: `${m.pet_name} — Forever loved` },
         { property: "og:description", content: m.epitaph ?? `Honoring ${m.pet_name}.` },
+        { property: "og:type", content: "article" },
+        { property: "og:url", content: url },
         ...(img ? [{ property: "og:image", content: img }, { name: "twitter:image", content: img }] : []),
         { name: "twitter:card", content: "summary_large_image" },
       ],
+      links: [{ rel: "canonical", href: url }],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Article",
+            headline: `${m.pet_name} — A Rememfur memorial`,
+            description: m.epitaph ?? `Honoring ${m.pet_name}, forever loved.`,
+            url,
+            ...(img ? { image: img } : {}),
+            isPartOf: { "@type": "WebSite", name: "Rememfur", url: "https://rememfur.com" },
+          }),
+        },
+      ],
     };
   },
+
 });
 
 function MemorialPage() {
