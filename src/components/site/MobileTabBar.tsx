@@ -55,7 +55,9 @@ export function MobileTabBar() {
   const reduced = usePrefersReducedMotion();
   const [tapHeart, setTapHeart] = useState(false);
 
-  const createTo = user ? "/create" : "/signup";
+  // Anyone can start a memorial — sign-in is only asked for at the moment of publishing.
+  const createTo = "/create/memorial";
+
 
   const tabs: Tab[] = [
     { to: "/", label: "Home", icon: Home, match: (p) => p === "/" },
