@@ -166,6 +166,92 @@ function Dashboard() {
   );
 }
 
+function MemoryKeeper() {
+  const overviewFn = useServerFn(memoryKeeperOverview);
+  const { data, isLoading } = useQuery({ queryKey: ["memory-keeper"], queryFn: () => overviewFn() });
+  const pets = data?.pets ?? [];
+  const recent = data?.recent ?? [];
+  const petName = (id: string) => pets.find((p) => p.id === id)?.name ?? "";
+
+  return (
+    <section>
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h1 className="font-display text-4xl text-foreground">Your Memory Keeper</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Everything you've written down, kept safe — for the ones still here and the ones who've gone ahead.
+          </p>
+        </div>
+        <Link to="/pets" className="btn-gold-sm">
+          <PawPrint className="h-4 w-4" /> Your pets
+        </Link>
+      </div>
+
+      {isLoading ? (
+        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {[...Array(3)].map((_, i) => <div key={i} className="h-28 animate-pulse rounded-2xl bg-muted" />)}
+        </div>
+      ) : pets.length === 0 ? (
+        <div className="mt-6 rounded-3xl border border-dashed border-border p-10 text-center">
+          <PawPrint className="mx-auto h-8 w-8 text-muted-foreground" />
+          <p className="mt-3 font-display text-2xl text-foreground">Add your first companion</p>
+          <p className="mx-auto mt-2 max-w-sm text-sm text-muted-foreground">
+            Give them a page of their own, then start keeping the small moments you never want to forget.
+          </p>
+          <Link to="/pets" className="btn-gold-sm mt-6">
+            <Plus className="h-4 w-4" /> Add a pet
+          </Link>
+        </div>
+      ) : (
+        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {pets.map((p) => (
+            <Link
+              key={p.id}
+              to="/pets/$petId"
+              params={{ petId: p.id }}
+              className="group flex items-center gap-3 rounded-2xl border border-border/60 bg-card p-4 soft-shadow transition hover:-translate-y-0.5"
+            >
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full bg-sage/15 text-sage-deep">
+                {p.avatar_url ? <img src={p.avatar_url} alt={p.name} className="h-full w-full object-cover" /> : <PawPrint className="h-5 w-5" />}
+              </div>
+              <div className="min-w-0">
+                <div className="truncate font-display text-xl text-foreground">{p.name}</div>
+                <div className="text-xs text-muted-foreground">
+                  {p.memory_count} {p.memory_count === 1 ? "memory" : "memories"}
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      )}
+
+      {recent.length > 0 && (
+        <div className="mt-8">
+          <h2 className="font-display text-2xl text-foreground">Recent memories</h2>
+          <ul className="mt-3 space-y-2">
+            {recent.map((m) => (
+              <li key={m.id}>
+                <Link
+                  to="/pets/$petId"
+                  params={{ petId: m.pet_id }}
+                  className="flex items-center gap-3 rounded-2xl border border-border/60 bg-card px-4 py-3 text-sm transition hover:border-sage/50"
+                >
+                  <BookHeart className="h-4 w-4 shrink-0 text-sage-deep" />
+                  <span className="min-w-0 flex-1 truncate text-foreground">{m.title}</span>
+                  <span className="shrink-0 text-xs text-muted-foreground">
+                    {petName(m.pet_id)} · {format(new Date(m.memory_date), "d MMM yyyy")}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </section>
+  );
+}
+
+
 function ZeroStateWelcome() {
   return (
     <div className="rounded-3xl border border-border/60 bg-gradient-to-br from-card via-card/80 to-transparent p-10 text-center soft-shadow md:p-14">
