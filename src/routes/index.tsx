@@ -157,10 +157,10 @@ function CosmosBg({ mode = "memory", reduced = false }: { mode?: WorldMode; redu
       };
       setStreaks((prev) => [...prev, item]);
       window.setTimeout(() => setStreaks((prev) => prev.filter((s) => s.id !== item.id)), 1500);
-      const next = 6000 + Math.random() * 4000;
+      const next = 2600 + Math.random() * 3200;
       window.setTimeout(spawn, next);
     };
-    const t = window.setTimeout(spawn, 2000);
+    const t = window.setTimeout(spawn, 900);
     return () => { alive = false; window.clearTimeout(t); };
   }, [reduced]);
 
@@ -1267,7 +1267,9 @@ function WorldToggle({ mode, setMode, reduced }: { mode: WorldMode; setMode: (m:
               style={{
                 color: active
                   ? "#1a1200"
-                  : isLife ? "rgba(58,44,28,0.7)" : "rgba(242,236,221,0.7)",
+                  : key === "life"
+                    ? "#FFFFFF"
+                    : isLife ? "rgba(58,44,28,0.7)" : "rgba(242,236,221,0.7)",
               }}
             >
               <Icon className="h-3.5 w-3.5" strokeWidth={2} />
@@ -1744,7 +1746,7 @@ function TheirSkyBand({ reduced }: { reduced: boolean }) {
     try {
       const d = new Date(dateStr);
       if (isNaN(d.getTime())) return dateStr;
-      return d.toLocaleDateString(undefined, { day: "numeric", month: "long", year: "numeric" });
+      return d.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
     } catch { return dateStr; }
   }, [dateStr]);
 
