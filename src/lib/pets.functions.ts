@@ -31,7 +31,7 @@ export const listMyPets = createServerFn({ method: "GET" })
   .handler(async ({ context }) => {
     const { data, error } = await context.supabase
       .from("pets")
-      .select("id, name, species, breed, birthdate, adoption_date, avatar_url, notes, created_at")
+      .select("id, name, species, breed, birthdate, passing_date, adoption_date, avatar_url, story, notes, created_at")
       .order("created_at", { ascending: false });
     if (error) throw new Error(error.message);
     return data ?? [];
