@@ -1,7 +1,6 @@
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { Home, Flower2, Heart, Users, ShoppingBag } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useAuth } from "@/hooks/use-auth";
 import { PawIcon } from "@/components/site/PawIcon";
 
 type Tab = { to: string; label: string; icon: any; match?: (p: string) => boolean };
@@ -51,7 +50,6 @@ function PawHeartMorph({ forceHeart }: { forceHeart?: boolean }) {
 export function MobileTabBar() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const { user } = useAuth();
   const reduced = usePrefersReducedMotion();
   const [tapHeart, setTapHeart] = useState(false);
 
