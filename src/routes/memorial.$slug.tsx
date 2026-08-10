@@ -36,7 +36,7 @@ export const Route = createFileRoute("/memorial/$slug")({
     return data;
   },
   head: ({ loaderData }) => {
-    if (!loaderData) return { meta: [{ title: "Memorial — Rememfur" }] };
+    if (!loaderData) return { meta: [{ title: "Memorial unavailable — Rememfur" }, { name: "robots", content: "noindex" }] };
     const m = loaderData.memorial;
     const img = m.transformed_image_url ?? m.hero_image_url;
     return {
