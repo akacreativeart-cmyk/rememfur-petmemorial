@@ -1,13 +1,14 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 /**
- * Gentle caption helper. Callers may pass `pronouns`, `nickname` and
- * `species` so the model never falls back to "it" for a beloved companion.
+ * Gentle caption helper. Public on purpose: the memorial-creation flow is
+ * open to guests, so requiring a bearer token here 401s signed-out visitors.
+ * Callers may pass `pronouns`, `nickname` and `species` so the model never
+ * falls back to "it" for a beloved companion.
  */
 export const assistCaption = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
+
   .inputValidator((input) =>
     z.object({
       draft: z.string().max(2000).optional().default(""),
