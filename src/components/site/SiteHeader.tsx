@@ -38,13 +38,15 @@ export function SiteHeader() {
 
   const authItems = user
     ? [
-        { to: "/create", label: "Create memorial", icon: PlusCircle },
-        { to: "/dashboard", label: "My dashboard", icon: UserIcon },
+        { to: "/dashboard", label: "My dashboard", icon: LayoutDashboard },
         { to: "/journal", label: "My journal", icon: HeartHandshake },
+        { to: "/pets", label: "My pets", icon: PawPrint },
+        { to: "/notifications", label: "Notifications", icon: Bell },
         { to: `/u/${user.id}`, label: "Profile", icon: UserIcon },
         { to: "/settings", label: "Settings", icon: Settings },
       ]
     : [];
+
 
   const desktopNav: { to: string; label: string }[] = [
     { to: "/", label: "Home" },
