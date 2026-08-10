@@ -82,9 +82,6 @@ function Dashboard() {
   const [dismissed, setDismissed] = useState(false);
   const banner = !dismissed && (since?.length ?? 0) > 0 ? since! : [];
 
-  if (hasNoMemorials) {
-    return <ZeroStateWelcome />;
-  }
 
   return (
     <div>
