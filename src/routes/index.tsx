@@ -457,7 +457,7 @@ function HomePage() {
       <WorldPane active={mode === "memory"} reduced={reduced}>
         <Hero
           secondaryCandle={secondaryCandle("Light a paw lamp")}
-          
+          onLastLetter={() => openBeta("last-letter")}
         />
         <TheirSkyBand reduced={reduced} />
         <GriefCopeBand />
@@ -551,7 +551,7 @@ function HomePage() {
 
 /* ────────── HERO ────────── */
 
-function Hero({ secondaryCandle }: { secondaryCandle: ReactNode }) {
+function Hero({ secondaryCandle, onLastLetter }: { secondaryCandle: ReactNode; onLastLetter?: () => void }) {
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -602,8 +602,15 @@ function Hero({ secondaryCandle }: { secondaryCandle: ReactNode }) {
             <div className="w-full max-w-[300px] [&>*]:w-full [&>*]:justify-center md:w-auto md:max-w-none">
               {secondaryCandle}
             </div>
-            {/* Their last letter lives in Chapter IV, where its "in development" state is visible. */}
-
+            {/* TERTIARY — last letter */}
+            <button
+              type="button"
+              onClick={onLastLetter}
+              className="mt-1 inline-flex items-center gap-2 font-display italic text-[15.5px] text-[var(--gold)]/90 underline-offset-4 opacity-90 hover:underline"
+            >
+              <Mail className="h-4 w-4" />
+              Send them your last letter
+            </button>
           </div>
         </div>
       </div>

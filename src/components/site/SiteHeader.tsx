@@ -2,15 +2,7 @@ import { Link, useRouter, useLocation } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { useIsAdmin } from "@/hooks/use-admin";
-import { ChevronLeft, LogOut, ShoppingBag, Menu, Home, Flower2, Users, BookOpen, PlusCircle, Feather, User as UserIcon, Settings, HeartHandshake, Info, HandHeart, Stethoscope, LifeBuoy, ShieldCheck, Download, MessageSquare, LayoutDashboard, PawPrint, Bell } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { ChevronLeft, LogOut, ShoppingBag, Menu, Home, Flower2, Users, BookOpen, PlusCircle, Feather, User as UserIcon, Settings, HeartHandshake, Info, HandHeart, Stethoscope, LifeBuoy, ShieldCheck, Download, MessageSquare } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { NotificationBell } from "@/components/site/NotificationBell";
 import { FeedbackDialog } from "@/components/site/FeedbackDialog";
@@ -46,15 +38,13 @@ export function SiteHeader() {
 
   const authItems = user
     ? [
-        { to: "/dashboard", label: "My dashboard", icon: LayoutDashboard },
+        { to: "/create", label: "Create memorial", icon: PlusCircle },
+        { to: "/dashboard", label: "My dashboard", icon: UserIcon },
         { to: "/journal", label: "My journal", icon: HeartHandshake },
-        { to: "/pets", label: "My pets", icon: PawPrint },
-        { to: "/notifications", label: "Notifications", icon: Bell },
         { to: `/u/${user.id}`, label: "Profile", icon: UserIcon },
         { to: "/settings", label: "Settings", icon: Settings },
       ]
     : [];
-
 
   const desktopNav: { to: string; label: string }[] = [
     { to: "/", label: "Home" },
@@ -156,31 +146,29 @@ export function SiteHeader() {
               {authItems.length > 0 && (
                 <>
                   <div className="my-4 h-px bg-white/10" />
-                  <p className="px-3 pb-1 text-[10px] uppercase tracking-[0.2em] text-white/40">Your space</p>
                   <nav className="space-y-1">
                     {authItems.map(({ to, label, icon: Icon }) => (
-                      <Link
+                      <a
                         key={to}
-                        to={to}
+                        href={to}
                         onClick={() => setOpen(false)}
                         className="flex items-center gap-3 rounded-xl px-3 py-3 text-base text-white/85 hover:bg-white/5"
                       >
                         <Icon className="h-5 w-5 text-[#E8B96D]" />
                         {label}
-                      </Link>
+                      </a>
                     ))}
                     {isAdmin && (
-                      <Link
-                        to="/admin"
+                      <a
+                        href="/admin"
                         onClick={() => setOpen(false)}
                         className="flex items-center gap-3 rounded-xl px-3 py-3 text-base text-white/85 hover:bg-white/5"
                       >
                         <ShieldCheck className="h-5 w-5 text-[#E8B96D]" />
                         Admin · Moderation
-                      </Link>
+                      </a>
                     )}
                   </nav>
-
                 </>
               )}
 
@@ -265,7 +253,8 @@ export function SiteHeader() {
 
         <div className="flex items-center gap-1.5 md:gap-2">
           <Link
-            to="/create/memorial"
+            to={user ? "/create" : "/signup"}
+            search={user ? undefined : ({ redirect: "/create" } as never)}
             className="btn-gold-sm ios-tappable hidden whitespace-nowrap md:inline-flex"
           >
             <Feather className="h-4 w-4" strokeWidth={2} />
@@ -273,51 +262,14 @@ export function SiteHeader() {
           </Link>
           <NotificationBell />
           {user ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button
-                  aria-label="Your account"
-                  className="flex h-9 w-9 items-center justify-center rounded-full text-white/70 ring-1 ring-white/10 hover:bg-white/10 hover:text-white"
-                >
-                  <UserIcon className="h-4 w-4" />
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                align="end"
-                className="w-56 border-white/10 text-white"
-                style={{ background: "linear-gradient(180deg,#0B1122,#080d1f)" }}
-              >
-                <DropdownMenuLabel className="text-[10px] uppercase tracking-[0.2em] text-white/40">
-                  Your space
-                </DropdownMenuLabel>
-                {authItems.map(({ to, label, icon: Icon }) => (
-                  <DropdownMenuItem key={to} asChild className="focus:bg-white/10 focus:text-white">
-                    <Link to={to} className="flex items-center gap-2.5 text-white/85">
-                      <Icon className="h-4 w-4 text-[#E8B96D]" />
-                      {label}
-                    </Link>
-                  </DropdownMenuItem>
-                ))}
-                {isAdmin && (
-                  <DropdownMenuItem asChild className="focus:bg-white/10 focus:text-white">
-                    <Link to="/admin" className="flex items-center gap-2.5 text-white/85">
-                      <ShieldCheck className="h-4 w-4 text-[#E8B96D]" />
-                      Admin · Moderation
-                    </Link>
-                  </DropdownMenuItem>
-                )}
-                <DropdownMenuSeparator className="bg-white/10" />
-                <DropdownMenuItem
-                  onSelect={() => signOut()}
-                  className="flex items-center gap-2.5 text-white/85 focus:bg-white/10 focus:text-white"
-                >
-                  <LogOut className="h-4 w-4 text-[#E8B96D]" />
-                  Sign out
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <button
+              onClick={() => signOut()}
+              aria-label="Sign out"
+              className="flex h-9 w-9 items-center justify-center rounded-full text-white/70 hover:bg-white/10 hover:text-white"
+            >
+              <LogOut className="h-4 w-4" />
+            </button>
           ) : (
-
             <Link
               to="/login"
               className="rounded-full px-3 py-1.5 text-sm font-medium text-white/80 hover:bg-white/10 hover:text-white"

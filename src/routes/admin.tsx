@@ -4,11 +4,11 @@ import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 import { toast } from "sonner";
 import { format } from "date-fns";
-import { EyeOff, Eye, Trash2, ShieldCheck, ChevronLeft, MessageSquare, Inbox } from "lucide-react";
+import { EyeOff, Eye, Trash2, ShieldCheck, ChevronLeft, MessageSquare } from "lucide-react";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { Button } from "@/components/ui/button";
-import { listReports, dismissReport, getMyAdminStatus, listSignupRequests, type AdminReport } from "@/lib/admin.functions";
+import { listReports, dismissReport, getMyAdminStatus, type AdminReport } from "@/lib/admin.functions";
 import { setContentHidden } from "@/lib/moderation.functions";
 import { listBetaFeedback, deleteBetaFeedback } from "@/lib/feedback.functions";
 
@@ -56,12 +56,7 @@ function ContentPreview({ r }: { r: AdminReport }) {
 }
 
 function AdminPage() {
-  const [tab, setTab] = useState<"reports" | "feedback" | "requests">("reports");
-  const tabs = [
-    { key: "reports" as const, label: "Reports", icon: ShieldCheck },
-    { key: "feedback" as const, label: "Beta feedback", icon: MessageSquare },
-    { key: "requests" as const, label: "Requests", icon: Inbox },
-  ];
+  const [tab, setTab] = useState<"reports" | "feedback">("reports");
   return (
     <div className="min-h-screen bg-[#05070f] text-white">
       <SiteHeader />
@@ -81,59 +76,26 @@ function AdminPage() {
 
         <div className="mt-8">
           <div className="flex gap-2 border-b border-white/10">
-            {tabs.map(({ key, label, icon: Icon }) => (
-              <button
-                key={key}
-                onClick={() => setTab(key)}
-                className={`-mb-px border-b-2 px-3 py-2 text-sm ${tab === key ? "border-amber-300 text-amber-200" : "border-transparent text-white/60 hover:text-white"}`}
-              >
-                <Icon className="mr-1.5 inline h-3.5 w-3.5" /> {label}
-              </button>
-            ))}
+            <button
+              onClick={() => setTab("reports")}
+              className={`-mb-px border-b-2 px-3 py-2 text-sm ${tab === "reports" ? "border-amber-300 text-amber-200" : "border-transparent text-white/60 hover:text-white"}`}
+            >
+              <ShieldCheck className="mr-1.5 inline h-3.5 w-3.5" /> Reports
+            </button>
+            <button
+              onClick={() => setTab("feedback")}
+              className={`-mb-px border-b-2 px-3 py-2 text-sm ${tab === "feedback" ? "border-amber-300 text-amber-200" : "border-transparent text-white/60 hover:text-white"}`}
+            >
+              <MessageSquare className="mr-1.5 inline h-3.5 w-3.5" /> Beta feedback
+            </button>
           </div>
-          <div className="mt-6">
-            {tab === "reports" && <ReportsPanel />}
-            {tab === "feedback" && <FeedbackPanel />}
-            {tab === "requests" && <RequestsPanel />}
-          </div>
+          <div className="mt-6">{tab === "reports" ? <ReportsPanel /> : <FeedbackPanel />}</div>
         </div>
       </main>
       <SiteFooter />
     </div>
   );
 }
-
-function RequestsPanel() {
-  const listFn = useServerFn(listSignupRequests);
-  const { data, isLoading } = useQuery({ queryKey: ["admin-requests"], queryFn: () => listFn() });
-  return (
-    <div className="space-y-3">
-      {isLoading && <div className="rounded-2xl bg-white/[0.05] p-6 text-sm text-white/60 ring-1 ring-white/10">Loading requests…</div>}
-      {!isLoading && (!data || data.length === 0) && (
-        <div className="rounded-2xl bg-white/[0.05] p-8 text-center text-sm text-white/60 ring-1 ring-white/10">
-          No early-access or marketplace requests yet.
-        </div>
-      )}
-      {(data ?? []).map((r) => (
-        <article key={`${r.kind}:${r.id}`} className="flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-white/[0.05] p-4 ring-1 ring-white/10">
-          <div className="min-w-0">
-            <div className="flex flex-wrap items-center gap-2">
-              <span className={`rounded-full px-2 py-0.5 text-[10px] uppercase tracking-wider ${r.kind === "beta" ? "bg-amber-200/15 text-amber-200" : "bg-emerald-300/15 text-emerald-200"}`}>
-                {r.kind === "beta" ? "Early access" : "Marketplace"}
-              </span>
-              <span className="truncate text-sm text-white/90">{r.email}</span>
-            </div>
-            <div className="mt-1 text-xs text-white/55">
-              {[r.detail, r.source].filter(Boolean).join(" · ") || "—"}
-            </div>
-          </div>
-          <span className="text-[11px] text-white/45">{format(new Date(r.created_at), "MMM d, yyyy · h:mm a")}</span>
-        </article>
-      ))}
-    </div>
-  );
-}
-
 
 function ReportsPanel() {
   const qc = useQueryClient();

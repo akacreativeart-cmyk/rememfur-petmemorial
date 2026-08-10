@@ -678,14 +678,6 @@ function StepPhoto({
         </button>
       </div>
 
-      {heroPreviewUrl && (
-        <p className="text-center text-xs text-muted-foreground">
-          Your words are saved as you go. Your photo stays on this device until you publish — if you refresh the page, you'll need to choose it again.
-        </p>
-      )}
-
-
-
       <div className="flex items-center gap-3 rounded-2xl border border-dashed border-border/60 bg-muted/30 px-4 py-3 opacity-60">
         <Video className="h-4 w-4 text-muted-foreground" />
         <div className="flex-1">
