@@ -128,15 +128,16 @@ function CommunityPage() {
                   : "This is a quiet, tender room. A photo, a sentence, a small story — anything is welcome."}
               </p>
               <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
-                <Link to={user ? "/create" : "/signup"} search={user ? undefined : ({ redirect: "/create" } as never)} className="btn-gold-sm">
-                  <PlusCircle className="h-4 w-4" /> Create a post
+                <Link to={user ? "/create/post" : "/signup"} search={user ? undefined : ({ redirect: "/create/post" } as never)} className="btn-gold-sm">
+                  <PlusCircle className="h-4 w-4" /> Share a memory
                 </Link>
-                <Link to="/">
+                <Link to="/garden">
                   <Button size="sm" variant="outline" className="rounded-full">
                     <Flame className="mr-2 h-4 w-4" /> Light a paw lamp
                   </Button>
                 </Link>
               </div>
+
             </div>
           )}
           {posts.map((p) => (
