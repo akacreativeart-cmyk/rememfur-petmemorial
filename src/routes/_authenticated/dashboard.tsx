@@ -120,23 +120,27 @@ function Dashboard() {
         </div>
       )}
 
-      <div className="flex flex-wrap items-end justify-between gap-3">
+      <MemoryKeeper />
+
+      <div className="mt-12 flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="font-display text-4xl text-foreground">My memorials</h1>
+          <h2 className="font-display text-3xl text-foreground">My memorials</h2>
           <p className="mt-1 text-sm text-muted-foreground">A private space for the bonds you've honored.</p>
         </div>
         <Link to="/create">
-          <Button className="rounded-full bg-sage-deep text-primary-foreground hover:bg-sage-deep/90">
+          <Button className="btn-gold-sm">
             <Plus className="mr-1.5 h-4 w-4" /> Create memorial
           </Button>
         </Link>
       </div>
 
-      <div className="mt-8">
+      <div className="mt-6">
         {isLoading ? (
           <div className="grid gap-4 md:grid-cols-2">
             {[...Array(2)].map((_, i) => <div key={i} className="h-44 animate-pulse rounded-3xl bg-muted" />)}
           </div>
+        ) : hasNoMemorials ? (
+          <ZeroStateWelcome />
         ) : (
           <div className="grid gap-4 md:grid-cols-2">
             {data!.map((m: any) => {
@@ -157,6 +161,7 @@ function Dashboard() {
           </div>
         )}
       </div>
+
     </div>
   );
 }
