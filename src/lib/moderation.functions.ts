@@ -45,7 +45,7 @@ export const setContentHidden = createServerFn({ method: "POST" })
     }).parse(input),
   )
   .handler(async ({ data, context }) => {
-    const { data: prof } = await context.supabase
+    const { data: prof } = await supabaseAdmin
       .from("profiles")
       .select("is_admin")
       .eq("id", context.userId)
