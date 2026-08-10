@@ -312,6 +312,50 @@ export type Database = {
           },
         ]
       }
+      memories: {
+        Row: {
+          content: string | null
+          created_at: string
+          id: string
+          memory_date: string
+          pet_id: string
+          photo_url: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          content?: string | null
+          created_at?: string
+          id?: string
+          memory_date?: string
+          pet_id: string
+          photo_url?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          content?: string | null
+          created_at?: string
+          id?: string
+          memory_date?: string
+          pet_id?: string
+          photo_url?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "memories_pet_id_fkey"
+            columns: ["pet_id"]
+            isOneToOne: false
+            referencedRelation: "pets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       messages: {
         Row: {
           author_id: string
@@ -459,7 +503,9 @@ export type Database = {
           name: string
           notes: string | null
           owner_id: string
+          passing_date: string | null
           species: string
+          story: string | null
           updated_at: string
         }
         Insert: {
@@ -472,7 +518,9 @@ export type Database = {
           name: string
           notes?: string | null
           owner_id: string
+          passing_date?: string | null
           species?: string
+          story?: string | null
           updated_at?: string
         }
         Update: {
@@ -485,7 +533,9 @@ export type Database = {
           name?: string
           notes?: string | null
           owner_id?: string
+          passing_date?: string | null
           species?: string
+          story?: string | null
           updated_at?: string
         }
         Relationships: []
