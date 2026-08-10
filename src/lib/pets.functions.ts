@@ -44,7 +44,7 @@ export const getMyPet = createServerFn({ method: "GET" })
     const [{ data: pet, error: pErr }, { data: records, error: rErr }] = await Promise.all([
       context.supabase
         .from("pets")
-        .select("id, name, species, breed, birthdate, adoption_date, notes, avatar_url, created_at, updated_at")
+        .select("id, name, species, breed, birthdate, passing_date, adoption_date, notes, story, avatar_url, created_at, updated_at")
         .eq("id", data.pet_id)
         .maybeSingle(),
       context.supabase
