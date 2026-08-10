@@ -10,6 +10,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { getMyPet, addPetRecord, deletePetRecord, deletePet } from "@/lib/pets.functions";
+import { MemoryTimeline } from "@/components/pets/MemoryTimeline";
+import { EditPetDialog } from "@/components/pets/EditPetDialog";
+
 
 export const Route = createFileRoute("/_authenticated/pets/$petId")({
   component: PetDetailPage,
