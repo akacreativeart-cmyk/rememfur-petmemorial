@@ -9,8 +9,12 @@ export const Route = createFileRoute("/adoption")({
   head: () => ({
     meta: [
       { title: "Adoption — Rememfur" },
-      { name: "description", content: "When you're ready, honor their memory by giving another soul a home." },
+      { name: "description", content: "When you're ready, honour your pet's memory by giving another animal a home. Meet adoptable pets and verified partner shelters and rescues near you." },
+      { property: "og:title", content: "Adoption — A new chapter, when you're ready" },
+      { property: "og:description", content: "A new companion never replaces the one you lost. Browse adoptable pets and verified partner rescues, and continue the love your pet taught you to give." },
+      { property: "og:url", content: "https://rememfur.com/adoption" },
     ],
+    links: [{ rel: "canonical", href: "https://rememfur.com/adoption" }],
   }),
 });
 

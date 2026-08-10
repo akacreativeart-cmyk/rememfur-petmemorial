@@ -9,8 +9,12 @@ export const Route = createFileRoute("/resources")({
   head: () => ({
     meta: [
       { title: "Grief resources — Rememfur" },
-      { name: "description", content: "Pet loss helplines, articles, and support communities to help you through grief." },
+      { name: "description", content: "Pet loss helplines, gentle articles and support communities — practical help for the first days after loss and for the grief that lingers long after." },
+      { property: "og:title", content: "Pet loss grief resources — Rememfur" },
+      { property: "og:description", content: "Helplines, counsellors, support groups and gentle reading for pet loss — practical help for the first 72 hours and for the grief that stays much longer." },
+      { property: "og:url", content: "https://rememfur.com/resources" },
     ],
+    links: [{ rel: "canonical", href: "https://rememfur.com/resources" }],
   }),
 });
 
