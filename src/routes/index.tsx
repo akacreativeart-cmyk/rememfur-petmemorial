@@ -1267,7 +1267,9 @@ function WorldToggle({ mode, setMode, reduced }: { mode: WorldMode; setMode: (m:
               style={{
                 color: active
                   ? "#1a1200"
-                  : isLife ? "rgba(58,44,28,0.7)" : "rgba(242,236,221,0.7)",
+                  : key === "life"
+                    ? "#FFFFFF"
+                    : isLife ? "rgba(58,44,28,0.7)" : "rgba(242,236,221,0.7)",
               }}
             >
               <Icon className="h-3.5 w-3.5" strokeWidth={2} />
