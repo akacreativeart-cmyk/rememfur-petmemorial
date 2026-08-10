@@ -94,7 +94,33 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Cormorant+SC:wght@600&family=Jost:wght@200;300;400;500;600&family=Caveat:wght@400;600;700&display=swap",
       },
     ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "Organization",
+              "@id": "https://rememfur.com/#organization",
+              name: "Rememfur",
+              url: "https://rememfur.com",
+              description: "A gentle pet memorial platform for the love that stays.",
+              email: "hello@rememfur.com",
+            },
+            {
+              "@type": "WebSite",
+              "@id": "https://rememfur.com/#website",
+              name: "Rememfur",
+              url: "https://rememfur.com",
+              publisher: { "@id": "https://rememfur.com/#organization" },
+            },
+          ],
+        }),
+      },
+    ],
   }),
+
   shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,

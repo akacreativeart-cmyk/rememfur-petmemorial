@@ -8,9 +8,13 @@ export const Route = createFileRoute("/contact")({
   component: Contact,
   head: () => ({
     meta: [
-      { title: "Contact — RememFur" },
-      { name: "description", content: "Get in touch with RememFur. We're listening." },
+      { title: "Contact — Rememfur" },
+      { name: "description", content: "Reach the Rememfur team by email at hello@rememfur.com for help with a memorial, account questions, partnership ideas or anything you'd like to share." },
+      { property: "og:title", content: "Contact Rememfur" },
+      { property: "og:description", content: "Email hello@rememfur.com for help with a memorial, account questions or partnerships — we read every message and reply as gently as we can." },
+      { property: "og:url", content: "https://rememfur.com/contact" },
     ],
+    links: [{ rel: "canonical", href: "https://rememfur.com/contact" }],
   }),
 });
 

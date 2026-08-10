@@ -9,8 +9,12 @@ export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
       { title: "About Rememfur — Why we built it" },
-      { name: "description", content: "Rememfur is a gentle pet memorial platform built around a 4-step ritual: photo, transform, tribute, paw lamp." },
+      { name: "description", content: "Rememfur is a gentle pet memorial platform built around a four-step ritual: choose a photo, transform it, write a tribute, and light a paw lamp that stays lit." },
+      { property: "og:title", content: "About Rememfur — Grief deserves a beautiful home" },
+      { property: "og:description", content: "Why we built Rememfur: a slow, four-step ritual — photo, portrait, tribute, paw lamp — that gives your love for a lost pet a permanent place to live." },
+      { property: "og:url", content: "https://rememfur.com/about" },
     ],
+    links: [{ rel: "canonical", href: "https://rememfur.com/about" }],
   }),
 });
 

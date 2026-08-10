@@ -14,7 +14,24 @@ export const Route = createFileRoute("/garden")({
   head: () => ({
     meta: [
       { title: "Memorial Garden — Rememfur" },
-      { name: "description", content: "Browse memorials lovingly created for the pets we miss. Light a paw lamp, leave a word." },
+      { name: "description", content: "Browse memorials lovingly created for the pets we miss — dogs, cats and every other companion. Light a paw lamp, leave a word, and remember together." },
+      { property: "og:title", content: "The Memorial Garden — Rememfur" },
+      { property: "og:description", content: "A shared garden of pet memorials. Wander among the dogs, cats and companions others are remembering, light a paw lamp and leave a gentle word." },
+      { property: "og:url", content: "https://rememfur.com/garden" },
+    ],
+    links: [{ rel: "canonical", href: "https://rememfur.com/garden" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          name: "Memorial Garden",
+          description: "A collection of pet memorials created on Rememfur.",
+          url: "https://rememfur.com/garden",
+          isPartOf: { "@type": "WebSite", name: "Rememfur", url: "https://rememfur.com" },
+        }),
+      },
     ],
   }),
 });

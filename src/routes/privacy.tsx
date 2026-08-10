@@ -7,11 +7,16 @@ export const Route = createFileRoute("/privacy")({
   component: Privacy,
   head: () => ({
     meta: [
-      { title: "Privacy — RememFur" },
-      { name: "description", content: "How RememFur handles your data." },
+      { title: "Privacy — Rememfur" },
+      { name: "description", content: "How Rememfur collects, stores and protects your data: what we keep, what we never sell, and how you can delete your memorials and account at any time." },
+      { property: "og:title", content: "Privacy at Rememfur" },
+      { property: "og:description", content: "What Rememfur keeps and what it never sells — how your memorials, photos and account data are stored, protected and deleted whenever you ask." },
+      { property: "og:url", content: "https://rememfur.com/privacy" },
     ],
+    links: [{ rel: "canonical", href: "https://rememfur.com/privacy" }],
   }),
 });
+
 
 function Privacy() {
   return (
