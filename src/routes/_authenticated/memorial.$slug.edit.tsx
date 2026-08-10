@@ -42,7 +42,33 @@ export const Route = createFileRoute("/_authenticated/memorial/$slug/edit")({
   head: ({ loaderData }) => ({
     meta: [{ title: `Edit ${loaderData?.pet_name ?? "memorial"} — Rememfur` }],
   }),
+  errorComponent: () => (
+    <EditFallback
+      title="We couldn't open this memorial for editing"
+      body="Something went wrong on our side. Nothing has been changed — please try again."
+    />
+  ),
+  notFoundComponent: () => (
+    <EditFallback
+      title="We couldn't find that memorial"
+      body="It may have been removed, or it belongs to another account."
+    />
+  ),
 });
+
+function EditFallback({ title, body }: { title: string; body: string }) {
+  return (
+    <div className="mx-auto max-w-md py-16 text-center">
+      <h1 className="font-display text-3xl text-foreground">{title}</h1>
+      <p className="mt-3 text-sm text-muted-foreground">{body}</p>
+      <div className="mt-7 flex flex-wrap justify-center gap-3">
+        <Link to="/dashboard" className="btn-gold-sm">Back to my memorials</Link>
+        <Link to="/garden" className="link-gold">Visit the garden</Link>
+      </div>
+    </div>
+  );
+}
+
 
 function EditMemorialPage() {
   const m = Route.useLoaderData();

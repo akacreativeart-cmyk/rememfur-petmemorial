@@ -36,7 +36,7 @@ export const Route = createFileRoute("/memorial/$slug")({
     return data;
   },
   head: ({ loaderData }) => {
-    if (!loaderData) return { meta: [{ title: "Memorial — Rememfur" }] };
+    if (!loaderData) return { meta: [{ title: "Memorial unavailable — Rememfur" }, { name: "robots", content: "noindex" }] };
     const m = loaderData.memorial;
     const img = m.transformed_image_url ?? m.hero_image_url;
     return {
@@ -50,7 +50,37 @@ export const Route = createFileRoute("/memorial/$slug")({
       ],
     };
   },
+  errorComponent: () => (
+    <MemorialFallback
+      title="We couldn't open this memorial"
+      body="Something went wrong on our side. Their page is safe — please try again in a moment."
+    />
+  ),
+  notFoundComponent: () => (
+    <MemorialFallback
+      title="This memorial isn't here"
+      body="It may have been made private or removed. The Memory Garden is still open to you."
+    />
+  ),
 });
+
+function MemorialFallback({ title, body }: { title: string; body: string }) {
+  return (
+    <div className="min-h-screen bg-background paper-grain">
+      <SiteHeader />
+      <main className="mx-auto flex max-w-md flex-col items-center px-5 py-24 text-center">
+        <h1 className="font-display text-3xl text-foreground">{title}</h1>
+        <p className="mt-3 text-sm text-muted-foreground">{body}</p>
+        <div className="mt-7 flex flex-wrap justify-center gap-3">
+          <Link to="/garden" className="btn-gold-sm">Visit the Memory Garden</Link>
+          <Link to="/" className="link-gold">Back home</Link>
+        </div>
+      </main>
+      <SiteFooter />
+    </div>
+  );
+}
+
 
 function MemorialPage() {
   const data = Route.useLoaderData();

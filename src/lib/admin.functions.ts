@@ -85,6 +85,56 @@ export const dismissReport = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
+export type SignupRequest = {
+  id: string;
+  kind: "beta" | "waitlist";
+  email: string;
+  detail: string | null;
+  source: string | null;
+  created_at: string;
+};
+
+/** Admin only: everyone who asked for early access or a marketplace item. */
+export const listSignupRequests = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }): Promise<SignupRequest[]> => {
+    await assertAdmin(context.userId);
+
+    const [{ data: invites }, { data: waitlist }] = await Promise.all([
+      supabaseAdmin
+        .from("beta_invites")
+        .select("id, email, note, source, created_at")
+        .order("created_at", { ascending: false })
+        .limit(200),
+      supabaseAdmin
+        .from("marketplace_waitlist")
+        .select("id, email, item_name, section, created_at")
+        .order("created_at", { ascending: false })
+        .limit(200),
+    ]);
+
+    const rows: SignupRequest[] = [
+      ...(invites ?? []).map((r) => ({
+        id: r.id,
+        kind: "beta" as const,
+        email: r.email,
+        detail: r.note ?? null,
+        source: r.source ?? null,
+        created_at: r.created_at,
+      })),
+      ...(waitlist ?? []).map((r) => ({
+        id: r.id,
+        kind: "waitlist" as const,
+        email: r.email,
+        detail: r.item_name,
+        source: r.section,
+        created_at: r.created_at,
+      })),
+    ];
+
+    return rows.sort((a, b) => (a.created_at < b.created_at ? 1 : -1));
+  });
+
 /** Lightweight check the client can call to render the admin link. */
 export const getMyAdminStatus = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
@@ -96,3 +146,4 @@ export const getMyAdminStatus = createServerFn({ method: "GET" })
       .maybeSingle();
     return { is_admin: !!data?.is_admin };
   });
+
