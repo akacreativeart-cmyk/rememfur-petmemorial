@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Cropper, { type Area } from "react-easy-crop";
+import { MultiPhotoUpload } from "@/components/site/MultiPhotoUpload";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 
@@ -78,6 +79,7 @@ function CreatePage() {
   const [location, setLocation] = useState("");
 
   // Step 3 — photo
+  const [galleryUrls, setGalleryUrls] = useState<string[]>([]);
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null); // blob url of raw
   const [cropOpen, setCropOpen] = useState(false);
@@ -269,6 +271,7 @@ function CreatePage() {
           breed: breedField,
           approx_age: unsureDates ? (approxAge.trim() || null) : null,
           location: location.trim() || null,
+          gallery_urls: galleryUrls,
         },
       });
       clearDraft();
@@ -328,6 +331,8 @@ function CreatePage() {
               onPickClick={() => fileInputRef.current?.click()}
               onLampOnly={chooseLampOnly}
               onRecrop={() => photoPreview && setCropOpen(true)}
+              galleryUrls={galleryUrls}
+              setGalleryUrls={setGalleryUrls}
               fileInputRef={fileInputRef}
               onFile={onPickFile}
             />
@@ -606,7 +611,7 @@ function StepTime({
 }
 
 function StepPhoto({
-  heroPreviewUrl, lampOnly, onPickClick, onLampOnly, onRecrop, fileInputRef, onFile,
+  heroPreviewUrl, lampOnly, onPickClick, onLampOnly, onRecrop, fileInputRef, onFile, galleryUrls, setGalleryUrls,
 }: {
   heroPreviewUrl: string | null;
   lampOnly: boolean;
@@ -615,6 +620,8 @@ function StepPhoto({
   onRecrop: () => void;
   fileInputRef: React.RefObject<HTMLInputElement | null>;
   onFile: (f: File | null) => void;
+  galleryUrls: string[];
+  setGalleryUrls: (v: string[]) => void;
 }) {
   return (
     <div className="space-y-6">
@@ -676,6 +683,14 @@ function StepPhoto({
             <div className="text-xs text-muted-foreground">No photo — soft glow instead</div>
           </div>
         </button>
+      </div>
+
+      <div className="rounded-2xl border border-border/60 bg-muted/20 p-4">
+        <div className="text-sm font-medium">More photos (optional)</div>
+        <p className="mb-2 text-xs text-muted-foreground">
+          Add a few more and they’ll appear as a slideshow on their page.
+        </p>
+        <MultiPhotoUpload value={galleryUrls} onChange={setGalleryUrls} bucket="pet-photos" max={6} />
       </div>
 
       <div className="flex items-center gap-3 rounded-2xl border border-dashed border-border/60 bg-muted/30 px-4 py-3 opacity-60">

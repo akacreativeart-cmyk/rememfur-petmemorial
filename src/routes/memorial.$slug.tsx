@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { SiteHeader } from "@/components/site/SiteHeader";
+import { ClaimMemorialPanel } from "@/components/site/ClaimMemorialPanel";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { CandleFlame } from "@/components/site/CandleFlame";
 import { PawLamp } from "@/components/site/PawLamp";
@@ -296,6 +297,8 @@ function MemorialPage() {
 
 
 
+
+            <ClaimMemorialPanel memorialId={m.id} petName={m.pet_name} hasOwner={!!m.owner_id} />
 
             {photos.length > 0 && (
               <section className="rounded-3xl border border-border/60 bg-card p-7 soft-shadow">

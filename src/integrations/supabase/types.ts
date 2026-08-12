@@ -197,6 +197,50 @@ export type Database = {
         }
         Relationships: []
       }
+      memorial_claims: {
+        Row: {
+          claimant_id: string
+          created_at: string
+          id: string
+          memorial_id: string
+          message: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          claimant_id: string
+          created_at?: string
+          id?: string
+          memorial_id: string
+          message?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          claimant_id?: string
+          created_at?: string
+          id?: string
+          memorial_id?: string
+          message?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "memorial_claims_memorial_id_fkey"
+            columns: ["memorial_id"]
+            isOneToOne: false
+            referencedRelation: "memorials"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       memorial_photos: {
         Row: {
           caption: string | null
@@ -352,6 +396,38 @@ export type Database = {
             columns: ["pet_id"]
             isOneToOne: false
             referencedRelation: "pets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      memory_photos: {
+        Row: {
+          created_at: string
+          id: string
+          memory_id: string
+          position: number
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          memory_id: string
+          position?: number
+          url: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          memory_id?: string
+          position?: number
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "memory_photos_memory_id_fkey"
+            columns: ["memory_id"]
+            isOneToOne: false
+            referencedRelation: "memories"
             referencedColumns: ["id"]
           },
         ]
@@ -575,6 +651,38 @@ export type Database = {
           },
         ]
       }
+      post_images: {
+        Row: {
+          created_at: string
+          id: string
+          position: number
+          post_id: string
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          position?: number
+          post_id: string
+          url: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          position?: number
+          post_id?: string
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "post_images_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       post_likes: {
         Row: {
           created_at: string
@@ -730,6 +838,10 @@ export type Database = {
         Returns: undefined
       }
       is_admin: { Args: { _user_id: string }; Returns: boolean }
+      review_memorial_claim: {
+        Args: { _approve: boolean; _claim_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never

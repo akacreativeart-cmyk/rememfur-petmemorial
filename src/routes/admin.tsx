@@ -4,13 +4,14 @@ import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 import { toast } from "sonner";
 import { format } from "date-fns";
-import { EyeOff, Eye, Trash2, ShieldCheck, ChevronLeft, MessageSquare } from "lucide-react";
+import { EyeOff, Eye, Trash2, ShieldCheck, ChevronLeft, MessageSquare, HandHeart } from "lucide-react";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { Button } from "@/components/ui/button";
 import { listReports, dismissReport, getMyAdminStatus, type AdminReport } from "@/lib/admin.functions";
 import { setContentHidden } from "@/lib/moderation.functions";
 import { listBetaFeedback, deleteBetaFeedback } from "@/lib/feedback.functions";
+import { listPendingClaims, reviewMemorialClaim } from "@/lib/claims.functions";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "Admin — Rememfur" }] }),
@@ -56,7 +57,7 @@ function ContentPreview({ r }: { r: AdminReport }) {
 }
 
 function AdminPage() {
-  const [tab, setTab] = useState<"reports" | "feedback">("reports");
+  const [tab, setTab] = useState<"reports" | "feedback" | "claims">("reports");
   return (
     <div className="min-h-screen bg-[#05070f] text-white">
       <SiteHeader />
@@ -88,11 +89,85 @@ function AdminPage() {
             >
               <MessageSquare className="mr-1.5 inline h-3.5 w-3.5" /> Beta feedback
             </button>
+            <button
+              onClick={() => setTab("claims")}
+              className={`-mb-px border-b-2 px-3 py-2 text-sm ${tab === "claims" ? "border-amber-300 text-amber-200" : "border-transparent text-white/60 hover:text-white"}`}
+            >
+              <HandHeart className="mr-1.5 inline h-3.5 w-3.5" /> Claims
+            </button>
           </div>
-          <div className="mt-6">{tab === "reports" ? <ReportsPanel /> : <FeedbackPanel />}</div>
+          <div className="mt-6">
+            {tab === "reports" && <ReportsPanel />}
+            {tab === "feedback" && <FeedbackPanel />}
+            {tab === "claims" && <ClaimsPanel />}
+          </div>
         </div>
       </main>
       <SiteFooter />
+    </div>
+  );
+}
+
+function ClaimsPanel() {
+  const qc = useQueryClient();
+  const listFn = useServerFn(listPendingClaims);
+  const reviewFn = useServerFn(reviewMemorialClaim);
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["admin-claims"],
+    queryFn: () => listFn(),
+  });
+
+  const review = useMutation({
+    mutationFn: (v: { claim_id: string; approve: boolean }) => reviewFn({ data: v }),
+    onSuccess: (_r, v) => {
+      toast.success(v.approve ? "Claim approved — they're now the keeper." : "Claim rejected.");
+      qc.invalidateQueries({ queryKey: ["admin-claims"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  if (isLoading) return <p className="text-sm text-white/60">Loading…</p>;
+  const claims = data ?? [];
+  if (!claims.length) return <p className="text-sm text-white/60">No claims waiting.</p>;
+
+  return (
+    <div className="space-y-3">
+      {claims.map((c) => (
+        <div key={c.id} className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+          <div className="flex flex-wrap items-center gap-2 text-sm">
+            <span className="font-medium text-amber-200">{c.claimant_name}</span>
+            <span className="text-white/50">wants to keep</span>
+            {c.memorial_slug ? (
+              <Link to="/memorial/$slug" params={{ slug: c.memorial_slug }} className="underline decoration-white/30 hover:text-amber-200">
+                {c.memorial_pet_name}
+              </Link>
+            ) : (
+              <span>{c.memorial_pet_name ?? "a memorial"}</span>
+            )}
+          </div>
+          {c.message && <p className="mt-2 whitespace-pre-wrap text-sm text-white/75">{c.message}</p>}
+          {c.memorial_has_owner && (
+            <p className="mt-2 text-xs text-amber-300/80">This memorial already has a keeper.</p>
+          )}
+          <div className="mt-3 flex gap-2">
+            <button
+              className="btn-gold-sm"
+              disabled={review.isPending}
+              onClick={() => review.mutate({ claim_id: c.id, approve: true })}
+            >
+              Approve
+            </button>
+            <button
+              className="rounded-full border border-white/20 px-4 py-1.5 text-xs text-white/70 hover:text-white"
+              disabled={review.isPending}
+              onClick={() => review.mutate({ claim_id: c.id, approve: false })}
+            >
+              Reject
+            </button>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }

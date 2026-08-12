@@ -5,37 +5,21 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Upload, ImagePlus, Sparkles } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { ImagePlus, Sparkles } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { createPost } from "@/lib/feed.functions";
 import { listMyMemorials } from "@/lib/memorials.functions";
 import { assistCaption } from "@/lib/ai-assist.functions";
 import { toast } from "sonner";
-
-type FilterKey =
-  | "none" | "warm" | "mono" | "sepia" | "fade" | "vintage" | "cool" | "glow";
-
-const FILTERS: { key: FilterKey; label: string }[] = [
-  { key: "none", label: "Original" },
-  { key: "warm", label: "Warm" },
-  { key: "vintage", label: "Vintage" },
-  { key: "sepia", label: "Sepia" },
-  { key: "fade", label: "Fade" },
-  { key: "mono", label: "Mono" },
-  { key: "cool", label: "Cool" },
-  { key: "glow", label: "Glow" },
-];
+import { MultiPhotoUpload } from "@/components/site/MultiPhotoUpload";
 
 export function ComposePost() {
   const { user } = useAuth();
   const qc = useQueryClient();
   const [open, setOpen] = useState(false);
   const [caption, setCaption] = useState("");
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [images, setImages] = useState<string[]>([]);
   const [memorialId, setMemorialId] = useState<string>("");
-  const [uploading, setUploading] = useState(false);
-  const [filter, setFilter] = useState<FilterKey>("none");
 
   const createFn = useServerFn(createPost);
   const myMemorialsFn = useServerFn(listMyMemorials);
@@ -46,18 +30,6 @@ export function ComposePost() {
     queryFn: () => myMemorialsFn(),
     enabled: !!user && open,
   });
-
-  const handleFile = async (file: File) => {
-    if (!user) return;
-    setUploading(true);
-    const ext = file.name.split(".").pop() || "jpg";
-    const path = `${user.id}/post-${Date.now()}.${ext}`;
-    const { error } = await supabase.storage.from("gallery").upload(path, file, { contentType: file.type, upsert: false });
-    setUploading(false);
-    if (error) return toast.error(error.message);
-    const { data } = supabase.storage.from("gallery").getPublicUrl(path);
-    setImageUrl(data.publicUrl);
-  };
 
   const assist = useMutation({
     mutationFn: () => assistFn({ data: { draft: caption, tone: "tender" } }),
@@ -72,21 +44,21 @@ export function ComposePost() {
     mutationFn: () =>
       createFn({
         data: {
-          image_url: imageUrl,
+          image_urls: images,
           caption: caption.trim() || null,
           memorial_id: memorialId || null,
         },
       }),
     onSuccess: () => {
       toast.success("Posted.");
-      setCaption(""); setImageUrl(null); setMemorialId(""); setFilter("none"); setOpen(false);
+      setCaption(""); setImages([]); setMemorialId(""); setOpen(false);
       qc.invalidateQueries({ queryKey: ["feed"] });
     },
     onError: (e: Error) => toast.error(e.message),
   });
 
   if (!user) return null;
-  const canSubmit = (!!caption.trim() || !!imageUrl) && !submit.isPending;
+  const canSubmit = (!!caption.trim() || images.length > 0) && !submit.isPending;
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -100,37 +72,7 @@ export function ComposePost() {
           <DialogTitle className="font-display text-2xl">Share a memory</DialogTitle>
         </DialogHeader>
         <div className="space-y-4">
-          {imageUrl ? (
-            <>
-              <div className="relative overflow-hidden rounded-xl bg-muted">
-                <img src={imageUrl} alt="" className={`aspect-square w-full object-cover filt-${filter}`} />
-                <Button variant="secondary" size="sm" className="absolute right-2 top-2" onClick={() => { setImageUrl(null); setFilter("none"); }}>
-                  Remove
-                </Button>
-              </div>
-              {/* Instagram-style filter strip */}
-              <div className="-mx-1 flex gap-2 overflow-x-auto pb-1">
-                {FILTERS.map((f) => (
-                  <button
-                    key={f.key}
-                    onClick={() => setFilter(f.key)}
-                    className={`shrink-0 rounded-xl border p-1.5 text-center transition ${
-                      filter === f.key ? "border-sage-deep ring-2 ring-sage-deep/30" : "border-border/60"
-                    }`}
-                  >
-                    <img src={imageUrl} alt="" className={`h-14 w-14 rounded-md object-cover filt-${f.key}`} />
-                    <div className="mt-1 text-[10px] text-muted-foreground">{f.label}</div>
-                  </button>
-                ))}
-              </div>
-            </>
-          ) : (
-            <label className="flex aspect-video w-full cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-border bg-muted/30 text-muted-foreground hover:bg-muted/50">
-              <Upload className="h-6 w-6" />
-              <span className="text-sm">{uploading ? "Uploading…" : "Add a photo (optional)"}</span>
-              <input type="file" accept="image/*" className="hidden" onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])} />
-            </label>
-          )}
+          <MultiPhotoUpload value={images} onChange={setImages} bucket="gallery" max={6} label="Add photos" />
 
           <div>
             <div className="flex items-center justify-between">

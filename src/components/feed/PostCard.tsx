@@ -20,6 +20,7 @@ import { lightCandleOnPost, listCandlesForPost } from "@/lib/post-candle.functio
 import { lightCandleGuestOnPost } from "@/lib/candle-guest.functions";
 import { CandleDialog } from "@/components/site/CandleDialog";
 import { CandleCountdown } from "@/components/site/CandleCountdown";
+import { PhotoCarousel } from "@/components/site/PhotoCarousel";
 import { ReportButton } from "@/components/site/ReportButton";
 import { toast } from "sonner";
 import { formatDistanceToNow } from "date-fns";
@@ -173,10 +174,11 @@ export function PostCard({ post }: { post: FeedPost }) {
             <p className="mt-1 whitespace-pre-wrap text-[15px] leading-relaxed text-foreground">{post.caption}</p>
           )}
 
-          {post.image_url && (
-            <div className="mt-3 overflow-hidden rounded-2xl border border-border/60 bg-muted">
-              <img src={post.image_url} alt="" className="max-h-[420px] w-full object-cover" loading="lazy" />
-            </div>
+          {(post.images?.length ? post.images : post.image_url ? [post.image_url] : []).length > 0 && (
+            <PhotoCarousel
+              className="mt-3"
+              images={post.images?.length ? post.images : [post.image_url as string]}
+            />
           )}
 
       <div className="space-y-3 pt-3">

@@ -27,6 +27,7 @@ export type FeedPost = {
   author_name: string;
   author_avatar: string | null;
   image_url: string | null;
+  images: string[];
   caption: string | null;
   memorial_id: string | null;
   memorial_slug: string | null;
@@ -65,18 +66,23 @@ async function hydratePosts(rows: any[], viewerId: string | null): Promise<FeedP
   const ids = rows.map((r) => r.id);
   const authorIds = Array.from(new Set(rows.map((r) => r.author_id)));
 
-  const [profsRes, likesRes, commentsRes, myLikesRes] = await Promise.all([
+  const [profsRes, likesRes, commentsRes, myLikesRes, imagesRes] = await Promise.all([
     supabaseAdmin.from("profiles").select("id, display_name, avatar_url").in("id", authorIds),
     supabaseAdmin.from("post_likes").select("post_id").in("post_id", ids),
     supabaseAdmin.from("post_comments").select("post_id").in("post_id", ids),
     viewerId
       ? supabaseAdmin.from("post_likes").select("post_id").eq("user_id", viewerId).in("post_id", ids)
       : Promise.resolve({ data: [] as any[] }),
+    supabaseAdmin.from("post_images").select("post_id, url, position").in("post_id", ids).order("position"),
   ]);
   const profs = profsRes.data ?? [];
   const likes = likesRes.data ?? [];
   const comments = commentsRes.data ?? [];
   const myLikes = (myLikesRes as any).data ?? [];
+  const imagesByPost: Record<string, string[]> = {};
+  ((imagesRes as any).data ?? []).forEach((r: any) => {
+    (imagesByPost[r.post_id] ??= []).push(r.url);
+  });
 
   const profMap = new Map(profs.map((p: any) => [p.id, p]));
   const memMap = visibleMemMap;
@@ -95,6 +101,7 @@ async function hydratePosts(rows: any[], viewerId: string | null): Promise<FeedP
       author_name: p?.display_name ?? "A friend",
       author_avatar: p?.avatar_url ?? null,
       image_url: r.image_url,
+      images: imagesByPost[r.id] ?? (r.image_url ? [r.image_url] : []),
       caption: r.caption,
       memorial_id: r.memorial_id,
       memorial_slug: m?.slug ?? null,
@@ -170,10 +177,11 @@ export const getUserProfile = createServerFn({ method: "GET" })
       .eq("id", data.userId)
       .maybeSingle();
     if (!profile) return null;
-    const [{ count: followers }, { count: following }, { count: posts }, viewerFollow] = await Promise.all([
+    const [{ count: followers }, { count: following }, { count: posts }, { count: lamps }, viewerFollow] = await Promise.all([
       supabaseAdmin.from("follows").select("*", { count: "exact", head: true }).eq("following_id", data.userId),
       supabaseAdmin.from("follows").select("*", { count: "exact", head: true }).eq("follower_id", data.userId),
       supabaseAdmin.from("posts").select("*", { count: "exact", head: true }).eq("author_id", data.userId),
+      supabaseAdmin.from("candles").select("*", { count: "exact", head: true }).eq("lit_by", data.userId),
       viewerId
         ? supabaseAdmin.from("follows").select("follower_id").eq("follower_id", viewerId).eq("following_id", data.userId).maybeSingle()
         : Promise.resolve({ data: null }),
@@ -183,6 +191,7 @@ export const getUserProfile = createServerFn({ method: "GET" })
       followers: followers ?? 0,
       following: following ?? 0,
       post_count: posts ?? 0,
+      lamp_count: lamps ?? 0,
       followed_by_me: !!(viewerFollow as any)?.data,
     };
   });
@@ -192,9 +201,14 @@ export const createPost = createServerFn({ method: "POST" })
   .inputValidator((input) =>
     z.object({
       image_url: z.string().url().nullable().optional(),
+      image_urls: z.array(z.string().url()).max(6).optional(),
       caption: z.string().max(2000).nullable().optional(),
       memorial_id: z.string().uuid().nullable().optional(),
-    }).refine((d) => !!d.image_url || !!d.caption, { message: "Image or caption required" }).parse(input),
+    })
+      .refine((d) => !!d.image_url || !!d.caption || !!d.image_urls?.length, {
+        message: "Image or caption required",
+      })
+      .parse(input),
   )
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
@@ -209,12 +223,22 @@ export const createPost = createServerFn({ method: "POST" })
         throw new Error("Memorial not found or not accessible");
       }
     }
+    const { image_urls, ...rest } = data;
+    const urls = (image_urls ?? []).slice(0, 6);
+    const cover = rest.image_url ?? urls[0] ?? null;
     const { data: row, error } = await supabase
       .from("posts")
-      .insert({ ...data, author_id: userId })
+      .insert({ ...rest, image_url: cover, author_id: userId })
       .select("id")
       .single();
     if (error) throw new Error(error.message);
+    const gallery = urls.length ? urls : cover ? [cover] : [];
+    if (gallery.length) {
+      const { error: imgErr } = await supabase
+        .from("post_images")
+        .insert(gallery.map((url, position) => ({ post_id: row!.id, url, position })));
+      if (imgErr) throw new Error(imgErr.message);
+    }
     return row!;
   });
 
