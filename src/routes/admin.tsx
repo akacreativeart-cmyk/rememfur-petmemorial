@@ -4,13 +4,14 @@ import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 import { toast } from "sonner";
 import { format } from "date-fns";
-import { EyeOff, Eye, Trash2, ShieldCheck, ChevronLeft, MessageSquare } from "lucide-react";
+import { EyeOff, Eye, Trash2, ShieldCheck, ChevronLeft, MessageSquare, HandHeart } from "lucide-react";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { Button } from "@/components/ui/button";
 import { listReports, dismissReport, getMyAdminStatus, type AdminReport } from "@/lib/admin.functions";
 import { setContentHidden } from "@/lib/moderation.functions";
 import { listBetaFeedback, deleteBetaFeedback } from "@/lib/feedback.functions";
+import { listPendingClaims, reviewMemorialClaim } from "@/lib/claims.functions";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "Admin — Rememfur" }] }),
