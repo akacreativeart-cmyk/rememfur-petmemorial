@@ -3,15 +3,15 @@ import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
-import { ImagePlus, Sparkles, X } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { createPost } from "@/lib/feed.functions";
 import { listMyMemorials } from "@/lib/memorials.functions";
 import { assistCaption } from "@/lib/ai-assist.functions";
+import { MultiPhotoUpload } from "@/components/site/MultiPhotoUpload";
 
 export const Route = createFileRoute("/create/post")({
   component: CreatePostPage,
@@ -28,9 +28,8 @@ function CreatePostPage() {
   const navigate = useNavigate();
   const qc = useQueryClient();
   const [caption, setCaption] = useState("");
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [images, setImages] = useState<string[]>([]);
   const [memorialId, setMemorialId] = useState<string>("");
-  const [uploading, setUploading] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
 
   const createFn = useServerFn(createPost);
@@ -42,18 +41,6 @@ function CreatePostPage() {
     queryFn: () => myMemorialsFn(),
     enabled: !!user,
   });
-
-  const handleFile = async (file: File) => {
-    if (!user) return;
-    setUploading(true);
-    const ext = file.name.split(".").pop() || "jpg";
-    const path = `${user.id}/post-${Date.now()}.${ext}`;
-    const { error } = await supabase.storage.from("gallery").upload(path, file, { contentType: file.type });
-    setUploading(false);
-    if (error) return toast.error(error.message);
-    const { data } = supabase.storage.from("gallery").getPublicUrl(path);
-    setImageUrl(data.publicUrl);
-  };
 
   const assist = useMutation({
     mutationFn: () => assistFn({ data: { draft: caption, tone: "tender" } }),
@@ -68,7 +55,7 @@ function CreatePostPage() {
     mutationFn: () =>
       createFn({
         data: {
-          image_url: imageUrl,
+          image_urls: images,
           caption: caption.trim() || null,
           memorial_id: memorialId || null,
         },
@@ -94,7 +81,7 @@ function CreatePostPage() {
     );
   }
 
-  const canSubmit = (!!caption.trim() || !!imageUrl) && !submit.isPending;
+  const canSubmit = (!!caption.trim() || images.length > 0) && !submit.isPending;
 
   return (
     <div className="mx-auto max-w-2xl px-5 py-10">
@@ -113,26 +100,10 @@ function CreatePostPage() {
           autoFocus
         />
 
-        {imageUrl && (
-          <div className="relative overflow-hidden rounded-2xl bg-muted">
-            <img src={imageUrl} alt="" className="max-h-[420px] w-full object-cover" />
-            <button
-              onClick={() => setImageUrl(null)}
-              className="absolute right-2 top-2 rounded-full bg-black/60 p-1.5 text-white hover:bg-black/80"
-              aria-label="Remove image"
-            >
-              <X className="h-4 w-4" />
-            </button>
-          </div>
-        )}
+        <MultiPhotoUpload value={images} onChange={setImages} bucket="gallery" max={6} label="Add photos" />
 
         <div className="flex items-center justify-between border-t border-border/40 pt-4">
           <div className="flex items-center gap-2">
-            <label className="flex cursor-pointer items-center gap-1.5 rounded-full px-3 py-1.5 text-sm text-sage-deep hover:bg-sage/10">
-              <ImagePlus className="h-4 w-4" />
-              {uploading ? "Uploading…" : "Photo"}
-              <input type="file" accept="image/*" className="hidden" onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])} />
-            </label>
             <Button
               type="button"
               size="sm"

@@ -23,6 +23,8 @@ const createSchema = z.object({
   pronouns: OPTIONAL_STR,
   approx_age: OPTIONAL_STR,
   location: OPTIONAL_STR,
+  // Extra gallery photos captured during the create flow.
+  gallery_urls: z.array(z.string().url()).max(6).optional(),
 });
 
 export const createMemorial = createServerFn({ method: "POST" })
@@ -30,22 +32,26 @@ export const createMemorial = createServerFn({ method: "POST" })
   .inputValidator((input) => createSchema.parse(input))
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
-    const slug = withRandomSuffix(slugify(data.pet_name));
+    const { gallery_urls, ...fields } = data;
+    const slug = withRandomSuffix(slugify(fields.pet_name));
     const { data: row, error } = await supabase
       .from("memorials")
-      .insert({ ...data, owner_id: userId, slug })
+      .insert({ ...fields, owner_id: userId, slug })
       .select("id, slug")
       .single();
     if (error) throw new Error(error.message);
 
     // Seed the gallery with any uploaded photos so `memorial_photos` reflects reality.
     const photoRows: Array<{ memorial_id: string; image_url: string; caption?: string | null }> = [];
-    if (data.hero_image_url) {
-      photoRows.push({ memorial_id: row!.id, image_url: data.hero_image_url, caption: "Original photo" });
+    if (fields.hero_image_url) {
+      photoRows.push({ memorial_id: row!.id, image_url: fields.hero_image_url, caption: "Original photo" });
     }
-    if (data.transformed_image_url && data.transformed_image_url !== data.hero_image_url) {
-      photoRows.push({ memorial_id: row!.id, image_url: data.transformed_image_url, caption: "Painted portrait" });
+    if (fields.transformed_image_url && fields.transformed_image_url !== fields.hero_image_url) {
+      photoRows.push({ memorial_id: row!.id, image_url: fields.transformed_image_url, caption: "Painted portrait" });
     }
+    (gallery_urls ?? []).forEach((url) => {
+      if (url !== fields.hero_image_url) photoRows.push({ memorial_id: row!.id, image_url: url, caption: null });
+    });
     if (photoRows.length) {
       // best-effort — never fail the whole create because of a gallery hiccup
       await supabase.from("memorial_photos").insert(photoRows);

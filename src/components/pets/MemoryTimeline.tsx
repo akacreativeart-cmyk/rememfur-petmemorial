@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { PlusCircle, Pencil, Trash2, ImagePlus, BookHeart } from "lucide-react";
+import { PlusCircle, Pencil, Trash2, BookHeart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,7 +9,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { listMemories, createMemory, updateMemory, deleteMemory } from "@/lib/memories.functions";
-import { uploadPetPhoto } from "@/lib/upload-photo";
+import { MultiPhotoUpload } from "@/components/site/MultiPhotoUpload";
+import { PhotoCarousel } from "@/components/site/PhotoCarousel";
 
 type Memory = {
   id: string;
@@ -17,6 +18,7 @@ type Memory = {
   content: string | null;
   memory_date: string;
   photo_url: string | null;
+  photos?: string[];
 };
 
 const today = () => new Date().toISOString().slice(0, 10);
@@ -33,8 +35,7 @@ export function MemoryTimeline({ petId, petName }: { petId: string; petName: str
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [date, setDate] = useState(today());
-  const [photo, setPhoto] = useState<string | null>(null);
-  const [uploading, setUploading] = useState(false);
+  const [photos, setPhotos] = useState<string[]>([]);
 
   const q = useQuery({ queryKey: ["memories", petId], queryFn: () => listFn({ data: { pet_id: petId } }) });
 
@@ -45,7 +46,7 @@ export function MemoryTimeline({ petId, petName }: { petId: string; petName: str
 
   const openNew = () => {
     setEditing(null);
-    setTitle(""); setContent(""); setDate(today()); setPhoto(null);
+    setTitle(""); setContent(""); setDate(today()); setPhotos([]);
     setOpen(true);
   };
 
@@ -54,7 +55,7 @@ export function MemoryTimeline({ petId, petName }: { petId: string; petName: str
     setTitle(m.title);
     setContent(m.content ?? "");
     setDate(m.memory_date);
-    setPhoto(m.photo_url);
+    setPhotos(m.photos?.length ? m.photos : m.photo_url ? [m.photo_url] : []);
     setOpen(true);
   };
 
@@ -64,7 +65,8 @@ export function MemoryTimeline({ petId, petName }: { petId: string; petName: str
         title: title.trim(),
         content: content.trim() || null,
         memory_date: date,
-        photo_url: photo,
+        photo_url: photos[0] ?? null,
+        photo_urls: photos,
       };
       if (editing) return updateFn({ data: { id: editing.id, ...payload } });
       return createFn({ data: { pet_id: petId, ...payload } });
@@ -85,18 +87,6 @@ export function MemoryTimeline({ petId, petName }: { petId: string; petName: str
     },
     onError: (e: Error) => toast.error(e.message),
   });
-
-  const pickPhoto = async (file?: File | null) => {
-    if (!file) return;
-    setUploading(true);
-    try {
-      setPhoto(await uploadPetPhoto(file));
-    } catch (e) {
-      toast.error((e as Error).message);
-    } finally {
-      setUploading(false);
-    }
-  };
 
   const memories = (q.data ?? []) as Memory[];
 
@@ -125,8 +115,13 @@ export function MemoryTimeline({ petId, petName }: { petId: string; petName: str
         {memories.map((m) => (
           <article key={m.id} className="rounded-2xl border border-border/60 bg-card p-4 soft-shadow">
             <div className="flex items-start gap-3">
-              {m.photo_url && (
-                <img src={m.photo_url} alt="" className="h-20 w-20 shrink-0 rounded-xl object-cover" />
+              {(m.photos?.length ? m.photos : m.photo_url ? [m.photo_url] : []).length > 0 && (
+                <div className="w-28 shrink-0 sm:w-36">
+                  <PhotoCarousel
+                    images={m.photos?.length ? m.photos : [m.photo_url as string]}
+                    imgClassName="aspect-square w-full object-cover"
+                  />
+                </div>
               )}
               <div className="min-w-0 flex-1">
                 <p className="text-[11px] uppercase tracking-widest text-muted-foreground">
@@ -172,15 +167,10 @@ export function MemoryTimeline({ petId, petName }: { petId: string; petName: str
               <Textarea rows={5} value={content} onChange={(e) => setContent(e.target.value)} placeholder="Write it as you remember it…" />
             </div>
             <div>
-              <Label>Photo</Label>
-              <div className="mt-1 flex items-center gap-3">
-                <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl bg-muted">
-                  {photo ? <img src={photo} alt="" className="h-full w-full object-cover" /> : <ImagePlus className="h-5 w-5 text-muted-foreground" />}
-                </div>
-                <Input type="file" accept="image/*" onChange={(e) => pickPhoto(e.target.files?.[0])} disabled={uploading} />
-              </div>
+              <Label>Photos</Label>
+              <MultiPhotoUpload className="mt-1" value={photos} onChange={setPhotos} bucket="pet-photos" max={6} />
             </div>
-            <Button className="btn-gold w-full" disabled={!title.trim() || save.isPending || uploading} onClick={() => save.mutate()}>
+            <Button className="btn-gold w-full" disabled={!title.trim() || save.isPending} onClick={() => save.mutate()}>
               {save.isPending ? "Saving…" : editing ? "Save changes" : "Save memory"}
             </Button>
           </div>

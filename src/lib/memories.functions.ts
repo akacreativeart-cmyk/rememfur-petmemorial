@@ -7,6 +7,7 @@ const memoryFields = {
   content: z.string().max(5000).nullable().optional(),
   memory_date: z.string(),
   photo_url: z.string().url().nullable().optional(),
+  photo_urls: z.array(z.string().url()).max(6).optional(),
 };
 
 const SELECT = "id, pet_id, title, content, memory_date, photo_url, created_at";
@@ -22,7 +23,19 @@ export const listMemories = createServerFn({ method: "GET" })
       .order("memory_date", { ascending: false })
       .order("created_at", { ascending: false });
     if (error) throw new Error(error.message);
-    return rows ?? [];
+    const list = rows ?? [];
+    if (!list.length) return [];
+    const { data: photos } = await context.supabase
+      .from("memory_photos")
+      .select("memory_id, url, position")
+      .in("memory_id", list.map((m) => m.id))
+      .order("position");
+    const byMemory: Record<string, string[]> = {};
+    (photos ?? []).forEach((p) => { (byMemory[p.memory_id] ??= []).push(p.url); });
+    return list.map((m) => ({
+      ...m,
+      photos: byMemory[m.id] ?? (m.photo_url ? [m.photo_url] : []),
+    }));
   });
 
 /** Pets + memory counts + a few recent memories, for the Memory Keeper dashboard. */
@@ -58,12 +71,20 @@ export const createMemory = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((i) => z.object({ pet_id: z.string().uuid(), ...memoryFields }).parse(i))
   .handler(async ({ data, context }) => {
+    const { photo_urls, ...rest } = data;
+    const urls = (photo_urls ?? []).slice(0, 6);
     const { data: row, error } = await context.supabase
       .from("memories")
-      .insert({ ...data, user_id: context.userId })
+      .insert({ ...rest, photo_url: rest.photo_url ?? urls[0] ?? null, user_id: context.userId })
       .select("id")
       .single();
     if (error) throw new Error(error.message);
+    if (urls.length) {
+      const { error: pErr } = await context.supabase
+        .from("memory_photos")
+        .insert(urls.map((url, position) => ({ memory_id: row!.id, url, position })));
+      if (pErr) throw new Error(pErr.message);
+    }
     return row!;
   });
 
@@ -71,9 +92,20 @@ export const updateMemory = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((i) => z.object({ id: z.string().uuid(), ...memoryFields }).parse(i))
   .handler(async ({ data, context }) => {
-    const { id, ...patch } = data;
-    const { error } = await context.supabase.from("memories").update(patch).eq("id", id);
+    const { id, photo_urls, ...patch } = data;
+    const urls = (photo_urls ?? []).slice(0, 6);
+    const { error } = await context.supabase
+      .from("memories")
+      .update({ ...patch, photo_url: patch.photo_url ?? urls[0] ?? null })
+      .eq("id", id);
     if (error) throw new Error(error.message);
+    await context.supabase.from("memory_photos").delete().eq("memory_id", id);
+    if (urls.length) {
+      const { error: pErr } = await context.supabase
+        .from("memory_photos")
+        .insert(urls.map((url, position) => ({ memory_id: id, url, position })));
+      if (pErr) throw new Error(pErr.message);
+    }
     return { ok: true };
   });
 

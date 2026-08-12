@@ -1149,3 +1149,26 @@ html, body { overflow-x: hidden; }
 @media (prefers-reduced-motion: reduce) {
   .candle-flame, .candle-halo { animation: none; }
 }
+
+/* ---- Realistic candle (PawLamp) ---- */
+@keyframes candle-flame-sway {
+  0%   { transform: rotate(-1.6deg) scale(1, 1);        }
+  17%  { transform: rotate(1.1deg)  scale(0.985, 1.03); }
+  31%  { transform: rotate(-0.6deg) scale(1.02, 0.97);  }
+  48%  { transform: rotate(2deg)    scale(0.97, 1.05);  }
+  63%  { transform: rotate(-1.2deg) scale(1.01, 0.98);  }
+  81%  { transform: rotate(0.7deg)  scale(0.99, 1.02);  }
+  100% { transform: rotate(-1.6deg) scale(1, 1);        }
+}
+@keyframes candle-glow-pulse {
+  0%   { opacity: 0.85; transform: scale(1);    }
+  23%  { opacity: 1;    transform: scale(1.07); }
+  44%  { opacity: 0.78; transform: scale(0.96); }
+  67%  { opacity: 0.98; transform: scale(1.05); }
+  100% { opacity: 0.85; transform: scale(1);    }
+}
+.candle-flame-sway { animation: candle-flame-sway 2.3s ease-in-out infinite; }
+.candle-glow-pulse { animation: candle-glow-pulse 3.1s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+@media (prefers-reduced-motion: reduce) {
+  .candle-anim { animation: none !important; }
+}
