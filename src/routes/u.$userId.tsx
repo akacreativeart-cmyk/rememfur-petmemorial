@@ -1,4 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { SiteHeader } from "@/components/site/SiteHeader";
@@ -6,9 +7,12 @@ import { SiteFooter } from "@/components/site/SiteFooter";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { PostCard } from "@/components/feed/PostCard";
+import { PawLamp } from "@/components/site/PawLamp";
 import { getUserProfile, listUserPosts, toggleFollow } from "@/lib/feed.functions";
+import { listUserActivity, listUserCandles, listUserMemorials } from "@/lib/profile-activity.functions";
 import { useAuth } from "@/hooks/use-auth";
 import { toast } from "sonner";
+
 
 export const Route = createFileRoute("/u/$userId")({
   component: UserProfilePage,
