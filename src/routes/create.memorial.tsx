@@ -611,7 +611,7 @@ function StepTime({
 }
 
 function StepPhoto({
-  heroPreviewUrl, lampOnly, onPickClick, onLampOnly, onRecrop, fileInputRef, onFile,
+  heroPreviewUrl, lampOnly, onPickClick, onLampOnly, onRecrop, fileInputRef, onFile, galleryUrls, setGalleryUrls,
 }: {
   heroPreviewUrl: string | null;
   lampOnly: boolean;
