@@ -41,3 +41,27 @@ export const postMessage = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { ok: true };
   });
+
+export const leaveFlower = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input) =>
+    z.object({
+      memorial_id: z.string().uuid(),
+      flower: z.enum(["rose", "lily", "daisy", "sunflower", "tulip"]).default("rose"),
+      message: z.string().max(300).nullable().optional(),
+    }).parse(input)
+  )
+  .handler(async ({ data, context }) => {
+    const { supabase, userId } = context;
+    const { data: prof } = await supabase
+      .from("profiles").select("display_name").eq("id", userId).maybeSingle();
+    const { error } = await supabase.from("memorial_flowers").insert({
+      memorial_id: data.memorial_id,
+      left_by: userId,
+      left_by_name: prof?.display_name ?? null,
+      flower: data.flower,
+      message: data.message?.trim() || null,
+    });
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
