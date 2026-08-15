@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { ClaimMemorialPanel } from "@/components/site/ClaimMemorialPanel";
+import { FlowerTributes } from "@/components/site/FlowerTributes";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { CandleFlame } from "@/components/site/CandleFlame";
 import { PawLamp } from "@/components/site/PawLamp";
