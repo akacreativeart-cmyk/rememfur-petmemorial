@@ -241,6 +241,54 @@ export type Database = {
           },
         ]
       }
+      memorial_flowers: {
+        Row: {
+          created_at: string
+          flower: string
+          id: string
+          is_hidden: boolean
+          left_by: string | null
+          left_by_name: string | null
+          memorial_id: string
+          message: string | null
+        }
+        Insert: {
+          created_at?: string
+          flower?: string
+          id?: string
+          is_hidden?: boolean
+          left_by?: string | null
+          left_by_name?: string | null
+          memorial_id: string
+          message?: string | null
+        }
+        Update: {
+          created_at?: string
+          flower?: string
+          id?: string
+          is_hidden?: boolean
+          left_by?: string | null
+          left_by_name?: string | null
+          memorial_id?: string
+          message?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "memorial_flowers_left_by_fkey"
+            columns: ["left_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "memorial_flowers_memorial_id_fkey"
+            columns: ["memorial_id"]
+            isOneToOne: false
+            referencedRelation: "memorials"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       memorial_photos: {
         Row: {
           caption: string | null

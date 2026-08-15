@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { ClaimMemorialPanel } from "@/components/site/ClaimMemorialPanel";
+import { FlowerTributes } from "@/components/site/FlowerTributes";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { CandleFlame } from "@/components/site/CandleFlame";
 import { PawLamp } from "@/components/site/PawLamp";
@@ -311,7 +312,10 @@ function MemorialPage() {
               </section>
             )}
 
+            <FlowerTributes memorialId={m.id} petName={m.pet_name} />
+
             <section className="rounded-3xl border border-border/60 bg-card p-7 soft-shadow">
+
               <h2 className="flex items-center gap-2 font-display text-2xl text-foreground">
                 <MessageCircle className="h-5 w-5 text-amber-200" /> Messages
               </h2>

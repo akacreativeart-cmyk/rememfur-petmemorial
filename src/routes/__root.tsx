@@ -1,4 +1,4 @@
-import { QueryClient, QueryClientProvider, useQueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
   Link,
@@ -141,16 +141,16 @@ function RootShell({ children }: { children: React.ReactNode }) {
   );
 }
 
-function AuthInvalidator() {
+function AuthInvalidator({ queryClient }: { queryClient: QueryClient }) {
   const router = useRouter();
-  const qc = useQueryClient();
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+      if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
       router.invalidate();
-      qc.invalidateQueries();
+      if (event !== "SIGNED_OUT") queryClient.invalidateQueries();
     });
     return () => subscription.unsubscribe();
-  }, [router, qc]);
+  }, [router, queryClient]);
   return null;
 }
 
@@ -162,7 +162,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <AuthInvalidator />
+        <AuthInvalidator queryClient={queryClient} />
         <InstallToastGuardian />
         <InstallAppDialog />
         {standalone ? (
