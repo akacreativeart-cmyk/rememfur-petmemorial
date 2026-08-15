@@ -311,7 +311,10 @@ function MemorialPage() {
               </section>
             )}
 
+            <FlowerTributes memorialId={m.id} petName={m.pet_name} />
+
             <section className="rounded-3xl border border-border/60 bg-card p-7 soft-shadow">
+
               <h2 className="flex items-center gap-2 font-display text-2xl text-foreground">
                 <MessageCircle className="h-5 w-5 text-amber-200" /> Messages
               </h2>
