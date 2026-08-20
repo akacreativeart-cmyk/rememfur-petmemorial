@@ -141,7 +141,7 @@ function CosmosBg({ mode = "memory", reduced = false }: { mode?: WorldMode; redu
       };
     });
     setStars(generated);
-  }, []);
+  }, [reduced]);
 
   useEffect(() => {
     if (reduced) return;
