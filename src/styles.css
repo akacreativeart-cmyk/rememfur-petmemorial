@@ -895,12 +895,15 @@ html, body { overflow-x: hidden; }
   mix-blend-mode: overlay;
 }
 
-/* Shooting star (contained) */
+/* Shooting star (contained) — transform/opacity only, promoted to its own layer */
 .shooter {
   position: absolute; width: 130px; height: 1.5px; pointer-events: none;
   background: linear-gradient(90deg, rgba(232,185,109,0), rgba(246,217,160,0.85) 55%, #fff2cc);
   border-radius: 2px; opacity: 0; transform: rotate(var(--ang, -28deg));
   animation: shoot 1.35s ease-out forwards;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  contain: strict;
 }
 .shooter::after {
   content: ""; position: absolute; right: -2px; top: -1.6px;
@@ -912,6 +915,24 @@ html, body { overflow-x: hidden; }
   0%   { opacity: 0; transform: rotate(var(--ang)) translateX(0); }
   8%   { opacity: 1; }
   100% { opacity: 0; transform: rotate(var(--ang)) translateX(min(300px, 40vw)); }
+}
+
+/* Mobile: shorter, lighter streak — smaller repaint area and a cheaper glow */
+@media (max-width: 767px) {
+  .shooter {
+    width: 88px;
+    height: 1.2px;
+    animation-duration: 1.15s;
+  }
+  .shooter::after {
+    width: 3.5px; height: 3.5px; top: -1.2px;
+    box-shadow: 0 0 8px 2px rgba(246,217,160,0.7);
+  }
+  @keyframes shoot {
+    0%   { opacity: 0; transform: rotate(var(--ang)) translateX(0); }
+    10%  { opacity: 1; }
+    100% { opacity: 0; transform: rotate(var(--ang)) translateX(min(190px, 45vw)); }
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
