@@ -438,7 +438,9 @@ function HomePage() {
   };
   const wrapperStyle: CSSProperties = {
     ...(mode === "life" ? lifeVars : memoryVars),
-    background: "var(--w-bg)",
+    // In memory mode the wrapper stays transparent so the fixed cosmos layer
+    // (stars + shooting stars, painted at z-index -10) is actually visible.
+    background: mode === "life" ? "var(--w-bg)" : "transparent",
     color: "var(--w-ink)",
     transition: reduced ? "none" : "background 1.1s ease, color 1.1s ease",
   };
