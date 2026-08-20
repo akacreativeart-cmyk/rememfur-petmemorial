@@ -144,25 +144,54 @@ function CosmosBg({ mode = "memory", reduced = false }: { mode?: WorldMode; redu
   }, [reduced]);
 
   useEffect(() => {
-    if (reduced) return;
+    // Skip entirely when motion is reduced or the cosmos layer is hidden (Life world):
+    // no timers, no re-renders, no compositing work.
+    if (reduced || mode === "life") return;
+
+    const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+    // Mobile: rarer streaks, and never more than one on screen at a time.
+    const minGap = isMobile ? 5200 : 2600;
+    const jitter = isMobile ? 5000 : 3200;
+    const life = 1500;
+
     let id = 0;
     let alive = true;
+    let spawnTimer = 0;
+    let clearTimer = 0;
+
+    const schedule = (delay: number) => {
+      spawnTimer = window.setTimeout(spawn, delay);
+    };
+
     const spawn = () => {
       if (!alive) return;
+      // Don't animate (or queue state updates) while the tab is backgrounded.
+      if (document.visibilityState !== "visible") {
+        schedule(minGap);
+        return;
+      }
       const item = {
         id: ++id,
         top: `${4 + Math.random() * 60}%`,
         left: `${Math.random() * 55}%`,
         ang: `${-20 - Math.random() * 18}deg`,
       };
-      setStreaks((prev) => [...prev, item]);
-      window.setTimeout(() => setStreaks((prev) => prev.filter((s) => s.id !== item.id)), 1500);
-      const next = 2600 + Math.random() * 3200;
-      window.setTimeout(spawn, next);
+      setStreaks(isMobile ? [item] : (prev) => [...prev, item]);
+      clearTimer = window.setTimeout(
+        () => setStreaks((prev) => prev.filter((s) => s.id !== item.id)),
+        life,
+      );
+      schedule(minGap + Math.random() * jitter);
     };
-    const t = window.setTimeout(spawn, 900);
-    return () => { alive = false; window.clearTimeout(t); };
-  }, [reduced]);
+
+    schedule(900);
+    return () => {
+      alive = false;
+      window.clearTimeout(spawnTimer);
+      window.clearTimeout(clearTimer);
+      setStreaks([]);
+    };
+  }, [reduced, mode]);
 
   return (
     <div
