@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useId, useMemo, useRef, useState, type ComponentType, type CSSProperties, type ReactNode, type SVGProps } from "react";
-import { ChevronDown, Stethoscope, Sparkles, PawPrint, HandHeart, MapPin, Cake, Home, Heart, Users, Feather, Cross, Gift, Bell, Mail, Moon, CalendarClock, ShoppingBag, MessagesSquare, Star, Phone } from "lucide-react";
+import { Stethoscope, Sparkles, PawPrint, HandHeart, MapPin, Cake, Home, Heart, Users, Feather, Cross, Gift, Bell, Mail, Moon, CalendarClock, ShoppingBag, MessagesSquare, Star, Phone } from "lucide-react";
 import { getConstellation, getProse, type Constellation } from "@/lib/constellations";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -1232,10 +1232,10 @@ function WorldToggle({ mode, setMode, reduced }: { mode: WorldMode; setMode: (m:
       <div
         role="tablist"
         aria-label="Choose a world"
-        className="relative flex w-[300px] md:w-[340px] rounded-full p-1 shadow-[0_2px_16px_-8px_rgba(0,0,0,0.5)]"
+        className="relative flex w-[300px] rounded-full p-1 shadow-[0_8px_24px_-18px_rgba(61,42,54,0.45)] md:w-[340px]"
         style={{
-          background: isLife ? "rgba(255,255,255,0.55)" : "rgba(255,255,255,0.05)",
-          border: `1px solid ${isLife ? "rgba(168,100,28,0.28)" : "rgba(232,185,109,0.28)"}`,
+          background: "rgba(255,253,252,0.74)",
+          border: `1px solid ${isLife ? "rgba(168,100,28,0.28)" : "rgba(109,63,98,0.2)"}`,
           backdropFilter: "blur(10px)",
         }}
       >
@@ -1248,8 +1248,8 @@ function WorldToggle({ mode, setMode, reduced }: { mode: WorldMode; setMode: (m:
             transition: reduced ? "none" : "transform 0.55s cubic-bezier(.4,0,.2,1), background 0.55s ease",
             background: isLife
               ? "linear-gradient(180deg,#E7C79A,#C9852F)"
-              : "linear-gradient(180deg,#F6D9A0,#E8B96D)",
-            boxShadow: "0 6px 18px -8px rgba(232,185,109,0.6)",
+              : "linear-gradient(145deg,#7A496F,#603555)",
+            boxShadow: isLife ? "0 6px 18px -8px rgba(201,133,47,0.5)" : "0 8px 20px -10px rgba(109,63,98,0.65)",
           }}
         />
         {[
@@ -1267,10 +1267,8 @@ function WorldToggle({ mode, setMode, reduced }: { mode: WorldMode; setMode: (m:
               className="relative z-[1] flex flex-1 items-center justify-center gap-1.5 rounded-full px-3 py-2 text-[11.5px] font-medium transition md:gap-2 md:px-4 md:text-[13px]"
               style={{
                 color: active
-                  ? "#1a1200"
-                  : key === "life"
-                    ? "#FFFFFF"
-                    : isLife ? "rgba(58,44,28,0.7)" : "rgba(242,236,221,0.7)",
+                  ? (isLife ? "#2C2422" : "#fffaf6")
+                  : (isLife ? "rgba(58,44,28,0.7)" : "#746865"),
               }}
             >
               <Icon className="h-3.5 w-3.5" strokeWidth={2} />
@@ -1281,7 +1279,7 @@ function WorldToggle({ mode, setMode, reduced }: { mode: WorldMode; setMode: (m:
       </div>
       <p
         className="mt-3 text-center font-display italic text-[13px] md:text-[14px]"
-        style={{ color: isLife ? "rgba(58,44,28,0.7)" : "rgba(242,236,221,0.65)" }}
+        style={{ color: isLife ? "rgba(58,44,28,0.7)" : "#746865" }}
       >
         {isLife
           ? "An ecosystem for the ones still by our side"
