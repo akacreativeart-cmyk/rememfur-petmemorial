@@ -1958,93 +1958,44 @@ function TheirSkyBand({ reduced }: { reduced: boolean }) {
 /* ────────── Grief-coping band (landing) ────────── */
 
 function GriefCopeBand() {
-  const cards: Array<{ n: string; title: string; body: string }> = [
-    { n: "01", title: "The first night", body: "Don't tidy their bed away. Eat something. Let the house be loud or silent — whatever you need. Nothing has to be decided tonight." },
-    { n: "02", title: "The guilt", body: "\"Did I wait too long? Too little?\" Almost every owner asks this. Love made the decision, not failure. The guilt is grief wearing a mask." },
-    { n: "03", title: "When people say \"it was just a pet\"", body: "They don't understand — that's their limit, not yours. Find the people who do. Grief spoken to the right ears begins to soften." },
-    { n: "04", title: "Telling children", body: "Simple, true words. No \"went to sleep\" or \"went away\" — it frightens them. Let them see you cry; it teaches them love is allowed to hurt." },
-    { n: "05", title: "The other pets", body: "They grieve too — searching, off their food, quiet. Keep their routine steady. Let them see the body, if you can. It helps them understand." },
-    { n: "06", title: "Ritual over \"moving on\"", body: "You don't get over them; you build somewhere to put the love. A lamp. A letter. A memorial. That's not clinging — that's how grief heals." },
+  const gentleSteps = [
+    { title: "Let today be small", body: "Eat something, rest, and leave tomorrow's decisions for tomorrow." },
+    { title: "Say their name", body: "Share a story with someone who understands how much they mattered." },
+    { title: "Give love somewhere to go", body: "Keep a photo close, light a paw lamp, or write them a few words." },
   ];
   return (
-        <section className="memorial-dark-panel relative px-4 py-10 md:px-8 md:py-16">
-      <div
-        className="relative mx-auto max-w-[1000px] overflow-hidden rounded-[24px] px-5 py-8 md:px-10 md:py-12"
-        style={{
-          background: "linear-gradient(155deg, #171f36 0%, #0b1020 72%)",
-          border: "1px solid rgba(232,185,109,.34)",
-        }}
-      >
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-40"
-          style={{ background: "radial-gradient(60% 100% at 50% 0%, rgba(232,185,109,.22), transparent 70%)" }}
-        />
-
-        <div className="relative">
-          <span className="inline-flex items-center gap-2 rounded-full border border-[var(--gold)]/40 px-3 py-1 text-[10px] uppercase tracking-[0.3em] text-[var(--gold)]">
-            <span className="relative inline-flex h-1.5 w-1.5">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--gold)] opacity-70" />
-              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[var(--gold)]" />
-            </span>
-            Start here if today is the day
-          </span>
-
-          <h2 className="mt-4 font-display leading-[1.1] tracking-tight text-[#f5efe0]" style={{ fontSize: "clamp(28px, 6.5vw, 46px)" }}>
-            How to cope with losing them.
-          </h2>
-          <p className="mt-4 font-display italic leading-relaxed text-white/80" style={{ fontSize: "clamp(15px, 3.6vw, 19px)" }}>
-            There's no correct way to grieve an animal who slept at your feet for a decade. But there are things that help —
-            and things nobody tells you.
+    <section className="relative border-y border-[var(--w-hair)] bg-[var(--w-card-2)] px-5 py-14 md:px-8 md:py-20">
+      <div className="mx-auto max-w-[920px]">
+        <div className="text-center">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--w-accent)]">For the difficult days</p>
+          <h2 className="mt-3 font-display text-3xl text-[var(--w-ink)] md:text-4xl">Be gentle with yourself.</h2>
+          <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-[var(--w-muted)] md:text-base">
+            There is no right way through this. For now, only take the next kind step.
           </p>
+        </div>
 
-          <div className="mt-8 grid grid-cols-1 gap-3 md:mt-10 md:grid-cols-3 md:gap-4">
-            {cards.map((c) => (
-              <article
-                key={c.n}
-                className="rounded-[14px] p-[18px] ring-1"
-                style={{ background: "rgba(255,255,255,.035)", borderColor: "transparent" }}
-              >
-                <p className="font-display text-[16px] text-[var(--gold)]/80">{c.n}</p>
-                <h3 className="mt-1 font-display text-[18px] leading-snug text-[#f5efe0]">{c.title}</h3>
-                <p className="mt-2 text-[12.8px] leading-relaxed text-white/60">{c.body}</p>
-              </article>
-            ))}
-          </div>
+        <ol className="mt-9 divide-y divide-[var(--w-hair)] border-y border-[var(--w-hair)] md:grid md:grid-cols-3 md:divide-x md:divide-y-0">
+          {gentleSteps.map((step, index) => (
+            <li key={step.title} className="flex gap-4 py-5 md:block md:px-6 md:py-7 md:text-center">
+              <span className="font-display text-sm italic text-[var(--w-accent)]">0{index + 1}</span>
+              <div>
+                <h3 className="font-display text-lg text-[var(--w-ink)]">{step.title}</h3>
+                <p className="mt-1 text-sm leading-6 text-[var(--w-muted)]">{step.body}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
 
-          <div className="mt-8 border-t border-white/10 pt-6">
-            <p className="text-[13.5px] leading-relaxed text-white/70">
-              If the weight is too much right now, talk to someone. Free, kind, and used to exactly this:
-            </p>
-            <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2">
-              <a
-                href="tel:8774743310"
-                className="flex items-center justify-between rounded-[14px] border border-white/12 bg-white/[0.03] px-4 py-3 hover:border-[var(--gold)]/40 hover:bg-white/[0.06]"
-              >
-                <div>
-                  <p className="text-[10px] uppercase tracking-[0.28em] text-white/55">ASPCA Pet Loss</p>
-                  <p className="mt-1 font-display text-[20px] text-[var(--gold)]">877-474-3310</p>
-                </div>
-                <Phone className="h-4 w-4 text-[var(--gold)]/80" />
-              </a>
-              <a
-                href="tel:8559335683"
-                className="flex items-center justify-between rounded-[14px] border border-white/12 bg-white/[0.03] px-4 py-3 hover:border-[var(--gold)]/40 hover:bg-white/[0.06]"
-              >
-                <div>
-                  <p className="text-[10px] uppercase tracking-[0.28em] text-white/55">Lap of Love</p>
-                  <p className="mt-1 font-display text-[20px] text-[var(--gold)]">855-933-5683</p>
-                </div>
-                <Phone className="h-4 w-4 text-[var(--gold)]/80" />
-              </a>
-            </div>
-          </div>
-
-          <div className="mt-8 flex justify-center md:justify-start">
-            <Link to="/grief-support" className="btn-gold ios-tappable">
-              Read the full grief guide
-            </Link>
-          </div>
+        <div className="mt-8 flex flex-col items-center justify-between gap-5 text-center md:flex-row md:text-left">
+          <p className="text-sm leading-6 text-[var(--w-muted)]">
+            Need someone now? Call{" "}
+            <a href="tel:8774743310" className="font-semibold text-[var(--w-accent)] hover:underline">ASPCA Pet Loss</a>
+            {" "}or{" "}
+            <a href="tel:8559335683" className="font-semibold text-[var(--w-accent)] hover:underline">Lap of Love</a>.
+          </p>
+          <Link to="/grief-support" className="btn-quiet ios-tappable shrink-0">
+            Find more support
+          </Link>
         </div>
       </div>
     </section>
