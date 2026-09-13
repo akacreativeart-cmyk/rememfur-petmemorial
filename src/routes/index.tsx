@@ -23,6 +23,9 @@ import lifeServicesImg from "@/assets/life-services.jpg";
 import lifeLifestyleImg from "@/assets/life-lifestyle.jpg";
 import lifeAdoptionImg from "@/assets/life-adoption.jpg";
 import memorialEditorialHero from "@/assets/memorial-editorial-hero.jpg";
+import petOne from "@/assets/pet-1.jpg";
+import petTwo from "@/assets/pet-2.jpg";
+import petThree from "@/assets/pet-3.jpg";
 
 // Real photography from Unsplash for the Life world — warm, real moments.
 // Local painterly assets remain as onError fallbacks.
@@ -624,7 +627,7 @@ function Hero({ secondaryCandle, onLastLetter }: { secondaryCandle: ReactNode; o
 
             <div className="mt-9 flex items-center justify-center gap-3 border-t border-[var(--w-hair)] pt-5 text-left lg:justify-start">
               <div className="flex -space-x-2">
-                {["/icon-192.png", "/apple-touch-icon.png", "/icon-512.png"].map((src) => (
+                {[petOne, petTwo, petThree].map((src) => (
                   <img key={src} src={src} alt="" className="h-9 w-9 rounded-full border-2 border-[var(--w-card-1)] object-cover" />
                 ))}
               </div>

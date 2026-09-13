@@ -74,7 +74,7 @@ export function SiteHeader() {
               <ChevronLeft className="h-5 w-5" />
             </button>
           ) : (
-            <img src={logo} alt="" width={24} height={24} className="h-6 w-6 opacity-90" />
+            <img src={logo} alt="" width={24} height={24} className="h-6 w-6" style={{ filter: "brightness(0) saturate(100%) invert(28%) sepia(17%) saturate(1428%) hue-rotate(267deg) brightness(91%) contrast(89%)" }} />
           )}
           <Link to="/" className="brand-wordmark">rememfur</Link>
           <span className="hidden text-[9px] font-semibold uppercase tracking-[0.18em] text-[#6D3F62]/55 xs:inline sm:inline">BETA</span>
@@ -227,7 +227,7 @@ export function SiteHeader() {
       {/* Desktop header */}
       <div className="mx-auto hidden h-16 max-w-[1200px] items-center justify-between gap-4 px-6 md:flex lg:gap-6 lg:px-8">
         <Link to="/" className="flex items-center gap-2">
-          <img src={logo} alt="" width={28} height={28} className="h-7 w-7 opacity-90" />
+          <img src={logo} alt="" width={28} height={28} className="h-7 w-7" style={{ filter: "brightness(0) saturate(100%) invert(28%) sepia(17%) saturate(1428%) hue-rotate(267deg) brightness(91%) contrast(89%)" }} />
           <span className="brand-wordmark text-xl">rememfur</span>
           <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#6D3F62]/55">BETA</span>
         </Link>
