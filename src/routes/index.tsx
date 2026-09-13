@@ -22,6 +22,7 @@ import pawtraitPreviewImg from "@/assets/pawtrait-preview.jpg";
 import lifeServicesImg from "@/assets/life-services.jpg";
 import lifeLifestyleImg from "@/assets/life-lifestyle.jpg";
 import lifeAdoptionImg from "@/assets/life-adoption.jpg";
+import memorialEditorialHero from "@/assets/memorial-editorial-hero.jpg";
 
 // Real photography from Unsplash for the Life world — warm, real moments.
 // Local painterly assets remain as onError fallbacks.
@@ -44,6 +45,8 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Write their memorial, light a paw lamp in their name, and hold your grief with people who understand. A quiet home for the love that has nowhere to go." },
       { property: "og:title", content: "Rememfur — A gentle place for the pet you loved." },
       { property: "og:description", content: "Write their memorial, light a paw lamp, share your grief with a community that gets it." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
 });
@@ -444,15 +447,15 @@ function HomePage() {
 
   // Palette variables scoped to the wrapper (do NOT bleed globally)
   const memoryVars: CSSProperties = {
-    ["--w-bg" as string]: "radial-gradient(130% 90% at 50% 0%, #0D1530, #050810 62%)",
-    ["--w-ink" as string]: "#F2ECDD",
-    ["--w-muted" as string]: "rgba(242,236,221,0.6)",
-    ["--w-accent" as string]: "#E8B96D",
-    ["--w-accent-2" as string]: "#F6D9A0",
-    ["--w-hair" as string]: "rgba(232,185,109,0.2)",
-    ["--w-card-1" as string]: "#151f36",
-    ["--w-card-2" as string]: "#0a0f20",
-    ["--w-kind" as string]: "#8FC79E",
+    ["--w-bg" as string]: "#FBF7F2",
+    ["--w-ink" as string]: "#2C2422",
+    ["--w-muted" as string]: "#746865",
+    ["--w-accent" as string]: "#6D3F62",
+    ["--w-accent-2" as string]: "#8A5A7D",
+    ["--w-hair" as string]: "rgba(109,63,98,0.18)",
+    ["--w-card-1" as string]: "#FFFDFC",
+    ["--w-card-2" as string]: "#F4ECE8",
+    ["--w-kind" as string]: "#71856E",
   };
   const lifeVars: CSSProperties = {
     ["--w-bg" as string]: "radial-gradient(130% 90% at 50% 0%, #F4E9D8, #EAD9BE 62%)",
@@ -469,13 +472,13 @@ function HomePage() {
     ...(mode === "life" ? lifeVars : memoryVars),
     // In memory mode the wrapper stays transparent so the fixed cosmos layer
     // (stars + shooting stars, painted at z-index -10) is actually visible.
-    background: mode === "life" ? "var(--w-bg)" : "transparent",
+    background: "var(--w-bg)",
     color: "var(--w-ink)",
     transition: reduced ? "none" : "background 1.1s ease, color 1.1s ease",
   };
 
   return (
-    <div className="relative min-h-screen text-white" style={wrapperStyle}>
+    <div className="warm-home relative min-h-screen" data-world={mode} style={wrapperStyle}>
       <VigilDogSymbol />
       <CosmosBg mode={mode} reduced={reduced} />
       <DawnBg mode={mode} reduced={reduced} />
@@ -1996,7 +1999,7 @@ function GriefCopeBand() {
     { n: "06", title: "Ritual over \"moving on\"", body: "You don't get over them; you build somewhere to put the love. A lamp. A letter. A memorial. That's not clinging — that's how grief heals." },
   ];
   return (
-    <section className="relative px-4 py-10 md:px-8 md:py-16">
+        <section className="memorial-dark-panel relative px-4 py-10 md:px-8 md:py-16">
       <div
         className="relative mx-auto max-w-[1000px] overflow-hidden rounded-[24px] px-5 py-8 md:px-10 md:py-12"
         style={{
