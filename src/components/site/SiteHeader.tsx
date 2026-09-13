@@ -58,7 +58,7 @@ export function SiteHeader() {
 
   return (
     <header
-      className="sticky top-0 z-40 glass-strong"
+      className="sticky top-0 z-40 border-b border-[rgba(109,63,98,0.1)] bg-[rgba(251,247,242,0.9)] text-[#2C2422] shadow-[0_8px_30px_-28px_rgba(61,42,54,0.5)] backdrop-blur-xl"
       style={{ paddingTop: "env(safe-area-inset-top)" }}
     >
       {/* Mobile header */}
@@ -69,21 +69,21 @@ export function SiteHeader() {
               type="button"
               onClick={() => router.history.back()}
               aria-label="Back"
-              className="-ml-2 flex h-9 w-9 items-center justify-center rounded-full text-[var(--cr2)] hover:bg-white/[0.06]"
+              className="-ml-2 flex h-9 w-9 items-center justify-center rounded-full text-[#746865] hover:bg-[#E9DED4]/55"
             >
               <ChevronLeft className="h-5 w-5" />
             </button>
           ) : (
-            <img src={logo} alt="" width={24} height={24} className="h-6 w-6 opacity-90" />
+            <img src={logo} alt="" width={24} height={24} className="h-6 w-6" style={{ filter: "brightness(0) saturate(100%) invert(28%) sepia(17%) saturate(1428%) hue-rotate(267deg) brightness(91%) contrast(89%)" }} />
           )}
           <Link to="/" className="brand-wordmark">rememfur</Link>
-          <span className="hidden text-[9px] font-semibold uppercase tracking-[0.18em] text-white/40 xs:inline sm:inline">BETA</span>
+          <span className="hidden text-[9px] font-semibold uppercase tracking-[0.18em] text-[#6D3F62]/55 xs:inline sm:inline">BETA</span>
         </div>
         <div className="flex items-center gap-1">
           <Link
             to="/marketplace"
             aria-label="Marketplace"
-            className="flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground hover:bg-muted"
+            className="flex h-9 w-9 items-center justify-center rounded-full text-[#746865] hover:bg-[#E9DED4]/55"
           >
             <ShoppingBag className="h-4 w-4" />
           </Link>
@@ -100,7 +100,7 @@ export function SiteHeader() {
           ) : (
             <Link
               to="/login"
-              className="rounded-full px-3 py-1.5 text-xs font-medium text-white/80 hover:bg-white/10 hover:text-white"
+              className="rounded-full px-3 py-1.5 text-xs font-medium text-[#5d4057] hover:bg-[#E9DED4]/55"
             >
               Log in
             </Link>
@@ -110,7 +110,7 @@ export function SiteHeader() {
             <SheetTrigger asChild>
               <button
                 aria-label="Open menu"
-                className="flex h-9 w-9 items-center justify-center rounded-full text-foreground hover:bg-muted"
+                className="flex h-9 w-9 items-center justify-center rounded-full text-[#5d4057] hover:bg-[#E9DED4]/55"
               >
                 <Menu className="h-5 w-5" />
               </button>
@@ -227,9 +227,9 @@ export function SiteHeader() {
       {/* Desktop header */}
       <div className="mx-auto hidden h-16 max-w-[1200px] items-center justify-between gap-4 px-6 md:flex lg:gap-6 lg:px-8">
         <Link to="/" className="flex items-center gap-2">
-          <img src={logo} alt="" width={28} height={28} className="h-7 w-7 opacity-90" />
+          <img src={logo} alt="" width={28} height={28} className="h-7 w-7" style={{ filter: "brightness(0) saturate(100%) invert(28%) sepia(17%) saturate(1428%) hue-rotate(267deg) brightness(91%) contrast(89%)" }} />
           <span className="brand-wordmark text-xl">rememfur</span>
-          <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/40">BETA</span>
+          <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#6D3F62]/55">BETA</span>
         </Link>
 
         <nav className="flex items-center gap-1">
@@ -241,8 +241,8 @@ export function SiteHeader() {
                 to={item.to}
                 className={`rounded-full px-2.5 py-1.5 text-sm transition lg:px-3.5 ${
                   active
-                    ? "bg-white/10 text-white"
-                    : "text-white/70 hover:bg-white/5 hover:text-white"
+                    ? "bg-[#E9DED4]/70 text-[#5d4057]"
+                    : "text-[#746865] hover:bg-[#E9DED4]/45 hover:text-[#2C2422]"
                 }`}
               >
                 {item.label}
@@ -265,14 +265,14 @@ export function SiteHeader() {
             <button
               onClick={() => signOut()}
               aria-label="Sign out"
-              className="flex h-9 w-9 items-center justify-center rounded-full text-white/70 hover:bg-white/10 hover:text-white"
+              className="flex h-9 w-9 items-center justify-center rounded-full text-[#746865] hover:bg-[#E9DED4]/55 hover:text-[#2C2422]"
             >
               <LogOut className="h-4 w-4" />
             </button>
           ) : (
             <Link
               to="/login"
-              className="rounded-full px-3 py-1.5 text-sm font-medium text-white/80 hover:bg-white/10 hover:text-white"
+              className="rounded-full px-3 py-1.5 text-sm font-medium text-[#5d4057] hover:bg-[#E9DED4]/55"
             >
               Log in
             </Link>
@@ -281,7 +281,7 @@ export function SiteHeader() {
             <SheetTrigger asChild>
               <button
                 aria-label="Open menu"
-                className="flex h-9 w-9 items-center justify-center rounded-full text-white/80 hover:bg-white/10 hover:text-white"
+                className="flex h-9 w-9 items-center justify-center rounded-full text-[#5d4057] hover:bg-[#E9DED4]/55"
               >
                 <Menu className="h-5 w-5" />
               </button>
