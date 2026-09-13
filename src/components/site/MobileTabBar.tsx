@@ -83,7 +83,7 @@ export function MobileTabBar() {
         {tabs.map(({ to, label, icon: Icon, match }) => {
           const active = match ? match(pathname) : pathname === to || pathname.startsWith(to + "/");
           const isCreate = label === "Create";
-          const activeColor = active ? "text-[#e6e1d6]" : "text-white/60";
+          const activeColor = active ? "text-[#6D3F62]" : "text-[#746865]";
 
           if (isCreate) {
             return (
@@ -108,12 +108,12 @@ export function MobileTabBar() {
                       />
                     )}
                     <span
-                      className="relative flex h-16 w-16 items-center justify-center rounded-full text-[#f2ead8] ring-1 ring-white/15"
+                      className="relative flex h-16 w-16 items-center justify-center rounded-full text-[#fffaf6] ring-1 ring-[#6D3F62]/20"
                       style={{
                         background:
-                          "linear-gradient(180deg, rgba(30,40,66,0.95), rgba(18,24,44,0.95))",
+                          "linear-gradient(145deg, #7A496F, #603555)",
                         boxShadow:
-                          "0 10px 30px -8px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.08), 0 0 24px -6px rgba(255,238,200,0.35)",
+                          "0 10px 30px -12px rgba(109,63,98,0.65), inset 0 1px 0 rgba(255,255,255,0.2)",
                         backdropFilter: "blur(14px)",
                         WebkitBackdropFilter: "blur(14px)",
                       }}
