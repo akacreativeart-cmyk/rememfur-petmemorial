@@ -586,99 +586,66 @@ function HomePage() {
 /* ────────── HERO ────────── */
 
 function Hero({ secondaryCandle, onLastLetter }: { secondaryCandle: ReactNode; onLastLetter?: () => void }) {
-  const [scrolled, setScrolled] = useState(false);
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
   return (
     <section
-      className="relative flex w-full flex-col overflow-hidden"
-      style={{ minHeight: "100svh" }}
-      aria-label="A quiet vigil beneath the night sky"
+      className="relative px-4 pb-14 pt-5 md:px-8 md:pb-24 md:pt-8"
+      aria-label="A gentle place to remember a beloved pet"
     >
-      {/* Moon top-right — clear of mobile header. Capped to 80px wide so the
-          caption sits BELOW the moon (own column) and cannot cross the
-          centred hero text below it. */}
-      <div className="pointer-events-none absolute right-4 top-14 z-20 md:right-10 md:top-8">
-        <MoonBadge />
-      </div>
+      <div className="memorial-editorial-hero relative mx-auto max-w-[1160px] overflow-hidden rounded-[24px] border border-[var(--w-hair)] bg-[var(--w-card-1)] shadow-[0_24px_70px_-46px_rgba(62,42,50,0.45)] md:rounded-[32px]">
+        <div className="grid items-stretch lg:grid-cols-[0.95fr_1.05fr]">
+          <div className="order-2 flex flex-col justify-center p-7 text-center sm:p-10 md:p-14 lg:order-1 lg:p-16 lg:text-left">
+            <p className="rise-in text-[10px] font-semibold uppercase tracking-[0.26em] text-[var(--w-accent)]" style={{ animationDelay: "0.05s" }}>
+              A place of lasting remembrance
+            </p>
+            <h1 className="rise-in mt-5 font-display text-[38px] leading-[1.12] text-[var(--w-ink)] sm:text-5xl lg:text-[58px]" style={{ animationDelay: "0.2s" }}>
+              Honouring every <span className="italic text-[var(--w-accent)]">paw print</span> left behind.
+            </h1>
+            <p className="rise-in mx-auto mt-5 max-w-[34rem] text-[15px] leading-[1.75] text-[var(--w-muted)] md:text-[17px] lg:mx-0" style={{ animationDelay: "0.45s" }}>
+              A gentle place to celebrate their life, keep every story, and hold the love that stays with you.
+            </p>
 
-      {/* TOP: story + CTA. Extra top padding on mobile so the moon block
-          (moon 44px + gap + two-line caption ≈ 90px) never overlaps the
-          eyebrow line. */}
-      <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-5 pb-8 pt-36 text-center md:pt-24">
-        <div className="mx-auto flex w-full max-w-md flex-col items-center md:max-w-2xl">
-          <p className="rise-in font-display italic text-[15px] leading-[1.4] text-[var(--gold)]/90 md:text-[18px]" style={{ animationDelay: "0.05s" }}>
-            From their first day to long after their last.
-          </p>
-          <p className="rise-in mt-3 text-[11px] uppercase tracking-[0.32em] text-amber-200/75" style={{ animationDelay: "0.15s" }}>
-            In loving memory · and in living joy
-          </p>
-          <h1 className="rise-in mt-4 font-display leading-[1.08] tracking-tight text-white" style={{ animationDelay: "0.3s", fontSize: "clamp(26px, 7.4vw, 64px)" }}>
-            Our beloved companions become the{" "}
-            <span className="italic text-[var(--gold)]">stars that watch over us</span>.
-          </h1>
-          <p className="rise-in mx-auto mt-5 max-w-[30ch] font-display italic text-[16px] leading-[1.55] text-white/75 md:max-w-none md:text-[20px]" style={{ animationDelay: "0.7s" }}>
-            Grief this deep needs somewhere to belong. Here, it does.
-          </p>
-
-          <div className="rise-in mt-8 flex w-full flex-col items-center gap-3" style={{ animationDelay: "1.1s" }}>
-            {/* PRIMARY — write a memorial */}
-            <div className="w-full max-w-[300px] [&>*]:w-full [&>*]:justify-center md:w-auto md:max-w-none">
-              <Link to="/create/memorial" className="btn-gold ios-tappable">
+            <div className="rise-in mt-8 flex w-full flex-col gap-3 sm:flex-row sm:justify-center lg:justify-start" style={{ animationDelay: "0.7s" }}>
+              <Link to="/create/memorial" className="btn-gold ios-tappable w-full sm:w-auto">
                 <Feather className="h-4 w-4" />
                 Write a memorial
               </Link>
+              <div className="w-full [&>*]:w-full [&>*]:justify-center sm:w-auto">
+                {secondaryCandle}
+              </div>
             </div>
-            {/* SECONDARY — light a paw lamp */}
-            <div className="w-full max-w-[300px] [&>*]:w-full [&>*]:justify-center md:w-auto md:max-w-none">
-              {secondaryCandle}
-            </div>
-            {/* TERTIARY — last letter */}
             <button
               type="button"
               onClick={onLastLetter}
-              className="mt-1 inline-flex items-center gap-2 font-display italic text-[15.5px] text-[var(--gold)]/90 underline-offset-4 opacity-90 hover:underline"
+              className="mx-auto mt-5 inline-flex items-center gap-2 font-display text-[15px] italic text-[var(--w-accent)] underline-offset-4 hover:underline lg:mx-0"
             >
               <Mail className="h-4 w-4" />
               Send them your last letter
             </button>
+
+            <div className="mt-9 flex items-center justify-center gap-3 border-t border-[var(--w-hair)] pt-5 text-left lg:justify-start">
+              <div className="flex -space-x-2">
+                {["/icon-192.png", "/apple-touch-icon.png", "/icon-512.png"].map((src) => (
+                  <img key={src} src={src} alt="" className="h-9 w-9 rounded-full border-2 border-[var(--w-card-1)] object-cover" />
+                ))}
+              </div>
+              <p className="text-xs leading-relaxed text-[var(--w-muted)]">A quiet community for every kind of love and loss.</p>
+            </div>
           </div>
-        </div>
-      </div>
-
-
-
-      {/* BOTTOM: Vigil scene as normal-flow block — content above can never overlap */}
-      <div className="relative w-full h-[220px] md:h-[340px]">
-        {/* Hill — full-width, always spans viewport */}
-        <svg
-          aria-hidden
-          className="absolute inset-x-0 bottom-0 z-[1] h-[45%] w-full"
-          viewBox="0 0 800 60"
-          preserveAspectRatio="none"
-        >
-          <path d="M 0 20 C 140 0, 260 -4, 380 8 C 500 20, 620 2, 740 10 C 770 12, 790 14, 800 16 L 800 60 L 0 60 Z" fill="#04060D" />
-        </svg>
-
-        {/* Dog perched on hill crest */}
-        <div
-          className="pointer-events-none absolute left-1/2 z-[3] -translate-x-1/2 vigil-dog-torso"
-          style={{ bottom: "20%", transformOrigin: "bottom center" }}
-        >
-          <div className="w-[88px] md:w-[124px]">
-            <VigilDog size={150} className="h-auto w-full" />
+          <div className="relative order-1 min-h-[360px] overflow-hidden lg:order-2 lg:min-h-[680px]">
+            <img
+              src={memorialEditorialHero}
+              alt="A golden retriever resting among wildflowers in warm evening light"
+              className="absolute inset-0 h-full w-full object-cover object-center"
+              width={1408}
+              height={1104}
+              fetchPriority="high"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[var(--w-ink)]/30 via-transparent to-transparent lg:bg-gradient-to-r lg:from-[var(--w-card-1)]/30 lg:to-transparent" />
+            <blockquote className="absolute inset-x-5 bottom-5 rounded-2xl border border-white/40 bg-[rgba(255,253,252,0.86)] p-5 text-left shadow-lg backdrop-blur-md sm:inset-x-auto sm:bottom-8 sm:right-8 sm:max-w-xs">
+              <p className="font-display text-lg italic leading-relaxed text-[var(--w-ink)]">“They never truly leave us. They simply run ahead.”</p>
+              <footer className="mt-3 text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--w-accent)]">In loving memory</footer>
+            </blockquote>
           </div>
-        </div>
-
-        {/* Scroll cue */}
-        <div
-          aria-hidden
-          className={`pointer-events-none absolute bottom-2 left-1/2 z-10 -translate-x-1/2 transition-opacity duration-500 ${scrolled ? "opacity-0" : "opacity-100"}`}
-        >
-          <ChevronDown className="scroll-cue h-5 w-5 text-white/60" />
         </div>
       </div>
     </section>
