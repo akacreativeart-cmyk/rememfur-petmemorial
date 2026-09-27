@@ -16,7 +16,14 @@ import { toast } from "sonner";
 
 export const Route = createFileRoute("/u/$userId")({
   component: UserProfilePage,
-  head: () => ({ meta: [{ title: "Profile — Rememfur" }] }),
+  head: () => ({ meta: [
+    { title: "Community profile — Rememfur" },
+    { name: "description", content: "Stories, memorials, and acts of remembrance shared on Rememfur." },
+    { property: "og:title", content: "Community profile — Rememfur" },
+    { property: "og:description", content: "Stories, memorials, and acts of remembrance shared on Rememfur." },
+    { property: "og:type", content: "profile" },
+    { name: "twitter:card", content: "summary" },
+  ] }),
 });
 
 function UserProfilePage() {
@@ -66,7 +73,7 @@ function UserProfilePage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-background paper-grain">
+      <div className="warm-platform min-h-screen bg-background paper-grain">
         <SiteHeader />
         <main className="mx-auto max-w-2xl px-5 py-16 text-center text-muted-foreground">Loading…</main>
       </div>
@@ -74,11 +81,11 @@ function UserProfilePage() {
   }
   if (!profile) {
     return (
-      <div className="min-h-screen bg-background paper-grain">
+      <div className="warm-platform min-h-screen bg-background paper-grain">
         <SiteHeader />
         <main className="mx-auto max-w-2xl px-5 py-16 text-center">
           <p className="font-display text-2xl">Profile not found.</p>
-          <Link to="/community" className="mt-4 inline-block text-sage-deep underline">Back to Community</Link>
+          <Link to="/community" className="mt-4 inline-block text-primary underline">Back to Community</Link>
         </main>
       </div>
     );
@@ -88,13 +95,13 @@ function UserProfilePage() {
   const isMe = user?.id === profile.id;
 
   return (
-    <div className="min-h-screen bg-background paper-grain">
+    <div className="warm-platform min-h-screen bg-background paper-grain">
       <SiteHeader />
-      <main className="mx-auto max-w-2xl px-5 py-10">
-        <header className="mb-8 flex items-center gap-5">
-          <Avatar className="h-20 w-20 md:h-24 md:w-24">
+      <main className="mx-auto max-w-2xl px-5 py-10 pb-28">
+        <header className="mb-8 flex items-center gap-5 border-b border-border pb-7">
+          <Avatar className="h-20 w-20 ring-4 ring-card soft-shadow md:h-24 md:w-24">
             {profile.avatar_url && <AvatarImage src={profile.avatar_url} alt="" />}
-            <AvatarFallback className="bg-sage/20 text-2xl text-sage-deep">{initials}</AvatarFallback>
+            <AvatarFallback className="bg-accent text-2xl text-primary">{initials}</AvatarFallback>
           </Avatar>
           <div className="flex-1">
             <h1 className="font-display text-3xl text-foreground">{profile.display_name ?? "Anonymous"}</h1>
@@ -107,7 +114,7 @@ function UserProfilePage() {
               <Button
                 size="sm"
                 onClick={() => follow.mutate()}
-                className={`mt-3 ${profile.followed_by_me ? "bg-muted text-foreground hover:bg-muted/80" : "bg-sage-deep text-primary-foreground hover:bg-sage-deep/90"}`}
+                className={`mt-3 ${profile.followed_by_me ? "btn-quiet" : "btn-gold-sm"}`}
               >
                 {profile.followed_by_me ? "Following" : "Follow"}
               </Button>
@@ -137,7 +144,7 @@ function UserProfilePage() {
               onClick={() => setTab(key)}
               className={`-mb-px shrink-0 border-b-2 px-3 py-2 text-sm transition ${
                 tab === key
-                  ? "border-[var(--cta)] text-foreground"
+                   ? "border-primary text-primary"
                   : "border-transparent text-muted-foreground hover:text-foreground"
               }`}
             >
@@ -161,7 +168,7 @@ function UserProfilePage() {
                 key={m.id}
                 to="/memorial/$slug"
                 params={{ slug: m.slug }}
-                className="flex gap-3 rounded-2xl border border-border/60 bg-card p-3 transition hover:border-[var(--cta)]/50"
+                className="flex gap-3 rounded-[18px] border border-border bg-card p-3 soft-shadow transition hover:border-primary/35"
               >
                 {m.hero_image_url ? (
                   <img src={m.hero_image_url} alt="" className="h-16 w-16 rounded-xl object-cover" />
@@ -181,7 +188,7 @@ function UserProfilePage() {
           <div className="space-y-3">
             {(lamps ?? []).length === 0 && <Empty>No paw lamps lit yet.</Empty>}
             {(lamps ?? []).map((c) => (
-              <div key={c.id} className="flex gap-3 rounded-2xl border border-border/60 bg-card p-4">
+                <div key={c.id} className="flex gap-3 rounded-[18px] border border-border bg-card p-4 soft-shadow">
                 <PawLamp size={26} />
                 <div className="min-w-0 flex-1">
                   <p className="text-sm text-foreground">
@@ -201,7 +208,7 @@ function UserProfilePage() {
           <div className="space-y-3">
             {(activity ?? []).length === 0 && <Empty>Nothing here yet.</Empty>}
             {(activity ?? []).map((a) => (
-              <div key={`${a.kind}-${a.id}`} className="flex items-center gap-3 rounded-2xl border border-border/60 bg-card p-4">
+              <div key={`${a.kind}-${a.id}`} className="flex items-center gap-3 rounded-[18px] border border-border bg-card p-4 soft-shadow">
                 {a.post_image && <img src={a.post_image} alt="" className="h-12 w-12 rounded-lg object-cover" />}
                 <div className="min-w-0 flex-1">
                   <p className="text-sm text-foreground">
@@ -222,7 +229,7 @@ function UserProfilePage() {
 
 function Empty({ children }: { children: React.ReactNode }) {
   return (
-    <div className="rounded-2xl border border-dashed border-border p-10 text-center text-muted-foreground sm:col-span-2">
+    <div className="rounded-[18px] border border-dashed border-primary/25 bg-card/60 p-10 text-center text-muted-foreground sm:col-span-2">
       {children}
     </div>
   );

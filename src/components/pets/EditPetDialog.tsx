@@ -82,7 +82,7 @@ export function EditPetDialog({ pet }: { pet: Pet }) {
           <Pencil className="h-4 w-4 text-muted-foreground" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-h-[85vh] overflow-y-auto">
+      <DialogContent className="warm-dialog max-h-[85vh] overflow-y-auto rounded-[20px]">
         <DialogHeader>
           <DialogTitle className="font-display text-2xl">Edit {pet.name}</DialogTitle>
         </DialogHeader>
@@ -90,7 +90,7 @@ export function EditPetDialog({ pet }: { pet: Pet }) {
           <div>
             <Label>Photo</Label>
             <div className="mt-1 flex items-center gap-3">
-              <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl bg-muted">
+              <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-[14px] bg-muted">
                 {photo ? <img src={photo} alt="" className="h-full w-full object-cover" /> : <ImagePlus className="h-5 w-5 text-muted-foreground" />}
               </div>
               <Input type="file" accept="image/*" onChange={(e) => pickPhoto(e.target.files?.[0])} disabled={uploading} />

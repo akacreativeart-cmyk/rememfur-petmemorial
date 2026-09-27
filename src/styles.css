@@ -1178,6 +1178,64 @@ html, body { overflow-x: hidden; }
 .warm-home[data-world="memory"] .memorial-dark-panel :where(.text-white\/80, .text-white\/70, .text-white\/60, .text-white\/55) { color: rgba(251,247,242,0.7); }
 .warm-home[data-world="memory"] .memorial-dark-panel :where(.text-\[\#f5efe0\]) { color: #fbf7f2; }
 
+/* Warm editorial application surfaces: dashboard, pets, community, and profiles. */
+.warm-platform,
+.warm-dialog {
+  --bg: #fbf7f2;
+  --bg2: #f5eee9;
+  --surface1: #fffdfc;
+  --surface2: #f1e7e2;
+  --cr: #2c2422;
+  --cr2: #746865;
+  --cr3: rgba(116,104,101,0.48);
+  --paper: #fbf7f2;
+  --cream: #f8f1ec;
+  --ink: #2c2422;
+  --sage: #d8c7cf;
+  --sage-deep: #6d3f62;
+  --terracotta: #9b5d70;
+  --mauve: #8b607d;
+  --gold: #6d3f62;
+  --gold2: rgba(109,63,98,0.24);
+  --gold3: rgba(109,63,98,0.08);
+  --cta: #6d3f62;
+  --cta-deep: #4f2d48;
+  --cta-foreground: #fffaf6;
+  --background: #fbf7f2;
+  --foreground: #2c2422;
+  --card: #fffdfc;
+  --card-foreground: #2c2422;
+  --popover: #fffdfc;
+  --popover-foreground: #2c2422;
+  --primary: #6d3f62;
+  --primary-foreground: #fffaf6;
+  --secondary: #f1e7e2;
+  --secondary-foreground: #2c2422;
+  --muted: #efe5df;
+  --muted-foreground: #746865;
+  --accent: #eadde3;
+  --accent-foreground: #5d4057;
+  --border: rgba(109,63,98,0.16);
+  --input: rgba(109,63,98,0.22);
+  --ring: #6d3f62;
+  color: var(--foreground);
+}
+.warm-platform.paper-grain::before { opacity: 0.34; mix-blend-mode: multiply; }
+.warm-platform .eyebrow { color: var(--primary); font-weight: 700; letter-spacing: 0.22em; }
+.warm-platform .soft-shadow { box-shadow: 0 18px 40px -28px rgba(77,45,68,0.42); }
+.warm-platform :where(h1, h2, h3, h4),
+.warm-dialog :where(h1, h2, h3, h4) { color: var(--foreground); }
+.warm-platform :where(input, textarea, select),
+.warm-dialog :where(input, textarea, select) {
+  background: rgba(255,253,252,0.86);
+  border-color: var(--input);
+}
+.warm-dialog {
+  background: var(--popover);
+  border-color: var(--border);
+  box-shadow: 0 28px 80px -30px rgba(67,40,60,0.55);
+}
+
 /* Realistic candle flame — subtle organic flicker.
    Uses transform (scale + tiny sway) and opacity, with a paired halo pulse. */
 @keyframes candleFlicker {

@@ -105,7 +105,7 @@ export function MemoryTimeline({ petId, petName }: { petId: string; petName: str
       <div className="mt-4 space-y-3">
         {q.isLoading && <div className="text-sm text-muted-foreground">Loading…</div>}
         {!q.isLoading && memories.length === 0 && (
-          <div className="rounded-2xl border border-dashed border-border p-8 text-center">
+          <div className="rounded-[18px] border border-dashed border-primary/25 bg-card/60 p-8 text-center">
             <BookHeart className="mx-auto h-7 w-7 text-muted-foreground" />
             <p className="mt-2 text-sm text-muted-foreground">
               No memories yet. Start with the first day you met, or a small everyday thing they did.
@@ -113,7 +113,7 @@ export function MemoryTimeline({ petId, petName }: { petId: string; petName: str
           </div>
         )}
         {memories.map((m) => (
-          <article key={m.id} className="rounded-2xl border border-border/60 bg-card p-4 soft-shadow">
+          <article key={m.id} className="rounded-[18px] border border-border bg-card p-4 soft-shadow">
             <div className="flex items-start gap-3">
               {(m.photos?.length ? m.photos : m.photo_url ? [m.photo_url] : []).length > 0 && (
                 <div className="w-28 shrink-0 sm:w-36">
@@ -149,7 +149,7 @@ export function MemoryTimeline({ petId, petName }: { petId: string; petName: str
       </div>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-h-[85vh] overflow-y-auto">
+        <DialogContent className="warm-dialog max-h-[85vh] overflow-y-auto rounded-[20px]">
           <DialogHeader>
             <DialogTitle className="font-display text-2xl">{editing ? "Edit memory" : "Add a memory"}</DialogTitle>
           </DialogHeader>

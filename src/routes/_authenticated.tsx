@@ -18,7 +18,7 @@ export const Route = createFileRoute("/_authenticated")({
 
 function AuthenticatedPending() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background paper-grain">
+    <div className="warm-platform flex min-h-screen items-center justify-center bg-background paper-grain">
       <div className="flex flex-col items-center gap-3 text-muted-foreground">
         <span className="h-6 w-6 animate-spin rounded-full border-2 border-current border-t-transparent" />
         <span className="text-[11px] uppercase tracking-[0.22em]">Opening your space…</span>
@@ -29,9 +29,9 @@ function AuthenticatedPending() {
 
 function AuthenticatedLayout() {
   return (
-    <div className="min-h-screen bg-background paper-grain">
+    <div className="warm-platform min-h-screen bg-background paper-grain">
       <SiteHeader />
-      <main className="mx-auto max-w-md px-4 py-6 md:max-w-3xl md:px-8 md:py-10">
+      <main className="mx-auto max-w-md px-5 py-8 pb-28 md:max-w-4xl md:px-8 md:py-12">
         <Outlet />
       </main>
     </div>
