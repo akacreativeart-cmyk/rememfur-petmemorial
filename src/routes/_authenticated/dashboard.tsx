@@ -9,6 +9,7 @@ import { memoryKeeperOverview } from "@/lib/memories.functions";
 import { useAuth } from "@/hooks/use-auth";
 import { consumePostAuthIntent } from "@/lib/post-auth-intent";
 import { Plus, Flame, MessageCircle, Heart, X, PawPrint, BookHeart } from "lucide-react";
+import { PawLamp } from "@/components/site/PawLamp";
 import { format } from "date-fns";
 import { toast } from "sonner";
 
@@ -86,10 +87,10 @@ function Dashboard() {
   return (
     <div>
       {banner.length > 0 && (
-        <div className="mb-6 overflow-hidden rounded-3xl border border-amber-400/30 bg-gradient-to-br from-amber-400/15 via-amber-300/10 to-transparent p-5 soft-shadow">
+        <div className="mb-8 overflow-hidden rounded-[20px] border border-border bg-card p-5 soft-shadow">
           <div className="flex items-start gap-3">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-amber-400/20 text-amber-300">
-              <Flame className="h-5 w-5" />
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent/35 text-primary">
+              <PawLamp size={22} />
             </div>
             <div className="flex-1">
               <div className="font-display text-lg text-foreground">While you were away…</div>
@@ -101,9 +102,9 @@ function Dashboard() {
                       params={{ slug: b.memorial!.slug }}
                       className="group flex items-center gap-2 text-sm text-foreground/85 hover:text-foreground"
                     >
-                      <span className="inline-flex h-1.5 w-1.5 rounded-full bg-amber-300/80" />
+                      <span className="inline-flex h-1.5 w-1.5 rounded-full bg-primary/70" />
                       <span>{phrase(b.count, b.type, b.memorial!.pet_name)}</span>
-                      <span className="text-xs text-amber-300/80 opacity-0 transition group-hover:opacity-100">Visit →</span>
+                      <span className="text-xs text-primary opacity-0 transition group-hover:opacity-100">Visit →</span>
                     </Link>
                   </li>
                 ))}
@@ -112,7 +113,7 @@ function Dashboard() {
             <button
               onClick={() => setDismissed(true)}
               aria-label="Dismiss"
-              className="rounded-full p-1.5 text-muted-foreground transition hover:bg-white/5 hover:text-foreground"
+              className="rounded-full p-1.5 text-muted-foreground transition hover:bg-accent hover:text-foreground"
             >
               <X className="h-4 w-4" />
             </button>
@@ -124,7 +125,8 @@ function Dashboard() {
 
       <div className="mt-12 flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h2 className="font-display text-3xl text-foreground">My memorials</h2>
+          <div className="eyebrow">A place for remembrance</div>
+          <h2 className="mt-2 font-display text-3xl text-foreground">My memorials</h2>
           <p className="mt-1 text-sm text-muted-foreground">A private space for the bonds you've honored.</p>
         </div>
         <Link to="/create">
@@ -137,7 +139,7 @@ function Dashboard() {
       <div className="mt-6">
         {isLoading ? (
           <div className="grid gap-4 md:grid-cols-2">
-            {[...Array(2)].map((_, i) => <div key={i} className="h-44 animate-pulse rounded-3xl bg-muted" />)}
+            {[...Array(2)].map((_, i) => <div key={i} className="h-44 animate-pulse rounded-[20px] bg-muted" />)}
           </div>
         ) : hasNoMemorials ? (
           <ZeroStateWelcome />
@@ -146,14 +148,14 @@ function Dashboard() {
             {data!.map((m: any) => {
               const img = m.transformed_image_url ?? m.hero_image_url;
               return (
-                <Link key={m.id} to="/memorial/$slug" params={{ slug: m.slug }} className="group flex gap-4 overflow-hidden rounded-3xl border border-border/60 bg-card p-3 soft-shadow transition hover:-translate-y-0.5">
-                  <div className="h-24 w-24 shrink-0 overflow-hidden rounded-2xl bg-muted">
+                <Link key={m.id} to="/memorial/$slug" params={{ slug: m.slug }} className="group flex gap-4 overflow-hidden rounded-[20px] border border-border bg-card p-3 soft-shadow transition hover:-translate-y-0.5 hover:border-primary/35">
+                  <div className="h-24 w-24 shrink-0 overflow-hidden rounded-[14px] bg-muted">
                     {img ? <img src={img} alt={m.pet_name} className="h-full w-full object-cover" /> : <div className="flex h-full items-center justify-center text-2xl">🐾</div>}
                   </div>
                   <div className="flex flex-col py-1">
                     <div className="font-display text-xl text-foreground">{m.pet_name}</div>
                     <div className="text-xs text-muted-foreground capitalize">{m.species}{m.passing_date ? ` · Angel day ${format(new Date(m.passing_date), "MMM d")}` : ""}</div>
-                    <div className="mt-auto text-xs text-sage-deep group-hover:underline">View memorial →</div>
+                    <div className="mt-auto text-xs text-primary group-hover:underline">View memorial →</div>
                   </div>
                 </Link>
               );
@@ -177,7 +179,8 @@ function MemoryKeeper() {
     <section>
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="font-display text-4xl text-foreground">Your Memory Keeper</h1>
+          <div className="eyebrow">Your private keepsake</div>
+          <h1 className="mt-2 font-display text-4xl text-foreground">Your Memory Keeper</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Everything you've written down, kept safe — for the ones still here and the ones who've gone ahead.
           </p>
@@ -189,10 +192,10 @@ function MemoryKeeper() {
 
       {isLoading ? (
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {[...Array(3)].map((_, i) => <div key={i} className="h-28 animate-pulse rounded-2xl bg-muted" />)}
+          {[...Array(3)].map((_, i) => <div key={i} className="h-28 animate-pulse rounded-[18px] bg-muted" />)}
         </div>
       ) : pets.length === 0 ? (
-        <div className="mt-6 rounded-3xl border border-dashed border-border p-10 text-center">
+        <div className="mt-6 rounded-[20px] border border-dashed border-primary/25 bg-card/60 p-10 text-center">
           <PawPrint className="mx-auto h-8 w-8 text-muted-foreground" />
           <p className="mt-3 font-display text-2xl text-foreground">Add your first companion</p>
           <p className="mx-auto mt-2 max-w-sm text-sm text-muted-foreground">
@@ -209,9 +212,9 @@ function MemoryKeeper() {
               key={p.id}
               to="/pets/$petId"
               params={{ petId: p.id }}
-              className="group flex items-center gap-3 rounded-2xl border border-border/60 bg-card p-4 soft-shadow transition hover:-translate-y-0.5"
+              className="group flex items-center gap-3 rounded-[18px] border border-border bg-card p-4 soft-shadow transition hover:-translate-y-0.5 hover:border-primary/35"
             >
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full bg-sage/15 text-sage-deep">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full bg-accent text-primary">
                 {p.avatar_url ? <img src={p.avatar_url} alt={p.name} className="h-full w-full object-cover" /> : <PawPrint className="h-5 w-5" />}
               </div>
               <div className="min-w-0">
@@ -234,9 +237,9 @@ function MemoryKeeper() {
                 <Link
                   to="/pets/$petId"
                   params={{ petId: m.pet_id }}
-                  className="flex items-center gap-3 rounded-2xl border border-border/60 bg-card px-4 py-3 text-sm transition hover:border-sage/50"
+                  className="flex items-center gap-3 rounded-[16px] border border-border bg-card px-4 py-3 text-sm transition hover:border-primary/35"
                 >
-                  <BookHeart className="h-4 w-4 shrink-0 text-sage-deep" />
+                  <BookHeart className="h-4 w-4 shrink-0 text-primary" />
                   <span className="min-w-0 flex-1 truncate text-foreground">{m.title}</span>
                   <span className="shrink-0 text-xs text-muted-foreground">
                     {petName(m.pet_id)} · {format(new Date(m.memory_date), "d MMM yyyy")}
@@ -254,7 +257,7 @@ function MemoryKeeper() {
 
 function ZeroStateWelcome() {
   return (
-    <div className="rounded-3xl border border-border/60 bg-gradient-to-br from-card via-card/80 to-transparent p-10 text-center soft-shadow md:p-14">
+    <div className="rounded-[20px] border border-border bg-card p-10 text-center soft-shadow md:p-14">
       <p className="font-display text-3xl text-foreground md:text-4xl">Welcome. Who are we remembering?</p>
       <p className="mx-auto mt-3 max-w-md text-sm text-muted-foreground">
         Take your time. We'll keep everything safe as you go — you can pause, come back, and finish whenever feels right.

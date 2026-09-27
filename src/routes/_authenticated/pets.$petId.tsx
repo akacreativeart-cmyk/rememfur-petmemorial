@@ -16,7 +16,14 @@ import { EditPetDialog } from "@/components/pets/EditPetDialog";
 
 export const Route = createFileRoute("/_authenticated/pets/$petId")({
   component: PetDetailPage,
-  head: () => ({ meta: [{ title: "Pet — Rememfur" }] }),
+  head: () => ({ meta: [
+    { title: "Pet memories — Rememfur" },
+    { name: "description", content: "Keep a pet's story, memories, and care records together in one gentle place." },
+    { property: "og:title", content: "Pet memories — Rememfur" },
+    { property: "og:description", content: "Keep a pet's story, memories, and care records together." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+  ] }),
 });
 
 const KINDS = [
@@ -94,7 +101,7 @@ function PetDetailPage() {
     return (
       <div className="mx-auto max-w-md text-center">
         <p className="font-display text-2xl text-foreground">Pet not found.</p>
-        <Link to="/pets" className="mt-3 inline-block text-sage-deep underline">Back to My pets</Link>
+        <Link to="/pets" className="mt-3 inline-block text-primary underline">Back to My pets</Link>
       </div>
     );
   }
@@ -108,8 +115,8 @@ function PetDetailPage() {
         <ArrowLeft className="h-4 w-4" /> My pets
       </Link>
 
-      <header className="mt-4 flex items-start gap-4">
-        <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-sage/15 text-sage-deep">
+      <header className="mt-5 flex items-start gap-4 border-b border-border pb-6">
+        <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-accent text-primary ring-4 ring-card">
           {pet.avatar_url ? <img src={pet.avatar_url} alt="" className="h-full w-full rounded-full object-cover" /> : <PawPrint className="h-7 w-7" />}
         </div>
         <div className="min-w-0 flex-1">
@@ -127,10 +134,10 @@ function PetDetailPage() {
       </header>
 
       {pet.story && (
-        <p className="mt-4 whitespace-pre-wrap rounded-2xl bg-muted/50 p-4 text-sm text-foreground">{pet.story}</p>
+        <p className="mt-5 whitespace-pre-wrap border-l-2 border-primary/35 bg-card/50 px-5 py-4 font-serif text-base italic text-foreground">{pet.story}</p>
       )}
       {pet.notes && (
-        <p className="mt-3 whitespace-pre-wrap rounded-2xl bg-muted/30 p-4 text-sm text-muted-foreground">{pet.notes}</p>
+        <p className="mt-3 whitespace-pre-wrap rounded-[16px] bg-muted/60 p-4 text-sm text-muted-foreground">{pet.notes}</p>
       )}
 
       <MemoryTimeline petId={pet.id} petName={pet.name} />
@@ -138,8 +145,8 @@ function PetDetailPage() {
 
 
       {nextDue7.length > 0 && (
-        <div className="mt-6 rounded-2xl border border-amber-400/40 bg-amber-400/5 p-4">
-          <p className="text-xs uppercase tracking-wider text-amber-200/80">Coming up</p>
+        <div className="mt-6 rounded-[16px] border border-primary/20 bg-accent/45 p-4">
+          <p className="text-xs uppercase tracking-wider text-primary">Coming up</p>
           <ul className="mt-2 space-y-1 text-sm text-foreground">
             {nextDue7.map((r) => (
               <li key={r.id}>· {r.title} — due {new Date(r.next_due_date!).toLocaleDateString()}</li>
@@ -152,11 +159,11 @@ function PetDetailPage() {
         <h2 className="font-display text-2xl text-foreground">Records</h2>
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
-            <Button size="sm" className="rounded-full bg-sage-deep text-primary-foreground hover:bg-sage-deep/90">
+            <Button size="sm" className="btn-gold-sm">
               <PlusCircle className="mr-2 h-4 w-4" /> Add record
             </Button>
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent className="warm-dialog rounded-[20px]">
             <DialogHeader>
               <DialogTitle className="font-display text-2xl">Add a record</DialogTitle>
             </DialogHeader>
@@ -192,7 +199,7 @@ function PetDetailPage() {
               <Button
                 onClick={() => add.mutate()}
                 disabled={!title.trim() || add.isPending}
-                className="w-full bg-sage-deep text-primary-foreground hover:bg-sage-deep/90"
+                className="btn-gold w-full"
               >
                 {add.isPending ? "Saving…" : "Save record"}
               </Button>
@@ -210,8 +217,8 @@ function PetDetailPage() {
         {records.map((r) => {
           const Icon = iconFor(r.kind);
           return (
-            <div key={r.id} className="group flex items-start gap-3 rounded-2xl border border-border/60 bg-card p-4">
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-sage/15 text-sage-deep">
+            <div key={r.id} className="group flex items-start gap-3 rounded-[16px] border border-border bg-card p-4 transition hover:border-primary/30">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent text-primary">
                 <Icon className="h-4 w-4" />
               </div>
               <div className="min-w-0 flex-1">

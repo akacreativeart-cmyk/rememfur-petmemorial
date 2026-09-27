@@ -143,7 +143,7 @@ export function PostCard({ post }: { post: FeedPost }) {
   const initials = (post.author_name || "?").split(/\s+/).map((s) => s[0]).slice(0, 2).join("").toUpperCase();
 
   return (
-    <article className="border-b border-border/60 bg-card px-4 py-4 transition hover:bg-card/80">
+    <article className="overflow-hidden rounded-[18px] border border-border bg-card px-4 py-4 soft-shadow transition hover:border-primary/25">
       <div className="flex gap-3">
         <Link to="/u/$userId" params={{ userId: post.author_id }} className="shrink-0">
           <Avatar className="h-10 w-10">
@@ -188,7 +188,7 @@ export function PostCard({ post }: { post: FeedPost }) {
           <Link
             to="/memorial/$slug"
             params={{ slug: post.memorial_slug }}
-            className="inline-flex items-center gap-1.5 rounded-full bg-sage/10 px-3 py-1 text-xs text-sage-deep hover:bg-sage/20"
+            className="inline-flex items-center gap-1.5 rounded-full bg-accent px-3 py-1 text-xs text-primary hover:bg-accent/70"
           >
             <Flower2 className="h-3 w-3" /> In memory of {post.memorial_pet_name}
           </Link>
@@ -340,7 +340,7 @@ export function PostCard({ post }: { post: FeedPost }) {
                   size="sm"
                   disabled={!commentBody.trim() || submitComment.isPending}
                   onClick={() => submitComment.mutate()}
-                  className="bg-sage-deep text-primary-foreground hover:bg-sage-deep/90"
+                  className="btn-gold-sm"
                 >
                   Post
                 </Button>

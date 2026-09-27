@@ -63,11 +63,11 @@ export function ComposePost() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="w-full bg-sage-deep text-primary-foreground hover:bg-sage-deep/90">
+        <Button className="btn-gold w-full">
           <ImagePlus className="mr-2 h-4 w-4" /> Share a memory
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+      <DialogContent className="warm-dialog max-h-[90vh] max-w-lg overflow-y-auto rounded-[20px]">
         <DialogHeader>
           <DialogTitle className="font-display text-2xl">Share a memory</DialogTitle>
         </DialogHeader>
@@ -81,7 +81,7 @@ export function ComposePost() {
                 type="button"
                 size="sm"
                 variant="ghost"
-                className="h-7 text-xs text-sage-deep hover:bg-sage/10"
+                className="h-7 text-xs text-primary hover:bg-accent"
                 disabled={assist.isPending}
                 onClick={() => assist.mutate()}
               >
@@ -109,7 +109,7 @@ export function ComposePost() {
             </div>
           )}
 
-          <Button disabled={!canSubmit} onClick={() => submit.mutate()} className="w-full bg-sage-deep text-primary-foreground hover:bg-sage-deep/90">
+          <Button disabled={!canSubmit} onClick={() => submit.mutate()} className="btn-gold w-full">
             {submit.isPending ? "Posting…" : "Post"}
           </Button>
         </div>

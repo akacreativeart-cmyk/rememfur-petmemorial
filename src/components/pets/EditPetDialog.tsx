@@ -82,7 +82,7 @@ export function EditPetDialog({ pet }: { pet: Pet }) {
           <Pencil className="h-4 w-4 text-muted-foreground" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-h-[85vh] overflow-y-auto">
+      <DialogContent className="warm-dialog max-h-[85vh] overflow-y-auto rounded-[20px]">
         <DialogHeader>
           <DialogTitle className="font-display text-2xl">Edit {pet.name}</DialogTitle>
         </DialogHeader>

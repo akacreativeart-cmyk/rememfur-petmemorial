@@ -21,6 +21,8 @@ export const Route = createFileRoute("/community")({
       { name: "description", content: "Share photos and memories of beloved pets with a supportive community." },
       { property: "og:title", content: "Community \u2014 Rememfur" },
       { property: "og:description", content: "Share photos and memories of beloved pets." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
 });
@@ -67,9 +69,9 @@ function CommunityPage() {
   const posts = data?.pages.flat() ?? [];
 
   return (
-    <div className="min-h-screen bg-background paper-grain">
+    <div className="warm-platform min-h-screen bg-background paper-grain">
       <SiteHeader />
-      <main className="mx-auto max-w-2xl px-5 py-10">
+      <main className="mx-auto max-w-2xl px-5 py-10 pb-28">
         <PageHero
           eyebrow="chapter two"
           title="The Memory Wall"
@@ -80,7 +82,7 @@ function CommunityPage() {
         {user ? (
           <div className="mb-6"><ComposePost /></div>
         ) : (
-          <div className="mb-6 rounded-2xl border border-border/60 bg-card p-5 text-center soft-shadow">
+          <div className="mb-6 rounded-[18px] border border-border bg-card p-5 text-center soft-shadow">
             <p className="text-sm text-muted-foreground">Sign in to share memories and join the conversation.</p>
             <div className="mt-3 flex justify-center gap-2">
               <Link to="/login"><Button variant="outline" size="sm">Log in</Button></Link>
@@ -90,16 +92,16 @@ function CommunityPage() {
         )}
 
         {user && (
-          <div className="mb-6 flex gap-2 rounded-full border border-border/60 bg-card p-1 text-sm">
+          <div className="mb-6 flex gap-2 rounded-full border border-border bg-card p-1 text-sm soft-shadow">
             <button
               onClick={() => setScope("all")}
-              className={`flex-1 rounded-full px-4 py-1.5 transition ${scope === "all" ? "bg-white/10 text-amber-200" : "text-muted-foreground"}`}
+                className={`flex-1 rounded-full px-4 py-2 transition ${scope === "all" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent"}`}
             >
               For you
             </button>
             <button
               onClick={() => setScope("following")}
-              className={`flex-1 rounded-full px-4 py-1.5 transition ${scope === "following" ? "bg-white/10 text-amber-200" : "text-muted-foreground"}`}
+                className={`flex-1 rounded-full px-4 py-2 transition ${scope === "following" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent"}`}
             >
               Following
             </button>
@@ -115,7 +117,7 @@ function CommunityPage() {
             </>
           )}
           {!isLoading && posts.length === 0 && (
-            <div className="flex flex-col items-center rounded-2xl border border-dashed border-border bg-card/50 p-8 text-center">
+            <div className="flex flex-col items-center rounded-[20px] border border-dashed border-primary/25 bg-card/60 p-8 text-center">
               <span className="hero-candle scale-90" aria-hidden>
                 <span className="flame" />
               </span>
