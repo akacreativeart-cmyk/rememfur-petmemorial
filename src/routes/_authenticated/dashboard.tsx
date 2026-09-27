@@ -19,6 +19,10 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
     meta: [
       { title: "Your Memory Keeper — Rememfur" },
       { name: "description", content: "Your pets and the memories you keep for them, saved safely in one place." },
+      { property: "og:title", content: "Your Memory Keeper — Rememfur" },
+      { property: "og:description", content: "Your pets and the memories you keep for them, saved safely in one place." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
 });

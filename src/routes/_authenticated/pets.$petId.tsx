@@ -210,7 +210,7 @@ function PetDetailPage() {
 
       <div className="mt-4 space-y-2">
         {records.length === 0 && (
-          <div className="rounded-2xl border border-dashed border-border p-8 text-center text-sm text-muted-foreground">
+          <div className="rounded-[18px] border border-dashed border-primary/25 bg-card/60 p-8 text-center text-sm text-muted-foreground">
             No records yet. Add their first vet visit, vaccination or grooming appointment.
           </div>
         )}

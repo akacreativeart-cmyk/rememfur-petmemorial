@@ -90,7 +90,7 @@ export function EditPetDialog({ pet }: { pet: Pet }) {
           <div>
             <Label>Photo</Label>
             <div className="mt-1 flex items-center gap-3">
-              <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl bg-muted">
+              <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-[14px] bg-muted">
                 {photo ? <img src={photo} alt="" className="h-full w-full object-cover" /> : <ImagePlus className="h-5 w-5 text-muted-foreground" />}
               </div>
               <Input type="file" accept="image/*" onChange={(e) => pickPhoto(e.target.files?.[0])} disabled={uploading} />

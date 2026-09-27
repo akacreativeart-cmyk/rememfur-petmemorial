@@ -85,7 +85,7 @@ function UserProfilePage() {
         <SiteHeader />
         <main className="mx-auto max-w-2xl px-5 py-16 text-center">
           <p className="font-display text-2xl">Profile not found.</p>
-          <Link to="/community" className="mt-4 inline-block text-sage-deep underline">Back to Community</Link>
+          <Link to="/community" className="mt-4 inline-block text-primary underline">Back to Community</Link>
         </main>
       </div>
     );
@@ -114,7 +114,7 @@ function UserProfilePage() {
               <Button
                 size="sm"
                 onClick={() => follow.mutate()}
-                  className={`mt-3 ${profile.followed_by_me ? "btn-quiet" : "btn-gold-sm"}`}
+                className={`mt-3 ${profile.followed_by_me ? "btn-quiet" : "btn-gold-sm"}`}
               >
                 {profile.followed_by_me ? "Following" : "Follow"}
               </Button>

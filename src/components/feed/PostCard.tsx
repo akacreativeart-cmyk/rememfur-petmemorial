@@ -148,7 +148,7 @@ export function PostCard({ post }: { post: FeedPost }) {
         <Link to="/u/$userId" params={{ userId: post.author_id }} className="shrink-0">
           <Avatar className="h-10 w-10">
             {post.author_avatar && <AvatarImage src={post.author_avatar} alt="" />}
-            <AvatarFallback className="bg-sage/20 text-sm text-sage-deep">{initials}</AvatarFallback>
+            <AvatarFallback className="bg-accent text-sm text-primary">{initials}</AvatarFallback>
           </Avatar>
         </Link>
         <div className="min-w-0 flex-1">
@@ -315,7 +315,7 @@ export function PostCard({ post }: { post: FeedPost }) {
                 <div key={c.id} className="group flex gap-2">
                   <Avatar className="h-7 w-7">
                     {c.author_avatar && <AvatarImage src={c.author_avatar} alt="" />}
-                    <AvatarFallback className="bg-sage/20 text-[10px] text-sage-deep">{ci}</AvatarFallback>
+                    <AvatarFallback className="bg-accent text-[10px] text-primary">{ci}</AvatarFallback>
                   </Avatar>
                   <div className="flex-1 rounded-xl bg-muted/50 px-3 py-2">
                     <div className="flex items-start justify-between gap-2">

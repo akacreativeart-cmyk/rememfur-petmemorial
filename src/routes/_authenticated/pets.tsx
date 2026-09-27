@@ -18,6 +18,10 @@ export const Route = createFileRoute("/_authenticated/pets")({
     meta: [
       { title: "Your pets — Rememfur" },
       { name: "description", content: "Every companion you're keeping memories for, in one gentle place." },
+      { property: "og:title", content: "Your pets — Rememfur" },
+      { property: "og:description", content: "Every companion you're keeping memories for, in one gentle place." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
 });
