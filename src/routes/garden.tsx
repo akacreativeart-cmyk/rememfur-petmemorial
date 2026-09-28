@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { listGardenMemorials } from "@/lib/memorials.functions";
-import { Flame, Search } from "lucide-react";
+import { Search } from "lucide-react";
+import { PawLamp } from "@/components/site/PawLamp";
 
 export const Route = createFileRoute("/garden")({
   component: GardenPage,
@@ -18,6 +19,8 @@ export const Route = createFileRoute("/garden")({
       { property: "og:title", content: "The Memorial Garden — Rememfur" },
       { property: "og:description", content: "A shared garden of pet memorials. Wander among the dogs, cats and companions others are remembering, light a paw lamp and leave a gentle word." },
       { property: "og:url", content: "https://rememfur.com/garden" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [{ rel: "canonical", href: "https://rememfur.com/garden" }],
     scripts: [
@@ -53,12 +56,13 @@ function GardenPage() {
   });
 
   return (
-    <div className="min-h-screen bg-background paper-grain">
+    <div className="warm-platform min-h-screen bg-background paper-grain">
       <SiteHeader />
       <main className="mx-auto max-w-6xl px-5 py-14">
-        <div className="rounded-[2rem] bg-navy/95 p-8 text-cream md:p-12">
-          <h1 className="font-display text-4xl md:text-5xl">Memorial Garden</h1>
-          <p className="mt-2 max-w-xl text-cream/75">A place where love lives on. Wander, remember, light a paw lamp.</p>
+        <div className="border-b border-border px-1 pb-8 text-center md:text-left">
+          <p className="font-hand text-2xl text-primary">each photograph holds a whole life</p>
+          <h1 className="mt-1 font-display text-4xl md:text-5xl">Memorial Garden</h1>
+          <p className="mt-2 max-w-xl text-muted-foreground">A place where love lives on. Wander, remember, light a paw lamp.</p>
 
           <div className="mt-7 flex flex-wrap items-center gap-2">
             {filters.map((f) => (
@@ -67,20 +71,20 @@ function GardenPage() {
                 onClick={() => setSpecies(f.key)}
                 className={`rounded-full border px-4 py-1.5 text-sm transition ${
                   species === f.key
-                    ? "border-cream bg-cream text-navy"
-                    : "border-cream/30 text-cream/80 hover:bg-cream/10"
+                    ? "border-primary bg-primary text-primary-foreground"
+                    : "border-border bg-card text-foreground hover:bg-muted"
                 }`}
               >
                 {f.label}
               </button>
             ))}
-            <div className="ml-auto flex items-center gap-2 rounded-full bg-cream/10 px-3 py-1.5">
-              <Search className="h-4 w-4 text-cream/70" />
+            <div className="ml-auto flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5">
+              <Search className="h-4 w-4 text-primary" />
               <Input
                 placeholder="Search by name…"
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
-                className="h-7 border-0 bg-transparent text-cream placeholder:text-cream/50 focus-visible:ring-0"
+                className="h-7 border-0 bg-transparent text-foreground placeholder:text-muted-foreground focus-visible:ring-0"
               />
             </div>
           </div>
@@ -88,7 +92,7 @@ function GardenPage() {
 
         <section className="mt-10">
           {isLoading ? (
-            <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4">
+            <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
               {[...Array(8)].map((_, i) => (
                 <div key={i} className="aspect-[3/4] animate-pulse rounded-3xl bg-muted" />
               ))}
@@ -111,8 +115,9 @@ function GardenPage() {
                     key={m.id}
                     to="/memorial/$slug"
                     params={{ slug: m.slug }}
-                    className="group overflow-hidden rounded-3xl border border-border/60 bg-card soft-shadow transition hover:-translate-y-0.5"
+                    className={`polaroid garden-polaroid group block transition hover:-translate-y-1 ${m.id.charCodeAt(0) % 2 ? "rotate-[1deg]" : "-rotate-[1deg]"}`}
                   >
+                    <span aria-hidden className="tape absolute -top-2 left-1/2 z-10 -translate-x-1/2 rotate-[-2deg]" />
                     <div className="relative aspect-square w-full overflow-hidden bg-muted">
                       {img ? (
                         <img src={img} alt={m.pet_name} loading="lazy" className="h-full w-full object-cover transition group-hover:scale-105" />
@@ -120,17 +125,17 @@ function GardenPage() {
                         <div className="flex h-full items-center justify-center text-muted-foreground">🐾</div>
                       )}
                     </div>
-                    <div className="px-4 py-3">
+                    <div className="px-2 pb-1 pt-3 text-center">
                       <div className="flex items-center justify-between">
-                        <div>
-                          <div className="font-display text-lg text-foreground">{m.pet_name}</div>
-                          <div className="text-xs text-muted-foreground">{years || "Forever loved"}</div>
+                        <div className="min-w-0 flex-1">
+                          <div className="font-hand text-2xl leading-none text-foreground">{m.pet_name}</div>
+                          <div className="mt-1 font-hand text-base text-muted-foreground">{years || "forever loved"}</div>
                         </div>
-                        <div className="flex items-center gap-1 text-xs text-terracotta">
-                          <Flame className="h-3.5 w-3.5" /> {m.candle_count}
+                        <div className="flex items-center gap-1 text-xs text-primary" aria-label={`${m.candle_count} paw lamps`}>
+                          <PawLamp size={15} /> {m.candle_count}
                         </div>
                       </div>
-                      {m.epitaph && <p className="mt-2 line-clamp-2 text-xs italic text-muted-foreground">"{m.epitaph}"</p>}
+                      {m.epitaph && <p className="mt-2 line-clamp-2 font-hand text-lg leading-tight text-muted-foreground">“{m.epitaph}”</p>}
                     </div>
                   </Link>
                 );

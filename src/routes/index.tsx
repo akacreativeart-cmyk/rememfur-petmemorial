@@ -23,9 +23,6 @@ import lifeServicesImg from "@/assets/life-services.jpg";
 import lifeLifestyleImg from "@/assets/life-lifestyle.jpg";
 import lifeAdoptionImg from "@/assets/life-adoption.jpg";
 import memorialEditorialHero from "@/assets/memorial-editorial-hero.jpg";
-import petOne from "@/assets/pet-1.jpg";
-import petTwo from "@/assets/pet-2.jpg";
-import petThree from "@/assets/pet-3.jpg";
 
 // Real photography from Unsplash for the Life world — warm, real moments.
 // Local painterly assets remain as onError fallbacks.
@@ -625,29 +622,23 @@ function Hero({ secondaryCandle, onLastLetter }: { secondaryCandle: ReactNode; o
               Send them your last letter
             </button>
 
-            <div className="mt-9 flex items-center justify-center gap-3 border-t border-[var(--w-hair)] pt-5 text-left lg:justify-start">
-              <div className="flex -space-x-2">
-                {[petOne, petTwo, petThree].map((src) => (
-                  <img key={src} src={src} alt="" className="h-9 w-9 rounded-full border-2 border-[var(--w-card-1)] object-cover" />
-                ))}
-              </div>
-              <p className="text-xs leading-relaxed text-[var(--w-muted)]">A quiet community for every kind of love and loss.</p>
-            </div>
+            <p className="mt-9 border-t border-[var(--w-hair)] pt-5 font-hand text-2xl text-[var(--w-accent)]">
+              every story deserves a beautiful place to stay
+            </p>
           </div>
-          <div className="relative order-1 min-h-[360px] overflow-hidden lg:order-2 lg:min-h-[680px]">
-            <img
-              src={memorialEditorialHero}
-              alt="A golden retriever resting among wildflowers in warm evening light"
-              className="absolute inset-0 h-full w-full object-cover object-center"
-              width={1408}
-              height={1104}
-              fetchPriority="high"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-[var(--w-ink)]/30 via-transparent to-transparent lg:bg-gradient-to-r lg:from-[var(--w-card-1)]/30 lg:to-transparent" />
-            <blockquote className="absolute inset-x-5 bottom-5 rounded-2xl border border-white/40 bg-[rgba(255,253,252,0.86)] p-5 text-left shadow-lg backdrop-blur-md sm:inset-x-auto sm:bottom-8 sm:right-8 sm:max-w-xs">
-              <p className="font-display text-lg italic leading-relaxed text-[var(--w-ink)]">“They never truly leave us. They simply run ahead.”</p>
-              <footer className="mt-3 text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--w-accent)]">In loving memory</footer>
-            </blockquote>
+          <div className="order-1 flex min-h-[400px] items-center justify-center p-6 pb-2 lg:order-2 lg:min-h-[680px] lg:p-12">
+            <figure className="polaroid home-hero-polaroid rotate-[1.5deg]">
+              <span aria-hidden className="tape absolute -top-2 left-1/2 z-10 -translate-x-1/2 -rotate-2" />
+              <img
+                src={memorialEditorialHero}
+                alt="A golden retriever resting among wildflowers in warm evening light"
+                className="aspect-[4/5] w-full object-cover object-center"
+                width={1408}
+                height={1104}
+                fetchPriority="high"
+              />
+              <figcaption>they simply run ahead…</figcaption>
+            </figure>
           </div>
         </div>
       </div>
@@ -1406,41 +1397,27 @@ function LifeWorld({ onDev }: { onDev: (source: string) => void }) {
           </div>
         </div>
 
-        {/* Painterly hero image */}
+        {/* Keepsake hero photograph */}
         <div className="mx-auto mt-10 w-full max-w-[900px] md:mt-12">
-          <div
-            className="relative overflow-hidden rounded-[24px]"
+          <figure
+            className="polaroid relative mx-auto max-w-[760px] rotate-[-1deg]"
             style={{
-              aspectRatio: "4 / 3",
               border: "1px solid var(--w-hair)",
               boxShadow: "0 24px 60px -30px rgba(58,44,28,0.35)",
             }}
           >
+            <span aria-hidden className="tape absolute -top-2 left-1/2 z-10 -translate-x-1/2 rotate-2" />
             <img
               src={UNSPLASH_LIFE_HERO}
               alt="A person warmly with a dog and cat together in soft home light"
-              className="h-full w-full object-cover md:[aspect-ratio:16/10]"
-              style={{ aspectRatio: "inherit" }}
+              className="aspect-[4/3] w-full object-cover md:aspect-[16/10]"
               width={1440}
               height={912}
               loading="lazy"
               onError={(e) => { (e.currentTarget as HTMLImageElement).src = lifeHeroImg; }}
             />
-            {/* Warm consistent grade to unify photography */}
-            <div
-              className="pointer-events-none absolute inset-0"
-              style={{
-                background:
-                  "linear-gradient(180deg, rgba(255,220,170,0.10) 0%, rgba(120,70,30,0.10) 100%)",
-                mixBlendMode: "multiply",
-              }}
-              aria-hidden
-            />
-            <div
-              className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3"
-              style={{ background: "linear-gradient(180deg, rgba(244,233,216,0) 0%, rgba(244,233,216,0.85) 100%)" }}
-            />
-          </div>
+            <figcaption>the ordinary days are the beautiful ones</figcaption>
+          </figure>
         </div>
       </section>
 
