@@ -1,157 +1,86 @@
 import { useId } from "react";
 
-/**
- * Realistic memorial candle.
- *
- * Kept under the historical name `PawLamp` because every UI surface (buttons,
- * notifications, feed, memorial page, header) imports it under that name.
- *
- * Rendering:
- *   - size <= 22  → flame-only variant, so it stays legible in dense list rows
- *   - size >  22  → full pillar candle: wax body with vertical texture, warm rim
- *     light, melted rim with pooled-wax highlight, wick and layered flame.
- *
- * Motion is a multi-frequency flicker (flame sway + independent glow pulse) so
- * it never reads as a single loop. Reduced-motion users get a still candle
- * (handled in styles.css via the `.candle-anim` guard).
- */
-export function PawLamp({
-  size = 20,
-  className,
-  glow = true,
-}: {
+type PawLampProps = {
   size?: number;
   className?: string;
   glow?: boolean;
-}) {
-  const rawId = useId().replace(/:/g, "");
-  const gid = `c${rawId}`;
-  const flameOnly = size <= 22;
+};
 
-  const vbW = flameOnly ? 24 : 34;
-  const vbH = flameOnly ? 30 : 54;
-  const height = Math.round((size * vbH) / vbW);
-
-  const defs = (
-    <defs>
-      {/* Flame body: pale core → amber → deep amber */}
-      <radialGradient id={`${gid}-flame`} cx="50%" cy="62%" r="62%">
-        <stop offset="0%" stopColor="#FFF7E2" />
-        <stop offset="38%" stopColor="#FFD98A" />
-        <stop offset="72%" stopColor="#F0A83C" />
-        <stop offset="100%" stopColor="#D9711C" stopOpacity="0.85" />
-      </radialGradient>
-      {/* Blue-hot base of the flame */}
-      <radialGradient id={`${gid}-blue`} cx="50%" cy="72%" r="60%">
-        <stop offset="0%" stopColor="#9CC9FF" stopOpacity="0.85" />
-        <stop offset="100%" stopColor="#6EA8F0" stopOpacity="0" />
-      </radialGradient>
-      {/* Warm halo around the flame */}
-      <radialGradient id={`${gid}-glow`} cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stopColor="#FFD79B" stopOpacity="0.55" />
-        <stop offset="55%" stopColor="#E8B96D" stopOpacity="0.18" />
-        <stop offset="100%" stopColor="#E8B96D" stopOpacity="0" />
-      </radialGradient>
-      {/* Wax pillar */}
-      <linearGradient id={`${gid}-wax`} x1="0" y1="0" x2="1" y2="0">
-        <stop offset="0%" stopColor="#B99B78" />
-        <stop offset="16%" stopColor="#F2E4CE" />
-        <stop offset="52%" stopColor="#FBF3E4" />
-        <stop offset="82%" stopColor="#E3CFB0" />
-        <stop offset="100%" stopColor="#A98D6C" />
-      </linearGradient>
-      {/* Melted rim */}
-      <linearGradient id={`${gid}-rim`} x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stopColor="#FFF3DC" />
-        <stop offset="100%" stopColor="#DCC4A2" />
-      </linearGradient>
-      {/* Light pool cast on the surface below */}
-      <radialGradient id={`${gid}-pool`} cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stopColor="#FFDCA6" stopOpacity="0.55" />
-        <stop offset="60%" stopColor="#E8B96D" stopOpacity="0.16" />
-        <stop offset="100%" stopColor="#E8B96D" stopOpacity="0" />
-      </radialGradient>
-    </defs>
-  );
-
-  if (flameOnly) {
-    return (
-      <svg
-        width={size}
-        height={height}
-        viewBox={`0 0 ${vbW} ${vbH}`}
-        className={className}
-        role="img"
-        aria-label="Candle flame"
-        style={{ overflow: "visible" }}
-      >
-        {defs}
-        {glow && (
-          <circle cx="12" cy="14" r="12" fill={`url(#${gid}-glow)`} className="candle-anim candle-glow-pulse" />
-        )}
-        <g className="candle-anim candle-flame-sway" style={{ transformOrigin: "12px 25px" }}>
-          <path
-            d="M12 2.5c3.6 4.1 6.2 7.4 6.2 11.4 0 3.9-2.8 6.6-6.2 6.6s-6.2-2.7-6.2-6.6C5.8 10.4 8.1 7.4 12 2.5z"
-            fill={`url(#${gid}-flame)`}
-          />
-          <ellipse cx="12" cy="16.6" rx="2.9" ry="3.6" fill={`url(#${gid}-blue)`} />
-          <ellipse cx="12" cy="11.6" rx="1.5" ry="3.1" fill="#FFFBF0" opacity="0.9" />
-        </g>
-        {/* wick tip so the flame doesn't float */}
-        <path d="M12 20.4v3.1" stroke="#4A3A2A" strokeWidth="1.5" strokeLinecap="round" />
-      </svg>
-    );
-  }
+/** A shared, natural-looking ivory memorial candle for every platform surface. */
+export function PawLamp({ size = 20, className, glow = true }: PawLampProps) {
+  const gid = `candle-${useId().replace(/:/g, "")}`;
+  const height = Math.round(size * 1.52);
 
   return (
     <svg
       width={size}
       height={height}
-      viewBox={`0 0 ${vbW} ${vbH}`}
+      viewBox="0 0 40 61"
       className={className}
       role="img"
       aria-label="Memorial candle"
       style={{ overflow: "visible" }}
     >
-      {defs}
+      <defs>
+        <linearGradient id={`${gid}-wax`} x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stopColor="#BBA589" />
+          <stop offset="0.16" stopColor="#E8D9C2" />
+          <stop offset="0.42" stopColor="#FFF8EA" />
+          <stop offset="0.7" stopColor="#EBD9BC" />
+          <stop offset="1" stopColor="#A99073" />
+        </linearGradient>
+        <linearGradient id={`${gid}-wax-top`} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#FFF9EC" />
+          <stop offset="0.62" stopColor="#E5D0AE" />
+          <stop offset="1" stopColor="#B89D7B" />
+        </linearGradient>
+        <radialGradient id={`${gid}-melt`} cx="48%" cy="42%" r="62%">
+          <stop offset="0" stopColor="#C8AD88" />
+          <stop offset="0.45" stopColor="#EAD7B7" />
+          <stop offset="1" stopColor="#FFF6E5" />
+        </radialGradient>
+        <linearGradient id={`${gid}-flame`} x1="0" y1="1" x2="0" y2="0">
+          <stop offset="0" stopColor="#5F87C4" />
+          <stop offset="0.15" stopColor="#FFF5D6" />
+          <stop offset="0.48" stopColor="#FFD073" />
+          <stop offset="0.78" stopColor="#F19A34" />
+          <stop offset="1" stopColor="#C85C16" />
+        </linearGradient>
+        <radialGradient id={`${gid}-core`} cx="50%" cy="70%" r="55%">
+          <stop offset="0" stopColor="#FFFFFF" />
+          <stop offset="0.55" stopColor="#FFF7D7" stopOpacity="0.96" />
+          <stop offset="1" stopColor="#FFE7A7" stopOpacity="0" />
+        </radialGradient>
+        <radialGradient id={`${gid}-halo`}>
+          <stop offset="0" stopColor="#FFD991" stopOpacity="0.42" />
+          <stop offset="0.52" stopColor="#E8B96D" stopOpacity="0.13" />
+          <stop offset="1" stopColor="#E8B96D" stopOpacity="0" />
+        </radialGradient>
+        <radialGradient id={`${gid}-pool`}>
+          <stop offset="0" stopColor="#D69A4A" stopOpacity="0.3" />
+          <stop offset="1" stopColor="#D69A4A" stopOpacity="0" />
+        </radialGradient>
+      </defs>
 
-      {/* light pool on the surface */}
-      {glow && <ellipse cx="17" cy="50" rx="16" ry="4.4" fill={`url(#${gid}-pool)`} />}
+      {glow && <ellipse cx="20" cy="57" rx="18" ry="3.2" fill={`url(#${gid}-pool)`} />}
+      {glow && <ellipse cx="20" cy="16" rx="19" ry="18" fill={`url(#${gid}-halo)`} className="candle-anim candle-glow-pulse" />}
 
-      {/* ambient glow around the flame */}
-      {glow && (
-        <circle cx="17" cy="12" r="14" fill={`url(#${gid}-glow)`} className="candle-anim candle-glow-pulse" />
-      )}
+      <path d="M8 28.5C8 25.5 10.6 23 13.6 23h12.8c3 0 5.6 2.5 5.6 5.5V53c0 3.4-2.8 6-6.2 6H14.2C10.8 59 8 56.4 8 53V28.5Z" fill={`url(#${gid}-wax)`} />
+      <path d="M9.5 29v23.6c0 2.8 1.9 4.8 4.4 5.1" fill="none" stroke="#FFF8E9" strokeWidth="1.2" strokeLinecap="round" opacity="0.68" />
+      <path d="M29.5 29v23" fill="none" stroke="#8B735B" strokeWidth="0.8" strokeLinecap="round" opacity="0.28" />
+      <path d="M12.5 33c1.2 2.8 0.8 6.6 2.2 8.7 1.3 1.9 2.7.5 2.4-2.1-.3-2.8-1.5-5-4.6-6.6Z" fill="#F3E5CF" opacity="0.72" />
 
-      {/* wax pillar */}
-      <path d="M8.5 22h17v25a3 3 0 0 1-3 3h-11a3 3 0 0 1-3-3V22z" fill={`url(#${gid}-wax)`} />
-      {/* vertical wax texture */}
-      <g stroke="#C9AE8B" strokeOpacity="0.35" strokeWidth="0.6" strokeLinecap="round">
-        <path d="M12.4 26v20" />
-        <path d="M17 27.5v18" />
-        <path d="M21.6 25.5v20.5" />
-      </g>
-      {/* warm rim light down the left edge */}
-      <path d="M10.2 23.5v23" stroke="#FFE9C4" strokeOpacity="0.7" strokeWidth="1.1" strokeLinecap="round" />
+      <ellipse cx="20" cy="27.5" rx="12" ry="5.2" fill={`url(#${gid}-wax-top)`} />
+      <path d="M9.3 27.2c2.2-2.6 5.7-3.8 10.7-3.8s8.7 1.2 10.8 3.8c-2.6-1.4-5.9-2.1-10.8-2.1-4.8 0-8.2.7-10.7 2.1Z" fill="#FFF9EC" opacity="0.94" />
+      <ellipse cx="20" cy="27.2" rx="6.4" ry="2.4" fill={`url(#${gid}-melt)`} />
+      <ellipse cx="17.8" cy="26.4" rx="2.4" ry="0.65" fill="#FFFDF6" opacity="0.8" />
 
-      {/* melted rim + wax pool highlight */}
-      <ellipse cx="17" cy="22" rx="8.5" ry="2.9" fill={`url(#${gid}-rim)`} />
-      <ellipse cx="17" cy="21.9" rx="5.4" ry="1.6" fill="#EBD6B4" />
-      <ellipse cx="15.2" cy="21.5" rx="2.1" ry="0.7" fill="#FFF8EA" opacity="0.9" />
-      {/* a drip of wax down the side */}
-      <path d="M9.6 23.4c-.9 2.4-.6 4.4.5 5.2 1 .8 1.9-.3 1.7-2-.2-1.4-.9-2.4-2.2-3.2z" fill="#F6E9D3" opacity="0.85" />
+      <path d="M20 27v-5.1c0-1.5.5-2.4 1.2-3.2" fill="none" stroke="#39281E" strokeWidth="1.45" strokeLinecap="round" />
+      <path d="M20.9 19.1c.8-.2 1.5.1 1.8.7" fill="none" stroke="#17100D" strokeWidth="1" strokeLinecap="round" />
 
-      {/* wick */}
-      <path d="M17 21.6v-3.4" stroke="#3E3123" strokeWidth="1.6" strokeLinecap="round" />
-
-      {/* flame */}
-      <g className="candle-anim candle-flame-sway" style={{ transformOrigin: "17px 20px" }}>
-        <path
-          d="M17 1.5c4.6 5.3 7.7 9.2 7.7 13.9 0 4.6-3.4 7.8-7.7 7.8s-7.7-3.2-7.7-7.8C9.3 10.7 12.3 6.9 17 1.5z"
-          fill={`url(#${gid}-flame)`}
-        />
-        <ellipse cx="17" cy="18.4" rx="3.6" ry="4.4" fill={`url(#${gid}-blue)`} />
-        <ellipse cx="17" cy="12.4" rx="1.8" ry="3.8" fill="#FFFBF0" opacity="0.92" />
+      <g className="candle-anim candle-flame-sway">
+        <path d="M21.2 2.5c.7 4.9 7.1 8.2 5.2 14.2-.9 3-3.3 5.2-6.5 5.2-3.8 0-6.6-2.8-6.4-6.5.3-4.3 4.5-7.2 7.7-12.9Z" fill={`url(#${gid}-flame)`} />
+        <path d="M20.3 9.5c.6 2.8 3.1 4.5 2.2 7.5-.4 1.6-1.4 2.8-2.8 2.8-1.7 0-2.8-1.5-2.6-3.4.2-2.3 1.9-4 3.2-6.9Z" fill={`url(#${gid}-core)`} />
       </g>
     </svg>
   );

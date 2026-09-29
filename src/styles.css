@@ -138,7 +138,7 @@
     font-family: var(--font-sans);
     font-size: 15px;
     line-height: 1.55;
-    font-weight: 300;
+    font-weight: 400;
     letter-spacing: 0;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
@@ -146,7 +146,7 @@
   /* Literary display type with a restrained memorial accent. */
   h1, h2, h3, h4 {
     font-family: var(--font-display);
-    font-weight: 400;
+    font-weight: 500;
     letter-spacing: 0;
     line-height: 1.1;
     color: var(--cr);
@@ -1186,8 +1186,8 @@ html, body { overflow-x: hidden; }
   --surface1: #fffdfc;
   --surface2: #f1e7e2;
   --cr: #2c2422;
-  --cr2: #746865;
-  --cr3: rgba(116,104,101,0.48);
+  --cr2: #625654;
+  --cr3: rgba(74,62,60,0.72);
   --paper: #fbf7f2;
   --cream: #f8f1ec;
   --ink: #2c2422;
@@ -1212,7 +1212,7 @@ html, body { overflow-x: hidden; }
   --secondary: #f1e7e2;
   --secondary-foreground: #2c2422;
   --muted: #efe5df;
-  --muted-foreground: #746865;
+  --muted-foreground: #625654;
   --accent: #eadde3;
   --accent-foreground: #5d4057;
   --border: rgba(109,63,98,0.16);
@@ -1233,6 +1233,7 @@ html, body { overflow-x: hidden; }
   opacity: 1;
 }
 .platform-header .header-icon svg { stroke-width: 2.25; }
+.platform-header .header-icon { color: #3f2839; }
 .home-hero-polaroid {
   width: min(100%, 430px);
   padding: 0.7rem 0.7rem 3.6rem;
@@ -1260,8 +1261,37 @@ html, body { overflow-x: hidden; }
 .warm-dialog :where(h1, h2, h3, h4) { color: var(--foreground); }
 .warm-platform :where(input, textarea, select),
 .warm-dialog :where(input, textarea, select) {
-  background: rgba(255,253,252,0.86);
+  background: #fffdfc;
   border-color: var(--input);
+  color: var(--foreground);
+}
+.warm-platform :where(input, textarea)::placeholder,
+.warm-dialog :where(input, textarea)::placeholder {
+  color: #6b5e5b;
+  opacity: 1;
+}
+.warm-platform :where(a:not([class*="text-white"])),
+.warm-dialog :where(a:not([class*="text-white"])) {
+  text-underline-offset: 3px;
+}
+.warm-platform :where(button, a, input, textarea, select):focus-visible,
+.warm-dialog :where(button, a, input, textarea, select):focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+.warm-platform .ios-list,
+.warm-platform .book-card,
+.warm-platform .ios-card {
+  color: var(--card-foreground);
+  border-color: var(--border);
+}
+.warm-platform .ios-row { color: var(--foreground); }
+.warm-platform .ios-row:active { background: var(--muted); }
+.warm-platform .ios-section-header { color: var(--muted-foreground); font-weight: 700; }
+.warm-platform .gold-chip {
+  color: var(--primary);
+  background: color-mix(in oklab, var(--primary) 9%, transparent);
+  border-color: color-mix(in oklab, var(--primary) 28%, transparent);
 }
 .warm-dialog {
   background: var(--popover);
@@ -1300,13 +1330,13 @@ html, body { overflow-x: hidden; }
 
 /* ---- Realistic candle (PawLamp) ---- */
 @keyframes candle-flame-sway {
-  0%   { transform: rotate(-1.6deg) scale(1, 1);        }
-  17%  { transform: rotate(1.1deg)  scale(0.985, 1.03); }
-  31%  { transform: rotate(-0.6deg) scale(1.02, 0.97);  }
-  48%  { transform: rotate(2deg)    scale(0.97, 1.05);  }
-  63%  { transform: rotate(-1.2deg) scale(1.01, 0.98);  }
-  81%  { transform: rotate(0.7deg)  scale(0.99, 1.02);  }
-  100% { transform: rotate(-1.6deg) scale(1, 1);        }
+  0%   { transform: rotate(-0.8deg) scale(1, 1); }
+  13%  { transform: rotate(1.4deg) scale(0.96, 1.04); }
+  29%  { transform: rotate(-1.1deg) scale(1.025, 0.98); }
+  46%  { transform: rotate(0.5deg) scale(0.98, 1.025); }
+  61%  { transform: rotate(-1.5deg) scale(1.01, 0.99); }
+  79%  { transform: rotate(1deg) scale(0.97, 1.045); }
+  100% { transform: rotate(-0.8deg) scale(1, 1); }
 }
 @keyframes candle-glow-pulse {
   0%   { opacity: 0.85; transform: scale(1);    }
@@ -1315,8 +1345,8 @@ html, body { overflow-x: hidden; }
   67%  { opacity: 0.98; transform: scale(1.05); }
   100% { opacity: 0.85; transform: scale(1);    }
 }
-.candle-flame-sway { animation: candle-flame-sway 2.3s ease-in-out infinite; }
-.candle-glow-pulse { animation: candle-glow-pulse 3.1s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+.candle-flame-sway { animation: candle-flame-sway 1.87s ease-in-out infinite; transform-box: fill-box; transform-origin: 50% 100%; }
+.candle-glow-pulse { animation: candle-glow-pulse 3.7s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
 @media (prefers-reduced-motion: reduce) {
   .candle-anim { animation: none !important; }
 }

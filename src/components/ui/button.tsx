@@ -4,7 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "@/lib/utils";
 
-// Cinematic night-sky buttons: pill, uppercase, wide tracking — Jost.
+// Shared semantic buttons: each variant adapts to dark memorial scenes and warm pages.
 const buttonVariants = cva(
   [
     "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full font-semibold cursor-pointer select-none",
@@ -20,18 +20,17 @@ const buttonVariants = cva(
         // Primary CTA — purple (kept per project memory)
         default:
           "bg-[var(--cta)] text-[var(--cta-foreground)] shadow-[0_8px_24px_-10px_color-mix(in_oklab,var(--cta)_60%,transparent)] hover:bg-[color-mix(in_oklab,var(--cta)_92%,white_8%)]",
-        // Warm gold gradient — for editorial moments (e.g. "Light a candle")
+        // Brand emphasis — follows the active theme's CTA colors.
         gold:
-          "text-[#1a1206] bg-[linear-gradient(135deg,#d4b378,#f0a868)] shadow-[0_6px_22px_-8px_rgba(212,179,120,0.45)] hover:brightness-105",
+          "bg-[var(--cta)] text-[var(--cta-foreground)] shadow-[0_8px_24px_-12px_color-mix(in_oklab,var(--cta)_55%,transparent)] hover:bg-[color-mix(in_oklab,var(--cta)_90%,white_10%)]",
         destructive:
           "bg-[var(--destructive)] text-destructive-foreground hover:bg-[color-mix(in_oklab,var(--destructive)_92%,white_8%)]",
-        // Hairline pill that reads on the dark sky
         outline:
-          "bg-transparent text-[var(--cr,inherit)] border border-[color-mix(in_oklab,white_14%,transparent)] hover:bg-white/[0.06]",
+          "border border-border bg-background/70 text-foreground hover:bg-muted hover:text-foreground",
         secondary:
-          "bg-white/[0.06] text-foreground border border-[color-mix(in_oklab,white_10%,transparent)] hover:bg-white/[0.1]",
+          "border border-border bg-secondary text-secondary-foreground hover:bg-accent hover:text-accent-foreground",
         ghost:
-          "bg-transparent text-foreground hover:bg-white/[0.06]",
+          "bg-transparent text-foreground hover:bg-muted hover:text-foreground",
         link:
           "bg-transparent text-[var(--gold,var(--cta))] underline-offset-4 hover:underline px-0 h-auto normal-case tracking-normal",
       },

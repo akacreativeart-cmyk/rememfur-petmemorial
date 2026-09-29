@@ -69,7 +69,7 @@ export function SiteHeader() {
               type="button"
               onClick={() => router.history.back()}
               aria-label="Back"
-              className="-ml-2 flex h-9 w-9 items-center justify-center rounded-full text-[#746865] hover:bg-[#E9DED4]/55"
+              className="header-icon -ml-2 flex h-9 w-9 items-center justify-center rounded-full text-foreground hover:bg-muted"
             >
               <ChevronLeft className="h-5 w-5" />
             </button>
@@ -93,7 +93,7 @@ export function SiteHeader() {
             <button
               onClick={() => signOut()}
               aria-label="Sign out"
-              className="flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground hover:bg-muted"
+              className="header-icon flex h-9 w-9 items-center justify-center rounded-full text-foreground hover:bg-muted"
             >
               <LogOut className="h-4 w-4" />
             </button>
