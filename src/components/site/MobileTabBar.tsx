@@ -83,7 +83,7 @@ export function MobileTabBar() {
         {tabs.map(({ to, label, icon: Icon, match }) => {
           const active = match ? match(pathname) : pathname === to || pathname.startsWith(to + "/");
           const isCreate = label === "Create";
-          const activeColor = active ? "text-[#6D3F62]" : "text-[#746865]";
+          const activeColor = active ? "text-primary" : "text-foreground/75";
 
           if (isCreate) {
             return (
@@ -107,17 +107,7 @@ export function MobileTabBar() {
                         }}
                       />
                     )}
-                    <span
-                      className="relative flex h-16 w-16 items-center justify-center rounded-full text-[#fffaf6] ring-1 ring-[#6D3F62]/20"
-                      style={{
-                        background:
-                          "linear-gradient(145deg, #7A496F, #603555)",
-                        boxShadow:
-                          "0 10px 30px -12px rgba(109,63,98,0.65), inset 0 1px 0 rgba(255,255,255,0.2)",
-                        backdropFilter: "blur(14px)",
-                        WebkitBackdropFilter: "blur(14px)",
-                      }}
-                    >
+                    <span className="relative flex h-16 w-16 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg ring-1 ring-primary/30">
                       <PawHeartMorph forceHeart={tapHeart} />
                     </span>
                   </span>
