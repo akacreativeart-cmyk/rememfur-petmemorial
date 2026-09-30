@@ -59,7 +59,7 @@ function ContentPreview({ r }: { r: AdminReport }) {
 function AdminPage() {
   const [tab, setTab] = useState<"reports" | "feedback" | "claims">("reports");
   return (
-    <div className="min-h-screen bg-[#05070f] text-white">
+    <div className="dark-scene min-h-screen bg-[#05070f] text-white">
       <SiteHeader />
       <main className="mx-auto max-w-2xl px-5 pt-6 pb-24 md:max-w-4xl md:px-8">
         <Link to="/" className="inline-flex items-center gap-1 text-xs text-white/60 hover:text-white">

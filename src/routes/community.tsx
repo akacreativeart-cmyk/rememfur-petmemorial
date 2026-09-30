@@ -8,7 +8,8 @@ import { PageHero } from "@/components/site/PageHero";
 import { PostCard } from "@/components/feed/PostCard";
 import { PostSkeleton } from "@/components/feed/PostSkeleton";
 import { ComposePost } from "@/components/feed/ComposePost";
-import { Flame, PlusCircle } from "lucide-react";
+import { PlusCircle } from "lucide-react";
+import { PawLamp } from "@/components/site/PawLamp";
 import { listFeed } from "@/lib/feed.functions";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
@@ -118,9 +119,7 @@ function CommunityPage() {
           )}
           {!isLoading && posts.length === 0 && (
             <div className="flex flex-col items-center rounded-[20px] border border-dashed border-primary/25 bg-card/60 p-8 text-center">
-              <span className="hero-candle scale-90" aria-hidden>
-                <span className="flame" />
-              </span>
+              <PawLamp size={56} />
               <p className="mt-4 font-display text-xl text-foreground">
                 Be among the first to share a memory
               </p>
@@ -135,7 +134,7 @@ function CommunityPage() {
                 </Link>
                 <Link to="/">
                   <Button size="sm" variant="outline" className="rounded-full">
-                    <Flame className="mr-2 h-4 w-4" /> Light a paw lamp
+                    <PawLamp size={15} glow={false} /> Light a paw lamp
                   </Button>
                 </Link>
               </div>

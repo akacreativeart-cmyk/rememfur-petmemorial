@@ -200,7 +200,7 @@ function MarketplacePage() {
   const visible = active === "all" ? sections : sections.filter((s) => s.id === active);
 
   return (
-    <div className="min-h-screen bg-[#05070f] text-white">
+    <div className="dark-scene min-h-screen bg-[#05070f] text-white">
       <SiteHeader />
       <main className="mx-auto max-w-md px-4 pt-4 pb-32 md:max-w-[1200px] md:px-8 md:pt-8">
         <header className="rounded-3xl bg-white/[0.05] px-5 py-6 text-center ring-1 ring-white/10">

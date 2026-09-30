@@ -201,7 +201,7 @@ export function PostCard({ post }: { post: FeedPost }) {
             className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm transition ${
               post.liked_by_me
                 ? "bg-terracotta/15 text-terracotta"
-                : "bg-muted/60 text-muted-foreground hover:bg-terracotta/10 hover:text-terracotta"
+                : "border border-border bg-card text-foreground/80 hover:bg-terracotta/10 hover:text-terracotta"
             }`}
           >
             <PawIcon className={`h-4 w-4 ${post.liked_by_me ? "fill-terracotta" : ""}`} />
@@ -209,7 +209,7 @@ export function PostCard({ post }: { post: FeedPost }) {
           </button>
           <button
             onClick={() => setShowComments((s) => !s)}
-            className="flex items-center gap-1.5 rounded-full bg-muted/60 px-3 py-1.5 text-sm text-muted-foreground transition hover:text-foreground"
+            className="flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-sm text-foreground/80 transition hover:bg-muted hover:text-foreground"
           >
             <MessageCircle className="h-4 w-4" />
             {post.comment_count}

@@ -19,18 +19,18 @@ interface PageHeroProps {
  */
 export function PageHero({ eyebrow, title, intro, handwritten, polaroids, children }: PageHeroProps) {
   return (
-    <section className="relative mb-10 overflow-hidden rounded-[2rem] border border-border/60 memory-wall px-6 py-10 md:px-10 md:py-14">
+    <section className="dark-scene relative mb-10 overflow-hidden rounded-[2rem] border border-white/15 memory-wall px-6 py-10 text-[#fffaf2] md:px-10 md:py-14">
       {/* corner tape strips for the storybook feel */}
       <span aria-hidden className="tape absolute -top-2 left-8 -rotate-6" />
       <span aria-hidden className="tape absolute -top-2 right-10 rotate-3" />
 
       <div className="relative z-10 max-w-2xl">
-        <div className="font-hand text-lg text-[var(--terracotta)]">{eyebrow}</div>
-        <h1 className="mt-2 font-display text-4xl leading-[1.05] text-foreground md:text-5xl">{title}</h1>
+        <div className="font-hand text-lg text-[#e5a8cf]">{eyebrow}</div>
+        <h1 className="mt-2 font-display text-4xl leading-[1.05] text-[#fffaf2] md:text-5xl">{title}</h1>
         {handwritten && (
-          <p className="mt-3 font-hand text-2xl text-[var(--cta)]">{handwritten}</p>
+          <p className="mt-3 font-hand text-2xl text-[#f0bf75]">{handwritten}</p>
         )}
-        {intro && <p className="mt-4 max-w-xl text-muted-foreground">{intro}</p>}
+        {intro && <p className="mt-4 max-w-xl text-[#e9ded4]">{intro}</p>}
         {children && <div className="mt-6">{children}</div>}
       </div>
 
