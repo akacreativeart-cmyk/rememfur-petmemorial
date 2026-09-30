@@ -1262,6 +1262,7 @@ html, body { overflow-x: hidden; }
 .warm-platform .dark-scene,
 .warm-platform .dark-scene :where(h1, h2, h3, h4) { color: #fffaf2; }
 .warm-platform .dark-scene .text-muted-foreground { color: rgba(255, 250, 242, 0.72); }
+.warm-platform .dark-scene .site-logo { filter: none; }
 .warm-platform :where(input, textarea, select),
 .warm-dialog :where(input, textarea, select) {
   background: #fffdfc;

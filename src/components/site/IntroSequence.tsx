@@ -86,14 +86,14 @@ export function IntroSequence() {
           e.stopPropagation();
           finish();
         }}
-        className="absolute right-4 top-4 rounded-full px-3 py-1.5 text-[12px] uppercase tracking-[0.28em] text-white/45 hover:text-white/80"
+        className="absolute right-4 top-4 rounded-full px-3 py-1.5 text-[12px] uppercase tracking-[0.28em] text-white/75 hover:text-white"
       >
         Skip
       </button>
 
       <div className="mx-auto max-w-xl">
         {currentStanza && (
-          <div key={step} className="intro-fade font-display text-white/90">
+          <div key={step} className="intro-fade font-display text-[#fffaf2]">
             {currentStanza.map((line, i) => (
               <p
                 key={i}
