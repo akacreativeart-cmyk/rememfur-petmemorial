@@ -196,8 +196,8 @@ export function CandleDialog({ target, trigger, onLit }: Props) {
             <div className="relative -mx-6 -mt-2 overflow-hidden rounded-xl">
               <div className="candle-lighting-bg relative flex h-44 items-center justify-center">
                 <div className="candle-rays" aria-hidden />
-                <div className="hero-candle candle-glow scale-110 relative z-10">
-                  <div className="flame" />
+                <div className="relative z-10 drop-shadow-[0_8px_24px_rgba(232,185,109,0.3)]">
+                  <PawLamp size={62} />
                 </div>
               </div>
             </div>

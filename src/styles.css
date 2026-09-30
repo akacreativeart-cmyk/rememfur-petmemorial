@@ -1259,6 +1259,9 @@ html, body { overflow-x: hidden; }
 .warm-platform .soft-shadow { box-shadow: 0 18px 40px -28px rgba(77,45,68,0.42); }
 .warm-platform :where(h1, h2, h3, h4),
 .warm-dialog :where(h1, h2, h3, h4) { color: var(--foreground); }
+.warm-platform .dark-scene,
+.warm-platform .dark-scene :where(h1, h2, h3, h4) { color: #fffaf2; }
+.warm-platform .dark-scene .text-muted-foreground { color: rgba(255, 250, 242, 0.72); }
 .warm-platform :where(input, textarea, select),
 .warm-dialog :where(input, textarea, select) {
   background: #fffdfc;
