@@ -22,7 +22,7 @@ export const Route = createFileRoute("/login")({
   head: () => ({ meta: [{ title: "Sign in — Rememfur" }] }),
 });
 
-function safeRedirect(value: string | undefined, fallback = "/dashboard") {
+function safeRedirect(value: string | undefined, fallback = "/welcome") {
   if (!value) return fallback;
   if (!value.startsWith("/") || value.startsWith("//")) return fallback;
   return value;
@@ -38,7 +38,7 @@ function LoginPage() {
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
-    if (user) navigate({ to: redirectTo });
+    if (user) navigate({ to: redirectTo, replace: true });
   }, [user, navigate, redirectTo]);
 
   const submit = async (e: React.FormEvent) => {
@@ -48,18 +48,17 @@ function LoginPage() {
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     setBusy(false);
     if (error) toast.error(error.message);
-    else navigate({ to: redirectTo });
   };
 
   const google = async () => {
     if (!search.redirect) setPostAuthIntent("return");
-    const r = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + redirectTo });
+    const r = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + "/login" });
     if (r.error) toast.error("Could not sign in with Google");
   };
 
   const apple = async () => {
     if (!search.redirect) setPostAuthIntent("return");
-    const r = await lovable.auth.signInWithOAuth("apple", { redirect_uri: window.location.origin + redirectTo });
+    const r = await lovable.auth.signInWithOAuth("apple", { redirect_uri: window.location.origin + "/login" });
     if (r.error) toast.error("Could not sign in with Apple");
   };
 
@@ -79,7 +78,7 @@ function LoginPage() {
   );
 
   return (
-    <div className="min-h-screen bg-background paper-grain">
+    <div className="warm-platform min-h-screen bg-background paper-grain">
       <SiteHeader />
       <main className="mx-auto grid max-w-5xl gap-10 px-5 py-12 md:grid-cols-2 md:py-20">
         <div className="hidden overflow-hidden rounded-3xl border border-border/60 soft-shadow md:block">

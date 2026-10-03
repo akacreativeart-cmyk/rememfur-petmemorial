@@ -1,13 +1,12 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { listMyMemorials } from "@/lib/memorials.functions";
 import { sinceYouWereAway } from "@/lib/notifications.functions";
 import { memoryKeeperOverview } from "@/lib/memories.functions";
 import { useAuth } from "@/hooks/use-auth";
-import { consumePostAuthIntent } from "@/lib/post-auth-intent";
 import { Plus, Flame, MessageCircle, Heart, X, PawPrint, BookHeart } from "lucide-react";
 import { PawLamp } from "@/components/site/PawLamp";
 import { format } from "date-fns";
@@ -53,7 +52,6 @@ function phrase(count: number, type: string, petName: string) {
 
 function Dashboard() {
   const { user } = useAuth();
-  const navigate = useNavigate();
   const fetchMine = useServerFn(listMyMemorials);
   const fetchSince = useServerFn(sinceYouWereAway);
 
@@ -62,16 +60,6 @@ function Dashboard() {
     queryFn: () => fetchMine(),
     enabled: !!user,
   });
-
-  // Honor the post-auth intent set on /signup or /login (only when no ?redirect was used).
-  // "welcome" → greet the new member and land them on the home screen.
-  useEffect(() => {
-    const intent = consumePostAuthIntent();
-    if (intent === "welcome") {
-      toast.success("Welcome to Rememfur. We're glad you're here.");
-      navigate({ to: "/", replace: true });
-    }
-  }, [navigate]);
 
   const memorialsCount = data?.length ?? 0;
   const hasNoMemorials = !isLoading && memorialsCount === 0;

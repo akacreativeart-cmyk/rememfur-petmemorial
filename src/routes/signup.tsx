@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -23,7 +23,7 @@ export const Route = createFileRoute("/signup")({
 });
 
 // Only allow same-origin relative paths as post-auth redirect targets.
-function safeRedirect(value: string | undefined, fallback = "/dashboard") {
+function safeRedirect(value: string | undefined, fallback = "/welcome") {
   if (!value) return fallback;
   if (!value.startsWith("/") || value.startsWith("//")) return fallback;
   return value;
@@ -38,18 +38,14 @@ function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
-  // A fresh signup handles its own landing (welcome → home); don't double-navigate.
-  const justSignedUp = useRef(false);
-
   useEffect(() => {
-    if (user && !justSignedUp.current) navigate({ to: redirectTo });
+    if (user) navigate({ to: redirectTo, replace: true });
   }, [user, navigate, redirectTo]);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     // Signal welcome flow for the default (no ?redirect) landing.
     if (!search.redirect) setPostAuthIntent("welcome");
-    justSignedUp.current = true;
     setBusy(true);
     const { data, error } = await supabase.auth.signUp({
       email,
@@ -62,9 +58,7 @@ function SignupPage() {
     setBusy(false);
     if (error) { toast.error(error.message); return; }
     if (data.session) {
-      // Signed in right away — welcome them and land on the home screen.
       toast.success(`Welcome${name ? `, ${name}` : ""}. We're glad you're here.`);
-      navigate({ to: search.redirect ? redirectTo : "/" });
     } else {
       toast.success("Check your email to confirm your account.");
     }
@@ -72,13 +66,13 @@ function SignupPage() {
 
   const google = async () => {
     if (!search.redirect) setPostAuthIntent("welcome");
-    const r = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + redirectTo });
+    const r = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + "/signup" });
     if (r.error) toast.error("Could not sign in with Google");
   };
 
   const apple = async () => {
     if (!search.redirect) setPostAuthIntent("welcome");
-    const r = await lovable.auth.signInWithOAuth("apple", { redirect_uri: window.location.origin + redirectTo });
+    const r = await lovable.auth.signInWithOAuth("apple", { redirect_uri: window.location.origin + "/signup" });
     if (r.error) toast.error("Could not sign in with Apple");
   };
 
@@ -98,7 +92,7 @@ function SignupPage() {
   );
 
   return (
-    <div className="min-h-screen bg-background paper-grain">
+    <div className="warm-platform min-h-screen bg-background paper-grain">
       <SiteHeader />
       <main className="mx-auto grid max-w-5xl gap-10 px-5 py-12 md:grid-cols-2 md:py-20">
         <div className="hidden overflow-hidden rounded-3xl border border-border/60 soft-shadow md:block">
