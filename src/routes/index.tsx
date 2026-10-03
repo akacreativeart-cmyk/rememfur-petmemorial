@@ -23,6 +23,7 @@ import lifeServicesImg from "@/assets/life-services.jpg";
 import lifeLifestyleImg from "@/assets/life-lifestyle.jpg";
 import lifeAdoptionImg from "@/assets/life-adoption.jpg";
 import memorialEditorialHero from "@/assets/memorial-editorial-hero.jpg";
+import nightVigilDog from "@/assets/night-vigil-dog.jpg";
 
 // Real photography from Unsplash for the Life world — warm, real moments.
 // Local painterly assets remain as onError fallbacks.
@@ -497,10 +498,10 @@ function HomePage() {
         <GriefCopeBand />
         <section className="relative px-5 py-20 text-center md:px-8 md:py-28">
           <Reveal className="mx-auto max-w-3xl">
-            <h2 className="font-display italic text-[24px] leading-[1.3] text-[#f5e6c8]/90 md:text-[34px] lg:text-[38px]">
+            <h2 className="font-display italic text-[24px] leading-[1.3] text-[var(--w-ink)] md:text-[34px] lg:text-[38px]">
               They were never <span className="not-italic">"just"</span> a pet. They were years of coming home to someone.
             </h2>
-            <p className="mt-6 font-display text-[18px] leading-[1.5] text-white/70 md:text-[22px]">
+            <p className="mt-6 font-display text-[18px] leading-[1.5] text-[var(--w-muted)] md:text-[22px]">
               All that love doesn't disappear when they do. It just needs somewhere to go — a paw lamp in the dark, a memorial that stays, a star in a sky that remembers.
             </p>
           </Reveal>
@@ -525,7 +526,7 @@ function HomePage() {
         <section className="relative px-5 py-16 md:px-8 md:py-24">
           <div className="mx-auto max-w-md md:max-w-[1100px]">
             <Reveal>
-              <h2 className="text-center font-display text-[30px] leading-[1.1] tracking-tight text-white md:text-5xl">
+              <h2 className="text-center font-display text-[30px] leading-[1.1] text-[var(--w-ink)] md:text-5xl">
                 How it works
               </h2>
             </Reveal>
@@ -534,7 +535,7 @@ function HomePage() {
               <Reveal><Step n="II" title="Light their paw lamp." body="A small warm light burning in their name. Yours forever, and lit by anyone who visits." /></Reveal>
               <Reveal><Step n="III" title="Return anytime." body="Their page stays. Come back on the hard days — birthdays, anniversaries, quiet Tuesdays." /></Reveal>
             </div>
-            <p className="mt-10 text-center text-[11px] uppercase tracking-[0.28em] text-white/45">
+            <p className="mt-10 text-center text-[11px] uppercase tracking-[0.2em] text-[var(--w-muted)]">
               No account needed. It takes about a minute.
             </p>
           </div>
@@ -544,7 +545,7 @@ function HomePage() {
         <section className="relative px-5 py-16 md:px-8 md:py-24">
           <div className="mx-auto max-w-md md:max-w-3xl">
             <Reveal>
-              <h2 className="text-center font-display text-[30px] leading-[1.1] tracking-tight text-white md:text-5xl">
+              <h2 className="text-center font-display text-[30px] leading-[1.1] text-[var(--w-ink)] md:text-5xl">
                 Gentle answers
               </h2>
             </Reveal>
@@ -651,7 +652,7 @@ function Hero({ secondaryCandle, onLastLetter }: { secondaryCandle: ReactNode; o
 
 function Chapters({ primaryCandle, onDev }: { primaryCandle: ReactNode; onDev?: (source: string) => void }) {
   const devPill = (
-    <span className="inline-flex items-center gap-1 rounded-full border border-white/15 px-2 py-[3px] text-[9px] font-medium uppercase tracking-[0.22em] text-white/55">
+    <span className="inline-flex items-center gap-1 rounded-full border border-[var(--w-hair)] px-2 py-[3px] text-[9px] font-medium uppercase tracking-[0.18em] text-[var(--w-muted)]">
       In development
     </span>
   );
@@ -708,16 +709,16 @@ function Chapters({ primaryCandle, onDev }: { primaryCandle: ReactNode; onDev?: 
           <Reveal key={c.eyebrow}>
             <div className={`grid items-center gap-8 md:grid-cols-2 md:gap-16 ${i % 2 === 1 ? "md:[&>*:first-child]:order-2" : ""}`}>
               <div className="text-center md:text-left">
-                <p className="flex items-center justify-center md:justify-start gap-3 text-[11px] uppercase tracking-[0.3em] text-amber-200/70">
+                <p className="flex items-center justify-center gap-3 text-[11px] uppercase tracking-[0.22em] text-[var(--w-accent)] md:justify-start">
                   <span className="font-display text-[16px] not-italic text-[var(--gold)] tracking-normal">{c.roman}</span>
                   <span className="h-px w-8 bg-[var(--gold)]/40" />
                   {c.eyebrow}
                   {"dev" in c && c.dev && <>{devPill}</>}
                 </p>
-                <h2 className="mt-3 font-display text-[28px] leading-[1.1] tracking-tight text-white md:text-4xl lg:text-5xl">
+                <h2 className="mt-3 font-display text-[28px] leading-[1.1] text-[var(--w-ink)] md:text-4xl lg:text-5xl">
                   {c.title}
                 </h2>
-                <p className="mt-4 text-[15px] leading-relaxed text-white/70 md:text-lg">
+                <p className="mt-4 text-[15px] leading-relaxed text-[var(--w-muted)] md:text-lg">
                   {c.body}
                 </p>
                 <div className="flex justify-center md:justify-start">{c.cta}</div>
@@ -739,22 +740,14 @@ function PlaqueMedallion() {
     <div className="w-full max-w-[340px]">
       <Plaque>
         <div className="flex flex-col items-center py-4">
-          <div className="flex h-28 w-28 items-center justify-center rounded-full border border-[var(--gold)]/50 bg-[#04060D]" style={{ boxShadow: "inset 0 0 20px rgba(212,179,120,0.15), 0 0 30px -10px rgba(212,179,120,0.35)" }}>
-            <svg width="72" height="72" viewBox="0 0 686 1119" aria-hidden>
-              <use href="#vigil-dog" fill="#E8B96D" />
-            </svg>
+          <div className="h-32 w-32 overflow-hidden rounded-full border border-[var(--gold)]/35 shadow-[0_12px_30px_-18px_rgba(44,36,34,0.6)]">
+            <img src={memorialEditorialHero} alt="A beloved golden retriever in a meadow" className="h-full w-full object-cover" loading="lazy" width={1408} height={1104} />
           </div>
           <p className="mt-5 font-display text-[22px] text-white">Their Name</p>
           <p className="mt-1 text-[12px] tracking-widest text-white/50">2008 — 2025</p>
           <p className="mt-3 font-display italic text-[14px] text-white/70">"Always at the door."</p>
-          <div className="mt-5 flex items-end gap-4">
-            {[0, 1, 2].map((i) => (
-              <div key={i} className="oc-candle" style={{ height: i === 1 ? 36 : 28 }}>
-                <span className="oc-flame" style={{ animationDelay: `${i * 0.3}s` }}>
-                  <span className="l1" /><span className="l2" /><span className="l3" />
-                </span>
-              </div>
-            ))}
+          <div className="mt-5 flex items-end gap-3">
+            {[30, 38, 30].map((size, i) => <PawLamp key={i} size={size} />)}
           </div>
           <p className="mt-4 text-[11px] uppercase tracking-[0.28em] text-amber-200/60">a light kept, night after night</p>
         </div>
@@ -764,18 +757,12 @@ function PlaqueMedallion() {
 }
 
 function PlaqueCandles() {
-  const heights = [42, 60, 36];
+  const sizes = [44, 58, 40];
   return (
     <div className="w-full max-w-[340px]">
       <Plaque>
         <div className="relative flex h-[220px] items-end justify-center gap-10 py-4">
-          {heights.map((h, i) => (
-            <div key={i} className="oc-candle" style={{ height: h, width: 20 }}>
-              <span className="oc-flame" style={{ animationDelay: `${i * 0.37}s`, animationDuration: `${1.05 + i * 0.19}s` }}>
-                <span className="l1" /><span className="l2" /><span className="l3" />
-              </span>
-            </div>
-          ))}
+          {sizes.map((size, i) => <PawLamp key={i} size={size} />)}
           <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/60 to-transparent" />
         </div>
         <p className="mt-2 text-center font-display italic text-[14px] text-white/70">One flame. Then another. Then thousands.</p>
@@ -819,7 +806,7 @@ function CandleStrip({ candles, weekCount, loading }: {
 }) {
   const enough = candles.length >= 3;
   return (
-    <section aria-label="Recent paw lamps" className="relative px-0 pt-8 md:pt-12">
+    <section aria-label="Recent paw lamps" className="dark-scene relative bg-[#090d1a] px-0 py-14 md:py-20">
       <div className="mx-auto max-w-md px-5 md:max-w-[1200px] md:px-8">
         <Reveal>
           <h2 className="text-center font-display text-[28px] leading-[1.1] tracking-tight text-white md:text-5xl">
@@ -843,11 +830,7 @@ function CandleStrip({ candles, weekCount, loading }: {
               const inner = (
                 <div className="flex h-full w-40 shrink-0 flex-col rounded-2xl bg-white/[0.04] p-3 ring-1 ring-white/10 transition hover:bg-white/[0.07]">
                   <div className="flex items-center gap-2">
-                    <div className="oc-candle" style={{ height: 20, width: 12 }}>
-                      <span className="oc-flame" style={{ transform: "translateX(-50%) scale(0.7)" }}>
-                        <span className="l1" /><span className="l2" /><span className="l3" />
-                      </span>
-                    </div>
+                    <PawLamp size={18} />
                     <span className="truncate font-display text-[14px] text-white">{c.pet_name ?? "A friend"}</span>
                   </div>
                   <p className="mt-2 line-clamp-2 text-[12px] leading-snug text-white/70">{c.message?.trim() || "✨"}</p>
@@ -867,9 +850,7 @@ function CandleStrip({ candles, weekCount, loading }: {
       ) : (
         <div className="mx-auto mt-4 max-w-md px-5 md:max-w-[1200px] md:px-8">
           <div className="flex flex-col items-center rounded-2xl bg-white/[0.03] p-6 text-center ring-1 ring-white/10">
-            <div className="oc-candle" style={{ height: 46, width: 20 }}>
-              <span className="oc-flame"><span className="l1" /><span className="l2" /><span className="l3" /></span>
-            </div>
+            <PawLamp size={48} />
             <p className="mt-4 font-display text-[17px] text-white">The sky is just beginning. Light one of the first paw lamps.</p>
             <p className="mt-1 text-[13px] text-white/55">No account needed.</p>
           </div>
@@ -882,66 +863,17 @@ function CandleStrip({ candles, weekCount, loading }: {
 /* ────────── Closing ────────── */
 
 function ClosingScene({ primaryCandle }: { primaryCandle: ReactNode }) {
-  const ref = useRef<SVGSVGElement | null>(null);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el || typeof IntersectionObserver === "undefined") { el?.classList.add("sky-in-view"); return; }
-    const io = new IntersectionObserver((es) => {
-      for (const e of es) if (e.isIntersecting) { (e.target as SVGSVGElement).classList.add("sky-in-view"); io.unobserve(e.target); }
-    }, { threshold: 0.4 });
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-
-  const stars = [
-    { id: "sirius", cx: 400, cy: 90, r: 4.5 },
-    { id: "mirzam", cx: 320, cy: 130 },
-    { id: "muliphein", cx: 430, cy: 55 },
-    { id: "wezen", cx: 470, cy: 170 },
-    { id: "adhara", cx: 435, cy: 215 },
-    { id: "aludra", cx: 525, cy: 180 },
-    { id: "furud", cx: 370, cy: 200 },
-  ];
-  const byId = Object.fromEntries(stars.map((s) => [s.id, s]));
-  const lines: [string, string][] = [
-    ["sirius", "mirzam"], ["sirius", "muliphein"], ["sirius", "wezen"],
-    ["wezen", "aludra"], ["wezen", "adhara"], ["adhara", "furud"],
-  ];
-
   return (
-    <section className="relative px-5 py-16 text-center md:px-8 md:py-24">
-      <Reveal className="mx-auto max-w-md md:max-w-2xl">
-        <div className="relative mx-auto mb-8 h-[280px] w-full max-w-lg">
-          <svg ref={ref} viewBox="0 0 800 320" className="their-sky-svg absolute inset-0 h-full w-full" aria-hidden>
-            {lines.map(([a, b], i) => {
-              const A = byId[a]!; const B = byId[b]!;
-              const len = Math.hypot(B.cx - A.cx, B.cy - A.cy);
-              return (
-                <line key={i} x1={A.cx} y1={A.cy} x2={B.cx} y2={B.cy}
-                  stroke="#d4b378" strokeOpacity="0.55" strokeWidth="1" strokeLinecap="round"
-                  className="ts-line"
-                  style={{ strokeDasharray: len, strokeDashoffset: len, ["--delay" as string]: `${i * 150}ms` } as React.CSSProperties}
-                />
-              );
-            })}
-            {stars.map((s, i) => (
-              <g key={s.id} className={`ts-star ${s.id === "sirius" ? "ts-star-sirius" : ""}`} style={{ ["--delay" as string]: `${400 + i * 110}ms` } as React.CSSProperties}>
-                <circle cx={s.cx} cy={s.cy} r={(s.r ?? 2.2) + 4} fill="#fff2cc" opacity="0.25" />
-                <circle cx={s.cx} cy={s.cy} r={s.r ?? 2} fill="#fffbe6" />
-              </g>
-            ))}
-            {/* small hill */}
-            <path d="M 0 300 C 200 270, 400 275, 600 285 C 700 290, 780 295, 800 298 L 800 320 L 0 320 Z" fill="#04060D" />
-          </svg>
-          <div className="absolute left-1/2 bottom-[10%] -translate-x-1/2 vigil-dog-torso" style={{ transformOrigin: "bottom center" }}>
-            <VigilDog size={90} />
-          </div>
-        </div>
-
-        <h2 className="font-display text-[30px] leading-[1.1] tracking-tight text-white md:text-5xl">
+    <section className="dark-scene closing-night relative overflow-hidden px-5 py-20 text-center md:px-8 md:py-32">
+      <img src={nightVigilDog} alt="A golden retriever sitting beneath a star-filled night sky" className="absolute inset-0 h-full w-full object-cover object-center" loading="lazy" width={1600} height={900} />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,8,16,0.18),rgba(5,8,16,0.48)_55%,rgba(5,8,16,0.88))]" />
+      <span aria-hidden className="closing-shooter closing-shooter-one" />
+      <span aria-hidden className="closing-shooter closing-shooter-two" />
+      <Reveal className="relative z-10 mx-auto max-w-md pt-[34vh] md:max-w-2xl md:pt-[42vh]">
+        <h2 className="font-display text-[30px] leading-[1.1] text-[#fffaf2] md:text-5xl">
           They mattered. They still do.
         </h2>
-        <p className="mt-4 text-[16px] leading-relaxed text-white/70 md:text-lg">
+        <p className="mt-4 text-[16px] leading-relaxed text-[#fffaf2]/80 md:text-lg">
           It takes a minute. It stays forever.
         </p>
         <div className="mt-8 flex flex-col items-center gap-3">
@@ -959,23 +891,23 @@ function ClosingScene({ primaryCandle }: { primaryCandle: ReactNode }) {
 
 function Step({ n, title, body }: { n: string; title: string; body: string }) {
   return (
-    <div className="flex flex-col items-center rounded-2xl bg-white/[0.04] p-6 text-center ring-1 ring-white/10 md:p-8">
+    <div className="soft-shadow flex h-full flex-col items-center rounded-2xl border border-[var(--w-hair)] bg-[var(--w-card-1)] p-6 text-center md:p-8">
       <span className="font-display text-[20px] italic text-[var(--gold)]">{n}</span>
       <span className="mt-4 inline-block h-px w-8 bg-[var(--gold)]/40" />
-      <h3 className="mt-4 font-display text-[20px] leading-tight text-white md:text-[22px]">{title}</h3>
-      <p className="mt-2 text-[14px] leading-relaxed text-white/60">{body}</p>
+      <h3 className="mt-4 font-display text-[20px] leading-tight text-[var(--w-ink)] md:text-[22px]">{title}</h3>
+      <p className="mt-2 text-[14px] leading-relaxed text-[var(--w-muted)]">{body}</p>
     </div>
   );
 }
 
 function FaqItem({ q, a }: { q: string; a: string }) {
   return (
-    <details className="group rounded-2xl bg-white/[0.04] p-5 ring-1 ring-white/10 open:bg-white/[0.06] md:p-6">
-      <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-display text-[18px] text-white md:text-[19px]">
+    <details className="group rounded-2xl border border-[var(--w-hair)] bg-[var(--w-card-1)] p-5 open:bg-[var(--w-card-2)] md:p-6">
+      <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-display text-[18px] text-[var(--w-ink)] md:text-[19px]">
         {q}
         <span className="text-[var(--gold)] text-xl transition-transform duration-300 group-open:rotate-45">+</span>
       </summary>
-      <p className="mt-3 text-[14px] leading-relaxed text-white/65">{a}</p>
+      <p className="mt-3 text-[14px] leading-relaxed text-[var(--w-muted)]">{a}</p>
     </details>
   );
 }
@@ -1003,13 +935,13 @@ function GriefBelongingSection() {
   return (
     <section className="relative px-5 py-16 md:px-8 md:py-24">
       <Reveal className="mx-auto max-w-3xl text-center">
-        <p className="text-[11px] uppercase tracking-[0.32em] text-amber-200/70">
+        <p className="text-[11px] uppercase tracking-[0.22em] text-[var(--w-accent)]">
           The grief no one prepares you for
         </p>
-        <h2 className="mt-3 font-display text-[28px] leading-[1.15] tracking-tight text-white md:text-[42px]">
+        <h2 className="mt-3 font-display text-[28px] leading-[1.15] text-[var(--w-ink)] md:text-[42px]">
           This love was real. So the loss is real grief — even if the world calls it small.
         </h2>
-        <div className="mx-auto mt-6 max-w-2xl space-y-4 text-left text-[15px] leading-relaxed text-white/70 md:text-[17px]">
+        <div className="mx-auto mt-6 max-w-2xl space-y-4 text-left text-[15px] leading-relaxed text-[var(--w-muted)] md:text-[17px]">
           <p>
             Grief researchers call this <span className="italic">disenfranchised grief</span> — a loss that is
             profound to you but unacknowledged by others. People expect you "over it" in a matter of days.
@@ -1026,12 +958,12 @@ function GriefBelongingSection() {
       <div className="mx-auto mt-10 grid max-w-md gap-4 md:mt-14 md:max-w-[1100px] md:grid-cols-3 md:gap-6">
         {cards.map((c) => (
           <Reveal key={c.title}>
-            <div className="flex h-full flex-col items-start rounded-2xl bg-white/[0.04] p-6 ring-1 ring-white/10">
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/[0.06] text-[var(--gold)]">
+            <div className="soft-shadow flex h-full flex-col items-start rounded-2xl border border-[var(--w-hair)] bg-[var(--w-card-1)] p-6">
+              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[var(--w-card-2)] text-[var(--w-accent)]">
                 <c.Icon size={22} className="h-5 w-5" />
               </div>
-              <h3 className="mt-4 font-display text-[20px] text-white">{c.title}</h3>
-              <p className="mt-2 text-[14px] leading-relaxed text-white/65">{c.body}</p>
+              <h3 className="mt-4 font-display text-[20px] text-[var(--w-ink)]">{c.title}</h3>
+              <p className="mt-2 text-[14px] leading-relaxed text-[var(--w-muted)]">{c.body}</p>
             </div>
           </Reveal>
         ))}
@@ -1077,7 +1009,7 @@ function MarketplaceRail() {
       title="In their memory"
       subtitle="Gentle things for after — made slowly, made well."
       kicker={
-        <span className="inline-flex items-center rounded-full border border-white/15 bg-white/[0.04] px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider text-white/70">
+        <span className="inline-flex items-center rounded-full border border-[var(--w-hair)] bg-[var(--w-card-1)] px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider text-[var(--w-accent)]">
           Memorabilia
         </span>
       }
@@ -1105,13 +1037,13 @@ function RailSection({
       <div className="mx-auto max-w-md px-5 md:max-w-[1200px] md:px-8">
         <Reveal>
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <h2 className="font-display text-[22px] leading-tight tracking-tight text-white md:text-[30px]">
+            <h2 className="font-display text-[22px] leading-tight text-[var(--w-ink)] md:text-[30px]">
               {title}
             </h2>
             {kicker}
           </div>
           {subtitle && (
-            <p className="mt-2 max-w-[60ch] text-[13.5px] leading-relaxed text-white/55">
+            <p className="mt-2 max-w-[60ch] text-[13.5px] leading-relaxed text-[var(--w-muted)]">
               {subtitle}
             </p>
           )}
@@ -1156,7 +1088,7 @@ function RailCardView({ card, section }: { card: RailCard; section: string }) {
       style={{ background: outerBg }}
     >
       <div
-        className="relative flex h-full flex-col overflow-hidden rounded-[19px] px-[22px] pb-[22px] pt-6"
+        className="dark-scene relative flex h-full flex-col overflow-hidden rounded-[19px] px-[22px] pb-[22px] pt-6"
         style={{ background: innerBg }}
       >
         {/* faint cosmic stars */}

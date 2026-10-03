@@ -30,6 +30,7 @@ import { Route as AuthenticatedJournalRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
 import { Route as AuthenticatedPetsRouteImport } from './routes/_authenticated/pets'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
+import { Route as AuthenticatedWelcomeRouteImport } from './routes/_authenticated/welcome'
 import { Route as CreateIndexRouteImport } from './routes/create.index'
 import { Route as CreateMemorialRouteImport } from './routes/create.memorial'
 import { Route as CreatePostRouteImport } from './routes/create.post'
@@ -143,6 +144,11 @@ const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedWelcomeRoute = AuthenticatedWelcomeRouteImport.update({
+  id: '/welcome',
+  path: '/welcome',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const CreateIndexRoute = CreateIndexRouteImport.update({
   id: '/create/',
   path: '/create/',
@@ -201,6 +207,7 @@ export interface FileRoutesByFullPath {
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/pets': typeof AuthenticatedPetsRouteWithChildren
   '/settings': typeof AuthenticatedSettingsRoute
+  '/welcome': typeof AuthenticatedWelcomeRoute
   '/create/memorial': typeof CreateMemorialRoute
   '/create/post': typeof CreatePostRoute
   '/memorial/$slug': typeof MemorialSlugRoute
@@ -230,6 +237,7 @@ export interface FileRoutesByTo {
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/pets': typeof AuthenticatedPetsRouteWithChildren
   '/settings': typeof AuthenticatedSettingsRoute
+  '/welcome': typeof AuthenticatedWelcomeRoute
   '/create/memorial': typeof CreateMemorialRoute
   '/create/post': typeof CreatePostRoute
   '/memorial/$slug': typeof MemorialSlugRoute
@@ -261,6 +269,7 @@ export interface FileRoutesById {
   '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
   '/_authenticated/pets': typeof AuthenticatedPetsRouteWithChildren
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
+  '/_authenticated/welcome': typeof AuthenticatedWelcomeRoute
   '/create/memorial': typeof CreateMemorialRoute
   '/create/post': typeof CreatePostRoute
   '/memorial/$slug': typeof MemorialSlugRoute
@@ -292,6 +301,7 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/pets'
     | '/settings'
+    | '/welcome'
     | '/create/memorial'
     | '/create/post'
     | '/memorial/$slug'
@@ -321,6 +331,7 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/pets'
     | '/settings'
+    | '/welcome'
     | '/create/memorial'
     | '/create/post'
     | '/memorial/$slug'
@@ -351,6 +362,7 @@ export interface FileRouteTypes {
     | '/_authenticated/notifications'
     | '/_authenticated/pets'
     | '/_authenticated/settings'
+    | '/_authenticated/welcome'
     | '/create/memorial'
     | '/create/post'
     | '/memorial/$slug'
@@ -533,6 +545,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSettingsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/welcome': {
+      id: '/_authenticated/welcome'
+      path: '/welcome'
+      fullPath: '/welcome'
+      preLoaderRoute: typeof AuthenticatedWelcomeRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/create/': {
       id: '/create/'
       path: '/create'
@@ -602,6 +621,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
   AuthenticatedPetsRoute: typeof AuthenticatedPetsRouteWithChildren
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
+  AuthenticatedWelcomeRoute: typeof AuthenticatedWelcomeRoute
   AuthenticatedMemorialSlugEditRoute: typeof AuthenticatedMemorialSlugEditRoute
 }
 
@@ -611,6 +631,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
   AuthenticatedPetsRoute: AuthenticatedPetsRouteWithChildren,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
+  AuthenticatedWelcomeRoute: AuthenticatedWelcomeRoute,
   AuthenticatedMemorialSlugEditRoute: AuthenticatedMemorialSlugEditRoute,
 }
 

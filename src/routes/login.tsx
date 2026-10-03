@@ -9,7 +9,6 @@ import { lovable } from "@/integrations/lovable";
 import { useAuth } from "@/hooks/use-auth";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
-import { setPostAuthIntent } from "@/lib/post-auth-intent";
 import heroImg from "@/assets/hero-meadow.jpg";
 
 export const Route = createFileRoute("/login")({
@@ -19,10 +18,17 @@ export const Route = createFileRoute("/login")({
     return r ? { redirect: r } : {};
   },
 
-  head: () => ({ meta: [{ title: "Sign in — Rememfur" }] }),
+  head: () => ({ meta: [
+    { title: "Sign in — Rememfur" },
+    { name: "description", content: "Sign in to your private Rememfur memory keeper." },
+    { property: "og:title", content: "Sign in — Rememfur" },
+    { property: "og:description", content: "Sign in to your private Rememfur memory keeper." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+  ] }),
 });
 
-function safeRedirect(value: string | undefined, fallback = "/dashboard") {
+function safeRedirect(value: string | undefined, fallback = "/welcome") {
   if (!value) return fallback;
   if (!value.startsWith("/") || value.startsWith("//")) return fallback;
   return value;
@@ -38,28 +44,24 @@ function LoginPage() {
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
-    if (user) navigate({ to: redirectTo });
+    if (user) navigate({ to: redirectTo, replace: true });
   }, [user, navigate, redirectTo]);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!search.redirect) setPostAuthIntent("return");
     setBusy(true);
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     setBusy(false);
     if (error) toast.error(error.message);
-    else navigate({ to: redirectTo });
   };
 
   const google = async () => {
-    if (!search.redirect) setPostAuthIntent("return");
-    const r = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + redirectTo });
+    const r = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + "/login" });
     if (r.error) toast.error("Could not sign in with Google");
   };
 
   const apple = async () => {
-    if (!search.redirect) setPostAuthIntent("return");
-    const r = await lovable.auth.signInWithOAuth("apple", { redirect_uri: window.location.origin + redirectTo });
+    const r = await lovable.auth.signInWithOAuth("apple", { redirect_uri: window.location.origin + "/login" });
     if (r.error) toast.error("Could not sign in with Apple");
   };
 
@@ -79,7 +81,7 @@ function LoginPage() {
   );
 
   return (
-    <div className="min-h-screen bg-background paper-grain">
+    <div className="warm-platform min-h-screen bg-background paper-grain">
       <SiteHeader />
       <main className="mx-auto grid max-w-5xl gap-10 px-5 py-12 md:grid-cols-2 md:py-20">
         <div className="hidden overflow-hidden rounded-3xl border border-border/60 soft-shadow md:block">
