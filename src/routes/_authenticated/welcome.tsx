@@ -19,7 +19,7 @@ export const Route = createFileRoute("/_authenticated/welcome")({
 function WelcomePage() {
   return (
     <section className="mx-auto max-w-2xl py-6 text-center md:py-12">
-      <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full border border-primary/20 bg-card shadow-[0_18px_50px_-28px_rgba(77,45,68,0.5)]">
+      <div className="soft-shadow mx-auto flex h-24 w-24 items-center justify-center rounded-full border border-primary/20 bg-card">
         <PawLamp size={48} />
       </div>
 

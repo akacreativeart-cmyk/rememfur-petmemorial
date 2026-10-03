@@ -526,7 +526,7 @@ function HomePage() {
         <section className="relative px-5 py-16 md:px-8 md:py-24">
           <div className="mx-auto max-w-md md:max-w-[1100px]">
             <Reveal>
-              <h2 className="text-center font-display text-[30px] leading-[1.1] tracking-tight text-white md:text-5xl">
+              <h2 className="text-center font-display text-[30px] leading-[1.1] text-[var(--w-ink)] md:text-5xl">
                 How it works
               </h2>
             </Reveal>
@@ -535,7 +535,7 @@ function HomePage() {
               <Reveal><Step n="II" title="Light their paw lamp." body="A small warm light burning in their name. Yours forever, and lit by anyone who visits." /></Reveal>
               <Reveal><Step n="III" title="Return anytime." body="Their page stays. Come back on the hard days — birthdays, anniversaries, quiet Tuesdays." /></Reveal>
             </div>
-            <p className="mt-10 text-center text-[11px] uppercase tracking-[0.28em] text-white/45">
+            <p className="mt-10 text-center text-[11px] uppercase tracking-[0.2em] text-[var(--w-muted)]">
               No account needed. It takes about a minute.
             </p>
           </div>
@@ -545,7 +545,7 @@ function HomePage() {
         <section className="relative px-5 py-16 md:px-8 md:py-24">
           <div className="mx-auto max-w-md md:max-w-3xl">
             <Reveal>
-              <h2 className="text-center font-display text-[30px] leading-[1.1] tracking-tight text-white md:text-5xl">
+              <h2 className="text-center font-display text-[30px] leading-[1.1] text-[var(--w-ink)] md:text-5xl">
                 Gentle answers
               </h2>
             </Reveal>
@@ -652,7 +652,7 @@ function Hero({ secondaryCandle, onLastLetter }: { secondaryCandle: ReactNode; o
 
 function Chapters({ primaryCandle, onDev }: { primaryCandle: ReactNode; onDev?: (source: string) => void }) {
   const devPill = (
-    <span className="inline-flex items-center gap-1 rounded-full border border-white/15 px-2 py-[3px] text-[9px] font-medium uppercase tracking-[0.22em] text-white/55">
+    <span className="inline-flex items-center gap-1 rounded-full border border-[var(--w-hair)] px-2 py-[3px] text-[9px] font-medium uppercase tracking-[0.18em] text-[var(--w-muted)]">
       In development
     </span>
   );
@@ -709,16 +709,16 @@ function Chapters({ primaryCandle, onDev }: { primaryCandle: ReactNode; onDev?: 
           <Reveal key={c.eyebrow}>
             <div className={`grid items-center gap-8 md:grid-cols-2 md:gap-16 ${i % 2 === 1 ? "md:[&>*:first-child]:order-2" : ""}`}>
               <div className="text-center md:text-left">
-                <p className="flex items-center justify-center md:justify-start gap-3 text-[11px] uppercase tracking-[0.3em] text-amber-200/70">
+                <p className="flex items-center justify-center gap-3 text-[11px] uppercase tracking-[0.22em] text-[var(--w-accent)] md:justify-start">
                   <span className="font-display text-[16px] not-italic text-[var(--gold)] tracking-normal">{c.roman}</span>
                   <span className="h-px w-8 bg-[var(--gold)]/40" />
                   {c.eyebrow}
                   {"dev" in c && c.dev && <>{devPill}</>}
                 </p>
-                <h2 className="mt-3 font-display text-[28px] leading-[1.1] tracking-tight text-white md:text-4xl lg:text-5xl">
+                <h2 className="mt-3 font-display text-[28px] leading-[1.1] text-[var(--w-ink)] md:text-4xl lg:text-5xl">
                   {c.title}
                 </h2>
-                <p className="mt-4 text-[15px] leading-relaxed text-white/70 md:text-lg">
+                <p className="mt-4 text-[15px] leading-relaxed text-[var(--w-muted)] md:text-lg">
                   {c.body}
                 </p>
                 <div className="flex justify-center md:justify-start">{c.cta}</div>
@@ -806,7 +806,7 @@ function CandleStrip({ candles, weekCount, loading }: {
 }) {
   const enough = candles.length >= 3;
   return (
-    <section aria-label="Recent paw lamps" className="relative px-0 pt-8 md:pt-12">
+    <section aria-label="Recent paw lamps" className="dark-scene relative bg-[#090d1a] px-0 py-14 md:py-20">
       <div className="mx-auto max-w-md px-5 md:max-w-[1200px] md:px-8">
         <Reveal>
           <h2 className="text-center font-display text-[28px] leading-[1.1] tracking-tight text-white md:text-5xl">
@@ -891,23 +891,23 @@ function ClosingScene({ primaryCandle }: { primaryCandle: ReactNode }) {
 
 function Step({ n, title, body }: { n: string; title: string; body: string }) {
   return (
-    <div className="flex flex-col items-center rounded-2xl bg-white/[0.04] p-6 text-center ring-1 ring-white/10 md:p-8">
+    <div className="soft-shadow flex h-full flex-col items-center rounded-2xl border border-[var(--w-hair)] bg-[var(--w-card-1)] p-6 text-center md:p-8">
       <span className="font-display text-[20px] italic text-[var(--gold)]">{n}</span>
       <span className="mt-4 inline-block h-px w-8 bg-[var(--gold)]/40" />
-      <h3 className="mt-4 font-display text-[20px] leading-tight text-white md:text-[22px]">{title}</h3>
-      <p className="mt-2 text-[14px] leading-relaxed text-white/60">{body}</p>
+      <h3 className="mt-4 font-display text-[20px] leading-tight text-[var(--w-ink)] md:text-[22px]">{title}</h3>
+      <p className="mt-2 text-[14px] leading-relaxed text-[var(--w-muted)]">{body}</p>
     </div>
   );
 }
 
 function FaqItem({ q, a }: { q: string; a: string }) {
   return (
-    <details className="group rounded-2xl bg-white/[0.04] p-5 ring-1 ring-white/10 open:bg-white/[0.06] md:p-6">
-      <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-display text-[18px] text-white md:text-[19px]">
+    <details className="group rounded-2xl border border-[var(--w-hair)] bg-[var(--w-card-1)] p-5 open:bg-[var(--w-card-2)] md:p-6">
+      <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-display text-[18px] text-[var(--w-ink)] md:text-[19px]">
         {q}
         <span className="text-[var(--gold)] text-xl transition-transform duration-300 group-open:rotate-45">+</span>
       </summary>
-      <p className="mt-3 text-[14px] leading-relaxed text-white/65">{a}</p>
+      <p className="mt-3 text-[14px] leading-relaxed text-[var(--w-muted)]">{a}</p>
     </details>
   );
 }
@@ -935,13 +935,13 @@ function GriefBelongingSection() {
   return (
     <section className="relative px-5 py-16 md:px-8 md:py-24">
       <Reveal className="mx-auto max-w-3xl text-center">
-        <p className="text-[11px] uppercase tracking-[0.32em] text-amber-200/70">
+        <p className="text-[11px] uppercase tracking-[0.22em] text-[var(--w-accent)]">
           The grief no one prepares you for
         </p>
-        <h2 className="mt-3 font-display text-[28px] leading-[1.15] tracking-tight text-white md:text-[42px]">
+        <h2 className="mt-3 font-display text-[28px] leading-[1.15] text-[var(--w-ink)] md:text-[42px]">
           This love was real. So the loss is real grief — even if the world calls it small.
         </h2>
-        <div className="mx-auto mt-6 max-w-2xl space-y-4 text-left text-[15px] leading-relaxed text-white/70 md:text-[17px]">
+        <div className="mx-auto mt-6 max-w-2xl space-y-4 text-left text-[15px] leading-relaxed text-[var(--w-muted)] md:text-[17px]">
           <p>
             Grief researchers call this <span className="italic">disenfranchised grief</span> — a loss that is
             profound to you but unacknowledged by others. People expect you "over it" in a matter of days.
@@ -958,12 +958,12 @@ function GriefBelongingSection() {
       <div className="mx-auto mt-10 grid max-w-md gap-4 md:mt-14 md:max-w-[1100px] md:grid-cols-3 md:gap-6">
         {cards.map((c) => (
           <Reveal key={c.title}>
-            <div className="flex h-full flex-col items-start rounded-2xl bg-white/[0.04] p-6 ring-1 ring-white/10">
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/[0.06] text-[var(--gold)]">
+            <div className="soft-shadow flex h-full flex-col items-start rounded-2xl border border-[var(--w-hair)] bg-[var(--w-card-1)] p-6">
+              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[var(--w-card-2)] text-[var(--w-accent)]">
                 <c.Icon size={22} className="h-5 w-5" />
               </div>
-              <h3 className="mt-4 font-display text-[20px] text-white">{c.title}</h3>
-              <p className="mt-2 text-[14px] leading-relaxed text-white/65">{c.body}</p>
+              <h3 className="mt-4 font-display text-[20px] text-[var(--w-ink)]">{c.title}</h3>
+              <p className="mt-2 text-[14px] leading-relaxed text-[var(--w-muted)]">{c.body}</p>
             </div>
           </Reveal>
         ))}
@@ -1009,7 +1009,7 @@ function MarketplaceRail() {
       title="In their memory"
       subtitle="Gentle things for after — made slowly, made well."
       kicker={
-        <span className="inline-flex items-center rounded-full border border-white/15 bg-white/[0.04] px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider text-white/70">
+        <span className="inline-flex items-center rounded-full border border-[var(--w-hair)] bg-[var(--w-card-1)] px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider text-[var(--w-accent)]">
           Memorabilia
         </span>
       }
@@ -1037,13 +1037,13 @@ function RailSection({
       <div className="mx-auto max-w-md px-5 md:max-w-[1200px] md:px-8">
         <Reveal>
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <h2 className="font-display text-[22px] leading-tight tracking-tight text-white md:text-[30px]">
+            <h2 className="font-display text-[22px] leading-tight text-[var(--w-ink)] md:text-[30px]">
               {title}
             </h2>
             {kicker}
           </div>
           {subtitle && (
-            <p className="mt-2 max-w-[60ch] text-[13.5px] leading-relaxed text-white/55">
+            <p className="mt-2 max-w-[60ch] text-[13.5px] leading-relaxed text-[var(--w-muted)]">
               {subtitle}
             </p>
           )}

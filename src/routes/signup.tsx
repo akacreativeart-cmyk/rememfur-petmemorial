@@ -9,7 +9,6 @@ import { lovable } from "@/integrations/lovable";
 import { useAuth } from "@/hooks/use-auth";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
-import { setPostAuthIntent } from "@/lib/post-auth-intent";
 import heroImg from "@/assets/hero-meadow.jpg";
 
 export const Route = createFileRoute("/signup")({
@@ -19,7 +18,14 @@ export const Route = createFileRoute("/signup")({
     return r ? { redirect: r } : {};
   },
 
-  head: () => ({ meta: [{ title: "Create your Rememfur account" }] }),
+  head: () => ({ meta: [
+    { title: "Create your Rememfur account" },
+    { name: "description", content: "Create a private Rememfur space for your pets, stories, and memories." },
+    { property: "og:title", content: "Create your Rememfur account" },
+    { property: "og:description", content: "Create a private Rememfur space for your pets, stories, and memories." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+  ] }),
 });
 
 // Only allow same-origin relative paths as post-auth redirect targets.
@@ -44,8 +50,6 @@ function SignupPage() {
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Signal welcome flow for the default (no ?redirect) landing.
-    if (!search.redirect) setPostAuthIntent("welcome");
     setBusy(true);
     const { data, error } = await supabase.auth.signUp({
       email,
@@ -65,13 +69,11 @@ function SignupPage() {
   };
 
   const google = async () => {
-    if (!search.redirect) setPostAuthIntent("welcome");
     const r = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + "/signup" });
     if (r.error) toast.error("Could not sign in with Google");
   };
 
   const apple = async () => {
-    if (!search.redirect) setPostAuthIntent("welcome");
     const r = await lovable.auth.signInWithOAuth("apple", { redirect_uri: window.location.origin + "/signup" });
     if (r.error) toast.error("Could not sign in with Apple");
   };
