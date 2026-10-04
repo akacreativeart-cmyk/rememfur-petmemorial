@@ -58,7 +58,10 @@ export function CandleDialog({ target, trigger, onLit }: Props) {
   const mut = useMutation({
     mutationFn: async () => {
       // Only authenticated users may attach name/message. Guests light anonymously.
-      const safeName = user ? name || null : null;
+      const accountName = typeof user?.user_metadata?.display_name === "string"
+        ? user.user_metadata.display_name.trim()
+        : "";
+      const safeName = user ? name.trim() || accountName || null : null;
       const safeMessage = user ? message || null : null;
       if (target.kind === "memorial") {
         return memorialFn({
