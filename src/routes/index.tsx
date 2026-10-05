@@ -738,6 +738,7 @@ function Chapters({ primaryCandle, onDev }: { primaryCandle: ReactNode; onDev?: 
 function PlaqueMedallion() {
   return (
     <div className="w-full max-w-[340px]">
+      <div className="memorial-dark-panel rounded-[18px]">
       <Plaque>
         <div className="flex flex-col items-center py-4">
           <div className="h-32 w-32 overflow-hidden rounded-full border border-[var(--gold)]/35 shadow-[0_12px_30px_-18px_rgba(44,36,34,0.6)]">
@@ -752,6 +753,7 @@ function PlaqueMedallion() {
           <p className="mt-4 text-[11px] uppercase tracking-[0.28em] text-amber-200/60">a light kept, night after night</p>
         </div>
       </Plaque>
+      </div>
     </div>
   );
 }
@@ -760,6 +762,7 @@ function PlaqueCandles() {
   const sizes = [44, 58, 40];
   return (
     <div className="w-full max-w-[340px]">
+      <div className="memorial-dark-panel rounded-[18px]">
       <Plaque>
         <div className="relative flex h-[220px] items-end justify-center gap-10 py-4">
           {sizes.map((size, i) => <PawLamp key={i} size={size} />)}
@@ -767,6 +770,7 @@ function PlaqueCandles() {
         </div>
         <p className="mt-2 text-center font-display italic text-[14px] text-white/70">One flame. Then another. Then thousands.</p>
       </Plaque>
+      </div>
     </div>
   );
 }
@@ -775,6 +779,7 @@ function PlaqueCandles() {
 function PlaqueJournal() {
   return (
     <div className="w-full max-w-[340px]">
+      <div className="memorial-dark-panel rounded-[18px]">
       <Plaque>
         <div className="rounded-md bg-[#0a1024] p-5 ring-1 ring-white/10">
           <p className="text-[11px] uppercase tracking-[0.28em] text-white/50">Tuesday, 2:14 am</p>
@@ -792,6 +797,7 @@ function PlaqueJournal() {
           </p>
         </div>
       </Plaque>
+      </div>
     </div>
   );
 }
@@ -1134,7 +1140,7 @@ function RailCardView({ card, section }: { card: RailCard; section: string }) {
             itemName={title}
             section={section}
             trigger={
-              <button type="button" className={`${highlight ? "btn-kind" : "btn-quiet"} w-full`}>
+              <button type="button" className={`${highlight ? "btn-kind" : "btn-dark-quiet"} w-full`}>
                 <Bell size={16} strokeWidth={1.75} />
                 Notify me
               </button>
