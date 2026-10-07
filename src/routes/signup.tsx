@@ -68,13 +68,20 @@ function SignupPage() {
     }
   };
 
+  // Carry the intended destination through the OAuth round-trip so the
+  // returning page can navigate there instead of the default fallback.
+  const oauthRedirectUri =
+    window.location.origin +
+    "/signup" +
+    (search.redirect ? `?redirect=${encodeURIComponent(search.redirect)}` : "");
+
   const google = async () => {
-    const r = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + "/signup" });
+    const r = await lovable.auth.signInWithOAuth("google", { redirect_uri: oauthRedirectUri });
     if (r.error) toast.error("Could not sign in with Google");
   };
 
   const apple = async () => {
-    const r = await lovable.auth.signInWithOAuth("apple", { redirect_uri: window.location.origin + "/signup" });
+    const r = await lovable.auth.signInWithOAuth("apple", { redirect_uri: oauthRedirectUri });
     if (r.error) toast.error("Could not sign in with Apple");
   };
 
