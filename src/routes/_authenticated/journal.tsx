@@ -12,7 +12,14 @@ import { Trash2, BookOpen } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/journal")({
   component: JournalPage,
-  head: () => ({ meta: [{ title: "Memory journal — Rememfur" }] }),
+  head: () => ({ meta: [
+    { title: "Memory journal — Rememfur" },
+    { name: "description", content: "Keep your private thoughts and memories in your Rememfur journal." },
+    { property: "og:title", content: "Memory journal — Rememfur" },
+    { property: "og:description", content: "Keep your private thoughts and memories in your Rememfur journal." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+  ] }),
 });
 
 function JournalPage() {
@@ -74,7 +81,7 @@ function JournalPage() {
                 {e.title && <h3 className="font-display text-xl text-foreground">{e.title}</h3>}
                 <div className="text-xs text-muted-foreground">{format(new Date(e.created_at), "MMMM d, yyyy · h:mm a")}</div>
               </div>
-              <Button variant="ghost" size="icon" onClick={() => del.mutate(e.id)}><Trash2 className="h-4 w-4" /></Button>
+              <Button variant="ghost" size="icon" aria-label="Delete journal entry" onClick={() => del.mutate(e.id)}><Trash2 className="h-4 w-4" /></Button>
             </div>
             <p className="mt-3 whitespace-pre-line leading-relaxed text-foreground/90">{e.body}</p>
           </article>

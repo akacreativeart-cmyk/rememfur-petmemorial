@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
 
 const STORAGE_KEY = "rememfur.intro.seen.v1";
 
@@ -44,15 +45,6 @@ export function IntroSequence() {
     return () => window.clearTimeout(t);
   }, [visible, reduced, step]);
 
-  // Auto-advance after final stanza settles
-  useEffect(() => {
-    if (!visible || reduced) return;
-    if (step !== STANZAS.length) return;
-    const t = window.setTimeout(() => finish(), FADE + HOLD + 3400);
-    return () => window.clearTimeout(t);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [visible, reduced, step]);
-
   function finish() {
     if (leaving) return;
     try {
@@ -71,8 +63,7 @@ export function IntroSequence() {
     <div
       role="dialog"
       aria-label="Welcome"
-      onClick={finish}
-      className={`fixed inset-0 z-[100] flex items-center justify-center bg-[#05070f] px-6 text-center transition-opacity duration-700 ${
+      className={`intro-scene fixed inset-0 z-[100] flex items-center justify-center bg-background px-6 text-center text-foreground transition-opacity duration-700 ${
         leaving ? "opacity-0" : "opacity-100"
       }`}
       style={{
@@ -80,20 +71,22 @@ export function IntroSequence() {
           "radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.6), transparent 60%), radial-gradient(1px 1px at 70% 20%, rgba(255,255,255,0.5), transparent 60%), radial-gradient(1.5px 1.5px at 40% 70%, rgba(255,255,255,0.7), transparent 60%), radial-gradient(1px 1px at 85% 60%, rgba(255,255,255,0.5), transparent 60%), radial-gradient(1px 1px at 15% 85%, rgba(255,255,255,0.6), transparent 60%), radial-gradient(1px 1px at 60% 50%, rgba(255,255,255,0.4), transparent 60%)",
       }}
     >
-      <button
+      <Button
         type="button"
+        variant="ghost"
         onClick={(e) => {
           e.stopPropagation();
           finish();
         }}
-        className="absolute right-4 top-4 rounded-full px-3 py-1.5 text-[12px] uppercase tracking-[0.28em] text-white/75 hover:text-white"
+        className="absolute right-4 top-4"
       >
         Skip
-      </button>
+      </Button>
 
-      <div className="mx-auto max-w-xl">
+      <div className="mx-auto flex w-full max-w-xl flex-col items-center">
+        <div className="flex min-h-48 items-center justify-center md:min-h-56">
         {currentStanza && (
-          <div key={step} className="intro-fade font-display text-[#fffaf2]">
+          <div key={step} className="intro-fade font-display text-foreground">
             {currentStanza.map((line, i) => (
               <p
                 key={i}
@@ -107,21 +100,15 @@ export function IntroSequence() {
 
         {showFinal && (
           <div className="intro-in flex flex-col items-center">
-            <p className="font-display italic text-[32px] leading-[1.25] text-[#f5e6c8] md:text-[52px]">
+            <p className="font-display italic text-[32px] leading-[1.25] text-foreground md:text-[52px]">
               {FINAL}
             </p>
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                finish();
-              }}
-              className="mt-10 rounded-full border border-white/25 px-6 py-2 text-[12px] uppercase tracking-[0.28em] text-white/75 transition hover:border-white/45 hover:text-white"
-            >
-              Enter
-            </button>
           </div>
         )}
+        </div>
+        <Button type="button" variant="gold" size="lg" onClick={finish} className="mt-8">
+          Enter Rememfur
+        </Button>
       </div>
     </div>
   );

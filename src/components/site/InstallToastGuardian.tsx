@@ -15,11 +15,13 @@ export function InstallToastGuardian() {
     if (isStandalone()) return;
     if (!bumped) { bumpVisitCount(); bumped = true; }
     if (shown) return;
-    if (pathname === "/create" || pathname === "/") return; // avoid intro & create
+    if (pathname === "/" || pathname === "/create" || pathname.startsWith("/create/")) return;
     if (!shouldSuggestInstall()) return;
     shown = true;
     const t = window.setTimeout(() => {
       toast("Keep their flame close — add Rememfur to your home screen", {
+        position: "bottom-center",
+        className: "mb-28 md:mb-4",
         duration: 8000,
         action: {
           label: "Install",

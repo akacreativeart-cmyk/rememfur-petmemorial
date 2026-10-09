@@ -632,6 +632,14 @@
 }
 .intro-in { animation: intro-in 1400ms cubic-bezier(.4,0,.2,1) forwards; }
 
+.intro-scene {
+  --background: var(--void);
+  --foreground: var(--ivory);
+  --muted: var(--surface2);
+  --cta: var(--upload-gold);
+  --cta-foreground: var(--upload-ink);
+}
+
 /* ---------- Home hero: starfield + story stagger ---------- */
 .home-hero {
   position: relative;
@@ -1342,6 +1350,13 @@ html, body { overflow-x: hidden; }
   border-color: var(--border);
 }
 .warm-platform .ios-row { color: var(--foreground); }
+.ios-tabbar {
+  --foreground: #2c2422;
+  --primary: #6d3f62;
+  --primary-foreground: #fffaf6;
+  --background: #fbf7f2;
+  --border: rgba(109,63,98,0.2);
+}
 .warm-platform .ios-row:active { background: var(--muted); }
 .warm-platform .ios-section-header { color: var(--muted-foreground); font-weight: 700; }
 .warm-platform .gold-chip {
