@@ -34,7 +34,14 @@ import {
 
 export const Route = createFileRoute("/create/memorial")({
   component: CreatePage,
-  head: () => ({ meta: [{ title: "Write a memorial — Rememfur" }] }),
+  head: () => ({ meta: [
+    { title: "Write a memorial — Rememfur" },
+    { name: "description", content: "Create a lasting pet memorial with a photo, a message, and a keepsake." },
+    { property: "og:title", content: "Write a memorial — Rememfur" },
+    { property: "og:description", content: "Create a lasting pet memorial with a photo, a message, and a keepsake." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+  ] }),
 });
 
 /* ─────────────────────────── constants ─────────────────────────── */
@@ -638,9 +645,7 @@ function StepPhoto({
       />
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <button
-          type="button"
-          onClick={onPickClick}
+        <div
           className={`group flex flex-col items-center justify-center gap-3 rounded-3xl border-2 border-dashed p-8 transition ${
             heroPreviewUrl
               ? "border-[var(--cta)]/60 bg-[var(--cta)]/5"
@@ -651,22 +656,22 @@ function StepPhoto({
             <>
               <img src={heroPreviewUrl} alt="" className="h-40 w-40 rounded-2xl object-cover shadow-md" />
               <div className="flex gap-2 pt-2">
-                <span className="btn-quiet text-[11px]">Replace</span>
-                <button type="button" onClick={(e) => { e.stopPropagation(); onRecrop(); }} className="btn-quiet text-[11px]">
+                <Button type="button" variant="outline" size="sm" onClick={onPickClick}>Replace</Button>
+                <Button type="button" variant="outline" size="sm" onClick={onRecrop}>
                   Reposition
-                </button>
+                </Button>
               </div>
             </>
           ) : (
             <>
               <Upload className="h-8 w-8 text-muted-foreground group-hover:text-[var(--cta)]" />
               <div className="text-center">
-                <div className="font-medium">Upload a photo</div>
+                <Button type="button" variant="outline" onClick={onPickClick}>Upload a photo</Button>
                 <div className="text-xs text-muted-foreground">JPG or PNG · you can crop next</div>
               </div>
             </>
           )}
-        </button>
+        </div>
 
         <button
           type="button"
