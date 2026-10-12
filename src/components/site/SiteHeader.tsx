@@ -27,6 +27,7 @@ export function SiteHeader() {
   const navItems: { to: string; label: string; icon: any }[] = [
     { to: "/", label: "Home", icon: Home },
     { to: "/garden", label: "Memory Garden", icon: Flower2 },
+    { to: "/archive", label: "Memorial archive", icon: BookOpen },
     { to: "/community", label: "Community", icon: Users },
     { to: "/marketplace", label: "Marketplace", icon: ShoppingBag },
     { to: "/grief-support", label: "Grief Support", icon: LifeBuoy },
