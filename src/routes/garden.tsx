@@ -63,6 +63,7 @@ function GardenPage() {
           <p className="font-hand text-2xl text-primary">each photograph holds a whole life</p>
           <h1 className="mt-1 font-display text-4xl md:text-5xl">Memorial Garden</h1>
           <p className="mt-2 max-w-xl text-muted-foreground">A place where love lives on. Wander, remember, light a paw lamp.</p>
+          <Button asChild variant="outline" className="mt-4"><Link to="/archive">Browse the memorial archive</Link></Button>
 
           <div className="mt-7 flex flex-wrap items-center gap-2">
             {filters.map((f) => (

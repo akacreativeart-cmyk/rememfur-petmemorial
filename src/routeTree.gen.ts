@@ -14,6 +14,7 @@ import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AdoptionRouteImport } from './routes/adoption'
+import { Route as ArchiveRouteImport } from './routes/archive'
 import { Route as CommunityRouteImport } from './routes/community'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as GardenRouteImport } from './routes/garden'
@@ -61,6 +62,11 @@ const AdminRoute = AdminRouteImport.update({
 const AdoptionRoute = AdoptionRouteImport.update({
   id: '/adoption',
   path: '/adoption',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ArchiveRoute = ArchiveRouteImport.update({
+  id: '/archive',
+  path: '/archive',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CommunityRoute = CommunityRouteImport.update({
@@ -191,6 +197,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
   '/adoption': typeof AdoptionRoute
+  '/archive': typeof ArchiveRoute
   '/community': typeof CommunityRoute
   '/contact': typeof ContactRoute
   '/garden': typeof GardenRoute
@@ -221,6 +228,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
   '/adoption': typeof AdoptionRoute
+  '/archive': typeof ArchiveRoute
   '/community': typeof CommunityRoute
   '/contact': typeof ContactRoute
   '/garden': typeof GardenRoute
@@ -253,6 +261,7 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
   '/adoption': typeof AdoptionRoute
+  '/archive': typeof ArchiveRoute
   '/community': typeof CommunityRoute
   '/contact': typeof ContactRoute
   '/garden': typeof GardenRoute
@@ -285,6 +294,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/admin'
     | '/adoption'
+    | '/archive'
     | '/community'
     | '/contact'
     | '/garden'
@@ -315,6 +325,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/admin'
     | '/adoption'
+    | '/archive'
     | '/community'
     | '/contact'
     | '/garden'
@@ -346,6 +357,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/admin'
     | '/adoption'
+    | '/archive'
     | '/community'
     | '/contact'
     | '/garden'
@@ -378,6 +390,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AdminRoute: typeof AdminRoute
   AdoptionRoute: typeof AdoptionRoute
+  ArchiveRoute: typeof ArchiveRoute
   CommunityRoute: typeof CommunityRoute
   ContactRoute: typeof ContactRoute
   GardenRoute: typeof GardenRoute
@@ -431,6 +444,13 @@ declare module '@tanstack/react-router' {
       path: '/adoption'
       fullPath: '/adoption'
       preLoaderRoute: typeof AdoptionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/archive': {
+      id: '/archive'
+      path: '/archive'
+      fullPath: '/archive'
+      preLoaderRoute: typeof ArchiveRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/community': {
@@ -645,6 +665,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   AdminRoute: AdminRoute,
   AdoptionRoute: AdoptionRoute,
+  ArchiveRoute: ArchiveRoute,
   CommunityRoute: CommunityRoute,
   ContactRoute: ContactRoute,
   GardenRoute: GardenRoute,

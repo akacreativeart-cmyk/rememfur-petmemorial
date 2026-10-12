@@ -1,5 +1,7 @@
 # Current tasks
 
+- [x] Build the public memorial archive with pet/name, passing-date range and paw-lamp count filters and pagination; verified real memorial results, sorting, reset, direct memorial links and desktop/mobile layouts; filter tests pass.
+
 - [x] Add direct memorial invitation links and email-app invitations; verified clipboard, email-draft launch and signed-in return on desktop/mobile with no page errors; invitation tests pass.
 - [ ] Enable hosted memorial-invitation sending. Blocked until the sending-domain setup is completed.
 
