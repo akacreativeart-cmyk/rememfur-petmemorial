@@ -4,7 +4,8 @@
 - [x] Verify dashboard, pets, journal, notifications, settings, profile, and memorial creation while signed in on desktop and mobile; fix observed issues.
 - [x] Make the intro Enter button visible, high-contrast, and available without waiting.
 
-- [ ] Publish the platform following security readiness checks.
-- [ ] Verify the live sign-in return destination; report any authentication limits.
+- [x] Request platform publishing following security readiness checks.
+- [x] Verify live Google/Apple destination links and member-session return to memorial creation.
+- [ ] Verify the complete Google/Apple provider sign-in round-trip. Blocked: external provider sign-in is not available in the test browser.
 
 Publishing explicitly requested on October 12, 2026.
