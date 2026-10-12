@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -43,6 +43,7 @@ function iconFor(kind: string) {
 }
 
 function PetDetailPage() {
+  const navigate = useNavigate();
   const { petId } = Route.useParams();
   const qc = useQueryClient();
   const getFn = useServerFn(getMyPet);
@@ -92,7 +93,9 @@ function PetDetailPage() {
     mutationFn: () => delPetFn({ data: { id: petId } }),
     onSuccess: () => {
       toast.success("Pet removed.");
-      window.location.href = "/pets";
+      qc.invalidateQueries({ queryKey: ["my-pets"] });
+      qc.invalidateQueries({ queryKey: ["memory-keeper"] });
+      navigate({ to: "/pets" });
     },
   });
 
@@ -115,11 +118,11 @@ function PetDetailPage() {
         <ArrowLeft className="h-4 w-4" /> My pets
       </Link>
 
-      <header className="mt-5 flex items-start gap-4 border-b border-border pb-6">
+      <header className="mt-5 flex flex-wrap items-start gap-3 border-b border-border pb-6">
         <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-accent text-primary ring-4 ring-card">
           {pet.avatar_url ? <img src={pet.avatar_url} alt="" className="h-full w-full rounded-full object-cover" /> : <PawPrint className="h-7 w-7" />}
         </div>
-        <div className="min-w-0 flex-1">
+        <div className="min-w-0 flex-1 basis-40">
           <h1 className="truncate font-display text-3xl text-foreground">{pet.name}</h1>
           <p className="text-sm text-muted-foreground">
             {pet.species}{pet.breed ? ` · ${pet.breed}` : ""}
@@ -128,7 +131,7 @@ function PetDetailPage() {
           </p>
         </div>
         <EditPetDialog pet={pet} />
-        <Button variant="ghost" size="sm" onClick={() => confirm("Remove this pet and all its records?") && delPet.mutate()}>
+        <Button variant="ghost" size="icon" aria-label="Delete pet" onClick={() => confirm("Remove this pet and all its records?") && delPet.mutate()}>
           <Trash2 className="h-4 w-4 text-muted-foreground" />
         </Button>
       </header>
@@ -149,7 +152,7 @@ function PetDetailPage() {
           <p className="text-xs uppercase tracking-wider text-primary">Coming up</p>
           <ul className="mt-2 space-y-1 text-sm text-foreground">
             {nextDue7.map((r) => (
-              <li key={r.id}>· {r.title} — due {new Date(r.next_due_date!).toLocaleDateString()}</li>
+               <li key={r.id}>· {r.title} — due {r.next_due_date ? new Date(r.next_due_date).toLocaleDateString() : ""}</li>
             ))}
           </ul>
         </div>
@@ -163,7 +166,7 @@ function PetDetailPage() {
               <PlusCircle className="mr-2 h-4 w-4" /> Add record
             </Button>
           </DialogTrigger>
-          <DialogContent className="warm-dialog rounded-[20px]">
+           <DialogContent className="warm-dialog max-h-[85dvh] overflow-y-auto rounded-[20px]">
             <DialogHeader>
               <DialogTitle className="font-display text-2xl">Add a record</DialogTitle>
             </DialogHeader>
@@ -230,9 +233,9 @@ function PetDetailPage() {
                       {r.next_due_date ? ` · next ${new Date(r.next_due_date).toLocaleDateString()}` : ""}
                     </p>
                   </div>
-                  <button onClick={() => delRec.mutate(r.id)} aria-label="Delete record" className="opacity-0 transition group-hover:opacity-100">
+                  <Button variant="ghost" size="icon" onClick={() => delRec.mutate(r.id)} aria-label="Delete record">
                     <Trash2 className="h-4 w-4 text-muted-foreground" />
-                  </button>
+                  </Button>
                 </div>
                 {r.notes && <p className="mt-1 whitespace-pre-wrap text-sm text-foreground/85">{r.notes}</p>}
               </div>
