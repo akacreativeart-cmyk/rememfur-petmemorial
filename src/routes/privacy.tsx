@@ -12,6 +12,8 @@ export const Route = createFileRoute("/privacy")({
       { property: "og:title", content: "Privacy at Rememfur" },
       { property: "og:description", content: "What Rememfur keeps and what it never sells — how your memorials, photos and account data are stored, protected and deleted whenever you ask." },
       { property: "og:url", content: "https://rememfur.com/privacy" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
     links: [{ rel: "canonical", href: "https://rememfur.com/privacy" }],
   }),

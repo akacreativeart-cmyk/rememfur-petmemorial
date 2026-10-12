@@ -13,6 +13,8 @@ export const Route = createFileRoute("/contact")({
       { property: "og:title", content: "Contact Rememfur" },
       { property: "og:description", content: "Email hello@rememfur.com for help with a memorial, account questions or partnerships — we read every message and reply as gently as we can." },
       { property: "og:url", content: "https://rememfur.com/contact" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
     links: [{ rel: "canonical", href: "https://rememfur.com/contact" }],
   }),

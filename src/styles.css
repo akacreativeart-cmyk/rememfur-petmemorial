@@ -637,7 +637,7 @@
   --foreground: var(--ivory);
   --muted: var(--surface2);
   --cta: var(--upload-gold);
-  --cta-foreground: var(--upload-ink);
+  --cta-foreground: var(--ivory);
 }
 
 /* ---------- Home hero: starfield + story stagger ---------- */
