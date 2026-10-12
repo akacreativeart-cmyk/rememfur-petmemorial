@@ -1,6 +1,6 @@
 # Current tasks
 
-- [ ] Add direct memorial invitation links and email-app invitations; verify desktop/mobile sharing and recipient sign-in destinations.
+- [x] Add direct memorial invitation links and email-app invitations; verified clipboard, email-draft launch and signed-in return on desktop/mobile with no page errors; invitation tests pass.
 - [ ] Enable hosted memorial-invitation sending. Blocked until the sending-domain setup is completed.
 
 - [ ] Configure the owned sending domain and memorial-owner paw-lamp/comment emails. Blocked until the email-domain setup dialog is completed.
