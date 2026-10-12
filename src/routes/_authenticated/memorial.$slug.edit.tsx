@@ -40,7 +40,14 @@ export const Route = createFileRoute("/_authenticated/memorial/$slug/edit")({
     return m;
   },
   head: ({ loaderData }) => ({
-    meta: [{ title: `Edit ${loaderData?.pet_name ?? "memorial"} — Rememfur` }],
+    meta: [
+      { title: `Edit ${loaderData?.pet_name ?? "memorial"} — Rememfur` },
+      { name: "description", content: "Update your pet memorial's words, photos, and visibility." },
+      { property: "og:title", content: `Edit ${loaderData?.pet_name ?? "memorial"} — Rememfur` },
+      { property: "og:description", content: "Update your pet memorial's words, photos, and visibility." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+    ],
   }),
 });
 
