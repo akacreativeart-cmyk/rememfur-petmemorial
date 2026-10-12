@@ -1323,6 +1323,15 @@ html, body { overflow-x: hidden; }
 .warm-platform .dark-scene :where(h1, h2, h3, h4) { color: #fffaf2; }
 .warm-platform .dark-scene .text-muted-foreground { color: rgba(255, 250, 242, 0.72); }
 .warm-platform .dark-scene .site-logo { filter: none; }
+.memorial-cover {
+  --foreground: var(--ivory);
+  --background: var(--deep);
+  --muted: var(--upload-ink);
+  --border: var(--hair);
+}
+.memorial-cover-shade {
+  background: linear-gradient(to top, var(--void), transparent);
+}
 .warm-platform :where(input, textarea, select),
 .warm-dialog :where(input, textarea, select) {
   background: #fffdfc;

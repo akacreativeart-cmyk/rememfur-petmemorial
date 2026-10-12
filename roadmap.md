@@ -1,7 +1,7 @@
 # Current tasks
 
 - [ ] Configure the owned sending domain and memorial-owner paw-lamp/comment emails. Blocked until the email-domain setup dialog is completed.
-- [x] Verify dashboard, pets, journal, notifications, settings, profile, and memorial creation while signed in on desktop and mobile; fix observed issues.
+- [x] Repeat full signed-in desktop/mobile checks for dashboard, pets, journal, notifications, settings, profile and memorial creation, including persistence and temporary-data cleanup. Verified real saves, uploads, edits, refreshes, profile tabs, notification links, keepsake downloads and memorial take-down; corrected memorial title contrast and mobile control wrapping. Account deletion/password changes and marking existing notifications read were deliberately not performed on the owner's account.
 - [x] Make the intro Enter button visible, high-contrast, and available without waiting.
 
 - [x] Request platform publishing following security readiness checks.
