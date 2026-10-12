@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, useLocation, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -38,6 +38,11 @@ export function lifeDates(p: { birthdate?: string | null; passing_date?: string 
 }
 
 function PetsPage() {
+  const { pathname } = useLocation();
+  return pathname.replace(/\/$/, "") === "/pets" ? <PetsListPage /> : <Outlet />;
+}
+
+function PetsListPage() {
   const qc = useQueryClient();
   const navigate = useNavigate();
   const listFn = useServerFn(listMyPets);
