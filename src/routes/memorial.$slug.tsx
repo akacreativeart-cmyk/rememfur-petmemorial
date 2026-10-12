@@ -20,6 +20,8 @@ import { ReportButton } from "@/components/site/ReportButton";
 import { TheirSky } from "@/components/site/TheirSky";
 import { Polaroid } from "@/components/site/Polaroid";
 import { BetaInviteDialog } from "@/components/site/BetaInviteDialog";
+import { MemorialInviteDialog } from "@/components/site/MemorialInviteDialog";
+import { memorialInvitePath } from "@/lib/memorial-invite";
 
 
 import { useAuth } from "@/hooks/use-auth";
@@ -195,6 +197,7 @@ function MemorialPage() {
                 <Button variant="outline" size="sm" onClick={share} className="rounded-full">
                   <Share2 className="mr-1.5 h-3.5 w-3.5" /> Share
                 </Button>
+                 {m.is_public && <MemorialInviteDialog slug={m.slug} petName={m.pet_name} />}
                 {user?.id === m.owner_id && (
                   <Link to="/memorial/$slug/edit" params={{ slug: m.slug }}>
                     <Button variant="outline" size="sm" className="rounded-full">
@@ -329,7 +332,7 @@ function MemorialPage() {
                   </div>
                 </div>
               ) : (
-                <p className="mt-4 text-sm text-muted-foreground"><Link to="/login" className="text-amber-200 hover:underline">Sign in</Link> to leave a message.</p>
+                <p className="mt-4 text-sm text-muted-foreground"><Link to="/login" search={{ redirect: memorialInvitePath(m.slug) }} className="text-primary hover:underline">Sign in</Link> to leave a message.</p>
               )}
               <ul className="mt-6 space-y-4">
                 {current.messages.length === 0 && <li className="text-sm italic text-muted-foreground">Be the first to leave a kind word.</li>}
@@ -373,7 +376,7 @@ function MemorialPage() {
                     }
                   />
                   <p className="mt-2 text-[11px] text-muted-foreground">
-                    No account needed. <Link to="/signup" className="underline">Join</Link> to share memories.
+                    No account needed. <Link to="/signup" search={{ redirect: memorialInvitePath(m.slug) }} className="underline">Join</Link> to share memories.
                   </p>
                 </div>
               )}
