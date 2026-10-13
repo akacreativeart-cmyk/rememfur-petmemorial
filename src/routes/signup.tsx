@@ -9,7 +9,7 @@ import { lovable } from "@/integrations/lovable";
 import { useAuth } from "@/hooks/use-auth";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
-import heroImg from "@/assets/hero-meadow.jpg";
+import companionPhoto from "@/assets/login-companion.jpg.asset.json";
 import { authDestination } from "@/lib/auth-destination";
 
 export const Route = createFileRoute("/signup")({
@@ -99,7 +99,7 @@ function SignupPage() {
       <SiteHeader />
       <main className="mx-auto grid max-w-5xl gap-10 px-5 py-12 md:grid-cols-2 md:py-20">
         <div className="hidden overflow-hidden rounded-3xl border border-border/60 soft-shadow md:block">
-          <img src={heroImg} alt="" width={900} height={1100} className="h-full w-full object-cover" />
+          <img src={companionPhoto.url} alt="A golden retriever resting in a sunlit garden" width={900} height={1100} className="h-full w-full object-cover" />
         </div>
         <div className="flex items-center">
           <form onSubmit={submit} className="w-full rounded-3xl border border-border/60 bg-card p-8 soft-shadow">
