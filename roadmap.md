@@ -1,4 +1,6 @@
 # Current tasks
+- [ ] Resolve eight open design comments on home, garden, community and login; verify before resolving threads.
+- [ ] Route returning members to their own profile and new members to welcome, preserving intended destinations.
 
 - [x] Build the public memorial archive with pet/name, passing-date range and paw-lamp count filters and pagination; verified real memorial results, sorting, reset, direct memorial links and desktop/mobile layouts; filter tests pass.
 
