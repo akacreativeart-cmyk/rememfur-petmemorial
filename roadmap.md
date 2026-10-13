@@ -5,7 +5,7 @@
 - [x] Add direct memorial invitation links and email-app invitations; verified clipboard, email-draft launch and signed-in return on desktop/mobile with no page errors; invitation tests pass.
 - [ ] Enable hosted memorial-invitation sending. Blocked until the sending-domain setup is completed.
 
-- [ ] Configure the owned sending domain and memorial-owner paw-lamp/comment emails. Blocked until the email-domain setup dialog is completed.
+- [x] Set up managed email sending for notify.rememfur.com and wire memorial-owner paw-lamp/comment emails (templates, send helper, triggers on signed-in and guest lamps, memorial messages and post comments). Sending starts once DNS verification completes; monitor in Cloud → Emails. Publish required for the live app.
 - [x] Repeat full signed-in desktop/mobile checks for dashboard, pets, journal, notifications, settings, profile and memorial creation, including persistence and temporary-data cleanup. Verified real saves, uploads, edits, refreshes, profile tabs, notification links, keepsake downloads and memorial take-down; corrected memorial title contrast and mobile control wrapping. Account deletion/password changes and marking existing notifications read were deliberately not performed on the owner's account.
 - [x] Make the intro Enter button visible, high-contrast, and available without waiting.
 
