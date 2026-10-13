@@ -65,11 +65,15 @@ function GardenPage() {
           <p className="mt-2 max-w-xl text-muted-foreground">A place where love lives on. Wander, remember, light a paw lamp.</p>
           <Button asChild variant="outline" className="mt-4"><Link to="/archive">Browse the memorial archive</Link></Button>
 
-          <div className="mt-7 flex flex-wrap items-center gap-2">
+        </div>
+
+          <div className="mt-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div className="flex flex-wrap items-center justify-center gap-2 md:justify-start">
             {filters.map((f) => (
-              <button
+              <Button
                 key={f.key}
                 onClick={() => setSpecies(f.key)}
+                variant={species === f.key ? "default" : "outline"}
                 className={`rounded-full border px-4 py-1.5 text-sm transition ${
                   species === f.key
                     ? "border-primary bg-primary text-primary-foreground"
@@ -77,19 +81,20 @@ function GardenPage() {
                 }`}
               >
                 {f.label}
-              </button>
+              </Button>
             ))}
-            <div className="ml-auto flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5">
+            </div>
+            <div className="flex w-full items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5 md:w-80">
               <Search className="h-4 w-4 text-primary" />
               <Input
                 placeholder="Search by name…"
+                aria-label="Search memorials by name"
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
                 className="h-7 border-0 bg-transparent text-foreground placeholder:text-muted-foreground focus-visible:ring-0"
               />
             </div>
           </div>
-        </div>
 
         <section className="mt-10">
           {isLoading ? (
@@ -107,8 +112,8 @@ function GardenPage() {
               </Link>
             </div>
           ) : (
-            <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4">
-              {data!.map((m) => {
+            <div className="grid gap-x-8 gap-y-12 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+              {(data ?? []).map((m) => {
                 const img = m.transformed_image_url ?? m.hero_image_url;
                 const years = [m.birth_date?.slice(0, 4), m.passing_date?.slice(0, 4)].filter(Boolean).join(" – ");
                 return (

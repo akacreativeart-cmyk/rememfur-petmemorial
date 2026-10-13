@@ -10,6 +10,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import heroImg from "@/assets/hero-meadow.jpg";
+import { authDestination } from "@/lib/auth-destination";
 
 export const Route = createFileRoute("/signup")({
   component: SignupPage,
@@ -28,18 +29,11 @@ export const Route = createFileRoute("/signup")({
   ] }),
 });
 
-// Only allow same-origin relative paths as post-auth redirect targets.
-function safeRedirect(value: string | undefined, fallback = "/welcome") {
-  if (!value) return fallback;
-  if (!value.startsWith("/") || value.startsWith("//")) return fallback;
-  return value;
-}
-
 function SignupPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const search = Route.useSearch();
-  const redirectTo = safeRedirect(search.redirect);
+  const redirectTo = authDestination(user, search.redirect, "signup");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
