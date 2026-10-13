@@ -15,6 +15,13 @@
       "when": 1791800158327,
       "tag": "0001_public_memorial_archive",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1791920707847,
+      "tag": "0002_grant_is_admin_execute_for_rls",
+      "breakpoints": true
     }
   ]
 }
