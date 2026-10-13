@@ -344,9 +344,26 @@ export const addComment = createServerFn({ method: "POST" })
     z.object({ post_id: z.string().uuid(), body: z.string().min(1).max(1000) }).parse(input),
   )
   .handler(async ({ data, context }) => {
-    const { error } = await context.supabase
+    const { data: comment, error } = await context.supabase
       .from("post_comments")
-      .insert({ post_id: data.post_id, author_id: context.userId, body: data.body });
+      .insert({ post_id: data.post_id, author_id: context.userId, body: data.body })
+      .select("id").single();
     if (error) throw new Error(error.message);
+    // If the post belongs to a memorial, email the memorial's owner.
+    const { data: post } = await context.supabase
+      .from("posts").select("memorial_id").eq("id", data.post_id).maybeSingle();
+    if (post?.memorial_id) {
+      const { data: prof } = await context.supabase
+        .from("profiles").select("display_name").eq("id", context.userId).maybeSingle();
+      const { notifyMemorialOwner } = await import("@/lib/owner-emails");
+      void notifyMemorialOwner({
+        memorialId: post.memorial_id,
+        kind: "comment",
+        actorId: context.userId,
+        actorName: prof?.display_name ?? null,
+        preview: data.body.slice(0, 140),
+        eventId: comment?.id ?? crypto.randomUUID(),
+      });
+    }
     return { ok: true };
   });
