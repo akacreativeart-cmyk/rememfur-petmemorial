@@ -496,7 +496,7 @@ function HomePage() {
         />
         <TheirSkyBand reduced={reduced} />
         <GriefCopeBand />
-        <section className="relative px-5 py-20 text-center md:px-8 md:py-28">
+        <section className="relative px-5 pb-4 pt-16 text-center md:px-8 md:pb-6 md:pt-24">
           <Reveal className="mx-auto max-w-3xl">
             <h2 className="font-display italic text-[24px] leading-[1.3] text-[var(--w-ink)] md:text-[34px] lg:text-[38px]">
               They were never <span className="not-italic">"just"</span> a pet. They were years of coming home to someone.
@@ -505,7 +505,6 @@ function HomePage() {
               All that love doesn't disappear when they do. It just needs somewhere to go — a paw lamp in the dark, a memorial that stays, a star in a sky that remembers.
             </p>
           </Reveal>
-          <Divider />
         </section>
 
         <GriefBelongingSection />
@@ -779,24 +778,21 @@ function PlaqueCandles() {
 function PlaqueJournal() {
   return (
     <div className="w-full max-w-[340px]">
-      <div className="memorial-dark-panel rounded-[18px]">
-      <Plaque>
-        <div className="rounded-md bg-[#0a1024] p-5 ring-1 ring-white/10">
-          <p className="text-[11px] uppercase tracking-[0.28em] text-white/50">Tuesday, 2:14 am</p>
-          <p className="mt-3 font-hand text-[22px] leading-snug text-[var(--gold)]">
+      <div className="rounded-[18px] border border-[var(--w-hair)] bg-[var(--w-card-1)] p-5 shadow-[0_14px_30px_-22px_rgba(44,36,34,0.45)]">
+        <div className="rounded-md bg-[var(--w-card-2)] p-5 ring-1 ring-[var(--w-hair)]">
+          <p className="text-[11px] uppercase tracking-[0.28em] text-[var(--w-muted)]">Tuesday, 2:14 am</p>
+          <p className="mt-3 font-hand text-[24px] leading-snug text-[var(--w-accent)]">
             I still hear his collar in the hallway.
           </p>
-          <div className="mt-4 space-y-2">
-            <div className="hw-line w-11/12" />
-            <div className="hw-line w-9/12" />
-            <div className="hw-line w-10/12" />
-            <div className="hw-line w-7/12" />
+          <div className="mt-4 space-y-3">
+            {["w-11/12", "w-9/12", "w-10/12", "w-7/12"].map((w) => (
+              <div key={w} className={`h-px ${w} bg-[var(--w-hair)]`} />
+            ))}
           </div>
-          <p className="mt-5 flex items-center gap-2 text-[10px] uppercase tracking-[0.28em] text-amber-200/60">
+          <p className="mt-5 flex items-center gap-2 text-[10px] uppercase tracking-[0.28em] text-[var(--w-accent)]">
             <span className="inline-block h-3 w-3 rounded-sm border border-current" /> Only you
           </p>
         </div>
-      </Plaque>
       </div>
     </div>
   );
@@ -1074,34 +1070,13 @@ function RailSection({
 function RailCardView({ card, section }: { card: RailCard; section: string }) {
   const { title, desc, Icon, highlight } = card;
 
-  const outerBg = highlight
-    ? "linear-gradient(160deg, rgba(143,199,158,.4), rgba(143,199,158,.05) 42%, transparent)"
-    : "linear-gradient(160deg, rgba(255,255,255,.14), rgba(255,255,255,.02) 40%, transparent)";
-  const innerBg = highlight
-    ? "linear-gradient(165deg,#152a20,#0e1c16 62%,#0b1611)"
-    : "linear-gradient(165deg,#151f36,#0b1024 62%,#0a0f20)";
-  const iconBg = highlight
-    ? "radial-gradient(circle at 40% 35%, rgba(143,199,158,.28), rgba(143,199,158,.06))"
-    : "radial-gradient(circle at 40% 35%, rgba(232,185,109,.22), rgba(232,185,109,.05))";
-  const iconShadow = highlight
-    ? "inset 0 0 0 1px rgba(143,199,158,.4), 0 0 22px -8px rgba(143,199,158,.55)"
-    : "inset 0 0 0 1px rgba(232,185,109,.28), 0 0 22px -8px rgba(232,185,109,.5)";
-  const iconStroke = highlight ? "#8FC79E" : "#E8B96D";
+  const accent = highlight ? "var(--w-kind)" : "var(--w-accent)";
 
   return (
-    <div
-      className="w-[248px] shrink-0 rounded-[20px] p-px transition duration-[400ms] hover:-translate-y-1"
-      style={{ background: outerBg }}
-    >
+    <div className="w-[248px] shrink-0 rounded-[20px] transition duration-[400ms] hover:-translate-y-1">
       <div
-        className="dark-scene relative flex h-full flex-col overflow-hidden rounded-[19px] px-[22px] pb-[22px] pt-6"
-        style={{ background: innerBg }}
+        className="relative flex h-full flex-col overflow-hidden rounded-[20px] border border-[var(--w-hair)] bg-[var(--w-card-1)] px-[22px] pb-[22px] pt-6 shadow-[0_14px_30px_-22px_rgba(44,36,34,0.45)]"
       >
-        {/* faint cosmic stars */}
-        <span className="pointer-events-none absolute right-4 top-3 h-[2px] w-[2px] rounded-full bg-white/40" />
-        <span className="pointer-events-none absolute right-9 top-6 h-[2px] w-[2px] rounded-full bg-white/40" />
-        <span className="pointer-events-none absolute right-6 top-10 h-[2px] w-[2px] rounded-full bg-white/40" />
-
         {highlight && (
           <span
             className="pointer-events-none absolute z-10 font-medium uppercase"
@@ -1109,8 +1084,8 @@ function RailCardView({ card, section }: { card: RailCard; section: string }) {
               top: 14,
               right: -30,
               padding: "3px 34px",
-              background: "rgba(143,199,158,.9)",
-              color: "#0b1611",
+              background: "var(--w-kind)",
+              color: "#FFFDFC",
               transform: "rotate(45deg)",
               fontSize: 8,
               letterSpacing: "0.16em",
@@ -1121,15 +1096,14 @@ function RailCardView({ card, section }: { card: RailCard; section: string }) {
         )}
 
         <div
-          className="mb-5 flex h-[52px] w-[52px] items-center justify-center rounded-[14px]"
-          style={{ background: iconBg, boxShadow: iconShadow }}
+          className="mb-5 flex h-[52px] w-[52px] items-center justify-center rounded-[14px] bg-[var(--w-card-2)] ring-1 ring-[var(--w-hair)]"
         >
-          <Icon width={24} height={24} strokeWidth={1.5} style={{ stroke: iconStroke }} />
+          <Icon width={24} height={24} strokeWidth={1.5} style={{ stroke: accent }} />
         </div>
 
-        <h3 className="font-display text-[22px] leading-tight text-white">{title}</h3>
+        <h3 className="font-display text-[22px] leading-tight text-[var(--w-ink)]">{title}</h3>
         <p
-          className="mt-2 flex-1 text-[13px] text-white/55"
+          className="mt-2 flex-1 text-[13px] text-[var(--w-muted)]"
           style={{ lineHeight: 1.62, minHeight: 62 }}
         >
           {desc}
@@ -1140,7 +1114,7 @@ function RailCardView({ card, section }: { card: RailCard; section: string }) {
             itemName={title}
             section={section}
             trigger={
-              <button type="button" className={`${highlight ? "btn-kind" : "btn-dark-quiet"} w-full`}>
+              <button type="button" className={`${highlight ? "btn-kind" : "btn-quiet"} w-full`}>
                 <Bell size={16} strokeWidth={1.75} />
                 Notify me
               </button>
@@ -1610,15 +1584,13 @@ function PlaqueLastLetter() {
 
 function PlaquePawtrait() {
   return (
-    <div className="w-full max-w-[340px]">
+    <div className="w-full max-w-[460px]">
       <Plaque>
-        <div className="flex flex-col items-center py-4">
+        <div className="flex flex-col items-center py-2">
           <div
-            className="overflow-hidden rounded-xl border border-[var(--gold)]/40"
+            className="w-full overflow-hidden rounded-xl border border-[var(--gold)]/40"
             style={{
-              width: "100%",
-              maxWidth: 260,
-              height: 120,
+              aspectRatio: "4 / 3",
               boxShadow: "inset 0 0 20px rgba(212,179,120,0.12), 0 0 30px -10px rgba(212,179,120,0.35)",
             }}
           >
@@ -1631,10 +1603,10 @@ function PlaquePawtrait() {
               loading="lazy"
             />
           </div>
-          <p className="mt-5 font-display italic text-[15px] text-white/75">
+          <p className="mt-5 font-display italic text-[16px] text-[var(--w-ink)]">
             "Once upon a good boy…"
           </p>
-          <p className="mt-2 text-[11px] uppercase tracking-[0.26em] text-amber-200/60">
+          <p className="mt-2 text-[11px] uppercase tracking-[0.26em] text-[var(--w-accent)]">
             An illustrated storybook, of them
           </p>
         </div>
