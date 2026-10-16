@@ -1114,7 +1114,7 @@ function RailCardView({ card, section }: { card: RailCard; section: string }) {
             itemName={title}
             section={section}
             trigger={
-              <button type="button" className={`${highlight ? "btn-kind" : "btn-dark-quiet"} w-full`}>
+              <button type="button" className={`${highlight ? "btn-kind" : "btn-quiet"} w-full`}>
                 <Bell size={16} strokeWidth={1.75} />
                 Notify me
               </button>

@@ -67,8 +67,18 @@ function GardenPage() {
 
         </div>
 
-          <div className="mt-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <div className="flex flex-wrap items-center justify-center gap-2 md:justify-start">
+          <div className="mx-auto mt-8 flex max-w-2xl flex-col items-center gap-4">
+            <div className="flex w-full items-center gap-2 rounded-full border border-border bg-card px-4 py-2 soft-shadow">
+              <Search className="h-4 w-4 shrink-0 text-primary" />
+              <Input
+                placeholder="Search by name…"
+                aria-label="Search memorials by name"
+                value={q}
+                onChange={(e) => setQ(e.target.value)}
+                className="h-8 border-0 bg-transparent text-foreground placeholder:text-muted-foreground focus-visible:ring-0"
+              />
+            </div>
+            <div className="flex flex-wrap items-center justify-center gap-2">
             {filters.map((f) => (
               <Button
                 key={f.key}
@@ -83,16 +93,6 @@ function GardenPage() {
                 {f.label}
               </Button>
             ))}
-            </div>
-            <div className="flex w-full items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5 md:w-80">
-              <Search className="h-4 w-4 text-primary" />
-              <Input
-                placeholder="Search by name…"
-                aria-label="Search memorials by name"
-                value={q}
-                onChange={(e) => setQ(e.target.value)}
-                className="h-7 border-0 bg-transparent text-foreground placeholder:text-muted-foreground focus-visible:ring-0"
-              />
             </div>
           </div>
 
