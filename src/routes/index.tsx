@@ -276,7 +276,7 @@ function HomePage() {
   });
   const { data: lampsThisWeek = 0 } = useQuery({
     queryKey: ["lamps-this-week"],
-    queryFn: () => fetchCount(),
+    queryFn: async () => (await fetchCount()).count,
     staleTime: 60_000,
   });
 
