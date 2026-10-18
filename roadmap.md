@@ -15,4 +15,4 @@
 - [x] Verify live Google/Apple destination links and member-session return to memorial creation.
 - [ ] Verify the complete Google/Apple provider sign-in round-trip. Blocked: external provider sign-in is not available in the test browser.
 
-Publishing explicitly requested on October 12, 2026.
+Publishing explicitly requested on October 12, 2026.- [x] Homepage = Memorial Garden: animated dawn banner with light motes, polaroid garden grid, lamp/love/share gated to signed-in members (guests get sign-in dialog), landing info condensed into cards (About / Gentle support / Keepsakes), About added to desktop nav.
