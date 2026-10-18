@@ -1430,3 +1430,29 @@ html, body { overflow-x: hidden; }
 @media (prefers-reduced-motion: reduce) {
   .candle-anim { animation: none !important; }
 }
+
+/* ---- Home garden banner: warm dawn + drifting light motes ---- */
+.garden-banner {
+  background:
+    radial-gradient(120% 90% at 50% -20%, color-mix(in oklab, var(--primary) 14%, transparent), transparent 60%),
+    linear-gradient(180deg, color-mix(in oklab, var(--muted) 55%, var(--background)) 0%, var(--background) 100%);
+}
+.garden-motes { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.garden-motes .mote {
+  position: absolute;
+  bottom: -8px;
+  border-radius: 9999px;
+  background: radial-gradient(circle, color-mix(in oklab, var(--primary) 55%, #fff) 0%, transparent 70%);
+  opacity: 0;
+  animation: mote-drift linear infinite;
+  will-change: transform, opacity;
+}
+@keyframes mote-drift {
+  0%   { transform: translate3d(0, 0, 0); opacity: 0; }
+  12%  { opacity: 0.7; }
+  85%  { opacity: 0.35; }
+  100% { transform: translate3d(12px, -46vh, 0); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .garden-motes .mote { animation: none; opacity: 0; }
+}
