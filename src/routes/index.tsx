@@ -13,8 +13,7 @@ import { PawLamp } from "@/components/site/PawLamp";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { listGardenMemorials } from "@/lib/memorials.functions";
-import { countCandlesThisWeek } from "@/lib/candle-guest.functions";
-import { leaveFlower } from "@/lib/tributes.functions";
+import { countCandlesThisWeek, lightCandleGuest } from "@/lib/candle-guest.functions";
 import { shareOrCopy } from "@/lib/share";
 import { useAuth } from "@/hooks/use-auth";
 import { softHaptic } from "@/lib/haptic";
@@ -120,7 +119,7 @@ function GardenBanner({ lampsThisWeek }: { lampsThisWeek: number }) {
 function GardenCard({ m, onGate }: { m: GardenMemorial; onGate: (action: string) => void }) {
   const { user } = useAuth();
   const qc = useQueryClient();
-  const flowerFn = useServerFn(leaveFlower);
+  const lightFn = useServerFn(lightCandleGuest);
   const img = m.transformed_image_url ?? m.hero_image_url;
   const years = [m.birth_date?.slice(0, 4), m.passing_date?.slice(0, 4)].filter(Boolean).join(" – ");
 
@@ -135,11 +134,13 @@ function GardenCard({ m, onGate }: { m: GardenMemorial; onGate: (action: string)
   const sendLove = () =>
     requireAuth("send love", async () => {
       try {
-        // Love is a flower tribute — never a paw lamp.
-        await flowerFn({ data: { memorial_id: m.id, flower: "rose", message: null } });
+        const accountName = typeof user?.user_metadata?.display_name === "string"
+          ? user.user_metadata.display_name.trim()
+          : "";
+        await lightFn({ data: { memorial_id: m.id, name: accountName || null, message: null } });
         softHaptic(20);
         toast.success(`Love sent to ${m.pet_name} ✨`);
-        qc.invalidateQueries({ queryKey: ["memorial-flowers", m.id] });
+        qc.invalidateQueries({ queryKey: ["home-garden"] });
       } catch (e: any) {
         toast.error(e?.message ?? "Couldn't send love just now");
       }
@@ -235,7 +236,7 @@ const infoCards = [
 
 function InfoCards() {
   return (
-    <section className="mx-auto mt-6 max-w-5xl pt-2">
+    <section className="mx-auto mt-16 max-w-5xl">
       <h2 className="text-center font-display text-2xl md:text-3xl">More of the garden</h2>
       <div className="mt-6 grid gap-5 px-1 sm:grid-cols-3">
         {infoCards.map(({ to, icon: Icon, title, body }) => (
