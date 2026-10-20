@@ -235,7 +235,7 @@ const infoCards = [
 
 function InfoCards() {
   return (
-    <section className="mx-auto mt-16 max-w-5xl">
+    <section className="mx-auto mt-6 max-w-5xl pt-2">
       <h2 className="text-center font-display text-2xl md:text-3xl">More of the garden</h2>
       <div className="mt-6 grid gap-5 px-1 sm:grid-cols-3">
         {infoCards.map(({ to, icon: Icon, title, body }) => (
