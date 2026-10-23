@@ -16,10 +16,6 @@ export const Route = createFileRoute("/create/")({
     meta: [
       { title: "Create — Rememfur" },
       { name: "description", content: "Write a memorial for a pet you loved, or share a memory with the community." },
-      { property: "og:title", content: "Create — Rememfur" },
-      { property: "og:description", content: "Write a memorial for a pet you loved, or share a memory with the community." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
     ],
   }),
 });

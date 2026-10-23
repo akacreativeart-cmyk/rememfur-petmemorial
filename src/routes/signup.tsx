@@ -9,8 +9,7 @@ import { lovable } from "@/integrations/lovable";
 import { useAuth } from "@/hooks/use-auth";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
-import companionPhoto from "@/assets/login-companion.jpg.asset.json";
-import { authDestination } from "@/lib/auth-destination";
+import heroImg from "@/assets/hero-meadow.jpg";
 
 export const Route = createFileRoute("/signup")({
   component: SignupPage,
@@ -29,11 +28,18 @@ export const Route = createFileRoute("/signup")({
   ] }),
 });
 
+// Only allow same-origin relative paths as post-auth redirect targets.
+function safeRedirect(value: string | undefined, fallback = "/welcome") {
+  if (!value) return fallback;
+  if (!value.startsWith("/") || value.startsWith("//")) return fallback;
+  return value;
+}
+
 function SignupPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const search = Route.useSearch();
-  const redirectTo = authDestination(user, search.redirect, "signup");
+  const redirectTo = safeRedirect(search.redirect);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -62,20 +68,13 @@ function SignupPage() {
     }
   };
 
-  // Carry the intended destination through the OAuth round-trip so the
-  // returning page can navigate there instead of the default fallback.
-  const oauthRedirectUri = () =>
-    window.location.origin +
-    "/signup" +
-    (search.redirect ? `?redirect=${encodeURIComponent(search.redirect)}` : "");
-
   const google = async () => {
-    const r = await lovable.auth.signInWithOAuth("google", { redirect_uri: oauthRedirectUri() });
+    const r = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + "/signup" });
     if (r.error) toast.error("Could not sign in with Google");
   };
 
   const apple = async () => {
-    const r = await lovable.auth.signInWithOAuth("apple", { redirect_uri: oauthRedirectUri() });
+    const r = await lovable.auth.signInWithOAuth("apple", { redirect_uri: window.location.origin + "/signup" });
     if (r.error) toast.error("Could not sign in with Apple");
   };
 
@@ -99,7 +98,7 @@ function SignupPage() {
       <SiteHeader />
       <main className="mx-auto grid max-w-5xl gap-10 px-5 py-12 md:grid-cols-2 md:py-20">
         <div className="hidden overflow-hidden rounded-3xl border border-border/60 soft-shadow md:block">
-          <img src={companionPhoto.url} alt="A golden retriever resting in a sunlit garden" width={900} height={1100} className="h-full w-full object-cover" />
+          <img src={heroImg} alt="" width={900} height={1100} className="h-full w-full object-cover" />
         </div>
         <div className="flex items-center">
           <form onSubmit={submit} className="w-full rounded-3xl border border-border/60 bg-card p-8 soft-shadow">

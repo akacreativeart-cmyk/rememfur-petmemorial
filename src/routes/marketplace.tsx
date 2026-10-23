@@ -28,8 +28,6 @@ export const Route = createFileRoute("/marketplace")({
       { name: "description", content: "Curated memory gifts, vetted pet products, trusted services — plus grief support, adoption listings, hero & service pets." },
       { property: "og:title", content: "Rememfur Marketplace — Curated with care" },
       { property: "og:description", content: "Memory gifts, vetted products and trusted services for pet parents." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
     ],
   }),
 });

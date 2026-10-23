@@ -12,14 +12,7 @@ import { formatDistanceToNow } from "date-fns";
 
 export const Route = createFileRoute("/_authenticated/notifications")({
   component: NotificationsPage,
-  head: () => ({ meta: [
-    { title: "Notifications — Rememfur" },
-    { name: "description", content: "Read the paw lamps and kind words left for your pets on Rememfur." },
-    { property: "og:title", content: "Notifications — Rememfur" },
-    { property: "og:description", content: "Read the paw lamps and kind words left for your pets on Rememfur." },
-    { property: "og:type", content: "website" },
-    { name: "twitter:card", content: "summary" },
-  ] }),
+  head: () => ({ meta: [{ title: "Notifications — Rememfur" }] }),
 });
 
 const ICONS: Record<string, any> = {
@@ -110,7 +103,7 @@ function NotificationsPage() {
               const slug = n.memorial?.slug;
               const petName = n.memorial?.pet_name;
               const content = (
-                <div className={`flex gap-3 px-5 py-4 transition ${n.read_at ? "" : "bg-accent/40"} hover:bg-muted/40`}>
+                <div className={`flex gap-3 px-5 py-4 transition ${n.read_at ? "" : "bg-amber-400/5"} hover:bg-cream/40`}>
                   <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--cta)]/10 text-[var(--cta)]">
                     <Icon className="h-4 w-4" />
                   </div>

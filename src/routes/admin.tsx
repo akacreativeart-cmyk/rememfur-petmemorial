@@ -14,14 +14,7 @@ import { listBetaFeedback, deleteBetaFeedback } from "@/lib/feedback.functions";
 import { listPendingClaims, reviewMemorialClaim } from "@/lib/claims.functions";
 
 export const Route = createFileRoute("/admin")({
-  head: () => ({ meta: [
-    { title: "Admin — Rememfur" },
-    { name: "description", content: "Manage Rememfur community moderation and memorial claims." },
-    { property: "og:title", content: "Admin — Rememfur" },
-    { property: "og:description", content: "Manage Rememfur community moderation and memorial claims." },
-    { property: "og:type", content: "website" },
-    { name: "twitter:card", content: "summary" },
-  ] }),
+  head: () => ({ meta: [{ title: "Admin — Rememfur" }] }),
   beforeLoad: async () => {
     try {
       const res = await getMyAdminStatus();

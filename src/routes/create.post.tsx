@@ -19,10 +19,6 @@ export const Route = createFileRoute("/create/post")({
     meta: [
       { title: "Post to the community — Rememfur" },
       { name: "description", content: "Share a memory, a question, or a hard day with people who understand." },
-      { property: "og:title", content: "Post to the community — Rememfur" },
-      { property: "og:description", content: "Share a memory, a question, or a hard day with people who understand." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
     ],
   }),
 });

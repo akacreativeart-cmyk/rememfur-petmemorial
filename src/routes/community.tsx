@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect, useRef } from "react";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
@@ -13,7 +13,6 @@ import { PawLamp } from "@/components/site/PawLamp";
 import { listFeed } from "@/lib/feed.functions";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
-import { listGardenMemorials } from "@/lib/memorials.functions";
 
 export const Route = createFileRoute("/community")({
   component: CommunityPage,
@@ -33,12 +32,6 @@ function CommunityPage() {
   const { user } = useAuth();
   const [scope, setScope] = useState<"all" | "following">("all");
   const feedFn = useServerFn(listFeed);
-  const gardenFn = useServerFn(listGardenMemorials);
-  const { data: wallMemorials = [] } = useQuery({
-    queryKey: ["community-memory-wall"],
-    queryFn: () => gardenFn({ data: { species: "all", q: "" } }),
-    staleTime: 60_000,
-  });
   const sentinelRef = useRef<HTMLDivElement | null>(null);
 
   const {
@@ -79,7 +72,7 @@ function CommunityPage() {
   return (
     <div className="warm-platform min-h-screen bg-background paper-grain">
       <SiteHeader />
-      <main className="mx-auto max-w-6xl px-5 py-10 pb-28">
+      <main className="mx-auto max-w-2xl px-5 py-10 pb-28">
         <PageHero
           eyebrow="chapter two"
           title="The Memory Wall"
@@ -87,27 +80,6 @@ function CommunityPage() {
           intro="A gentle place to share memories, photos, and kind words with people who understand."
         />
 
-        {wallMemorials.length > 0 && (
-          <section aria-label="Photos and messages of love" className="mb-14 grid grid-cols-2 gap-x-6 gap-y-10 px-2 py-5 md:grid-cols-3 lg:grid-cols-4">
-            {wallMemorials.slice(0, 12).map((memorial, index) => (
-              <Link key={memorial.id} to="/memorial/$slug" params={{ slug: memorial.slug }}
-                className={`polaroid garden-polaroid group block transition hover:-translate-y-1 ${index % 2 ? "rotate-[1deg]" : "-rotate-[1deg]"}`}>
-                <span aria-hidden className="tape absolute -top-2 left-1/2 z-10 -translate-x-1/2" />
-                <div className="aspect-square overflow-hidden bg-muted">
-                  {(memorial.hero_image_url ?? memorial.transformed_image_url) ? (
-                    <img src={memorial.hero_image_url ?? memorial.transformed_image_url ?? undefined} alt={memorial.pet_name} loading="lazy" className="h-full w-full object-cover" />
-                  ) : <div className="flex h-full items-center justify-center"><PawLamp size={64} /></div>}
-                </div>
-                <div className="px-1 pb-2 pt-3 text-center">
-                  <h2 className="font-hand text-2xl text-foreground">{memorial.pet_name}</h2>
-                  <p className="mt-1 line-clamp-3 font-hand text-lg leading-snug text-muted-foreground">{memorial.epitaph || "Forever loved, always remembered."}</p>
-                </div>
-              </Link>
-            ))}
-          </section>
-        )}
-
-        <div className="mx-auto max-w-2xl">
         {user ? (
           <div className="mb-6"><ComposePost /></div>
         ) : (
@@ -187,7 +159,6 @@ function CommunityPage() {
               You&apos;re all caught up
             </div>
           )}
-        </div>
         </div>
       </main>
       <SiteFooter />

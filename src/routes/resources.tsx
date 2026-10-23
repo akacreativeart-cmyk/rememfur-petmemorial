@@ -13,8 +13,6 @@ export const Route = createFileRoute("/resources")({
       { property: "og:title", content: "Pet loss grief resources — Rememfur" },
       { property: "og:description", content: "Helplines, counsellors, support groups and gentle reading for pet loss — practical help for the first 72 hours and for the grief that stays much longer." },
       { property: "og:url", content: "https://rememfur.com/resources" },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
     ],
     links: [{ rel: "canonical", href: "https://rememfur.com/resources" }],
   }),

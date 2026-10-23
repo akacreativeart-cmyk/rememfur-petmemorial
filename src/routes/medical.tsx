@@ -10,10 +10,6 @@ export const Route = createFileRoute("/medical")({
     meta: [
       { title: "Medical & End-of-Life Care — Rememfur" },
       { name: "description", content: "Hospice, euthanasia guidance, and trusted veterinary resources for your pet." },
-      { property: "og:title", content: "Medical & End-of-Life Care — Rememfur" },
-      { property: "og:description", content: "Hospice, euthanasia guidance, and trusted veterinary resources for your pet." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
     ],
   }),
 });

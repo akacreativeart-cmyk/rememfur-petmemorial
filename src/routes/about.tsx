@@ -13,8 +13,6 @@ export const Route = createFileRoute("/about")({
       { property: "og:title", content: "About Rememfur — Grief deserves a beautiful home" },
       { property: "og:description", content: "Why we built Rememfur: a slow, four-step ritual — photo, portrait, tribute, paw lamp — that gives your love for a lost pet a permanent place to live." },
       { property: "og:url", content: "https://rememfur.com/about" },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
     ],
     links: [{ rel: "canonical", href: "https://rememfur.com/about" }],
   }),

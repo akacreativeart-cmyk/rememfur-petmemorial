@@ -20,8 +20,6 @@ import { ReportButton } from "@/components/site/ReportButton";
 import { TheirSky } from "@/components/site/TheirSky";
 import { Polaroid } from "@/components/site/Polaroid";
 import { BetaInviteDialog } from "@/components/site/BetaInviteDialog";
-import { MemorialInviteDialog } from "@/components/site/MemorialInviteDialog";
-import { memorialInvitePath } from "@/lib/memorial-invite";
 
 
 import { useAuth } from "@/hooks/use-auth";
@@ -176,7 +174,7 @@ function MemorialPage() {
       <SiteHeader />
       <main className="mx-auto max-w-6xl px-5 py-10 md:px-8">
         <div className="overflow-hidden rounded-[2rem] border border-border/60 soft-shadow">
-          <div className="memorial-cover dark-scene relative">
+          <div className="relative">
             {hero ? (
               <img src={hero} alt={m.pet_name} className="h-[420px] w-full object-cover md:h-[520px]" />
             ) : (
@@ -184,23 +182,22 @@ function MemorialPage() {
                 <img src={petSilhouette} alt="" aria-hidden className="h-56 w-56 opacity-80" />
               </div>
             )}
-            <div className="memorial-cover-shade absolute inset-0" />
-            <div className="absolute bottom-0 left-0 right-0 flex flex-wrap items-end justify-between gap-3 p-5 md:p-8">
-              <div className="min-w-0 w-full">
-                <h1 className="break-words font-display text-4xl text-foreground md:text-6xl">{m.pet_name}</h1>
-                <div className="mt-1 text-sm text-foreground/80">{years || "Forever loved"}</div>
-                {m.epitaph && <p className="mt-3 max-w-xl font-display text-xl italic text-foreground/90">"{m.epitaph}"</p>}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#05070f] via-[#05070f]/40 to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 flex flex-wrap items-end justify-between gap-3 p-8">
+              <div>
+                <h1 className="font-display text-5xl text-white md:text-6xl">{m.pet_name}</h1>
+                <div className="mt-1 text-sm text-white/70">{years || "Forever loved"}</div>
+                {m.epitaph && <p className="mt-3 max-w-xl font-display text-xl italic text-white/80">"{m.epitaph}"</p>}
               </div>
-              <div className="flex w-full flex-wrap items-center gap-3 text-sm text-foreground/90">
+              <div className="flex items-center gap-4 text-sm text-white/80">
                 <div className="flex items-center gap-1.5"><PawLamp size={16} /> {current.candles.length} paw lamps</div>
-                <div className="flex items-center gap-1"><MessageCircle className="h-4 w-4" /> {current.messages.length} messages</div>
-                <Button variant="outline" size="sm" onClick={share} className="rounded-full">
+                <div className="flex items-center gap-1"><MessageCircle className="h-4 w-4 text-amber-200" /> {current.messages.length} messages</div>
+                <Button variant="outline" size="sm" onClick={share} className="rounded-full border-white/15 bg-white/10">
                   <Share2 className="mr-1.5 h-3.5 w-3.5" /> Share
                 </Button>
-                 {m.is_public && <MemorialInviteDialog slug={m.slug} petName={m.pet_name} />}
                 {user?.id === m.owner_id && (
                   <Link to="/memorial/$slug/edit" params={{ slug: m.slug }}>
-                    <Button variant="outline" size="sm" className="rounded-full">
+                    <Button variant="outline" size="sm" className="rounded-full border-white/15 bg-white/10">
                       <Pencil className="mr-1.5 h-3.5 w-3.5" /> Edit
                     </Button>
                   </Link>
@@ -332,7 +329,7 @@ function MemorialPage() {
                   </div>
                 </div>
               ) : (
-                <p className="mt-4 text-sm text-muted-foreground"><Link to="/login" search={{ redirect: memorialInvitePath(m.slug) }} className="text-primary hover:underline">Sign in</Link> to leave a message.</p>
+                <p className="mt-4 text-sm text-muted-foreground"><Link to="/login" className="text-amber-200 hover:underline">Sign in</Link> to leave a message.</p>
               )}
               <ul className="mt-6 space-y-4">
                 {current.messages.length === 0 && <li className="text-sm italic text-muted-foreground">Be the first to leave a kind word.</li>}
@@ -376,7 +373,7 @@ function MemorialPage() {
                     }
                   />
                   <p className="mt-2 text-[11px] text-muted-foreground">
-                    No account needed. <Link to="/signup" search={{ redirect: memorialInvitePath(m.slug) }} className="underline">Join</Link> to share memories.
+                    No account needed. <Link to="/signup" className="underline">Join</Link> to share memories.
                   </p>
                 </div>
               )}

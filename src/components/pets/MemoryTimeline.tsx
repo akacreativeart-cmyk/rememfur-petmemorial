@@ -114,7 +114,7 @@ export function MemoryTimeline({ petId, petName }: { petId: string; petName: str
         )}
         {memories.map((m) => (
           <article key={m.id} className="rounded-[18px] border border-border bg-card p-4 soft-shadow">
-            <div className="flex flex-wrap items-start gap-3 sm:flex-nowrap">
+            <div className="flex items-start gap-3">
               {(m.photos?.length ? m.photos : m.photo_url ? [m.photo_url] : []).length > 0 && (
                 <div className="w-28 shrink-0 sm:w-36">
                   <PhotoCarousel
@@ -123,7 +123,7 @@ export function MemoryTimeline({ petId, petName }: { petId: string; petName: str
                   />
                 </div>
               )}
-              <div className="min-w-0 flex-1 basis-32">
+              <div className="min-w-0 flex-1">
                 <p className="text-[11px] uppercase tracking-widest text-muted-foreground">
                   {new Date(m.memory_date).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}
                 </p>
@@ -131,12 +131,12 @@ export function MemoryTimeline({ petId, petName }: { petId: string; petName: str
                 {m.content && <p className="mt-1 whitespace-pre-wrap text-sm text-foreground/85">{m.content}</p>}
               </div>
               <div className="flex shrink-0 gap-1">
-                <Button variant="ghost" size="icon" aria-label="Edit memory" onClick={() => openEdit(m)}>
+                <Button variant="ghost" size="sm" aria-label="Edit memory" onClick={() => openEdit(m)}>
                   <Pencil className="h-4 w-4 text-muted-foreground" />
                 </Button>
                 <Button
                   variant="ghost"
-                  size="icon"
+                  size="sm"
                   aria-label="Delete memory"
                   onClick={() => confirm("Delete this memory?") && remove.mutate(m.id)}
                 >

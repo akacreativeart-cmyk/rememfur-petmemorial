@@ -1,7 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { notifyMemorialOwner } from "@/lib/owner-emails";
 
 export const lightCandle = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -14,21 +13,13 @@ export const lightCandle = createServerFn({ method: "POST" })
   )
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
-    const { data: candle, error } = await supabase.from("candles").insert({
+    const { error } = await supabase.from("candles").insert({
       memorial_id: data.memorial_id,
       lit_by: userId,
       message: data.message ?? null,
       lit_by_name: data.lit_by_name ?? null,
-    }).select("id").single();
-    if (error) throw new Error(error.message);
-    void notifyMemorialOwner({
-      memorialId: data.memorial_id,
-      kind: "paw-lamp",
-      actorId: userId,
-      actorName: data.lit_by_name ?? null,
-      preview: data.message ?? null,
-      eventId: candle?.id ?? crypto.randomUUID(),
     });
+    if (error) throw new Error(error.message);
     return { ok: true };
   });
 
@@ -42,22 +33,12 @@ export const postMessage = createServerFn({ method: "POST" })
   )
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
-    const { data: msg, error } = await supabase.from("messages").insert({
+    const { error } = await supabase.from("messages").insert({
       memorial_id: data.memorial_id,
       author_id: userId,
       body: data.body,
-    }).select("id").single();
-    if (error) throw new Error(error.message);
-    const { data: prof } = await supabase
-      .from("profiles").select("display_name").eq("id", userId).maybeSingle();
-    void notifyMemorialOwner({
-      memorialId: data.memorial_id,
-      kind: "comment",
-      actorId: userId,
-      actorName: prof?.display_name ?? null,
-      preview: data.body.slice(0, 140),
-      eventId: msg?.id ?? crypto.randomUUID(),
     });
+    if (error) throw new Error(error.message);
     return { ok: true };
   });
 

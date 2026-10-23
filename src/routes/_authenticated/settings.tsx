@@ -26,14 +26,7 @@ import { Upload, User, KeyRound, AlertTriangle } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/settings")({
   component: SettingsPage,
-  head: () => ({ meta: [
-    { title: "Settings — Rememfur" },
-    { name: "description", content: "Manage your Rememfur profile and account preferences." },
-    { property: "og:title", content: "Settings — Rememfur" },
-    { property: "og:description", content: "Manage your Rememfur profile and account preferences." },
-    { property: "og:type", content: "website" },
-    { name: "twitter:card", content: "summary" },
-  ] }),
+  head: () => ({ meta: [{ title: "Settings — Rememfur" }] }),
 });
 
 function SettingsPage() {

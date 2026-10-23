@@ -3,7 +3,6 @@ import { getRequest, getRequestIP } from "@tanstack/react-start/server";
 import { createHash } from "crypto";
 import { z } from "zod";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
-import { notifyMemorialOwner } from "@/lib/owner-emails";
 
 // Hash a stable client identifier (IP + UA) so we can throttle without storing raw IPs.
 function clientHash(): string {
@@ -66,21 +65,13 @@ export const lightCandleGuest = createServerFn({ method: "POST" })
 
     await assertCandleLimit(data.memorial_id);
 
-    const { data: candle, error } = await supabaseAdmin.from("candles").insert({
+    const { error } = await supabaseAdmin.from("candles").insert({
       memorial_id: data.memorial_id,
       lit_by: null,
       lit_by_name: data.name?.trim() || "A friend",
       message: data.message?.trim() || null,
-    }).select("id").single();
-    if (error) throw new Error(error.message);
-    void notifyMemorialOwner({
-      memorialId: data.memorial_id,
-      kind: "paw-lamp",
-      actorId: null,
-      actorName: data.name?.trim() || "A friend",
-      preview: data.message?.trim() || null,
-      eventId: candle?.id ?? crypto.randomUUID(),
     });
+    if (error) throw new Error(error.message);
     return { ok: true };
   });
 
@@ -109,21 +100,13 @@ export const lightCandleGuestOnPost = createServerFn({ method: "POST" })
 
     await assertCandleLimit(post.memorial_id);
 
-    const { data: candle, error } = await supabaseAdmin.from("candles").insert({
+    const { error } = await supabaseAdmin.from("candles").insert({
       memorial_id: post.memorial_id,
       lit_by: null,
       lit_by_name: data.name?.trim() || "A friend",
       message: data.message?.trim() || null,
-    }).select("id").single();
-    if (error) throw new Error(error.message);
-    void notifyMemorialOwner({
-      memorialId: post.memorial_id,
-      kind: "paw-lamp",
-      actorId: null,
-      actorName: data.name?.trim() || "A friend",
-      preview: data.message?.trim() || null,
-      eventId: candle?.id ?? crypto.randomUUID(),
     });
+    if (error) throw new Error(error.message);
     return { ok: true };
   });
 

@@ -10,10 +10,6 @@ export const Route = createFileRoute("/grief-support")({
     meta: [
       { title: "Grief Support — Rememfur" },
       { name: "description", content: "Talk to someone who understands pet loss. Helplines, counselors, and support circles." },
-      { property: "og:title", content: "Grief Support — Rememfur" },
-      { property: "og:description", content: "Talk to someone who understands pet loss. Helplines, counselors, and support circles." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
     ],
   }),
 });

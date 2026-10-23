@@ -14,7 +14,6 @@ import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AdoptionRouteImport } from './routes/adoption'
-import { Route as ArchiveRouteImport } from './routes/archive'
 import { Route as CommunityRouteImport } from './routes/community'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as GardenRouteImport } from './routes/garden'
@@ -39,7 +38,6 @@ import { Route as MemorialSlugRouteImport } from './routes/memorial.$slug'
 import { Route as UUserIdRouteImport } from './routes/u.$userId'
 import { Route as AuthenticatedPetsPetIdRouteImport } from './routes/_authenticated/pets.$petId'
 import { Route as AuthenticatedMemorialSlugEditRouteImport } from './routes/_authenticated/memorial.$slug.edit'
-import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -63,11 +61,6 @@ const AdminRoute = AdminRouteImport.update({
 const AdoptionRoute = AdoptionRouteImport.update({
   id: '/adoption',
   path: '/adoption',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ArchiveRoute = ArchiveRouteImport.update({
-  id: '/archive',
-  path: '/archive',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CommunityRoute = CommunityRouteImport.update({
@@ -192,19 +185,12 @@ const AuthenticatedMemorialSlugEditRoute =
     path: '/memorial/$slug/edit',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-const LovableEmailTransactionalPreviewRoute =
-  LovableEmailTransactionalPreviewRouteImport.update({
-    id: '/lovable/email/transactional/preview',
-    path: '/lovable/email/transactional/preview',
-    getParentRoute: () => rootRouteImport,
-  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
   '/adoption': typeof AdoptionRoute
-  '/archive': typeof ArchiveRoute
   '/community': typeof CommunityRoute
   '/contact': typeof ContactRoute
   '/garden': typeof GardenRoute
@@ -229,14 +215,12 @@ export interface FileRoutesByFullPath {
   '/create/': typeof CreateIndexRoute
   '/pets/$petId': typeof AuthenticatedPetsPetIdRoute
   '/memorial/$slug/edit': typeof AuthenticatedMemorialSlugEditRoute
-  '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
   '/adoption': typeof AdoptionRoute
-  '/archive': typeof ArchiveRoute
   '/community': typeof CommunityRoute
   '/contact': typeof ContactRoute
   '/garden': typeof GardenRoute
@@ -261,7 +245,6 @@ export interface FileRoutesByTo {
   '/create': typeof CreateIndexRoute
   '/pets/$petId': typeof AuthenticatedPetsPetIdRoute
   '/memorial/$slug/edit': typeof AuthenticatedMemorialSlugEditRoute
-  '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -270,7 +253,6 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
   '/adoption': typeof AdoptionRoute
-  '/archive': typeof ArchiveRoute
   '/community': typeof CommunityRoute
   '/contact': typeof ContactRoute
   '/garden': typeof GardenRoute
@@ -295,7 +277,6 @@ export interface FileRoutesById {
   '/create/': typeof CreateIndexRoute
   '/_authenticated/pets/$petId': typeof AuthenticatedPetsPetIdRoute
   '/_authenticated/memorial/$slug/edit': typeof AuthenticatedMemorialSlugEditRoute
-  '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -304,7 +285,6 @@ export interface FileRouteTypes {
     | '/about'
     | '/admin'
     | '/adoption'
-    | '/archive'
     | '/community'
     | '/contact'
     | '/garden'
@@ -329,14 +309,12 @@ export interface FileRouteTypes {
     | '/create/'
     | '/pets/$petId'
     | '/memorial/$slug/edit'
-    | '/lovable/email/transactional/preview'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
     | '/admin'
     | '/adoption'
-    | '/archive'
     | '/community'
     | '/contact'
     | '/garden'
@@ -361,7 +339,6 @@ export interface FileRouteTypes {
     | '/create'
     | '/pets/$petId'
     | '/memorial/$slug/edit'
-    | '/lovable/email/transactional/preview'
   id:
     | '__root__'
     | '/'
@@ -369,7 +346,6 @@ export interface FileRouteTypes {
     | '/about'
     | '/admin'
     | '/adoption'
-    | '/archive'
     | '/community'
     | '/contact'
     | '/garden'
@@ -394,7 +370,6 @@ export interface FileRouteTypes {
     | '/create/'
     | '/_authenticated/pets/$petId'
     | '/_authenticated/memorial/$slug/edit'
-    | '/lovable/email/transactional/preview'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -403,7 +378,6 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AdminRoute: typeof AdminRoute
   AdoptionRoute: typeof AdoptionRoute
-  ArchiveRoute: typeof ArchiveRoute
   CommunityRoute: typeof CommunityRoute
   ContactRoute: typeof ContactRoute
   GardenRoute: typeof GardenRoute
@@ -420,7 +394,6 @@ export interface RootRouteChildren {
   MemorialSlugRoute: typeof MemorialSlugRoute
   UUserIdRoute: typeof UUserIdRoute
   CreateIndexRoute: typeof CreateIndexRoute
-  LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -458,13 +431,6 @@ declare module '@tanstack/react-router' {
       path: '/adoption'
       fullPath: '/adoption'
       preLoaderRoute: typeof AdoptionRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/archive': {
-      id: '/archive'
-      path: '/archive'
-      fullPath: '/archive'
-      preLoaderRoute: typeof ArchiveRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/community': {
@@ -635,13 +601,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedMemorialSlugEditRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/lovable/email/transactional/preview': {
-      id: '/lovable/email/transactional/preview'
-      path: '/lovable/email/transactional/preview'
-      fullPath: '/lovable/email/transactional/preview'
-      preLoaderRoute: typeof LovableEmailTransactionalPreviewRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
@@ -686,7 +645,6 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   AdminRoute: AdminRoute,
   AdoptionRoute: AdoptionRoute,
-  ArchiveRoute: ArchiveRoute,
   CommunityRoute: CommunityRoute,
   ContactRoute: ContactRoute,
   GardenRoute: GardenRoute,
@@ -703,7 +661,6 @@ const rootRouteChildren: RootRouteChildren = {
   MemorialSlugRoute: MemorialSlugRoute,
   UUserIdRoute: UUserIdRoute,
   CreateIndexRoute: CreateIndexRoute,
-  LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
