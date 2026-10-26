@@ -881,6 +881,19 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      browse_memorial_archive: {
+        Args: {
+          _from?: string
+          _max_lamps?: number
+          _min_lamps?: number
+          _name?: string
+          _page?: number
+          _sort?: string
+          _species?: string
+          _to?: string
+        }
+        Returns: Json
+      }
       delete_user_account: {
         Args: { _purge_memorials?: boolean; _user_id: string }
         Returns: undefined

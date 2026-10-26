@@ -1267,6 +1267,20 @@ html, body { overflow-x: hidden; }
   padding: 0.7rem 0.7rem 3.6rem;
   box-shadow: 0 25px 65px -30px rgba(67,40,60,0.52), 0 6px 20px rgba(67,40,60,0.16);
 }
+.concept-home-hero {
+  min-height: 560px;
+  display: flex;
+  align-items: center;
+}
+.concept-home-wash {
+  background: linear-gradient(90deg, var(--w-bg) 0%, color-mix(in srgb, var(--w-bg) 94%, transparent) 32%, color-mix(in srgb, var(--w-bg) 72%, transparent) 52%, transparent 85%);
+}
+@media (max-width: 639px) {
+  .concept-home-hero { min-height: 610px; }
+  .concept-home-wash {
+    background: linear-gradient(90deg, color-mix(in srgb, var(--w-bg) 96%, transparent), color-mix(in srgb, var(--w-bg) 82%, transparent));
+  }
+}
 .home-hero-polaroid figcaption,
 .warm-home .polaroid figcaption {
   font-family: var(--font-hand);

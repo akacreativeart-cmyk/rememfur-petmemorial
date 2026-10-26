@@ -13,8 +13,6 @@ import { BetaInviteDialog } from "@/components/site/BetaInviteDialog";
 import { PawLamp } from "@/components/site/PawLamp";
 import {
   pickFeaturedMemorial,
-  listRecentCandles,
-  countCandlesThisWeek,
 } from "@/lib/candle-guest.functions";
 import lifeHeroImg from "@/assets/life-hero.jpg";
 import bridgeSkyImg from "@/assets/bridge-sky.jpg";
@@ -375,22 +373,10 @@ function Plaque({ children }: { children: ReactNode }) {
 
 function HomePage() {
   const featuredFn = useServerFn(pickFeaturedMemorial);
-  const recentFn = useServerFn(listRecentCandles);
-  const countFn = useServerFn(countCandlesThisWeek);
 
   const featured = useQuery({
     queryKey: ["home", "featured-memorial"],
     queryFn: () => featuredFn(),
-    staleTime: 60_000,
-  });
-  const recent = useQuery({
-    queryKey: ["home", "recent-candles"],
-    queryFn: () => recentFn({ data: { limit: 12 } }),
-    staleTime: 30_000,
-  });
-  const weekly = useQuery({
-    queryKey: ["home", "candles-week"],
-    queryFn: () => countFn(),
     staleTime: 60_000,
   });
 
@@ -494,6 +480,14 @@ function HomePage() {
           secondaryCandle={secondaryCandle("Light a paw lamp")}
           onLastLetter={() => openBeta("last-letter")}
         />
+        <section className="relative px-5 py-12 text-center md:px-8 md:py-16" aria-label="About Rememfur">
+          <Reveal className="mx-auto max-w-3xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--w-accent)]">Your memory keeper</p>
+            <h2 className="mt-4 font-display text-3xl leading-tight text-[var(--w-ink)] md:text-5xl">One place for a lifetime of love.</h2>
+            <p className="mt-5 text-base leading-relaxed text-[var(--w-muted)] md:text-lg">Rememfur brings their photos, stories, and little everyday moments together. Remember a pet who has passed, keep memories of the pets beside you, and find people who understand what they mean to you.</p>
+          </Reveal>
+        </section>
+        <Chapters primaryCandle={primaryCandle("Light a paw lamp")} onDev={openBeta} />
         <TheirSkyBand reduced={reduced} />
         <GriefCopeBand />
         <section className="relative px-5 py-20 text-center md:px-8 md:py-28">
@@ -510,17 +504,6 @@ function HomePage() {
 
         <GriefBelongingSection />
         <MarketplaceRail />
-        <Chapters
-          primaryCandle={primaryCandle("Light theirs now")}
-          onDev={openBeta}
-        />
-
-        <Divider />
-        <CandleStrip
-          candles={recent.data ?? []}
-          weekCount={weekly.data?.count ?? 0}
-          loading={recent.isLoading}
-        />
 
         <Divider />
         <section className="relative px-5 py-16 md:px-8 md:py-24">
@@ -536,7 +519,7 @@ function HomePage() {
               <Reveal><Step n="III" title="Return anytime." body="Their page stays. Come back on the hard days — birthdays, anniversaries, quiet Tuesdays." /></Reveal>
             </div>
             <p className="mt-10 text-center text-[11px] uppercase tracking-[0.2em] text-[var(--w-muted)]">
-              No account needed. It takes about a minute.
+              Create an account to keep their memorial. Visitors can light a paw lamp without signing up.
             </p>
           </div>
         </section>
@@ -588,59 +571,20 @@ function HomePage() {
 
 function Hero({ secondaryCandle, onLastLetter }: { secondaryCandle: ReactNode; onLastLetter?: () => void }) {
   return (
-    <section
-      className="relative px-4 pb-14 pt-5 md:px-8 md:pb-24 md:pt-8"
-      aria-label="A gentle place to remember a beloved pet"
-    >
-      <div className="memorial-editorial-hero relative mx-auto max-w-[1160px] overflow-hidden rounded-[24px] border border-[var(--w-hair)] bg-[var(--w-card-1)] shadow-[0_24px_70px_-46px_rgba(62,42,50,0.45)] md:rounded-[32px]">
-        <div className="grid items-stretch lg:grid-cols-[0.95fr_1.05fr]">
-          <div className="order-2 flex flex-col justify-center p-7 text-center sm:p-10 md:p-14 lg:order-1 lg:p-16 lg:text-left">
-            <p className="rise-in text-[10px] font-semibold uppercase tracking-[0.26em] text-[var(--w-accent)]" style={{ animationDelay: "0.05s" }}>
-              A place of lasting remembrance
-            </p>
-            <h1 className="rise-in mt-5 font-display text-[38px] leading-[1.12] text-[var(--w-ink)] sm:text-5xl lg:text-[58px]" style={{ animationDelay: "0.2s" }}>
-              Honouring every <span className="italic text-[var(--w-accent)]">paw print</span> left behind.
-            </h1>
-            <p className="rise-in mx-auto mt-5 max-w-[34rem] text-[15px] leading-[1.75] text-[var(--w-muted)] md:text-[17px] lg:mx-0" style={{ animationDelay: "0.45s" }}>
-              A gentle place to celebrate their life, keep every story, and hold the love that stays with you.
-            </p>
-
-            <div className="rise-in mt-8 flex w-full flex-col gap-3 sm:flex-row sm:justify-center lg:justify-start" style={{ animationDelay: "0.7s" }}>
-              <Link to="/create/memorial" className="btn-gold ios-tappable w-full sm:w-auto">
-                <Feather className="h-4 w-4" />
-                Write a memorial
-              </Link>
-              <div className="w-full [&>*]:w-full [&>*]:justify-center sm:w-auto">
-                {secondaryCandle}
-              </div>
-            </div>
-            <button
-              type="button"
-              onClick={onLastLetter}
-              className="mx-auto mt-5 inline-flex items-center gap-2 font-display text-[15px] italic text-[var(--w-accent)] underline-offset-4 hover:underline lg:mx-0"
-            >
-              <Mail className="h-4 w-4" />
-              Send them your last letter
-            </button>
-
-            <p className="mt-9 border-t border-[var(--w-hair)] pt-5 font-hand text-2xl text-[var(--w-accent)]">
-              every story deserves a beautiful place to stay
-            </p>
+    <section className="concept-home-hero relative isolate overflow-hidden px-5 py-16 md:px-8 md:py-24" aria-label="Rememfur — your memory keeper">
+      <img src={memorialEditorialHero} alt="A golden retriever resting among wildflowers in warm evening light" className="absolute inset-0 -z-20 h-full w-full object-cover object-[70%_center]" width={1408} height={1104} fetchPriority="high" />
+      <div className="concept-home-wash absolute inset-0 -z-10" />
+      <div className="mx-auto w-full max-w-[1100px]">
+        <div className="max-w-xl">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--w-accent)]">For the love that stays</p>
+          <h1 className="mt-4 font-display text-5xl leading-[1.1] text-[var(--w-ink)] md:text-7xl">Rememfur</h1>
+          <p className="mt-4 font-display text-2xl leading-snug text-[var(--w-accent)] md:text-3xl">Their life. Your memories. Always together.</p>
+          <p className="mt-5 max-w-md text-base leading-relaxed text-[var(--w-ink)] md:text-lg">Celebrate the pets beside you, remember the ones who ran ahead, and give every photo, story, and paw print a place to stay.</p>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <Link to="/create/memorial" className="btn-gold ios-tappable"><Feather className="h-4 w-4" />Write a memorial</Link>
+            {secondaryCandle}
           </div>
-          <div className="order-1 flex min-h-[400px] items-center justify-center p-6 pb-2 lg:order-2 lg:min-h-[680px] lg:p-12">
-            <figure className="polaroid home-hero-polaroid rotate-[1.5deg]">
-              <span aria-hidden className="tape absolute -top-2 left-1/2 z-10 -translate-x-1/2 -rotate-2" />
-              <img
-                src={memorialEditorialHero}
-                alt="A golden retriever resting among wildflowers in warm evening light"
-                className="aspect-[4/5] w-full object-cover object-center"
-                width={1408}
-                height={1104}
-                fetchPriority="high"
-              />
-              <figcaption>they simply run ahead…</figcaption>
-            </figure>
-          </div>
+          <button type="button" onClick={onLastLetter} className="link-gold mt-5 inline-flex items-center gap-2"><Mail className="h-4 w-4" />Send them your last letter</button>
         </div>
       </div>
     </section>
