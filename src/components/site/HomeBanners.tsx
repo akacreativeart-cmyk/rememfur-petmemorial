@@ -30,7 +30,7 @@ export const HOME_BANNERS: HomeBanner[] = [
     title: "Give them a page that stays.",
     body: "A photo, a name, a few words. Their memorial is ready in minutes.",
     cta: { label: "Write a memorial", to: "/create/memorial" },
-    image: pet1,
+    image: tulipPhoto.url,
     caption: "Forever our good boy",
   },
   {
@@ -39,7 +39,7 @@ export const HOME_BANNERS: HomeBanner[] = [
     title: "Every pet becomes a star.",
     body: "Each memorial is placed in the season's constellation — a light you can find again.",
     cta: { label: "Visit the garden", to: "/garden" },
-    image: pet2,
+    image: gingerCatPhoto.url,
     caption: "Shining somewhere tonight",
   },
   {
@@ -48,7 +48,7 @@ export const HOME_BANNERS: HomeBanner[] = [
     title: "Light a paw lamp for a friend.",
     body: "Anyone can leave a small warm light on a memorial — no account needed.",
     cta: { label: "See the community", to: "/community" },
-    image: pet3,
+    image: dogCatPhoto.url,
     caption: "Loved by everyone",
   },
 ];
@@ -139,10 +139,10 @@ export function Polaroid({ src, caption, tilt = 0, className = "" }: { src: stri
 export function PolaroidSky() {
   const c = getConstellation(new Date());
   const pics = [
-    { src: pet1, caption: "Biscuit ✦", tilt: -6 },
-    { src: pet2, caption: "Luna", tilt: 4 },
-    { src: pet4, caption: "Our Max", tilt: -2 },
-    { src: heroEditorial, caption: "Sunny days", tilt: 6 },
+    { src: beaglePhoto.url, caption: "Biscuit ✦", tilt: -6 },
+    { src: colliePhoto.url, caption: "Luna", tilt: 4 },
+    { src: samoyedPhoto.url, caption: "Our Max", tilt: -2 },
+    { src: grassDogPhoto.url, caption: "Sunny days", tilt: 6 },
   ];
   return (
     <section className="dark-scene relative overflow-hidden bg-[#0b1024] px-5 py-16 text-center md:px-8 md:py-24" aria-label="Polaroids under their sky">
