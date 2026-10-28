@@ -11,6 +11,7 @@ import { IntroSequence } from "@/components/site/IntroSequence";
 import { WaitlistDialog } from "@/components/site/WaitlistDialog";
 import { BetaInviteDialog } from "@/components/site/BetaInviteDialog";
 import { PawLamp } from "@/components/site/PawLamp";
+import { HomeBanners, PolaroidSky } from "@/components/site/HomeBanners";
 import {
   pickFeaturedMemorial,
 } from "@/lib/candle-guest.functions";
@@ -489,6 +490,7 @@ function HomePage() {
           </Reveal>
         </section>
         <Chapters primaryCandle={primaryCandle("Light a paw lamp")} onDev={openBeta} />
+        <PolaroidSky />
         <TheirSkyBand reduced={reduced} />
         <GriefCopeBand />
         <section className="relative px-5 py-20 text-center md:px-8 md:py-28">
