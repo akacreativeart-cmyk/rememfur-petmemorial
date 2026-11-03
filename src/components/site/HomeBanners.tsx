@@ -191,6 +191,9 @@ export function PolaroidSky() {
             </div>
           ))}
         </div>
+        <div className="mx-auto mt-12 max-w-[720px] overflow-hidden rounded-[18px] border border-[#E8B96D]/30 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.8)]">
+          <img src={candlesPhoto.url} alt="Three lit memorial candles on a wooden table" loading="lazy" className="h-48 w-full object-cover md:h-64" />
+        </div>
       </div>
     </section>
   );
