@@ -8,6 +8,7 @@ import beaglePhoto from "@/assets/polaroid-beagle.jpg.asset.json";
 import colliePhoto from "@/assets/polaroid-collie.jpg.asset.json";
 import samoyedPhoto from "@/assets/polaroid-samoyed.jpg.asset.json";
 import grassDogPhoto from "@/assets/polaroid-grass-dog.jpg.asset.json";
+import candlesPhoto from "@/assets/memorial-candles.jpg.asset.json";
 
 /**
  * Rotating homepage banners. Add, remove or reorder entries here to change
@@ -101,7 +102,7 @@ export function HomeBanners() {
                 </Link>
               </div>
               <div className="order-1 flex justify-center md:order-2">
-                <Polaroid src={b.image} caption={b.caption} tilt={idx % 2 ? 3 : -3} />
+                <Polaroid src={b.image} caption={b.caption} tilt={idx % 2 ? 3 : -3} candle />
               </div>
             </div>
           ))}
@@ -123,14 +124,38 @@ export function HomeBanners() {
   );
 }
 
-export function Polaroid({ src, caption, tilt = 0, className = "" }: { src: string; caption: string; tilt?: number; className?: string }) {
+/** Funeral-style memorial frame: dark walnut, gilded inner edge, mourning ribbon, brass plate. */
+export function Polaroid({ src, caption, tilt = 0, className = "", candle = false }: { src: string; caption: string; tilt?: number; className?: string; candle?: boolean }) {
   return (
-    <figure
-      className={`w-[200px] rounded-[4px] bg-[#fffdf8] p-3 pb-4 shadow-[0_18px_40px_-18px_rgba(44,36,34,0.55)] md:w-[240px] ${className}`}
-      style={{ transform: `rotate(${tilt}deg)` }}
-    >
-      <img src={src} alt={caption} loading="lazy" className="aspect-square w-full object-cover" />
-      <figcaption className="mt-3 text-center font-hand text-xl leading-none text-[#2C2422]">{caption}</figcaption>
+    <figure className={`relative w-[210px] md:w-[250px] ${className}`} style={{ transform: `rotate(${tilt * 0.4}deg)` }}>
+      <div
+        className="relative rounded-[3px] p-[10px] shadow-[0_22px_45px_-18px_rgba(0,0,0,0.7)]"
+        style={{ background: "linear-gradient(135deg,#3b2417 0%,#5a3722 35%,#2a180f 65%,#4a2c1b 100%)" }}
+      >
+        <div className="p-[3px]" style={{ background: "linear-gradient(135deg,#f3d48a,#b8873a 45%,#f6e2a6 70%,#9c6e2c)" }}>
+          <div className="bg-[#f5efe3] p-2">
+            <img src={src} alt={caption} loading="lazy" className="aspect-[4/5] w-full object-cover [filter:sepia(0.12)_saturate(0.9)]" />
+          </div>
+        </div>
+        {/* mourning ribbon */}
+        <span aria-hidden className="pointer-events-none absolute right-0 top-0 h-14 w-14 overflow-hidden">
+          <span className="absolute right-[-22px] top-[12px] block h-[10px] w-[90px] rotate-45 bg-[#111] shadow-[0_2px_4px_rgba(0,0,0,0.5)]" />
+        </span>
+      </div>
+      <figcaption
+        className="mx-auto -mt-3 relative w-[78%] rounded-[2px] px-2 py-1 text-center font-display text-sm tracking-wide text-[#2a1a0c] shadow-[0_4px_10px_-4px_rgba(0,0,0,0.6)]"
+        style={{ background: "linear-gradient(180deg,#f4dc97,#c99a4a 55%,#e8c77c)" }}
+      >
+        {caption}
+      </figcaption>
+      {candle && (
+        <img
+          src={candlesPhoto.url}
+          alt="Lit memorial candles"
+          loading="lazy"
+          className="absolute -bottom-6 -right-10 h-24 w-24 rounded-full border-4 border-[#f5efe3] object-cover shadow-lg md:h-28 md:w-28"
+        />
+      )}
     </figure>
   );
 }
