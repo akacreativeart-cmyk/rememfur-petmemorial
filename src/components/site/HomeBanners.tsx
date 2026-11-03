@@ -153,7 +153,7 @@ export function Polaroid({ src, caption, tilt = 0, className = "", candle = fals
           src={candlesPhoto.url}
           alt="Lit memorial candles"
           loading="lazy"
-          className="absolute -bottom-8 -left-12 h-24 w-24 rounded-full border-4 border-[#f5efe3] object-cover shadow-lg md:h-28 md:w-28"
+          className="absolute -bottom-4 -left-16 h-24 w-24 rounded-full border-4 border-[#f5efe3] object-cover shadow-lg md:h-28 md:w-28"
         />
       )}
     </figure>
