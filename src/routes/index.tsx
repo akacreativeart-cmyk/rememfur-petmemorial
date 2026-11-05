@@ -12,6 +12,8 @@ import { WaitlistDialog } from "@/components/site/WaitlistDialog";
 import { BetaInviteDialog } from "@/components/site/BetaInviteDialog";
 import { PawLamp } from "@/components/site/PawLamp";
 import { HomeBanners, PolaroidSky } from "@/components/site/HomeBanners";
+import { HandwrittenLetter } from "@/components/site/HandwrittenLetter";
+import memorialCandlesPhoto from "@/assets/memorial-candles.jpg.asset.json";
 import {
   pickFeaturedMemorial,
 } from "@/lib/candle-guest.functions";
@@ -694,7 +696,7 @@ function PlaqueMedallion() {
           <p className="mt-1 text-[12px] tracking-widest text-white/50">2008 — 2025</p>
           <p className="mt-3 font-display italic text-[14px] text-white/70">"Always at the door."</p>
           <div className="mt-5 flex items-end gap-3">
-            {[30, 38, 30].map((size, i) => <PawLamp key={i} size={size} />)}
+            <img src={memorialCandlesPhoto.url} alt="Real candles burning in remembrance" className="h-24 w-44 rounded-sm object-cover" loading="lazy" />
           </div>
           <p className="mt-4 text-[11px] uppercase tracking-[0.28em] text-amber-200/60">a light kept, night after night</p>
         </div>
@@ -704,43 +706,17 @@ function PlaqueMedallion() {
 }
 
 function PlaqueCandles() {
-  const sizes = [44, 58, 40];
   return (
-    <div className="w-full max-w-[340px]">
-      <Plaque>
-        <div className="relative flex h-[220px] items-end justify-center gap-10 py-4">
-          {sizes.map((size, i) => <PawLamp key={i} size={size} />)}
-          <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/60 to-transparent" />
-        </div>
-        <p className="mt-2 text-center font-display italic text-[14px] text-white/70">One flame. Then another. Then thousands.</p>
-      </Plaque>
-    </div>
+    <figure className="w-full max-w-[340px]">
+      <img src={memorialCandlesPhoto.url} alt="Three real pillar candles burning together at a memorial vigil" className="aspect-[4/3] w-full rounded-sm object-cover" loading="lazy" />
+      <figcaption className="candle-photo-caption mt-4 text-center font-display italic text-base">One flame. Then another. Then thousands.</figcaption>
+    </figure>
   );
 }
 
 
 function PlaqueJournal() {
-  return (
-    <div className="w-full max-w-[340px]">
-      <Plaque>
-        <div className="rounded-md bg-[#0a1024] p-5 ring-1 ring-white/10">
-          <p className="text-[11px] uppercase tracking-[0.28em] text-white/50">Tuesday, 2:14 am</p>
-          <p className="mt-3 font-hand text-[22px] leading-snug text-[var(--gold)]">
-            I still hear his collar in the hallway.
-          </p>
-          <div className="mt-4 space-y-2">
-            <div className="hw-line w-11/12" />
-            <div className="hw-line w-9/12" />
-            <div className="hw-line w-10/12" />
-            <div className="hw-line w-7/12" />
-          </div>
-          <p className="mt-5 flex items-center gap-2 text-[10px] uppercase tracking-[0.28em] text-amber-200/60">
-            <span className="inline-block h-3 w-3 rounded-sm border border-current" /> Only you
-          </p>
-        </div>
-      </Plaque>
-    </div>
-  );
+  return <HandwrittenLetter kind="journal" />;
 }
 
 
@@ -1526,27 +1502,7 @@ function BetaBand({ onOpen }: { onOpen: () => void }) {
 /* ────────── Plaques for dev chapters ────────── */
 
 function PlaqueLastLetter() {
-  return (
-    <div className="w-full max-w-[340px]">
-      <Plaque>
-        <div className="rounded-md bg-[#0a1024] p-5 ring-1 ring-white/10">
-          <p className="text-[11px] uppercase tracking-[0.28em] text-white/50">A sealed letter</p>
-          <p className="mt-3 font-hand text-[22px] leading-snug text-[var(--gold)]">
-            There are things I didn't get to say.
-          </p>
-          <div className="mt-4 space-y-2">
-            <div className="hw-line w-11/12" />
-            <div className="hw-line w-10/12" />
-            <div className="hw-line w-9/12" />
-            <div className="hw-line w-6/12" />
-          </div>
-          <p className="mt-5 flex items-center gap-2 text-[10px] uppercase tracking-[0.28em] text-amber-200/60">
-            <Mail className="h-3 w-3" /> Sealed with love
-          </p>
-        </div>
-      </Plaque>
-    </div>
-  );
+  return <HandwrittenLetter kind="letter" />;
 }
 
 function PlaquePawtrait() {

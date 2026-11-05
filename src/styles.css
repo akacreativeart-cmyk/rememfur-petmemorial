@@ -1170,6 +1170,18 @@ html, body { overflow-x: hidden; }
   box-shadow: 0 22px 50px -38px rgba(82,49,73,0.45);
 }
 .warm-home[data-world="memory"] .plaque-inner { border-color: rgba(109,63,98,0.12); }
+.handwritten-letter {
+  --letter-paper: #fffdf8;
+  --letter-ink: #392e35;
+  --letter-rule: #e6dadf;
+  --letter-shadow: 0 18px 40px -28px rgba(77,45,68,0.4);
+  background: var(--letter-paper);
+  color: var(--letter-ink);
+  border-color: var(--letter-rule);
+  box-shadow: var(--letter-shadow);
+}
+.handwritten-letter figcaption { color: var(--letter-ink); }
+.candle-photo-caption { color: var(--w-ink); }
 .warm-home[data-world="memory"] .memorial-dark-panel {
   background: linear-gradient(150deg, #362b34, #251f25 72%);
   color: #fbf7f2;
