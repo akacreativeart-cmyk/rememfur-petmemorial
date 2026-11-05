@@ -55,13 +55,16 @@ function LoginPage() {
     if (error) toast.error(error.message);
   };
 
+  const oauthRedirectUri = () =>
+    `${window.location.origin}/login?redirect=${encodeURIComponent(redirectTo)}`;
+
   const google = async () => {
-    const r = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + "/login" });
+    const r = await lovable.auth.signInWithOAuth("google", { redirect_uri: oauthRedirectUri() });
     if (r.error) toast.error("Could not sign in with Google");
   };
 
   const apple = async () => {
-    const r = await lovable.auth.signInWithOAuth("apple", { redirect_uri: window.location.origin + "/login" });
+    const r = await lovable.auth.signInWithOAuth("apple", { redirect_uri: oauthRedirectUri() });
     if (r.error) toast.error("Could not sign in with Apple");
   };
 
