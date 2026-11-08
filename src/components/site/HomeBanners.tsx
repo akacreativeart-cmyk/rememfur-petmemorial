@@ -27,34 +27,52 @@ export type HomeBanner = {
 export const HOME_BANNERS: HomeBanner[] = [
   {
     id: "write",
-    eyebrow: "Begin gently",
-    title: "Give them a page that stays.",
-    body: "A photo, a name, a few words. Their memorial is ready in minutes.",
+    eyebrow: "For the one who waited by the door",
+    title: "They loved you every single day. Let the world know.",
+    body: "A photo, their name, a few words from your heart. Their memorial is ready in minutes — and it stays forever.",
     cta: { label: "Write a memorial", to: "/create/memorial" },
     image: tulipPhoto.url,
     caption: "Forever our good boy",
   },
   {
     id: "sky",
-    eyebrow: "Their sky",
-    title: "Every pet becomes a star.",
-    body: "Each memorial is placed in the season's constellation — a light you can find again.",
+    eyebrow: "Look up tonight",
+    title: "They're not gone. They're shining.",
+    body: "Every memorial becomes a star in the season's constellation — a light you can always find again.",
     cta: { label: "Visit the garden", to: "/garden" },
     image: gingerCatPhoto.url,
     caption: "Shining somewhere tonight",
   },
   {
     id: "together",
-    eyebrow: "You're not alone",
-    title: "Light a paw lamp for a friend.",
-    body: "Anyone can leave a small warm light on a memorial — no account needed.",
+    eyebrow: "You're not alone in this",
+    title: "Someone, somewhere, is missing them too.",
+    body: "Light a paw lamp on a stranger's memorial. A small warm light that says: I understand.",
     cta: { label: "See the community", to: "/community" },
     image: dogCatPhoto.url,
     caption: "Loved by everyone",
   },
+  {
+    id: "letter",
+    eyebrow: "The words you never got to say",
+    title: "Write them one last letter.",
+    body: "Thank them for the walks, the warmth, the way they always knew. Say goodbye — or simply, see you later.",
+    cta: { label: "Write a memorial", to: "/create/memorial" },
+    image: beaglePhoto.url,
+    caption: "Thank you, Biscuit",
+  },
+  {
+    id: "forever",
+    eyebrow: "Love doesn't end",
+    title: "Paw prints fade from the floor, never from the heart.",
+    body: "Keep every photo, story and silly habit in one gentle place your whole family can visit.",
+    cta: { label: "Begin their page", to: "/create/memorial" },
+    image: grassDogPhoto.url,
+    caption: "Running free",
+  },
 ];
 
-const ROTATE_MS = 6500;
+const ROTATE_MS = 4500;
 
 export function HomeBanners() {
   const [i, setI] = useState(0);
@@ -74,7 +92,7 @@ export function HomeBanners() {
     <section
       aria-roledescription="carousel"
       aria-label="Rememfur highlights"
-      className="px-5 py-10 md:px-8 md:py-14"
+      className="px-4 py-8 md:px-8 md:py-14"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocus={() => setPaused(true)}
@@ -127,7 +145,7 @@ export function HomeBanners() {
 /** Funeral-style memorial frame: dark walnut, gilded inner edge, mourning ribbon, brass plate. */
 export function Polaroid({ src, caption, tilt = 0, className = "", candle = false }: { src: string; caption: string; tilt?: number; className?: string; candle?: boolean }) {
   return (
-    <figure className={`relative w-[210px] md:w-[250px] ${className}`} style={{ transform: `rotate(${tilt * 0.4}deg)` }}>
+    <figure className={`relative ${candle ? "w-[78vw] max-w-[300px] md:w-[340px] md:max-w-none" : "w-[210px] md:w-[250px]"} ${className}`} style={{ transform: `rotate(${tilt * 0.4}deg)` }}>
       <div
         className="relative rounded-[3px] p-[10px] shadow-[0_22px_45px_-18px_rgba(0,0,0,0.7)]"
         style={{ background: "linear-gradient(135deg,#3b2417 0%,#5a3722 35%,#2a180f 65%,#4a2c1b 100%)" }}

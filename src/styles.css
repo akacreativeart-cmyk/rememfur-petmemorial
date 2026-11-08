@@ -1408,3 +1408,10 @@ html, body { overflow-x: hidden; }
 @media (prefers-reduced-motion: reduce) {
   .candle-anim { animation: none !important; }
 }
+
+/* Bottom tab bar: always-legible labels and icons on the ivory bar */
+.ios-tabbar .ios-tabbar-inner a { color: #4A3A44; }
+.ios-tabbar .ios-tabbar-inner a.text-primary,
+.ios-tabbar .ios-tabbar-inner a .text-primary { color: #6D3F62; }
+.ios-tabbar .ios-tabbar-inner a span { font-weight: 700; }
+.ios-tabbar .ios-tabbar-inner a { font-size: 11px; }
