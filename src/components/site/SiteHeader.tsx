@@ -7,6 +7,7 @@ import logo from "@/assets/logo.png";
 import { NotificationBell } from "@/components/site/NotificationBell";
 import { FeedbackDialog } from "@/components/site/FeedbackDialog";
 import { InstallAppDialog } from "@/components/site/InstallAppDialog";
+import { ThemeToggle } from "@/components/site/ThemeProvider";
 import {
   Sheet,
   SheetContent,
@@ -80,13 +81,7 @@ export function SiteHeader() {
           <span className="hidden text-[9px] font-bold uppercase tracking-[0.16em] text-primary/75 xs:inline sm:inline">BETA</span>
         </div>
         <div className="flex items-center gap-1">
-          <Link
-            to="/marketplace"
-            aria-label="Marketplace"
-              className="header-icon flex h-9 w-9 items-center justify-center rounded-full text-foreground hover:bg-muted"
-          >
-            <ShoppingBag className="h-4 w-4" />
-          </Link>
+          <ThemeToggle />
           <NotificationBell />
 
           {user ? (
@@ -252,6 +247,7 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-1.5 md:gap-2">
+          <ThemeToggle />
           <Link
             to={user ? "/create" : "/signup"}
             search={user ? undefined : ({ redirect: "/create" } as never)}
