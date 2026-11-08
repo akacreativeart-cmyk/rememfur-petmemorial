@@ -16,6 +16,7 @@ import { MobileTabBar } from "@/components/site/MobileTabBar";
 import { SkyBackground } from "@/components/site/SkyBackground";
 import { InstallToastGuardian } from "@/components/site/InstallToastGuardian";
 import { InstallAppDialog } from "@/components/site/InstallAppDialog";
+import { ThemeProvider } from "@/components/site/ThemeProvider";
 import { registerServiceWorker } from "@/lib/pwa/register-sw";
 
 import appCss from "../styles.css?url";
@@ -80,8 +81,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "Rememfur — A gentle pet memorial for the love that stays" },
       { name: "twitter:description", content: "Honor, remember, and celebrate your pet with a beautiful AI-illustrated memorial, a paw lamp wall, and a community that understands." },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/f9ef67d1-9549-46f4-b7a7-f649489a4eb4" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/f9ef67d1-9549-46f4-b7a7-f649489a4eb4" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
@@ -163,6 +162,7 @@ function RootComponent() {
   useEffect(() => { void registerServiceWorker(); }, []);
   return (
     <QueryClientProvider client={queryClient}>
+      <ThemeProvider>
       <AuthProvider>
         <AuthInvalidator queryClient={queryClient} />
         <InstallToastGuardian />
@@ -183,6 +183,7 @@ function RootComponent() {
         )}
         <Toaster richColors position="top-center" />
       </AuthProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }

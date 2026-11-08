@@ -1415,3 +1415,83 @@ html, body { overflow-x: hidden; }
 .ios-tabbar .ios-tabbar-inner a .text-primary { color: #6D3F62; }
 .ios-tabbar .ios-tabbar-inner a span { font-weight: 700; }
 .ios-tabbar .ios-tabbar-inner a { font-size: 11px; }
+
+/* Galaxy appearance: one static image, no continuous background animation. */
+.theme-content { position: relative; z-index: 1; }
+.galaxy-backdrop { position: fixed; inset: 0; z-index: 0; pointer-events: none; background: var(--background); }
+.galaxy-backdrop img { width: 100%; height: 100%; object-fit: cover; }
+.galaxy-veil { position: absolute; inset: 0; background: var(--galaxy-overlay); }
+.galaxy-mode { color-scheme: dark; }
+.galaxy-mode,
+.galaxy-mode :is(.warm-home, .warm-platform, .warm-dialog, .platform-header, .ios-tabbar) {
+  --background: oklch(0.14 0.015 285);
+  --foreground: oklch(0.96 0.012 80);
+  --card: oklch(0.20 0.022 285 / 0.93);
+  --card-foreground: var(--foreground);
+  --popover: oklch(0.21 0.023 285);
+  --popover-foreground: var(--foreground);
+  --primary: oklch(0.82 0.085 75);
+  --primary-foreground: oklch(0.19 0.015 285);
+  --secondary: oklch(0.28 0.025 285);
+  --secondary-foreground: var(--foreground);
+  --muted: oklch(0.26 0.02 285);
+  --muted-foreground: oklch(0.80 0.012 80);
+  --accent: oklch(0.32 0.035 335);
+  --accent-foreground: var(--foreground);
+  --border: oklch(0.72 0.04 75 / 0.25);
+  --input: oklch(0.72 0.04 75 / 0.38);
+  --ring: var(--primary);
+  --cta: var(--primary);
+  --cta-deep: oklch(0.72 0.10 75);
+  --cta-foreground: var(--primary-foreground);
+  --gold: var(--primary);
+  --upload-gold: var(--primary);
+  --gold2: oklch(0.82 0.085 75 / 0.32);
+  --gold3: oklch(0.82 0.085 75 / 0.10);
+  --bg: var(--background);
+  --bg2: var(--card);
+  --surface1: var(--card);
+  --surface2: var(--secondary);
+  --cr: var(--foreground);
+  --cr2: var(--muted-foreground);
+  --cr3: var(--muted-foreground);
+  --ink: var(--foreground);
+  --cream: var(--foreground);
+  --paper: var(--card);
+  --galaxy-overlay: oklch(0.12 0.015 285 / 0.52);
+  --parchment: var(--foreground);
+  --faint: var(--muted-foreground);
+  --hair: var(--border);
+  --w-bg: var(--background) !important;
+  --w-ink: var(--foreground) !important;
+  --w-muted: var(--muted-foreground) !important;
+  --w-accent: var(--primary) !important;
+  --w-accent-2: var(--primary) !important;
+  --w-hair: var(--border) !important;
+  --w-card: var(--card) !important;
+  --w-card-1: var(--card) !important;
+  --w-card-2: var(--secondary) !important;
+  --w-kind: oklch(0.78 0.07 155) !important;
+  color: var(--foreground);
+}
+.galaxy-mode .warm-home { background: transparent !important; }
+.galaxy-mode .warm-platform { background: color-mix(in oklab, var(--background) 76%, transparent); }
+.galaxy-mode .platform-header { background: color-mix(in oklab, var(--background) 92%, transparent); }
+.galaxy-mode .platform-header :is(.brand-wordmark, .header-icon) { color: var(--foreground); }
+.galaxy-mode .platform-header .header-logo { filter: brightness(0) invert(1); }
+.galaxy-mode .ios-tabbar-inner { background: var(--popover); border-color: var(--border); }
+.galaxy-mode .ios-tabbar .ios-tabbar-inner a { color: var(--foreground); }
+.galaxy-mode .ios-tabbar .ios-tabbar-inner :is(a.text-primary, a .text-primary) { color: var(--primary); }
+.galaxy-mode .warm-home[data-world="memory"] :where([class*="text-white"]) { color: var(--foreground); }
+.galaxy-mode .warm-home[data-world="memory"] :where([class*="text-amber-"]) { color: var(--primary); }
+.galaxy-mode .warm-home[data-world="memory"] :where([class*="bg-white/"]) { background: var(--card); }
+.galaxy-mode .warm-home[data-world="memory"] .plaque { background: var(--card); border-color: var(--border); }
+.galaxy-mode .warm-home[data-world="memory"] .plaque-inner { border-color: var(--border); }
+.galaxy-mode :is(.btn-gold, .btn-gold-sm) { background: var(--cta); color: var(--cta-foreground); border-color: var(--cta); }
+.galaxy-mode .btn-quiet { background: var(--card); color: var(--foreground); border-color: var(--border); }
+.galaxy-mode .link-gold { color: var(--primary); }
+.galaxy-mode :is(.warm-platform, .warm-dialog) :where(input, textarea, select) { background: var(--popover); color: var(--foreground); }
+.galaxy-mode :is(.warm-platform, .warm-dialog) :where(input, textarea)::placeholder { color: var(--muted-foreground); }
+.galaxy-mode .concept-home-hero > img { opacity: 0.28; }
+.galaxy-mode .concept-home-wash { background: transparent; }
+.galaxy-mode .warm-home .polaroid figcaption { color: var(--letter-ink); }
