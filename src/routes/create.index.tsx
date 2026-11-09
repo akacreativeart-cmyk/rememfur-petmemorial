@@ -16,6 +16,10 @@ export const Route = createFileRoute("/create/")({
     meta: [
       { title: "Create — Rememfur" },
       { name: "description", content: "Write a memorial for a pet you loved, or share a memory with the community." },
+      { property: "og:title", content: "Create — Rememfur" },
+      { property: "og:description", content: "Write a memorial for a pet you loved, or share a memory with the community." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
 });
@@ -24,7 +28,7 @@ function CreateChooser() {
   return (
     <div className="mx-auto max-w-3xl px-5 py-14 md:py-20">
       <div className="text-center">
-        <p className="text-[11px] uppercase tracking-[0.3em] text-amber-200/70">Create</p>
+        <p className="text-[11px] uppercase tracking-[0.3em] text-primary font-bold">Create</p>
         <h1 className="mt-3 font-display text-4xl leading-tight text-foreground md:text-5xl">
           What do you want to share?
         </h1>
@@ -36,23 +40,23 @@ function CreateChooser() {
       <div className="mt-10 grid gap-5 md:grid-cols-2">
         <Link
           to="/create/memorial"
-          className="group flex flex-col rounded-3xl border border-amber-400/30 bg-gradient-to-br from-amber-400/10 via-transparent to-transparent p-7 transition hover:border-amber-400/60 hover:bg-amber-400/10"
+          className="group flex flex-col rounded-3xl border border-primary/30 bg-card p-7 shadow-sm transition hover:border-primary"
         >
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-400/15 text-amber-200 ring-1 ring-amber-400/30">
+          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary ring-1 ring-primary/30">
             <Heart className="h-5 w-5" />
           </div>
           <h2 className="mt-5 font-display text-2xl text-foreground">Write a memorial</h2>
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
             Photo, story, the small things. A page that stays — for the pet you loved, and for the people who loved them too.
           </p>
-          <span className="mt-6 text-sm font-medium text-amber-200 group-hover:text-amber-100">
+          <span className="mt-6 text-sm font-medium text-primary">
             Begin their memorial →
           </span>
         </Link>
 
         <Link
           to="/create/post"
-          className="group flex flex-col rounded-3xl border border-border/60 bg-card p-7 transition hover:border-sage/50 hover:bg-card/80"
+          className="group flex flex-col rounded-3xl border border-border/60 bg-card p-7 transition hover:border-sage/50 shadow-sm"
         >
           <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-sage/15 text-sage-deep ring-1 ring-sage/30">
             <MessageSquare className="h-5 w-5" />
