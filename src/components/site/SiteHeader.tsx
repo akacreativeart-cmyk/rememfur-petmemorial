@@ -249,8 +249,7 @@ export function SiteHeader() {
         <div className="flex items-center gap-1.5 md:gap-2">
           <ThemeToggle />
           <Link
-            to={user ? "/create" : "/signup"}
-            search={user ? undefined : ({ redirect: "/create" } as never)}
+            to="/create/memorial"
             className="btn-gold-sm ios-tappable hidden whitespace-nowrap md:inline-flex"
           >
             <Feather className="h-4 w-4" strokeWidth={2} />
