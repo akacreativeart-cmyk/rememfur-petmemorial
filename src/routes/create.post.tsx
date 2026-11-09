@@ -74,8 +74,8 @@ function CreatePostPage() {
         <p className="font-display text-2xl text-foreground">Sign in to post</p>
         <p className="mt-2 text-sm text-muted-foreground">You need an account to share with the community.</p>
         <div className="mt-6 flex justify-center gap-2">
-          <Link to="/login"><Button variant="outline">Log in</Button></Link>
-          <Link to="/signup" className="btn-gold-sm">Join</Link>
+          <Link to="/login" search={{ redirect: "/create/post" }}><Button variant="outline">Log in</Button></Link>
+          <Link to="/signup" search={{ redirect: "/create/post" }} className="btn-gold-sm">Join</Link>
         </div>
       </div>
     );
