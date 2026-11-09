@@ -13,6 +13,7 @@ import { BetaInviteDialog } from "@/components/site/BetaInviteDialog";
 import { PawLamp } from "@/components/site/PawLamp";
 import { HomeBanners, PolaroidSky } from "@/components/site/HomeBanners";
 import { HandwrittenLetter } from "@/components/site/HandwrittenLetter";
+import polaroidDogCat from "@/assets/polaroid-dog-cat.jpg.asset.json";
 import memorialCandlesPhoto from "@/assets/memorial-candles.jpg.asset.json";
 import {
   pickFeaturedMemorial,
@@ -560,6 +561,7 @@ function HomePage() {
       <Bridge />
 
       {/* BETA — shared */}
+      <AccessBundle />
       <BetaBand onOpen={() => openBeta("console-friend", "console")} />
 
       <BetaInviteDialog source={betaSource} variant={betaVariant} open={betaOpen} onOpenChange={setBetaOpen} />
@@ -1459,41 +1461,63 @@ function Bridge() {
   );
 }
 
+const ACCESS_BUNDLE: { icon: ComponentType<SVGProps<SVGSVGElement>>; title: string; body: string; to: string }[] = [
+  { icon: Feather, title: "A memorial page", body: "Their photos, story and the little things — kept forever.", to: "/create/memorial" },
+  { icon: Mail, title: "One last letter", body: "Write the words you never got to say.", to: "/create/memorial" },
+  { icon: Star, title: "Their star in the sky", body: "A constellation drawn just for them.", to: "/garden" },
+  { icon: Heart, title: "Paw lamps & flowers", body: "Friends can light a lamp or leave flowers.", to: "/garden" },
+  { icon: MessagesSquare, title: "A kind community", body: "People who truly understand this loss.", to: "/community" },
+  { icon: HandHeart, title: "Grief support", body: "Gentle guidance and helplines when you need them.", to: "/grief-support" },
+];
+
+function AccessBundle() {
+  return (
+    <section className="px-[18px] py-12 md:px-8 md:py-16">
+      <div className="mx-auto max-w-[1000px] text-center">
+        <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-primary">Free for every family</p>
+        <h3 className="mt-3 font-display text-foreground" style={{ fontSize: "clamp(24px, 5.6vw, 38px)" }}>
+          Access to everything they deserve
+        </h3>
+        <p className="mx-auto mt-3 max-w-[52ch] text-[15px] text-muted-foreground">One memorial opens all of this — for you and everyone who loved them.</p>
+        <div className="mt-8 grid gap-3 text-left sm:grid-cols-2 lg:grid-cols-3">
+          {ACCESS_BUNDLE.map(({ icon: Icon, title, body, to }) => (
+            <Link key={title} to={to} className="flex gap-3 rounded-2xl border border-border bg-card p-4 shadow-sm transition hover:border-primary/50">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary"><Icon className="h-5 w-5" /></span>
+              <span>
+                <span className="block font-display text-[16px] text-card-foreground">Access to {title.charAt(0).toLowerCase() + title.slice(1)}</span>
+                <span className="mt-1 block text-[13.5px] leading-snug text-muted-foreground">{body}</span>
+              </span>
+            </Link>
+          ))}
+        </div>
+        <Link to="/create/memorial" className="btn-gold ios-tappable mt-8 inline-flex">
+          <PawLamp size={18} /> Write a memorial
+        </Link>
+      </div>
+    </section>
+  );
+}
+
 function BetaBand({ onOpen }: { onOpen: () => void }) {
   return (
-    <section className="relative px-[18px] py-12 md:px-8 md:py-20">
-      <div
-        className="mx-auto flex max-w-[900px] flex-col items-center rounded-[20px] p-6 text-center md:p-12"
-        style={{
-          background: "linear-gradient(150deg,#12182b,#0a0e1c 70%)",
-          border: "1px solid rgba(232,185,109,0.28)",
-          color: "#F2ECDD",
-        }}
-      >
-        <span className="inline-flex items-center gap-2 rounded-full border border-[rgba(232,185,109,0.4)] bg-white/[0.03] px-3 py-1 text-[10.5px] font-medium uppercase tracking-[0.22em] text-[#E8B96D]">
-          <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#E8B96D] opacity-70" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-[#E8B96D]" />
-          </span>
-          When someone you love is grieving
-        </span>
-        <h3 className="mt-5 font-display leading-[1.15] tracking-tight text-white" style={{ fontSize: "clamp(22px, 5.6vw, 36px)" }}>
-          Be there for them.
-        </h3>
-        <p className="mt-4 max-w-[60ch] text-[14.5px] leading-relaxed text-white/70 md:text-[16px]">
-          The hardest part is knowing what to say. Send a friend a paw lamp and a few gentle words — and bring them somewhere that understands.
-        </p>
-        <button
-          type="button"
-          onClick={onOpen}
-          className="btn-gold ios-tappable mt-7 w-full max-w-[320px] md:w-auto md:max-w-none"
-        >
-          <Heart className="h-4 w-4" />
-          Console a friend
-        </button>
-        <p className="mt-4 text-[11.5px] text-white/45">
-          It takes a minute. It means everything.
-        </p>
+    <section className="relative px-[18px] py-12 md:px-8 md:py-16">
+      <div className="mx-auto grid max-w-[1000px] overflow-hidden rounded-[22px] border border-border bg-card shadow-sm md:grid-cols-2">
+        <div className="relative h-[240px] md:h-auto">
+          <img src={polaroidDogCat.url} alt="A dog and cat cuddling together in the grass" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
+        </div>
+        <div className="flex flex-col items-center p-6 text-center md:items-start md:p-10 md:text-left">
+          <span className="text-[11px] font-bold uppercase tracking-[0.22em] text-primary">When someone you love is grieving</span>
+          <h3 className="mt-3 font-display leading-[1.15] text-card-foreground" style={{ fontSize: "clamp(24px, 5.6vw, 34px)" }}>
+            Be there for them.
+          </h3>
+          <p className="mt-3 text-[15px] leading-relaxed text-foreground/80">
+            The hardest part is knowing what to say. Send a friend a paw lamp and a few gentle words — and bring them somewhere that understands.
+          </p>
+          <button type="button" onClick={onOpen} className="btn-gold ios-tappable mt-6 w-full max-w-[320px] md:w-auto">
+            <Heart className="h-4 w-4" /> Console a friend
+          </button>
+          <p className="mt-3 text-[12.5px] text-muted-foreground">It takes a minute. It means everything.</p>
+        </div>
       </div>
     </section>
   );
