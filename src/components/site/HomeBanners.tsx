@@ -151,12 +151,14 @@ export function Polaroid({ src, caption, note, tilt = 0, className = "", candle 
   return (
     <figure
       className={`relative rounded-[3px] bg-[#FBF7EE] p-3 pb-4 shadow-[0_22px_45px_-18px_rgba(0,0,0,0.6),0_2px_0_rgba(0,0,0,0.04)] ${candle ? "w-[78vw] max-w-[300px] md:w-[340px] md:max-w-none" : "w-[210px] md:w-[250px]"} ${className}`}
-      style={{ transform: `rotate(${tilt * 0.4}deg)` }}
+      style={{ transform: `rotate(${tilt * 0.6}deg)` }}
     >
+      {/* push pin */}
+      <span aria-hidden className="absolute left-1/2 top-[-9px] z-10 h-5 w-5 -translate-x-1/2 rounded-full shadow-[0_3px_4px_rgba(0,0,0,0.45)]" style={{ background: "radial-gradient(circle at 35% 30%, #f3a3a3, #b3262f 55%, #6e1118)" }} />
       <img src={src} alt={caption} loading="lazy" className="aspect-square w-full rounded-[2px] object-cover" />
       <figcaption className="mt-3 text-center leading-tight text-[#2a1e14]">
-        <span className="block font-hand text-[24px]">{caption}</span>
-        {note && <span className="mt-1 block font-hand text-[17px] text-[#4a3b30]">{note}</span>}
+        <span className="block font-hand text-[26px] -rotate-2" style={{ color: "#1d2a4a" }}>{caption}</span>
+        {note && <span className="mt-1 block font-hand text-[19px] rotate-1" style={{ color: "#2b3a5e" }}>{note}</span>}
       </figcaption>
       {candle && (
         <img
