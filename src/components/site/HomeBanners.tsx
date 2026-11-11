@@ -9,6 +9,7 @@ import colliePhoto from "@/assets/polaroid-collie.jpg.asset.json";
 import samoyedPhoto from "@/assets/polaroid-samoyed.jpg.asset.json";
 import grassDogPhoto from "@/assets/polaroid-grass-dog.jpg.asset.json";
 import candlesPhoto from "@/assets/memorial-candles.jpg.asset.json";
+import nightSkyPhoto from "@/assets/bridge-sky.jpg";
 
 /**
  * Rotating homepage banners. Add, remove or reorder entries here to change
@@ -158,7 +159,7 @@ export function Polaroid({ src, caption, note, tilt = 0, className = "", candle 
       <img src={src} alt={caption} loading="lazy" className="aspect-square w-full rounded-[2px] object-cover" />
       <figcaption className="mt-3 text-center leading-tight text-[#2a1e14]">
         <span className="block font-hand text-[26px] -rotate-2" style={{ color: "#1d2a4a" }}>{caption}</span>
-        {note && <span className="mt-1 block font-hand text-[19px] rotate-1" style={{ color: "#2b3a5e" }}>{note}</span>}
+        {note && <span className="mt-1 block whitespace-pre-line font-hand text-[19px] rotate-1" style={{ color: "#2b3a5e" }}>{note}</span>}
       </figcaption>
       {candle && (
         <img
@@ -176,13 +177,15 @@ export function Polaroid({ src, caption, note, tilt = 0, className = "", candle 
 export function PolaroidSky() {
   const c = getConstellation(new Date());
   const pics = [
-    { src: beaglePhoto.url, caption: "Biscuit ✦", note: "my sunshine", tilt: -6 },
-    { src: colliePhoto.url, caption: "Luna", note: "goodnight, sweet girl", tilt: 4 },
-    { src: samoyedPhoto.url, caption: "Our Max", note: "best friend forever", tilt: -2 },
-    { src: grassDogPhoto.url, caption: "Sunny days", note: "run free, love", tilt: 6 },
+    { src: beaglePhoto.url, caption: "Biscuit ✦", note: "my sunshine —\nyou made every morning brighter.\nsleep well now, little one.", tilt: -6 },
+    { src: colliePhoto.url, caption: "Luna", note: "goodnight, sweet girl.\nthe house is quieter without you.\nwe look for you in every star.", tilt: 4 },
+    { src: samoyedPhoto.url, caption: "Our Max", note: "best friend forever.\nthank you for every walk, every wait.\nrun free now.", tilt: -2 },
+    { src: grassDogPhoto.url, caption: "Sunny days", note: "run free, love.\nthe grass still remembers your paws.\nuntil we meet again.", tilt: 6 },
   ];
   return (
     <section className="dark-scene relative overflow-hidden bg-[#0b1024] px-5 py-16 text-center md:px-8 md:py-24" aria-label="Polaroids under their sky">
+      <img src={nightSkyPhoto} alt="" aria-hidden loading="lazy" className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-60" />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(11,16,36,0.55),rgba(11,16,36,0.35)_45%,rgba(11,16,36,0.8))]" aria-hidden />
       <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" className="pointer-events-none absolute left-1/2 top-6 h-[220px] w-[220px] -translate-x-1/2 opacity-90 md:h-[300px] md:w-[300px]" aria-hidden>
         {c.lines.map(([a, b], k) => (
           <line key={k} x1={c.stars[a][0]} y1={c.stars[a][1]} x2={c.stars[b][0]} y2={c.stars[b][1]} stroke="#E8B96D" strokeOpacity="0.55" strokeWidth="0.35" />

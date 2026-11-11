@@ -13,7 +13,6 @@ import { WaitlistDialog } from "@/components/site/WaitlistDialog";
 import { BetaInviteDialog } from "@/components/site/BetaInviteDialog";
 import { PawLamp } from "@/components/site/PawLamp";
 import { HomeBanners, PolaroidSky } from "@/components/site/HomeBanners";
-import { HandwrittenLetter } from "@/components/site/HandwrittenLetter";
 import polaroidDogCat from "@/assets/polaroid-dog-cat.jpg.asset.json";
 import memorialCandlesPhoto from "@/assets/memorial-candles.jpg.asset.json";
 import {
@@ -21,7 +20,6 @@ import {
 } from "@/lib/candle-guest.functions";
 import lifeHeroImg from "@/assets/life-hero.jpg";
 import bridgeSkyImg from "@/assets/bridge-sky.jpg";
-import pawtraitPreviewImg from "@/assets/pawtrait-preview.jpg";
 import lifeServicesImg from "@/assets/life-services.jpg";
 import lifeLifestyleImg from "@/assets/life-lifestyle.jpg";
 import lifeAdoptionImg from "@/assets/life-adoption.jpg";
@@ -364,19 +362,6 @@ function Divider() {
   );
 }
 
-/* ────────── Plaque wrapper ────────── */
-
-function Plaque({ children }: { children: ReactNode }) {
-  return (
-    <div className="plaque">
-      <span className="brk-tl" />
-      <span className="brk-tr" />
-      <span className="brk-bl" />
-      <span className="brk-br" />
-      <div className="plaque-inner">{children}</div>
-    </div>
-  );
-}
 
 /* ────────── Home page ────────── */
 
@@ -491,7 +476,6 @@ function HomePage() {
         />
         <BetaBand onOpen={() => openBeta("console-friend", "console")} />
         <HomeBanners />
-        <Chapters primaryCandle={primaryCandle("Light a candle")} onDev={openBeta} />
         <PolaroidSky />
         <GriefCopeBand />
         <section className="relative px-5 py-20 text-center md:px-8 md:py-28">
@@ -507,6 +491,8 @@ function HomePage() {
         </section>
 
         <MarketplaceRail />
+
+        <ClosingScene primaryCandle={primaryCandle("Light a candle")} />
 
         <Divider />
         <section className="relative px-5 py-16 md:px-8 md:py-24">
@@ -526,8 +512,6 @@ function HomePage() {
             </div>
           </div>
         </section>
-
-        <ClosingScene primaryCandle={primaryCandle("Light a candle")} />
       </WorldPane>
 
       {/* LIFE WORLD */}
@@ -573,128 +557,6 @@ function Hero({ secondaryCandle, onLastLetter }: { secondaryCandle: ReactNode; o
   );
 }
 
-
-/* ────────── SIX CHAPTERS ────────── */
-
-function Chapters({ primaryCandle, onDev }: { primaryCandle: ReactNode; onDev?: (source: string) => void }) {
-  const devPill = (
-    <span className="inline-flex items-center gap-1 rounded-full border border-[var(--w-hair)] px-2 py-[3px] text-[9px] font-medium uppercase tracking-[0.18em] text-[var(--w-muted)]">
-      In development
-    </span>
-  );
-  const devCta = (source: string, label: string) => (
-    <button
-      type="button"
-      onClick={() => onDev?.(source)}
-      className="btn-quiet mt-6"
-    >
-      <Sparkles className="h-4 w-4" />
-      {label}
-    </button>
-  );
-
-  const items = useMemo(() => [
-    {
-      roman: "I", eyebrow: "Their memorial", title: "A page that stays.",
-      body: "Photos, their story, the details only you knew — a place their name can live.",
-      cta: <Link to="/create/memorial" className="mt-6 link-gold">Start their memorial →</Link>,
-      plaque: <PlaqueMedallion />,
-    },
-    {
-      roman: "II", eyebrow: "Candles", title: "A warm light in their name.",
-      body: "Anyone can light a candle — no account, no noise. Each one burns quietly beside the others, and the count stays forever.",
-      cta: primaryCandle,
-      plaque: <PlaqueCandles />,
-    },
-    {
-      roman: "III", eyebrow: "The journal", title: "For the words you're not ready to say out loud.",
-      body: "Private. Only yours. Written when the house is at its quietest.",
-      cta: <Link to="/journal" className="mt-6 link-gold">Open the journal →</Link>,
-      plaque: <PlaqueJournal />,
-    },
-    {
-      roman: "IV", eyebrow: "Their last letter", title: "The things left unsaid.",
-      body: "Write it, seal it, send it — wherever they are now.",
-      dev: true, source: "last-letter",
-      cta: devCta("last-letter", "Get early access"),
-      plaque: <PlaqueLastLetter />,
-    },
-    {
-      roman: "V", eyebrow: "Pawtrait Tales™", title: "Their whole life, an illustrated storybook.",
-      body: "Their whole life woven into an illustrated storybook, with a gentle hand from AI.",
-      dev: true, source: "pawtrait-tales",
-      cta: devCta("pawtrait-tales", "Get early access"),
-      plaque: <PlaquePawtrait />,
-    },
-  ], [primaryCandle, onDev]);
-
-  return (
-    <section className="relative px-5 py-8 md:px-8 md:py-12">
-      <div className="mx-auto max-w-md md:max-w-[1100px] space-y-20 md:space-y-28">
-        {items.map((c, i) => (
-          <Reveal key={c.eyebrow}>
-            <div className={`grid items-center gap-8 md:grid-cols-2 md:gap-16 ${i % 2 === 1 ? "md:[&>*:first-child]:order-2" : ""}`}>
-              <div className="text-center md:text-left">
-                <p className="flex items-center justify-center gap-3 text-[11px] uppercase tracking-[0.22em] text-[var(--w-accent)] md:justify-start">
-                  <span className="font-display text-[16px] not-italic text-[var(--gold)] tracking-normal">{c.roman}</span>
-                  <span className="h-px w-8 bg-[var(--gold)]/40" />
-                  {c.eyebrow}
-                  {"dev" in c && c.dev && <>{devPill}</>}
-                </p>
-                <h2 className="mt-3 font-display text-[28px] leading-[1.1] text-[var(--w-ink)] md:text-4xl lg:text-5xl">
-                  {c.title}
-                </h2>
-                <p className="mt-4 text-[15px] leading-relaxed text-[var(--w-muted)] md:text-lg">
-                  {c.body}
-                </p>
-                <div className="flex justify-center md:justify-start">{c.cta}</div>
-              </div>
-              <div className="flex justify-center">{c.plaque}</div>
-            </div>
-          </Reveal>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-
-/* ────────── Plaques ────────── */
-
-function PlaqueMedallion() {
-  return (
-    <div className="w-full max-w-[340px]">
-      <Plaque>
-        <div className="flex flex-col items-center py-4">
-          <div className="h-32 w-32 overflow-hidden rounded-full border border-[var(--gold)]/35 shadow-[0_12px_30px_-18px_rgba(44,36,34,0.6)]">
-            <img src={memorialEditorialHero} alt="A beloved golden retriever in a meadow" className="h-full w-full object-cover" loading="lazy" width={1408} height={1104} />
-          </div>
-          <p className="mt-5 font-display text-[22px] text-white">Their Name</p>
-          <p className="mt-1 text-[12px] tracking-widest text-white/50">2008 — 2025</p>
-          <p className="mt-3 font-display italic text-[14px] text-white/70">"Always at the door."</p>
-          <div className="mt-5 flex items-end gap-3">
-            <img src={memorialCandlesPhoto.url} alt="Real candles burning in remembrance" className="h-24 w-44 rounded-sm object-cover" loading="lazy" />
-          </div>
-          <p className="mt-4 text-[11px] uppercase tracking-[0.28em] text-amber-200/60">a light kept, night after night</p>
-        </div>
-      </Plaque>
-    </div>
-  );
-}
-
-function PlaqueCandles() {
-  return (
-    <figure className="w-full max-w-[340px]">
-      <img src={memorialCandlesPhoto.url} alt="Three real pillar candles burning together at a memorial vigil" className="aspect-[4/3] w-full rounded-sm object-cover" loading="lazy" />
-      <figcaption className="candle-photo-caption mt-4 text-center font-display italic text-base">One flame. Then another. Then thousands.</figcaption>
-    </figure>
-  );
-}
-
-
-function PlaqueJournal() {
-  return <HandwrittenLetter kind="journal" />;
-}
 
 
 /* ────────── Live candles ────────── */
@@ -764,12 +626,13 @@ function CandleStrip({ candles, weekCount, loading }: {
 
 function ClosingScene({ primaryCandle }: { primaryCandle: ReactNode }) {
   return (
-    <section className="dark-scene closing-night relative overflow-hidden px-5 py-20 text-center md:px-8 md:py-32">
+    <section className="relative px-4 py-10 md:px-8 md:py-16">
+      <div className="dark-scene closing-night relative mx-auto max-w-[1100px] overflow-hidden rounded-[28px] border border-[var(--w-hair)] px-5 py-14 text-center soft-shadow md:py-20">
       <img src={nightVigilDog} alt="A golden retriever sitting beneath a star-filled night sky" className="absolute inset-0 h-full w-full object-cover object-center" loading="lazy" width={1600} height={900} />
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,8,16,0.18),rgba(5,8,16,0.48)_55%,rgba(5,8,16,0.88))]" />
       <span aria-hidden className="closing-shooter closing-shooter-one" />
       <span aria-hidden className="closing-shooter closing-shooter-two" />
-      <Reveal className="relative z-10 mx-auto max-w-md pt-[34vh] md:max-w-2xl md:pt-[42vh]">
+      <Reveal className="relative z-10 mx-auto max-w-md pt-[20vh] md:max-w-2xl md:pt-[26vh]">
         <h2 className="font-display text-[30px] leading-[1.1] text-[#fffaf2] md:text-5xl">
           They mattered. They still do.
         </h2>
@@ -782,6 +645,7 @@ function ClosingScene({ primaryCandle }: { primaryCandle: ReactNode }) {
           </Link>
         </div>
       </Reveal>
+      </div>
     </section>
   );
 }
@@ -1499,48 +1363,6 @@ function BetaBand({ onOpen }: { onOpen: () => void }) {
     </section>
   );
 }
-
-/* ────────── Plaques for dev chapters ────────── */
-
-function PlaqueLastLetter() {
-  return <HandwrittenLetter kind="letter" />;
-}
-
-function PlaquePawtrait() {
-  return (
-    <div className="w-full max-w-[340px]">
-      <Plaque>
-        <div className="flex flex-col items-center py-4">
-          <div
-            className="overflow-hidden rounded-xl border border-[var(--gold)]/40"
-            style={{
-              width: "100%",
-              maxWidth: 260,
-              height: 120,
-              boxShadow: "inset 0 0 20px rgba(212,179,120,0.12), 0 0 30px -10px rgba(212,179,120,0.35)",
-            }}
-          >
-            <img
-              src={pawtraitPreviewImg}
-              alt="An open illustrated storybook of a dog through the seasons in warm lamplight"
-              className="h-full w-full object-cover"
-              width={1024}
-              height={768}
-              loading="lazy"
-            />
-          </div>
-          <p className="mt-5 font-display italic text-[15px] text-white/75">
-            "Once upon a good boy…"
-          </p>
-          <p className="mt-2 text-[11px] uppercase tracking-[0.26em] text-amber-200/60">
-            An illustrated storybook, of them
-          </p>
-        </div>
-      </Plaque>
-    </div>
-  );
-}
-
 
 /* ────────── Their Sky band (landing) ────────── */
 
