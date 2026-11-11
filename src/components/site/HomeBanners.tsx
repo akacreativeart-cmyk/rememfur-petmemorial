@@ -119,7 +119,7 @@ export function HomeBanners() {
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--w-accent)]">{b.eyebrow}</p>
                 <h2 className="mt-3 font-display text-3xl leading-tight text-[var(--w-ink)] md:text-5xl">{b.title}</h2>
                 <p className="mt-4 text-base leading-relaxed text-[var(--w-muted)] md:text-lg">{b.body}</p>
-                <Link to={b.cta.to} tabIndex={idx === i ? 0 : -1} className="btn-gold ios-tappable mt-6 inline-flex">
+                <Link to={b.cta.to} tabIndex={idx === i ? 0 : -1} className="link-gold mt-6 inline-flex">
                   {b.cta.label}
                 </Link>
               </div>

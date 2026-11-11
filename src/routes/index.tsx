@@ -489,17 +489,10 @@ function HomePage() {
           secondaryCandle={secondaryCandle("Light a candle")}
           onLastLetter={() => openBeta("last-letter")}
         />
+        <BetaBand onOpen={() => openBeta("console-friend", "console")} />
         <HomeBanners />
-        <section className="relative px-5 py-12 text-center md:px-8 md:py-16" aria-label="About Rememfur">
-          <Reveal className="mx-auto max-w-3xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--w-accent)]">Your memory keeper</p>
-            <h2 className="mt-4 font-display text-3xl leading-tight text-[var(--w-ink)] md:text-5xl">One place for a lifetime of love.</h2>
-            <p className="mt-5 text-base text-[var(--w-muted)] md:text-lg">Their photos. Their quirks. Their story.</p>
-          </Reveal>
-        </section>
         <Chapters primaryCandle={primaryCandle("Light a candle")} onDev={openBeta} />
         <PolaroidSky />
-        <TheirSkyBand reduced={reduced} />
         <GriefCopeBand />
         <section className="relative px-5 py-20 text-center md:px-8 md:py-28">
           <Reveal className="mx-auto max-w-3xl">
@@ -513,27 +506,7 @@ function HomePage() {
           <Divider />
         </section>
 
-        <GriefBelongingSection />
         <MarketplaceRail />
-
-        <Divider />
-        <section className="relative px-5 py-16 md:px-8 md:py-24">
-          <div className="mx-auto max-w-md md:max-w-[1100px]">
-            <Reveal>
-              <h2 className="text-center font-display text-[30px] leading-[1.1] text-[var(--w-ink)] md:text-5xl">
-                How it works
-              </h2>
-            </Reveal>
-            <div className="mt-10 grid gap-6 md:mt-14 md:grid-cols-3 md:gap-8">
-              <Reveal><Step n="I" title="Say their name." body="Tell us who they were — a name, a photo, a few words. Or just a name. That's enough." /></Reveal>
-              <Reveal><Step n="II" title="Light their candle." body="A small warm light burning in their name. Yours forever, and lit by anyone who visits." /></Reveal>
-              <Reveal><Step n="III" title="Return anytime." body="Their page stays. Come back on the hard days — birthdays, anniversaries, quiet Tuesdays." /></Reveal>
-            </div>
-            <p className="mt-10 text-center text-[11px] uppercase tracking-[0.2em] text-[var(--w-muted)]">
-              Create an account to keep their memorial. Visitors can light a candle without signing up.
-            </p>
-          </div>
-        </section>
 
         <Divider />
         <section className="relative px-5 py-16 md:px-8 md:py-24">
@@ -566,8 +539,6 @@ function HomePage() {
       <Bridge />
 
       {/* BETA — shared */}
-      <AccessBundle />
-      <BetaBand onOpen={() => openBeta("console-friend", "console")} />
 
       <BetaInviteDialog source={betaSource} variant={betaVariant} open={betaOpen} onOpenChange={setBetaOpen} />
 
@@ -593,10 +564,9 @@ function Hero({ secondaryCandle, onLastLetter }: { secondaryCandle: ReactNode; o
           <p className="mt-4 font-display text-2xl leading-snug text-[var(--w-accent)] md:text-3xl">Tell their story.</p>
           <p className="mt-4 max-w-md text-base text-[var(--w-ink)] md:text-lg">Write their obituary. Let the love speak.</p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Link to="/create/memorial" className="btn-gold ios-tappable"><Feather className="h-4 w-4" />Write their obituary</Link>
-            <GiftKeepsakeDialog trigger={<button type="button" className="btn-quiet ios-tappable"><Gift className="h-4 w-4" />Send a keepsake</button>} />
+            <Link to="/create/memorial" className="btn-gold ios-tappable"><Feather className="h-4 w-4" />Write a memorial</Link>
           </div>
-          <button type="button" onClick={onLastLetter} className="link-gold mt-5 inline-flex items-center gap-2"><Mail className="h-4 w-4" />Send them your last letter</button>
+          <a href="#console" className="link-gold mt-5 inline-flex items-center gap-2"><Heart className="h-4 w-4" />Here to comfort someone? Console a friend →</a>
         </div>
       </div>
     </section>
@@ -627,7 +597,7 @@ function Chapters({ primaryCandle, onDev }: { primaryCandle: ReactNode; onDev?: 
     {
       roman: "I", eyebrow: "Their memorial", title: "A page that stays.",
       body: "Photos, their story, the details only you knew — a place their name can live.",
-      cta: <Link to="/create/memorial" className="mt-6 btn-gold ios-tappable">Write a memorial</Link>,
+      cta: <Link to="/create/memorial" className="mt-6 link-gold">Start their memorial →</Link>,
       plaque: <PlaqueMedallion />,
     },
     {
@@ -807,9 +777,8 @@ function ClosingScene({ primaryCandle }: { primaryCandle: ReactNode }) {
           It takes a minute. It stays forever.
         </p>
         <div className="mt-8 flex flex-col items-center gap-3">
-          {primaryCandle}
-          <Link to="/create/memorial" className="link-gold">
-            Write a memorial
+          <Link to="/create/memorial" className="btn-gold ios-tappable">
+            <Feather className="h-4 w-4" /> Write a memorial
           </Link>
         </div>
       </Reveal>
@@ -1505,7 +1474,7 @@ function AccessBundle() {
 
 function BetaBand({ onOpen }: { onOpen: () => void }) {
   return (
-    <section className="relative px-[18px] py-12 md:px-8 md:py-16">
+    <section id="console" className="relative scroll-mt-20 px-[18px] py-10 md:px-8 md:py-14">
       <div className="mx-auto grid max-w-[1000px] overflow-hidden rounded-[22px] border border-border bg-card shadow-sm md:grid-cols-2">
         <div className="relative h-[240px] md:h-auto">
           <img src={polaroidDogCat.url} alt="A dog and cat cuddling together in the grass" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
@@ -1519,7 +1488,7 @@ function BetaBand({ onOpen }: { onOpen: () => void }) {
             Words are hard. Send a keepsake instead.
           </p>
           <div className="mt-6 flex w-full flex-col gap-3 md:flex-row">
-            <GiftKeepsakeDialog source="console-gift" trigger={<button type="button" className="btn-gold ios-tappable w-full md:w-auto"><Gift className="h-4 w-4" /> Gift a keepsake</button>} />
+            <GiftKeepsakeDialog source="console-gift" trigger={<button type="button" className="btn-quiet ios-tappable w-full md:w-auto"><Gift className="h-4 w-4" /> Gift a keepsake</button>} />
             <button type="button" onClick={onOpen} className="btn-quiet ios-tappable w-full md:w-auto">
               <Heart className="h-4 w-4" /> Send kind words
             </button>
