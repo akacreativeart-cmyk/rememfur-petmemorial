@@ -47,7 +47,7 @@ export const leaveFlower = createServerFn({ method: "POST" })
   .inputValidator((input) =>
     z.object({
       memorial_id: z.string().uuid(),
-      flower: z.enum(["rose", "lily", "daisy", "sunflower", "tulip"]).default("rose"),
+      flower: z.enum(["rose", "lily", "daisy", "sunflower", "tulip", "forgetmenot", "stone", "star"]).default("rose"),
       message: z.string().max(300).nullable().optional(),
     }).parse(input)
   )

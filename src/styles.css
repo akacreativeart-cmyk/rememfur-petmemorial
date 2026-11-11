@@ -6,10 +6,10 @@
 
 @theme inline {
   /* Warm memorial editorial system — literary Lora + approachable Nunito Sans */
-  --font-display: "Lora", ui-serif, Georgia, serif;
-  --font-serif:   "Lora", ui-serif, Georgia, serif;
+  --font-display: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-serif:   "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-hand:    "Caveat", "Snell Roundhand", cursive;
-  --font-sans:    "Nunito Sans", -apple-system, BlinkMacSystemFont, "Helvetica Neue", system-ui, sans-serif;
+  --font-sans:    "Helvetica Neue", Helvetica, Arial, sans-serif;
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -1491,3 +1491,10 @@ html, body { overflow-x: hidden; }
 .galaxy-mode .concept-home-hero > img { opacity: 0.28; }
 .galaxy-mode .concept-home-wash { background: transparent; }
 .galaxy-mode .warm-home .polaroid figcaption { color: var(--letter-ink); }
+
+/* Full-page shooting stars over the whole homepage (both worlds). */
+.home-shooters { position: fixed; inset: 0; z-index: 30; pointer-events: none; overflow: hidden; }
+.warm-home .home-shooters .shooter {
+  background: linear-gradient(90deg, rgba(201,146,63,0), rgba(201,146,63,0.75) 55%, #b9802f);
+}
+.warm-home .home-shooters .shooter::after { background: #f3c977; box-shadow: 0 0 10px 3px rgba(201,146,63,0.6); }

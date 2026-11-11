@@ -47,7 +47,7 @@ export const HOME_BANNERS: HomeBanner[] = [
     id: "together",
     eyebrow: "You're not alone in this",
     title: "Someone, somewhere, is missing them too.",
-    body: "Light a paw lamp on a stranger's memorial. A small warm light that says: I understand.",
+    body: "Light a candle on a stranger's memorial. A small warm light that says: I understand.",
     cta: { label: "See the community", to: "/community" },
     image: dogCatPhoto.url,
     caption: "Loved by everyone",

@@ -26,7 +26,7 @@ const ICONS: Record<string, any> = {
 };
 
 const VERBS: Record<string, string> = {
-  candle: "lit a paw lamp",
+  candle: "lit a candle",
   paw: "left a paw",
   comment: "commented",
   message: "wrote on the memorial",
@@ -99,7 +99,7 @@ export function NotificationBell() {
         <div className="max-h-[70vh] overflow-y-auto">
           {items.length === 0 ? (
             <div className="px-4 py-10 text-center text-sm text-muted-foreground">
-              No notifications yet. When friends light a paw lamp or leave a paw,
+              No notifications yet. When friends light a candle or leave a paw,
               you'll find their love here.
             </div>
           ) : (

@@ -33,7 +33,7 @@ export const listUserMemorials = createServerFn({ method: "GET" })
     return rows ?? [];
   });
 
-/** Paw lamps this person lit, on memorials that are publicly visible. */
+/** Candles this person lit, on memorials that are publicly visible. */
 export const listUserCandles = createServerFn({ method: "GET" })
   .inputValidator(userInput)
   .handler(async ({ data }) => {

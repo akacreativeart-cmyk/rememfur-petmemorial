@@ -626,7 +626,7 @@ function StepPhoto({
   return (
     <div className="space-y-6">
       <p className="text-[15px] leading-relaxed text-muted-foreground">
-        A single photo is enough. Or light a paw lamp for now — you can always add one later.
+        A single photo is enough. Or light a candle for now — you can always add one later.
       </p>
 
       <input
@@ -679,7 +679,7 @@ function StepPhoto({
         >
           <PawLamp size={40} />
           <div className="text-center">
-            <div className="font-medium">Just light a paw lamp</div>
+            <div className="font-medium">Just light a candle</div>
             <div className="text-xs text-muted-foreground">No photo — soft glow instead</div>
           </div>
         </button>
@@ -769,7 +769,7 @@ function StepPreview({
         onOrderPrint={onOrderPrint}
       />
       <p className="text-center text-[12px] text-muted-foreground">
-        Publishing opens their memorial page — their constellation, the wall of paw lamps, and this keepsake.
+        Publishing opens their memorial page — their constellation, the wall of candles, and this keepsake.
       </p>
       {submitting && (
         <div className="flex justify-center text-sm text-muted-foreground">

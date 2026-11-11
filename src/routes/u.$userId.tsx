@@ -136,7 +136,7 @@ function UserProfilePage() {
           {([
             ["posts", "Posts"],
             ["memorials", "Memorials"],
-            ["lamps", "Paw lamps"],
+            ["lamps", "Candles"],
             ["activity", "Activity"],
           ] as const).map(([key, label]) => (
             <button
@@ -186,13 +186,13 @@ function UserProfilePage() {
 
         {tab === "lamps" && (
           <div className="space-y-3">
-            {(lamps ?? []).length === 0 && <Empty>No paw lamps lit yet.</Empty>}
+            {(lamps ?? []).length === 0 && <Empty>No candles lit yet.</Empty>}
             {(lamps ?? []).map((c) => (
                 <div key={c.id} className="flex gap-3 rounded-[18px] border border-border bg-card p-4 soft-shadow">
                 <PawLamp size={26} />
                 <div className="min-w-0 flex-1">
                   <p className="text-sm text-foreground">
-                    Lit a paw lamp for{" "}
+                    Lit a candle for{" "}
                     <Link to="/memorial/$slug" params={{ slug: c.memorial_slug }} className="link-gold">
                       {c.memorial_pet_name}
                     </Link>

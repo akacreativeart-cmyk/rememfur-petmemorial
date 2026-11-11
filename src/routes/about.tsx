@@ -9,9 +9,9 @@ export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
       { title: "About Rememfur — Why we built it" },
-      { name: "description", content: "Rememfur is a gentle pet memorial platform built around a four-step ritual: choose a photo, transform it, write a tribute, and light a paw lamp that stays lit." },
+      { name: "description", content: "Rememfur is a gentle pet memorial platform built around a four-step ritual: choose a photo, transform it, write a tribute, and light a candle that stays lit." },
       { property: "og:title", content: "About Rememfur — Grief deserves a beautiful home" },
-      { property: "og:description", content: "Why we built Rememfur: a slow, four-step ritual — photo, portrait, tribute, paw lamp — that gives your love for a lost pet a permanent place to live." },
+      { property: "og:description", content: "Why we built Rememfur: a slow, four-step ritual — photo, portrait, tribute, candle — that gives your love for a lost pet a permanent place to live." },
       { property: "og:url", content: "https://rememfur.com/about" },
     ],
     links: [{ rel: "canonical", href: "https://rememfur.com/about" }],
@@ -37,13 +37,13 @@ function About() {
         <h2 className="font-display text-3xl text-foreground">The ritual</h2>
         <p className="mt-3 text-muted-foreground">
           Every memorial is created through the same gentle four-step ceremony. It takes about ten minutes,
-          and it's designed to feel like lighting a paw lamp — quiet, sacred, complete.
+          and it's designed to feel like lighting a candle — quiet, sacred, complete.
         </p>
         <ol className="mt-5 space-y-3 text-foreground">
           <li><strong className="font-medium text-sage-deep">1. Photo.</strong> Choose an image that feels like them.</li>
           <li><strong className="font-medium text-sage-deep">2. Transform.</strong> AI paints a soft portrait in the style of your choosing.</li>
           <li><strong className="font-medium text-sage-deep">3. Tribute.</strong> Write what you most want remembered.</li>
-          <li><strong className="font-medium text-sage-deep">4. Paw lamp.</strong> Light the first warm light. It stays lit for as long as you wish.</li>
+          <li><strong className="font-medium text-sage-deep">4. Candle.</strong> Light the first warm light. It stays lit for as long as you wish.</li>
         </ol>
 
         <h2 className="mt-12 font-display text-3xl text-foreground">Who it's for</h2>

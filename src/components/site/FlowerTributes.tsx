@@ -16,6 +16,9 @@ const FLOWERS = [
   { id: "daisy", label: "Daisy", glyph: "🌼", note: "innocence" },
   { id: "sunflower", label: "Sunflower", glyph: "🌻", note: "warmth" },
   { id: "tulip", label: "Tulip", glyph: "💐", note: "gratitude" },
+  { id: "forgetmenot", label: "Forget-me-not", glyph: "🪻", note: "always" },
+  { id: "stone", label: "River stone", glyph: "🪨", note: "steady love" },
+  { id: "star", label: "A star", glyph: "⭐", note: "watching over" },
 ] as const;
 
 type FlowerId = (typeof FLOWERS)[number]["id"];

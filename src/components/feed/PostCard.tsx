@@ -1,3 +1,4 @@
+import { GiftKeepsakeDialog } from "@/components/site/GiftKeepsakeDialog";
 import { Link } from "@tanstack/react-router";
 import { useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient, InfiniteData } from "@tanstack/react-query";
@@ -66,7 +67,7 @@ export function PostCard({ post }: { post: FeedPost }) {
       return { prev };
     },
     onSuccess: () => {
-      toast.success("Paw lamp lit ✨ — they would have felt it.");
+      toast.success("Candle lit ✨ — they would have felt it.");
       qc.invalidateQueries({ queryKey: ["post-candles", post.id] });
       qc.invalidateQueries({ queryKey: ["candles-this-week"] });
     },
@@ -193,6 +194,13 @@ export function PostCard({ post }: { post: FeedPost }) {
             <Flower2 className="h-3 w-3" /> In memory of {post.memorial_pet_name}
           </Link>
         )}
+        {post.memorial_slug && (
+          <GiftKeepsakeDialog
+            petName={post.memorial_pet_name ?? undefined}
+            source={`gift-post-${post.id}`.slice(0, 80)}
+            trigger={<button type="button" className="ml-2 inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1 text-xs text-primary">🎁 Send a keepsake</button>}
+          />
+        )}
 
         <div className="flex items-center gap-3 pt-1">
           <button
@@ -219,7 +227,7 @@ export function PostCard({ post }: { post: FeedPost }) {
               <button
                 onClick={quickLight}
                 disabled={candle.isPending}
-                aria-label="Light a paw lamp"
+                aria-label="Light a candle"
                 className="candle-pulse relative flex items-center gap-1.5 rounded-full bg-[color-mix(in_oklab,var(--cta)_14%,transparent)] px-3 py-1.5 text-sm font-medium text-[var(--cta)] transition hover:bg-[color-mix(in_oklab,var(--cta)_24%,transparent)] active:scale-95"
               >
                 <span className="inline-flex"><PawLamp size={16} glow={false} /></span>
@@ -248,7 +256,7 @@ export function PostCard({ post }: { post: FeedPost }) {
                 }}
                 trigger={
                   <button
-                    aria-label="Light a paw lamp with a note"
+                    aria-label="Light a candle with a note"
                     className="ml-1 rounded-full px-2 py-1.5 text-xs text-[var(--cta)] hover:bg-[color-mix(in_oklab,var(--cta)_12%,transparent)]"
                   >
                     + note
@@ -258,7 +266,7 @@ export function PostCard({ post }: { post: FeedPost }) {
             </div>
           ) : (
             <span
-              aria-label="Paw lamps burning"
+              aria-label="Candles burning"
               className="flex items-center gap-1.5 rounded-full bg-muted/60 px-3 py-1.5 text-sm text-muted-foreground"
             >
               <PawLamp size={14} glow={false} />
@@ -284,7 +292,7 @@ export function PostCard({ post }: { post: FeedPost }) {
           <div className="rounded-xl border border-[color-mix(in_oklab,var(--cta)_25%,transparent)] bg-[color-mix(in_oklab,var(--cta)_6%,transparent)] p-3">
             <div className="mb-2 flex items-center gap-1.5 text-xs font-medium uppercase tracking-wider text-[var(--cta)]">
               <PawLamp size={14} glow={false} />
-              Paw lamps lit {candleData.count > candleData.candles.length ? `(showing ${candleData.candles.length} of ${candleData.count})` : `(${candleData.count})`}
+              Candles lit {candleData.count > candleData.candles.length ? `(showing ${candleData.candles.length} of ${candleData.count})` : `(${candleData.count})`}
             </div>
             <ul className="space-y-2">
               {candleData.candles.map((c) => (
@@ -293,7 +301,7 @@ export function PostCard({ post }: { post: FeedPost }) {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-2">
                       <div className="text-xs font-medium text-foreground">{c.lit_by_name ?? "A friend"}</div>
-                      <ReportButton contentType="candle" contentId={c.id} label="Report paw lamp" />
+                      <ReportButton contentType="candle" contentId={c.id} label="Report candle" />
                     </div>
                     {c.message && (
                       <div className="whitespace-pre-line text-sm leading-snug text-foreground/85">{c.message}</div>

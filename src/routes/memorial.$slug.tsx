@@ -1,3 +1,4 @@
+import { GiftKeepsakeDialog } from "@/components/site/GiftKeepsakeDialog";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -96,7 +97,7 @@ function MemorialPage() {
     mutationFn: (vars: { message?: string }) =>
       fetchLightCandle({ data: { memorial_id: m.id, message: vars.message ?? null } }),
     onSuccess: () => {
-      toast.success("Paw lamp lit. Their light glows on.");
+      toast.success("Candle lit. Their light glows on.");
       setCandleMsg("");
       qc.invalidateQueries({ queryKey: ["memorial", m.slug] });
     },
@@ -190,7 +191,7 @@ function MemorialPage() {
                 {m.epitaph && <p className="mt-3 max-w-xl font-display text-xl italic text-white/80">"{m.epitaph}"</p>}
               </div>
               <div className="flex items-center gap-4 text-sm text-white/80">
-                <div className="flex items-center gap-1.5"><PawLamp size={16} /> {current.candles.length} paw lamps</div>
+                <div className="flex items-center gap-1.5"><PawLamp size={16} /> {current.candles.length} candles</div>
                 <div className="flex items-center gap-1"><MessageCircle className="h-4 w-4 text-amber-200" /> {current.messages.length} messages</div>
                 <Button variant="outline" size="sm" onClick={share} className="rounded-full border-white/15 bg-white/10">
                   <Share2 className="mr-1.5 h-3.5 w-3.5" /> Share
@@ -207,7 +208,7 @@ function MemorialPage() {
           </div>
         </div>
 
-        {/* Light a paw lamp — prominent, just below the photo */}
+        {/* Light a candle — prominent, just below the photo */}
         <div className="mt-6 flex flex-col items-center justify-between gap-4 rounded-3xl border border-border/60 bg-card p-5 soft-shadow sm:flex-row sm:p-6">
           <div className="flex items-center gap-3">
             <div className="flex h-14 w-10 shrink-0 items-center justify-center">
@@ -215,7 +216,7 @@ function MemorialPage() {
             </div>
             <div>
               <div className="font-display text-xl text-foreground">
-                {current.candles.length} {current.candles.length === 1 ? "paw lamp" : "paw lamps"} lit for {m.pet_name}
+                {current.candles.length} {current.candles.length === 1 ? "candle" : "candles"} lit for {m.pet_name}
               </div>
               <div className="text-sm text-muted-foreground">Keep their memory shining bright.</div>
             </div>
@@ -225,7 +226,7 @@ function MemorialPage() {
             onLit={() => qc.invalidateQueries({ queryKey: ["memorial", m.slug] })}
             trigger={
               <button type="button" className="btn-gold w-full sm:w-auto">
-                <PawLamp size={16} glow={false} /> Light a paw lamp
+                <PawLamp size={16} glow={false} /> Light a candle
               </button>
             }
           />
@@ -352,13 +353,13 @@ function MemorialPage() {
               <div className="mx-auto flex h-16 w-12 items-center justify-center">
                 <PawLamp size={48} />
               </div>
-              <h3 className="mt-4 font-display text-xl text-foreground">Light a paw lamp</h3>
+              <h3 className="mt-4 font-display text-xl text-foreground">Light a candle</h3>
               <p className="mt-1 text-xs text-muted-foreground">Keep their memory shining bright.</p>
               {user ? (
                 <div className="mt-4 space-y-2 text-left">
                   <Textarea value={candleMsg} onChange={(e) => setCandleMsg(e.target.value)} placeholder="A few words (optional)" rows={2} />
                   <button type="button" onClick={() => candleMut.mutate({ message: candleMsg.trim() || undefined })} disabled={candleMut.isPending} className="btn-gold-sm w-full">
-                    <Heart className="h-4 w-4 fill-current" /> Light paw lamp
+                    <Heart className="h-4 w-4 fill-current" /> Light candle
                   </button>
                 </div>
               ) : (
@@ -368,7 +369,7 @@ function MemorialPage() {
                     onLit={() => qc.invalidateQueries({ queryKey: ["memorial", m.slug] })}
                     trigger={
                       <button type="button" className="btn-gold-sm w-full">
-                        <PawLamp size={16} glow={false} /> Light a paw lamp
+                        <PawLamp size={16} glow={false} /> Light a candle
                       </button>
                     }
                   />
@@ -400,7 +401,7 @@ function MemorialPage() {
 
             {current.candles.length > 0 && (
               <div className="rounded-3xl border border-border/60 bg-card p-6 soft-shadow">
-                <h3 className="font-display text-lg text-foreground">Recent paw lamps</h3>
+                <h3 className="font-display text-lg text-foreground">Recent candles</h3>
                 <ul className="mt-3 space-y-3 text-sm">
                   {current.candles.slice(0, 8).map((c: any) => (
                     <li key={c.id} className="flex gap-2">
@@ -430,17 +431,9 @@ function MemorialPage() {
                 <h3 className="font-display text-lg text-foreground">Memory gifts for {m.pet_name}</h3>
               </div>
               <p className="mt-2 text-xs text-muted-foreground">
-                Keepsakes, prints and condolence cards to honor their memory.
+                Frames, mugs, cards, flowers.
               </p>
-              <ul className="mt-3 space-y-1.5 text-sm text-foreground/90">
-                <li>· Engraved name tag</li>
-                <li>· Framed portrait print</li>
-                <li>· Replica plush</li>
-                <li>· Digital paw lamp card</li>
-              </ul>
-              <Link to="/marketplace" className="btn-gold-sm mt-4 w-full">
-                Browse memory gifts
-              </Link>
+              <GiftKeepsakeDialog petName={m.pet_name} source={`gift-memorial-${m.slug}`} trigger={<button type="button" className="btn-gold-sm mt-4 w-full"><Gift className="h-4 w-4" /> Send a keepsake</button>} />
             </div>
           </aside>
         </div>

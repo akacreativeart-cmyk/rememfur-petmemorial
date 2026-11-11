@@ -74,7 +74,7 @@ export function CandleDialog({ target, trigger, onLit }: Props) {
     },
     onSuccess: () => {
       softHaptic(20);
-      toast.success("Paw lamp lit ✨");
+      toast.success("Candle lit ✨");
       setLit(true);
       onLit?.();
     },
@@ -94,8 +94,8 @@ export function CandleDialog({ target, trigger, onLit }: Props) {
       : "";
   const petName = target.kind === "memorial" ? target.pet_name : null;
   const shareText = petName
-    ? `I just lit a paw lamp for ${petName} on Rememfur ✨ — light one too?`
-    : `I just lit a paw lamp on Rememfur ✨ — light one too?`;
+    ? `I just lit a candle for ${petName} on Rememfur ✨ — light one too?`
+    : `I just lit a candle on Rememfur ✨ — light one too?`;
 
   async function nativeShare() {
     try {
@@ -125,7 +125,7 @@ export function CandleDialog({ target, trigger, onLit }: Props) {
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 font-display text-2xl">
             <PawLamp size={20} glow={false} />
-            {lit ? "Paw lamp lit ✨" : "Light a paw lamp"}
+            {lit ? "Candle lit ✨" : "Light a candle"}
             {!lit && target.kind === "memorial" && target.pet_name ? (
               <span className="text-base font-normal text-muted-foreground">for {target.pet_name}</span>
             ) : null}
@@ -135,7 +135,7 @@ export function CandleDialog({ target, trigger, onLit }: Props) {
               ? "Thank you. Their sky is a little brighter because of you."
               : user
                 ? "Leave up to two short lines — they'll glow softly beside their star."
-                : "Anyone can light a paw lamp right now — no account needed."}
+                : "Anyone can light a candle right now — no account needed."}
           </DialogDescription>
         </DialogHeader>
 
@@ -190,7 +190,7 @@ export function CandleDialog({ target, trigger, onLit }: Props) {
               className="w-full rounded-full bg-[var(--cta)] text-[var(--cta-foreground,white)] hover:opacity-90"
             >
               <PawLamp size={16} glow={false} />
-              {mut.isPending ? "Releasing…" : user ? "Release the star" : "Light a paw lamp anonymously"}
+              {mut.isPending ? "Releasing…" : user ? "Release the star" : "Light a candle anonymously"}
             </Button>
           </div>
         ) : (

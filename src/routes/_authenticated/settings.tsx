@@ -123,7 +123,7 @@ function SettingsPage() {
     <div className="animate-fade-in">
       <h1 className="font-display text-4xl text-foreground">Settings</h1>
       <p className="mt-1 text-sm text-muted-foreground">
-        How you appear when you light a paw lamp or leave a kind word.
+        How you appear when you light a candle or leave a kind word.
       </p>
 
       <div className="mt-8 space-y-6">
@@ -245,7 +245,7 @@ function SettingsPage() {
               className="mt-0.5"
             />
             <span className="text-foreground/85">
-              Also delete every memorial I've created, along with their paw lamps, messages, and photos.
+              Also delete every memorial I've created, along with their candles, messages, and photos.
               <span className="mt-0.5 block text-xs text-muted-foreground">This cannot be undone.</span>
             </span>
           </label>
@@ -265,7 +265,7 @@ function SettingsPage() {
                 </AlertDialogTitle>
                 <AlertDialogDescription>
                   {purge
-                    ? "This will remove your account and every memorial you created — paw lamps, messages, and photos included."
+                    ? "This will remove your account and every memorial you created — candles, messages, and photos included."
                     : "This will close your account. The memorials you created will stay online in loving memory, but no one will be able to edit them anymore."}
                 </AlertDialogDescription>
               </AlertDialogHeader>

@@ -1,3 +1,4 @@
+import { GiftKeepsakeDialog } from "@/components/site/GiftKeepsakeDialog";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useId, useMemo, useRef, useState, type ComponentType, type CSSProperties, type ReactNode, type SVGProps } from "react";
 import { Stethoscope, Sparkles, PawPrint, HandHeart, MapPin, Cake, Home, Heart, Users, Feather, Cross, Gift, Bell, Mail, Moon, CalendarClock, ShoppingBag, MessagesSquare, Star, Phone } from "lucide-react";
@@ -45,9 +46,9 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Rememfur — A gentle place for the pet you loved." },
-      { name: "description", content: "Write their memorial, light a paw lamp in their name, and hold your grief with people who understand. A quiet home for the love that has nowhere to go." },
+      { name: "description", content: "Write their memorial, light a candle in their name, and hold your grief with people who understand. A quiet home for the love that has nowhere to go." },
       { property: "og:title", content: "Rememfur — A gentle place for the pet you loved." },
-      { property: "og:description", content: "Write their memorial, light a paw lamp, share your grief with a community that gets it." },
+      { property: "og:description", content: "Write their memorial, light a candle, share your grief with a community that gets it." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -152,7 +153,7 @@ function CosmosBg({ mode = "memory", reduced = false }: { mode?: WorldMode; redu
   useEffect(() => {
     // Skip entirely when motion is reduced or the cosmos layer is hidden (Life world):
     // no timers, no re-renders, no compositing work.
-    if (reduced || mode === "life") return;
+    if (reduced) return;
 
     const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
     // Mobile: rarer streaks, and never more than one on screen at a time.
@@ -200,6 +201,7 @@ function CosmosBg({ mode = "memory", reduced = false }: { mode?: WorldMode; redu
   }, [reduced, mode]);
 
   return (
+    <>
     <div
       className="cosmos-bg"
       aria-hidden
@@ -221,15 +223,18 @@ function CosmosBg({ mode = "memory", reduced = false }: { mode?: WorldMode; redu
           <span key={i} className={s.className} style={s.style} />
         ))}
       </div>
-      {streaks.map((s) => (
-        <span
-          key={s.id}
-          className="shooter"
-          style={{ top: s.top, left: s.left, ["--ang" as string]: s.ang } as React.CSSProperties}
-        />
-      ))}
       <div className="grain" />
     </div>
+      <div className="home-shooters" aria-hidden>
+        {streaks.map((s) => (
+          <span
+            key={s.id}
+            className="shooter"
+            style={{ top: s.top, left: s.left, ["--ang" as string]: s.ang } as React.CSSProperties}
+          />
+        ))}
+      </div>
+    </>
   );
 }
 
@@ -409,7 +414,7 @@ function HomePage() {
     setBetaOpen(true);
   };
 
-  const buildCandle = (label: string = "Light a paw lamp", variant: "gold" | "quiet" = "gold") => {
+  const buildCandle = (label: string = "Light a candle", variant: "gold" | "quiet" = "gold") => {
     const cls = variant === "gold" ? "btn-gold ios-tappable" : "btn-quiet";
     return featured.data ? (
       <CandleDialog
@@ -481,7 +486,7 @@ function HomePage() {
       {/* MEMORY WORLD */}
       <WorldPane active={mode === "memory"} reduced={reduced}>
         <Hero
-          secondaryCandle={secondaryCandle("Light a paw lamp")}
+          secondaryCandle={secondaryCandle("Light a candle")}
           onLastLetter={() => openBeta("last-letter")}
         />
         <HomeBanners />
@@ -489,10 +494,10 @@ function HomePage() {
           <Reveal className="mx-auto max-w-3xl">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--w-accent)]">Your memory keeper</p>
             <h2 className="mt-4 font-display text-3xl leading-tight text-[var(--w-ink)] md:text-5xl">One place for a lifetime of love.</h2>
-            <p className="mt-5 text-base leading-relaxed text-[var(--w-muted)] md:text-lg">Rememfur brings their photos, stories, and little everyday moments together. Remember a pet who has passed, keep memories of the pets beside you, and find people who understand what they mean to you.</p>
+            <p className="mt-5 text-base text-[var(--w-muted)] md:text-lg">Their photos. Their quirks. Their story.</p>
           </Reveal>
         </section>
-        <Chapters primaryCandle={primaryCandle("Light a paw lamp")} onDev={openBeta} />
+        <Chapters primaryCandle={primaryCandle("Light a candle")} onDev={openBeta} />
         <PolaroidSky />
         <TheirSkyBand reduced={reduced} />
         <GriefCopeBand />
@@ -502,7 +507,7 @@ function HomePage() {
               They were never <span className="not-italic">"just"</span> a pet. They were years of coming home to someone.
             </h2>
             <p className="mt-6 font-display text-[18px] leading-[1.5] text-[var(--w-muted)] md:text-[22px]">
-              All that love doesn't disappear when they do. It just needs somewhere to go — a paw lamp in the dark, a memorial that stays, a star in a sky that remembers.
+              All that love doesn't disappear when they do. It just needs somewhere to go — a candle in the dark, a memorial that stays, a star in a sky that remembers.
             </p>
           </Reveal>
           <Divider />
@@ -521,11 +526,11 @@ function HomePage() {
             </Reveal>
             <div className="mt-10 grid gap-6 md:mt-14 md:grid-cols-3 md:gap-8">
               <Reveal><Step n="I" title="Say their name." body="Tell us who they were — a name, a photo, a few words. Or just a name. That's enough." /></Reveal>
-              <Reveal><Step n="II" title="Light their paw lamp." body="A small warm light burning in their name. Yours forever, and lit by anyone who visits." /></Reveal>
+              <Reveal><Step n="II" title="Light their candle." body="A small warm light burning in their name. Yours forever, and lit by anyone who visits." /></Reveal>
               <Reveal><Step n="III" title="Return anytime." body="Their page stays. Come back on the hard days — birthdays, anniversaries, quiet Tuesdays." /></Reveal>
             </div>
             <p className="mt-10 text-center text-[11px] uppercase tracking-[0.2em] text-[var(--w-muted)]">
-              Create an account to keep their memorial. Visitors can light a paw lamp without signing up.
+              Create an account to keep their memorial. Visitors can light a candle without signing up.
             </p>
           </div>
         </section>
@@ -539,8 +544,8 @@ function HomePage() {
               </h2>
             </Reveal>
             <div className="mt-8 grid gap-3 md:mt-10">
-              <FaqItem q="Is it free?" a="Yes. Creating a memorial, lighting a paw lamp, and visiting the garden are all free." />
-              <FaqItem q="Do I need an account to light a paw lamp?" a="No. You can light a paw lamp for any pet without signing up. An account is only needed if you want to create your own memorial, keep a journal, or track your pets' records." />
+              <FaqItem q="Is it free?" a="Yes. Creating a memorial, lighting a candle, and visiting the garden are all free." />
+              <FaqItem q="Do I need an account to light a candle?" a="No. You can light a candle for any pet without signing up. An account is only needed if you want to create your own memorial, keep a journal, or track your pets' records." />
               <FaqItem q="Can I keep a memorial private?" a="Yes. You can keep a memorial just for you, share it only with a link, or let it live in the garden — your choice, and you can change it anytime." />
               <FaqItem q="Can I add more photos later?" a="Yes. You can return anytime to add photos, edit their story, or update anything about their memorial." />
               <FaqItem q="What about the marketplace, vets, or funeral services?" a="Those are on the way — join the notify list on any card above and we'll let you know as each part opens." />
@@ -549,7 +554,7 @@ function HomePage() {
           </div>
         </section>
 
-        <ClosingScene primaryCandle={primaryCandle("Light a paw lamp")} />
+        <ClosingScene primaryCandle={primaryCandle("Light a candle")} />
       </WorldPane>
 
       {/* LIFE WORLD */}
@@ -585,11 +590,11 @@ function Hero({ secondaryCandle, onLastLetter }: { secondaryCandle: ReactNode; o
         <div className="max-w-xl">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--w-accent)]">For the love that stays</p>
           <h1 className="mt-4 font-display text-5xl leading-[1.1] text-[var(--w-ink)] md:text-7xl">Rememfur</h1>
-          <p className="mt-4 font-display text-2xl leading-snug text-[var(--w-accent)] md:text-3xl">Their life. Your memories. Always together.</p>
-          <p className="mt-5 max-w-md text-base leading-relaxed text-[var(--w-ink)] md:text-lg">Celebrate the pets beside you, remember the ones who ran ahead, and give every photo, story, and paw print a place to stay.</p>
+          <p className="mt-4 font-display text-2xl leading-snug text-[var(--w-accent)] md:text-3xl">Tell their story.</p>
+          <p className="mt-4 max-w-md text-base text-[var(--w-ink)] md:text-lg">Write their obituary. Let the love speak.</p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Link to="/create/memorial" className="btn-gold ios-tappable"><Feather className="h-4 w-4" />Write a memorial</Link>
-            {secondaryCandle}
+            <Link to="/create/memorial" className="btn-gold ios-tappable"><Feather className="h-4 w-4" />Write their obituary</Link>
+            <GiftKeepsakeDialog trigger={<button type="button" className="btn-quiet ios-tappable"><Gift className="h-4 w-4" />Send a keepsake</button>} />
           </div>
           <button type="button" onClick={onLastLetter} className="link-gold mt-5 inline-flex items-center gap-2"><Mail className="h-4 w-4" />Send them your last letter</button>
         </div>
@@ -626,8 +631,8 @@ function Chapters({ primaryCandle, onDev }: { primaryCandle: ReactNode; onDev?: 
       plaque: <PlaqueMedallion />,
     },
     {
-      roman: "II", eyebrow: "Paw lamps", title: "A warm light in their name.",
-      body: "Anyone can light a paw lamp — no account, no noise. Each one burns quietly beside the others, and the count stays forever.",
+      roman: "II", eyebrow: "Candles", title: "A warm light in their name.",
+      body: "Anyone can light a candle — no account, no noise. Each one burns quietly beside the others, and the count stays forever.",
       cta: primaryCandle,
       plaque: <PlaqueCandles />,
     },
@@ -731,18 +736,18 @@ function CandleStrip({ candles, weekCount, loading }: {
 }) {
   const enough = candles.length >= 3;
   return (
-    <section aria-label="Recent paw lamps" className="dark-scene relative bg-[#090d1a] px-0 py-14 md:py-20">
+    <section aria-label="Recent candles" className="dark-scene relative bg-[#090d1a] px-0 py-14 md:py-20">
       <div className="mx-auto max-w-md px-5 md:max-w-[1200px] md:px-8">
         <Reveal>
           <h2 className="text-center font-display text-[28px] leading-[1.1] tracking-tight text-white md:text-5xl">
-            Strangers light paw lamps for pets they never met.
+            Strangers light candles for pets they never met.
           </h2>
           <p className="mt-4 text-center text-[15px] leading-relaxed text-white/65 md:text-lg">
             Every small light is a pet who was deeply loved.
           </p>
         </Reveal>
         <div className="mt-10 flex items-baseline justify-between">
-          <p className="text-[11px] uppercase tracking-[0.28em] text-amber-200/70">Paw lamps burning</p>
+          <p className="text-[11px] uppercase tracking-[0.28em] text-amber-200/70">Candles burning</p>
           {!loading && weekCount > 0 && (
             <p className="text-[11px] text-white/50">{weekCount} lit this week</p>
           )}
@@ -776,7 +781,7 @@ function CandleStrip({ candles, weekCount, loading }: {
         <div className="mx-auto mt-4 max-w-md px-5 md:max-w-[1200px] md:px-8">
           <div className="flex flex-col items-center rounded-2xl bg-white/[0.03] p-6 text-center ring-1 ring-white/10">
             <PawLamp size={48} />
-            <p className="mt-4 font-display text-[17px] text-white">The sky is just beginning. Light one of the first paw lamps.</p>
+            <p className="mt-4 font-display text-[17px] text-white">The sky is just beginning. Light one of the first candles.</p>
             <p className="mt-1 text-[13px] text-white/55">No account needed.</p>
           </div>
         </div>
@@ -844,7 +849,7 @@ function GriefBelongingSection() {
     {
       Icon: PawLamp as ComponentType<{ size?: number; className?: string }>,
       title: "Express it",
-      body: "Light a paw lamp, write to them, keep a private journal only you can read.",
+      body: "Light a candle, write to them, keep a private journal only you can read.",
     },
     {
       Icon: Users,
@@ -1465,7 +1470,7 @@ const ACCESS_BUNDLE: { icon: ComponentType<SVGProps<SVGSVGElement>>; title: stri
   { icon: Feather, title: "A memorial page", body: "Their photos, story and the little things — kept forever.", to: "/create/memorial" },
   { icon: Mail, title: "One last letter", body: "Write the words you never got to say.", to: "/create/memorial" },
   { icon: Star, title: "Their star in the sky", body: "A constellation drawn just for them.", to: "/garden" },
-  { icon: Heart, title: "Paw lamps & flowers", body: "Friends can light a lamp or leave flowers.", to: "/garden" },
+  { icon: Heart, title: "Candles & flowers", body: "Friends can light a lamp or leave flowers.", to: "/garden" },
   { icon: MessagesSquare, title: "A kind community", body: "People who truly understand this loss.", to: "/community" },
   { icon: HandHeart, title: "Grief support", body: "Gentle guidance and helplines when you need them.", to: "/grief-support" },
 ];
@@ -1511,11 +1516,14 @@ function BetaBand({ onOpen }: { onOpen: () => void }) {
             Be there for them.
           </h3>
           <p className="mt-3 text-[15px] leading-relaxed text-foreground/80">
-            The hardest part is knowing what to say. Send a friend a paw lamp and a few gentle words — and bring them somewhere that understands.
+            Words are hard. Send a keepsake instead.
           </p>
-          <button type="button" onClick={onOpen} className="btn-gold ios-tappable mt-6 w-full max-w-[320px] md:w-auto">
-            <Heart className="h-4 w-4" /> Console a friend
-          </button>
+          <div className="mt-6 flex w-full flex-col gap-3 md:flex-row">
+            <GiftKeepsakeDialog source="console-gift" trigger={<button type="button" className="btn-gold ios-tappable w-full md:w-auto"><Gift className="h-4 w-4" /> Gift a keepsake</button>} />
+            <button type="button" onClick={onOpen} className="btn-quiet ios-tappable w-full md:w-auto">
+              <Heart className="h-4 w-4" /> Send kind words
+            </button>
+          </div>
           <p className="mt-3 text-[12.5px] text-muted-foreground">It takes a minute. It means everything.</p>
         </div>
       </div>
@@ -1797,7 +1805,7 @@ function GriefCopeBand() {
   const gentleSteps = [
     { title: "Let today be small", body: "Eat something, rest, and leave tomorrow's decisions for tomorrow." },
     { title: "Say their name", body: "Share a story with someone who understands how much they mattered." },
-    { title: "Give love somewhere to go", body: "Keep a photo close, light a paw lamp, or write them a few words." },
+    { title: "Give love somewhere to go", body: "Keep a photo close, light a candle, or write them a few words." },
   ];
   return (
     <section className="relative border-y border-[var(--w-hair)] bg-[var(--w-card-2)] px-5 py-14 md:px-8 md:py-20">

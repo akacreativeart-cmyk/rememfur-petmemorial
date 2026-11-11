@@ -24,7 +24,7 @@ const ICONS: Record<string, any> = {
 };
 
 const VERBS: Record<string, string> = {
-  candle: "lit a paw lamp",
+  candle: "lit a candle",
   paw: "left a paw",
   comment: "commented",
   message: "wrote on the memorial",
@@ -58,7 +58,7 @@ function NotificationsPage() {
         <div>
           <h1 className="font-display text-4xl text-foreground">Notifications</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Every paw lamp lit, every kind word left — quietly gathered here.
+            Every candle lit, every kind word left — quietly gathered here.
           </p>
         </div>
         {unreadCount > 0 && (
@@ -91,7 +91,7 @@ function NotificationsPage() {
             </div>
             <p className="mt-4 font-display text-2xl text-foreground">Quiet for now</p>
             <p className="mx-auto mt-2 max-w-sm text-sm text-muted-foreground">
-              When friends light a paw lamp, leave a message, or follow you, their kindness will land here.
+              When friends light a candle, leave a message, or follow you, their kindness will land here.
             </p>
           </div>
         ) : (

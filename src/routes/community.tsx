@@ -76,7 +76,7 @@ function CommunityPage() {
         <PageHero
           eyebrow="chapter two"
           title="The Memory Wall"
-          handwritten="share a story, light a paw lamp"
+          handwritten="share a story, light a candle"
           intro="A gentle place to share memories, photos, and kind words with people who understand."
         />
 
@@ -134,7 +134,7 @@ function CommunityPage() {
                 </Link>
                 <Link to="/">
                   <Button size="sm" variant="outline" className="rounded-full">
-                    <PawLamp size={15} glow={false} /> Light a paw lamp
+                    <PawLamp size={15} glow={false} /> Light a candle
                   </Button>
                 </Link>
               </div>

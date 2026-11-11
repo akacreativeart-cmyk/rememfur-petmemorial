@@ -15,9 +15,9 @@ export const Route = createFileRoute("/garden")({
   head: () => ({
     meta: [
       { title: "Memorial Garden — Rememfur" },
-      { name: "description", content: "Browse memorials lovingly created for the pets we miss — dogs, cats and every other companion. Light a paw lamp, leave a word, and remember together." },
+      { name: "description", content: "Browse memorials lovingly created for the pets we miss — dogs, cats and every other companion. Light a candle, leave a word, and remember together." },
       { property: "og:title", content: "The Memorial Garden — Rememfur" },
-      { property: "og:description", content: "A shared garden of pet memorials. Wander among the dogs, cats and companions others are remembering, light a paw lamp and leave a gentle word." },
+      { property: "og:description", content: "A shared garden of pet memorials. Wander among the dogs, cats and companions others are remembering, light a candle and leave a gentle word." },
       { property: "og:url", content: "https://rememfur.com/garden" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -62,7 +62,7 @@ function GardenPage() {
         <div className="border-b border-border px-1 pb-8 text-center md:text-left">
           <p className="font-hand text-2xl text-primary">each photograph holds a whole life</p>
           <h1 className="mt-1 font-display text-4xl md:text-5xl">Memorial Garden</h1>
-          <p className="mt-2 max-w-xl text-muted-foreground">A place where love lives on. Wander, remember, light a paw lamp.</p>
+          <p className="mt-2 max-w-xl text-muted-foreground">A place where love lives on. Wander, remember, light a candle.</p>
 
           <div className="mt-7 flex flex-wrap items-center gap-2">
             {filters.map((f) => (
@@ -131,7 +131,7 @@ function GardenPage() {
                           <div className="font-hand text-2xl leading-none text-foreground">{m.pet_name}</div>
                           <div className="mt-1 font-hand text-base text-muted-foreground">{years || "forever loved"}</div>
                         </div>
-                        <div className="flex items-center gap-1 text-xs text-primary" aria-label={`${m.candle_count} paw lamps`}>
+                        <div className="flex items-center gap-1 text-xs text-primary" aria-label={`${m.candle_count} candles`}>
                           <PawLamp size={15} /> {m.candle_count}
                         </div>
                       </div>
