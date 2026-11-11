@@ -22,6 +22,7 @@ export type HomeBanner = {
   cta: { label: string; to: string };
   image: string;
   caption: string;
+  note?: string;
 };
 
 export const HOME_BANNERS: HomeBanner[] = [
@@ -33,6 +34,7 @@ export const HOME_BANNERS: HomeBanner[] = [
     cta: { label: "Write a memorial", to: "/create/memorial" },
     image: tulipPhoto.url,
     caption: "Forever our good boy",
+    note: "you waited by the door, always",
   },
   {
     id: "sky",
@@ -42,6 +44,7 @@ export const HOME_BANNERS: HomeBanner[] = [
     cta: { label: "Visit the garden", to: "/garden" },
     image: gingerCatPhoto.url,
     caption: "Shining somewhere tonight",
+    note: "look up — I see you",
   },
   {
     id: "together",
@@ -51,6 +54,7 @@ export const HOME_BANNERS: HomeBanner[] = [
     cta: { label: "See the community", to: "/community" },
     image: dogCatPhoto.url,
     caption: "Loved by everyone",
+    note: "never alone, not once",
   },
   {
     id: "letter",
@@ -120,7 +124,7 @@ export function HomeBanners() {
                 </Link>
               </div>
               <div className="order-1 flex justify-center md:order-2">
-                <Polaroid src={b.image} caption={b.caption} tilt={idx % 2 ? 3 : -3} candle />
+                <Polaroid src={b.image} caption={b.caption} note={b.note} tilt={idx % 2 ? 3 : -3} candle />
               </div>
             </div>
           ))}
@@ -142,36 +146,24 @@ export function HomeBanners() {
   );
 }
 
-/** Funeral-style memorial frame: dark walnut, gilded inner edge, mourning ribbon, brass plate. */
-export function Polaroid({ src, caption, tilt = 0, className = "", candle = false }: { src: string; caption: string; tilt?: number; className?: string; candle?: boolean }) {
+/** Classic polaroid: ivory card, wide chin, handwritten note in dark ink. */
+export function Polaroid({ src, caption, note, tilt = 0, className = "", candle = false }: { src: string; caption: string; note?: string; tilt?: number; className?: string; candle?: boolean }) {
   return (
-    <figure className={`relative ${candle ? "w-[78vw] max-w-[300px] md:w-[340px] md:max-w-none" : "w-[210px] md:w-[250px]"} ${className}`} style={{ transform: `rotate(${tilt * 0.4}deg)` }}>
-      <div
-        className="relative rounded-[3px] p-[10px] shadow-[0_22px_45px_-18px_rgba(0,0,0,0.7)]"
-        style={{ background: "linear-gradient(135deg,#3b2417 0%,#5a3722 35%,#2a180f 65%,#4a2c1b 100%)" }}
-      >
-        <div className="p-[3px]" style={{ background: "linear-gradient(135deg,#f3d48a,#b8873a 45%,#f6e2a6 70%,#9c6e2c)" }}>
-          <div className="bg-[#f5efe3] p-2">
-            <img src={src} alt={caption} loading="lazy" className="aspect-[4/5] w-full object-cover [filter:sepia(0.12)_saturate(0.9)]" />
-          </div>
-        </div>
-        {/* mourning ribbon */}
-        <span aria-hidden className="pointer-events-none absolute right-0 top-0 h-14 w-14 overflow-hidden">
-          <span className="absolute right-[-22px] top-[12px] block h-[10px] w-[90px] rotate-45 bg-[#111] shadow-[0_2px_4px_rgba(0,0,0,0.5)]" />
-        </span>
-      </div>
-      <figcaption
-        className="mx-auto -mt-3 relative w-[78%] rounded-[2px] px-2 py-1 text-center font-display text-sm tracking-wide text-[#2a1a0c] shadow-[0_4px_10px_-4px_rgba(0,0,0,0.6)]"
-        style={{ background: "linear-gradient(180deg,#f4dc97,#c99a4a 55%,#e8c77c)" }}
-      >
-        {caption}
+    <figure
+      className={`relative rounded-[3px] bg-[#FBF7EE] p-3 pb-4 shadow-[0_22px_45px_-18px_rgba(0,0,0,0.6),0_2px_0_rgba(0,0,0,0.04)] ${candle ? "w-[78vw] max-w-[300px] md:w-[340px] md:max-w-none" : "w-[210px] md:w-[250px]"} ${className}`}
+      style={{ transform: `rotate(${tilt * 0.4}deg)` }}
+    >
+      <img src={src} alt={caption} loading="lazy" className="aspect-square w-full rounded-[2px] object-cover" />
+      <figcaption className="mt-3 text-center leading-tight text-[#2a1e14]">
+        <span className="block font-hand text-[24px]">{caption}</span>
+        {note && <span className="mt-1 block font-hand text-[17px] text-[#4a3b30]">{note}</span>}
       </figcaption>
       {candle && (
         <img
           src={candlesPhoto.url}
           alt="Lit memorial candles"
           loading="lazy"
-          className="absolute -bottom-4 -left-16 h-24 w-24 rounded-full border-4 border-[#f5efe3] object-cover shadow-lg md:h-28 md:w-28"
+          className="absolute -bottom-4 -left-16 h-24 w-24 rounded-full border-4 border-[#FBF7EE] object-cover shadow-lg md:h-28 md:w-28"
         />
       )}
     </figure>
@@ -182,10 +174,10 @@ export function Polaroid({ src, caption, tilt = 0, className = "", candle = fals
 export function PolaroidSky() {
   const c = getConstellation(new Date());
   const pics = [
-    { src: beaglePhoto.url, caption: "Biscuit ✦", tilt: -6 },
-    { src: colliePhoto.url, caption: "Luna", tilt: 4 },
-    { src: samoyedPhoto.url, caption: "Our Max", tilt: -2 },
-    { src: grassDogPhoto.url, caption: "Sunny days", tilt: 6 },
+    { src: beaglePhoto.url, caption: "Biscuit ✦", note: "my sunshine", tilt: -6 },
+    { src: colliePhoto.url, caption: "Luna", note: "goodnight, sweet girl", tilt: 4 },
+    { src: samoyedPhoto.url, caption: "Our Max", note: "best friend forever", tilt: -2 },
+    { src: grassDogPhoto.url, caption: "Sunny days", note: "run free, love", tilt: 6 },
   ];
   return (
     <section className="dark-scene relative overflow-hidden bg-[#0b1024] px-5 py-16 text-center md:px-8 md:py-24" aria-label="Polaroids under their sky">
@@ -205,7 +197,7 @@ export function PolaroidSky() {
           {pics.map((p) => (
             <div key={p.caption} className="flex flex-col items-center">
               <span className="h-8 w-px bg-[#E8B96D]/50" aria-hidden />
-              <Polaroid src={p.src} caption={p.caption} tilt={p.tilt} className="!w-[150px] md:!w-[200px]" />
+              <Polaroid src={p.src} caption={p.caption} note={p.note} tilt={p.tilt} className="!w-[150px] md:!w-[200px]" />
             </div>
           ))}
         </div>

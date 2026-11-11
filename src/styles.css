@@ -6,8 +6,8 @@
 
 @theme inline {
   /* Warm memorial editorial system — literary Lora + approachable Nunito Sans */
-  --font-display: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  --font-serif:   "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-display: "Lora", Georgia, "Times New Roman", serif;
+  --font-serif:   "Lora", Georgia, "Times New Roman", serif;
   --font-hand:    "Caveat", "Snell Roundhand", cursive;
   --font-sans:    "Helvetica Neue", Helvetica, Arial, sans-serif;
 
@@ -1498,3 +1498,8 @@ html, body { overflow-x: hidden; }
   background: linear-gradient(90deg, rgba(201,146,63,0), rgba(201,146,63,0.75) 55%, #b9802f);
 }
 .warm-home .home-shooters .shooter::after { background: #f3c977; box-shadow: 0 0 10px 3px rgba(201,146,63,0.6); }
+
+/* Stylized serif headings */
+h1, h2, h3, .font-display { font-family: var(--font-display); letter-spacing: -0.012em; font-weight: 500; text-wrap: balance; }
+h1 { letter-spacing: -0.02em; }
+h1 em, h2 em, h3 em, .font-display em { font-style: italic; font-weight: 400; color: var(--w-accent, currentColor); }
