@@ -1,7 +1,6 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { MoonStar, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import galaxy from "@/assets/galaxy-night.jpg";
 
 type Theme = "light" | "dark";
 const ThemeContext = createContext<{ theme: Theme; toggle: () => void }>({ theme: "light", toggle: () => {} });
@@ -24,7 +23,6 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   };
   return (
     <ThemeContext.Provider value={{ theme, toggle }}>
-      {theme === "dark" && <div className="galaxy-backdrop" aria-hidden="true"><img src={galaxy} width={1920} height={1280} alt="" /><div className="galaxy-veil" /></div>}
       <div className="theme-content">{children}</div>
     </ThemeContext.Provider>
   );
@@ -32,6 +30,6 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
 export function ThemeToggle() {
   const { theme, toggle } = useContext(ThemeContext);
-  const label = theme === "dark" ? "Switch to light mode" : "Switch to galaxy dark mode";
+  const label = theme === "dark" ? "Switch to light mode" : "Switch to dark mode";
   return <Button variant="ghost" size="icon" className="shrink-0" aria-label={label} title={label} onClick={toggle}>{theme === "dark" ? <Sun /> : <MoonStar />}</Button>;
 }
