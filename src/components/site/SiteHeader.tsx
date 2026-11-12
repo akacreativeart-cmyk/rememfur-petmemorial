@@ -220,21 +220,21 @@ export function SiteHeader() {
       </div>
 
       {/* Desktop header */}
-      <div className="mx-auto hidden h-16 max-w-[1200px] items-center justify-between gap-4 px-6 md:flex lg:gap-6 lg:px-8">
-        <Link to="/" className="flex items-center gap-2">
+      <div className="mx-auto hidden h-16 max-w-[1200px] items-center justify-between gap-2 px-4 md:flex lg:gap-6 lg:px-8">
+        <Link to="/" className="flex shrink-0 items-center gap-2">
           <img src={logo} alt="Rememfur" width={32} height={32} className="header-logo h-8 w-8" />
           <span className="brand-wordmark text-xl">rememfur</span>
-          <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-primary/75">BETA</span>
+          <span className="hidden text-[10px] font-bold uppercase tracking-[0.18em] text-primary/75 lg:inline">BETA</span>
         </Link>
 
-        <nav className="flex items-center gap-1">
+        <nav className="flex min-w-0 items-center gap-0.5 lg:gap-1">
           {desktopNav.map((item) => {
             const active = isActive(item.to);
             return (
               <Link
                 key={item.to}
                 to={item.to}
-                className={`rounded-full px-2.5 py-1.5 text-sm transition lg:px-3.5 ${
+                className={`whitespace-nowrap rounded-full px-2 py-1.5 text-[13px] transition lg:px-3.5 lg:text-sm ${
                   active
                     ? "bg-muted text-primary"
                     : "text-foreground/75 hover:bg-muted hover:text-foreground"
@@ -246,14 +246,15 @@ export function SiteHeader() {
           })}
         </nav>
 
-        <div className="flex items-center gap-1.5 md:gap-2">
+        <div className="flex shrink-0 items-center gap-1 lg:gap-2">
           <ThemeToggle />
           <Link
             to="/create/memorial"
             className="btn-gold-sm ios-tappable hidden whitespace-nowrap md:inline-flex"
           >
             <Feather className="h-4 w-4" strokeWidth={2} />
-            <span>Write a memorial</span>
+            <span className="lg:hidden">Write</span>
+            <span className="hidden lg:inline">Write a memorial</span>
           </Link>
           <NotificationBell />
           {user ? (
